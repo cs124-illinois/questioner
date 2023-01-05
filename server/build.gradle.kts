@@ -60,7 +60,7 @@ kotlin {
 tasks.withType<ShadowJar> {
     isZip64 = true
 }
-val dockerName = "cs125/questioner"
+val dockerName = "cs124/questioner"
 tasks.register<Copy>("dockerCopyJar") {
     from(tasks["shadowJar"].outputs)
     into("${buildDir}/docker")
