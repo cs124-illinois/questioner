@@ -34,7 +34,7 @@ open class PublishQuestions : DefaultTask() {
         require(questions.all { it.validated }) { "Cannot publish until all questions are validated" }
         Request
             .post(uri)
-            .addHeader("token", token)
+            .addHeader("authorization", """Bearer $token""")
             .bodyString(questions.toJSON(), ContentType.APPLICATION_JSON)
             .execute()
             .returnResponse().also {
