@@ -66,7 +66,7 @@ tasks {
 gradlePlugin {
     plugins {
         create("plugin") {
-            id = "com.github.cs125-illinois.questioner"
+            id = "com.github.cs124-illinois.questioner"
             implementationClass = "edu.illinois.cs.cs125.questioner.plugin.QuestionerPlugin"
         }
     }
