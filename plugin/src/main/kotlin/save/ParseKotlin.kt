@@ -1,5 +1,6 @@
 package edu.illinois.cs.cs125.questioner.plugin.save
 
+import edu.illinois.cs.cs125.jeed.core.FeatureName
 import edu.illinois.cs.cs125.jeed.core.SnippetArguments
 import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.complexity
@@ -118,7 +119,31 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
                 features.lookup("", "$className.kt")
             }
         }.features
-        return Question.FlatFile(className, solutionContent, Question.Language.kotlin, path, complexity, features, lineCounts)
+        val expectedDeadCode = features.let {
+            when {
+                features.featureMap[FeatureName.ASSERT] > 0 -> features.featureMap[FeatureName.ASSERT]
+                else -> 0
+            } + when {
+                features.featureMap[FeatureName.FOR_LOOP_STEP] > 0 -> features.featureMap[FeatureName.FOR_LOOP_STEP]
+                else -> 0
+            } + when {
+                features.featureMap[FeatureName.FOR_LOOP_RANGE] > 0 -> features.featureMap[FeatureName.FOR_LOOP_RANGE]
+                else -> 0
+            } + when {
+                features.featureMap[FeatureName.ELVIS_OPERATOR] > 0 -> features.featureMap[FeatureName.ELVIS_OPERATOR]
+                else -> 0
+            }
+        }
+        return Question.FlatFile(
+            className,
+            solutionContent,
+            Question.Language.kotlin,
+            path,
+            complexity,
+            features,
+            lineCounts,
+            expectedDeadCode
+        )
     }
 
     fun toStarterFile(cleanSpec: CleanSpec): Question.IncorrectFile {
@@ -177,7 +202,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
         }
 
     @Suppress("ComplexMethod")
-    fun clean(cleanSpec: CleanSpec): String {
+    private fun clean(cleanSpec: CleanSpec): String {
         val (hasTemplate, wrapWith, importNames) = cleanSpec
         val toRemove = mutableSetOf<Int>()
         parseTree.preamble()?.packageHeader()?.also {
@@ -302,6 +327,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
             returnType.matches(arrayRegex) -> arrayRegex.find(returnType)?.let {
                 "arrayOf<${it.groups[1]!!.value}>()"
             } ?: error("regex only matched the first time")
+
             else -> error("Can't generate empty Kotlin return for type $returnType")
         }.let {
             if (it.isNotBlank()) {
@@ -340,6 +366,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
             usedImports = parseKotlin().tree.preamble().importList().importHeader().map { it.identifier().text }
             this
         }
+
         wrappedClass != null && !topLevelFile -> parseKotlin().tree.also { context ->
             usedImports = context.preamble().importList().importHeader().map { it.identifier().text }
         }.topLevelObject()
@@ -358,6 +385,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
                     }
                 }.joinToString("\n").trimIndent().trim()
             }
+
         !hasTemplate -> this
         else -> {
             val lines = split("\n")

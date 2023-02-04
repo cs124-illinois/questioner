@@ -26,12 +26,11 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     }
 
     fauxStatic = solution.fauxStatic
-    var deferredException: Exception? = null
 
     val javaClassWhitelist = mutableSetOf<String>().apply { addAll(defaultJavaClassWhitelist) }
     val kotlinClassWhitelist = mutableSetOf<String>().apply { addAll(defaultKotlinClassWhitelist) }
 
-    fun TestResults.checkCorrect(file: Question.FlatFile) {
+    fun TestResults.checkCorrect(file: Question.FlatFile, finalChecks: Boolean = false) {
         if (taskResults?.threw != null) {
             throw SolutionTestingThrew(file, taskResults!!.threw!!)
         }
@@ -100,7 +99,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             }
 
         val size = toJson().length
-        if (size > Question.DEFAULT_MAX_OUTPUT_SIZE || taskResults!!.truncatedLines > 0) {
+        if (finalChecks && size > Question.DEFAULT_MAX_OUTPUT_SIZE || taskResults!!.truncatedLines > 0) {
             throw TooMuchOutput(file.contents, file.path, size, Question.DEFAULT_MAX_OUTPUT_SIZE, file.language)
         }
 
@@ -108,8 +107,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             file.expectedDeadCount ?: correct.expectedDeadCount ?: error("Couldn't load dead code count")
         val deadCodeLimit = control.maxDeadCode!! + expectedDeadCode
 
-        if (complete.coverage!!.submission.missed > deadCodeLimit && deferredException == null) {
-            deferredException = SolutionDeadCode(
+        if (finalChecks && complete.coverage!!.submission.missed > deadCodeLimit) {
+            throw SolutionDeadCode(
                 file,
                 complete.coverage!!.submission.missed,
                 deadCodeLimit,
@@ -188,8 +187,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
 
     val bootstrapSettings = Question.TestingSettings(
         seed = seed,
-        minTestCount = minTestCount,
-        maxTestCount = maxTestCount,
+        testCount = minTestCount,
         timeout = control.maxTimeout!!, // No timeout
         outputLimit = Question.UNLIMITED_OUTPUT_LINES, // No line limit
         perTestOutputLimit = Question.UNLIMITED_OUTPUT_LINES, // No per test line limit
@@ -350,14 +348,18 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         )
     }.filterNotNull()
 
-    if (deferredException != null) {
-        throw deferredException!!
-    }
-
-    val requiredTestCount = incorrectResults
+    var requiredTestCount = incorrectResults
         .filter { !it.results.timeout && !it.results.succeeded }
         .mapNotNull { it.results.tests()?.size }
         .maxOrNull() ?: error("No incorrect results")
+
+    val bootstrapRandomStartCount = firstCorrectResults.maxOfOrNull { results ->
+        val maxComplexity = results.tests()!!.maxOf { it.complexity!! }
+        results.tests()!!.indexOfFirst { it.complexity!! == maxComplexity } + 1
+    }!!.coerceAtLeast(0)
+
+    requiredTestCount = requiredTestCount.coerceAtLeast(bootstrapRandomStartCount)
+
     val testCount = requiredTestCount.coerceAtLeast(minTestCount)
 
     // Rerun solutions to set timeouts and output limits
@@ -384,7 +386,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             right.language,
             calibrationSettings
         ).let {
-            it.checkCorrect(right)
+            it.checkCorrect(right, true)
             CorrectResults(right, it)
         }
     }

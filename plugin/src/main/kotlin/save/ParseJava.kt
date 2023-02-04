@@ -320,7 +320,7 @@ $cleanContent
         }.features
         val expectedDeadCode = features.let {
             when {
-                features.featureMap[FeatureName.ASSERT] > 0 -> features.featureMap[FeatureName.ASSERT] + 1
+                features.featureMap[FeatureName.ASSERT] != 0 -> 1
                 else -> 0
             } + when {
                 features.featureMap[FeatureName.ASSERT] == 0 && features.featureMap[FeatureName.CONSTRUCTOR] == 0 -> 1
