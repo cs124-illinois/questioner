@@ -1396,6 +1396,189 @@
     },
     "fauxStatic": false
   },
+  "With Dead Code Annotation": {
+    "name": "With Dead Code Annotation",
+    "type": "KLASS",
+    "klass": "Question",
+    "metadata": {
+      "contentHash": "8a2c3438f0a1179829d6de0cc97edd72",
+      "packageName": "com.examples.testing.withdeadcodeannotation",
+      "version": "2023.2.0",
+      "author": "challen@illinois.edu",
+      "javaDescription": "<p>Testing dead code comments.</p>",
+      "kotlinDescription": "<p>Testing dead code comments.</p>",
+      "usedFiles": [
+        "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withdeadcodeannotation/correct/kotlin/Question.kt"
+      ],
+      "templateImports": [],
+      "focused": true
+    },
+    "annotatedControls": {},
+    "question": {
+      "klass": "Question",
+      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Testing dead code comments.\n */\n@Correct(name = \"With Dead Code Annotation\", version = \"2023.2.0\", author = \"challen@illinois.edu\", focused = true)\npublic class Question {\n  public static int whatever(int value) {\n    if (value % 2 == 0) {\n      return value * 2;\n    }\n    assert false;\n    // mutate-disable\n    return -1; // dead code\n  }\n}",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withdeadcodeannotation/Question.java"
+    },
+    "correct": {
+      "klass": "Question",
+      "contents": "public class Question {\n  public static int whatever(int value) {\n    if (value % 2 == 0) {\n      return value * 2;\n    }\n    assert false;\n    // mutate-disable\n    return -1;\n  }\n}\n",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withdeadcodeannotation/Question.java",
+      "complexity": 2,
+      "features": {
+        "featureMap": {
+          "ARITHMETIC_OPERATORS": 2,
+          "COMPARISON_OPERATORS": 1,
+          "IF_STATEMENTS": 1,
+          "METHOD": 1,
+          "RETURN": 2,
+          "CLASS": 1,
+          "ASSERT": 1,
+          "VISIBILITY_MODIFIERS": 2,
+          "STATIC_METHOD": 1
+        },
+        "importList": [],
+        "typeList": [
+          "int"
+        ],
+        "identifierList": [],
+        "dottedMethodList": []
+      },
+      "lineCount": {
+        "source": 9,
+        "comment": 1,
+        "blank": 1
+      },
+      "expectedDeadCount": 2
+    },
+    "alternativeSolutions": [
+      {
+        "klass": "QuestionKt",
+        "contents": "fun whatever(value: Int): Int {\n  if (value % 2 == 0) {\n    return value * 2\n  }\n  assert(false)\n\n  return -1\n}",
+        "language": "kotlin",
+        "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withdeadcodeannotation/correct/kotlin/Question.kt",
+        "complexity": 3,
+        "features": {
+          "featureMap": {
+            "IF_STATEMENTS": 1,
+            "METHOD": 1,
+            "ASSERT": 1,
+            "EQUALITY": 1
+          },
+          "importList": [],
+          "typeList": [],
+          "identifierList": [],
+          "dottedMethodList": []
+        },
+        "lineCount": {
+          "source": 7,
+          "comment": 0,
+          "blank": 1
+        },
+        "expectedDeadCount": 2
+      }
+    ],
+    "incorrect": [],
+    "common": [],
+    "importWhitelist": [],
+    "importBlacklist": [],
+    "checkstyleSuppressions": [],
+    "slug": "with-dead-code-annotation",
+    "kotlinSolution": {
+      "klass": "QuestionKt",
+      "contents": "fun whatever(value: Int): Int {\n  if (value % 2 == 0) {\n    return value * 2\n  }\n  assert(false)\n\n  return -1\n}",
+      "language": "kotlin",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withdeadcodeannotation/correct/kotlin/Question.kt",
+      "complexity": 3,
+      "features": {
+        "featureMap": {
+          "IF_STATEMENTS": 1,
+          "METHOD": 1,
+          "ASSERT": 1,
+          "EQUALITY": 1
+        },
+        "importList": [],
+        "typeList": [],
+        "identifierList": [],
+        "dottedMethodList": []
+      },
+      "lineCount": {
+        "source": 7,
+        "comment": 0,
+        "blank": 1
+      },
+      "expectedDeadCount": 2
+    },
+    "hasKotlin": true,
+    "published": {
+      "name": "With Dead Code Annotation",
+      "type": "KLASS",
+      "path": "with-dead-code-annotation",
+      "author": "challen@illinois.edu",
+      "version": "2023.2.0",
+      "packageName": "com.examples.testing.withdeadcodeannotation",
+      "languages": [
+        "java",
+        "kotlin"
+      ],
+      "descriptions": {
+        "java": "<p>Testing dead code comments.</p>",
+        "kotlin": "<p>Testing dead code comments.</p>"
+      },
+      "complexity": {
+        "java": 2,
+        "kotlin": 3
+      },
+      "features": {
+        "java": {
+          "featureMap": {
+            "ARITHMETIC_OPERATORS": 2,
+            "COMPARISON_OPERATORS": 1,
+            "IF_STATEMENTS": 1,
+            "METHOD": 1,
+            "RETURN": 2,
+            "CLASS": 1,
+            "ASSERT": 1,
+            "VISIBILITY_MODIFIERS": 2,
+            "STATIC_METHOD": 1
+          },
+          "importList": [],
+          "typeList": [
+            "int"
+          ],
+          "identifierList": [],
+          "dottedMethodList": []
+        },
+        "kotlin": {
+          "featureMap": {
+            "IF_STATEMENTS": 1,
+            "METHOD": 1,
+            "ASSERT": 1,
+            "EQUALITY": 1
+          },
+          "importList": [],
+          "typeList": [],
+          "identifierList": [],
+          "dottedMethodList": []
+        }
+      },
+      "lineCounts": {
+        "java": {
+          "source": 9,
+          "comment": 1,
+          "blank": 1
+        },
+        "kotlin": {
+          "source": 7,
+          "comment": 0,
+          "blank": 1
+        }
+      },
+      "templateImports": []
+    },
+    "fauxStatic": false
+  },
   "Test Empty Constructor": {
     "name": "Test Empty Constructor",
     "type": "KLASS",
@@ -3393,7 +3576,7 @@
     "type": "METHOD",
     "klass": "Question",
     "metadata": {
-      "contentHash": "de06895ddbedb506a09965a2c6942941",
+      "contentHash": "cf69028309acfa6fae8cc88f3063f219",
       "packageName": "com.examples.addone",
       "version": "2021.6.0",
       "author": "challen@illinois.edu",
@@ -3409,12 +3592,12 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/correct/kotlin/Question.kt"
       ],
       "templateImports": [],
-      "focused": true
+      "focused": false
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\n\n/*\n * Write a method `addOne` that returns its `int` argument plus one.\n */\n\n@Correct(name = \"Add One\", author = \"challen@illinois.edu\", version = \"2021.6.0\", focused = true)\n@Wrap\npublic class Question {\n  // Here to avoid dead code errors in the memoization test\n  @FixedParameters\n  private static final List<Integer> FIXED = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);\n\n  int addOne(int value) {\n    return value + 1;\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\n\n/*\n * Write a method `addOne` that returns its `int` argument plus one.\n */\n\n@Correct(name = \"Add One\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\n@Wrap\npublic class Question {\n  // Here to avoid dead code errors in the memoization test\n  @FixedParameters\n  private static final List<Integer> FIXED = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);\n\n  int addOne(int value) {\n    return value + 1;\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/Question.java"
     },

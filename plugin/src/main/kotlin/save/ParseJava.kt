@@ -9,6 +9,7 @@ import edu.illinois.cs.cs125.jeed.core.complexity
 import edu.illinois.cs.cs125.jeed.core.countLines
 import edu.illinois.cs.cs125.jeed.core.features
 import edu.illinois.cs.cs125.jeed.core.fromSnippet
+import edu.illinois.cs.cs125.jeed.core.googleFormat
 import edu.illinois.cs.cs125.questioner.antlr.JavaLexer
 import edu.illinois.cs.cs125.questioner.antlr.JavaParser
 import edu.illinois.cs.cs125.questioner.lib.AlsoCorrect
@@ -287,8 +288,18 @@ data class ParsedJavaFile(val path: String, val contents: String) {
                 }.map { it.location.line }.toSet()
                 content.lines().filterIndexed { index, _ -> !removeLines.contains(index + 1) }.joinToString("\n")
             }
-        }.trimStart()
-        val cleanContent = solutionContent.javaDeTemplate(cleanSpec.hasTemplate, cleanSpec.wrappedClass)
+        }.trimStart().let {
+            Source.fromJava(it).googleFormat().contents
+        }
+
+        val cleanContentWithDead = solutionContent.javaDeTemplate(cleanSpec.hasTemplate, cleanSpec.wrappedClass)
+        val deadlineCount = cleanContentWithDead.lines().filter {
+            it.trim().endsWith("// dead code")
+        }.size
+        val cleanContent = cleanContentWithDead.lines().map {
+            it.trimEnd().removeSuffix("// dead code").trimEnd()
+        }.joinToString("\n")
+
         val questionType = cleanContent.getType()
         val source = when (questionType) {
             Question.Type.KLASS -> Source(mapOf("$className.java" to cleanContent))
@@ -318,7 +329,7 @@ $cleanContent
                 Question.Type.SNIPPET -> features.lookup("")
             }
         }.features
-        val expectedDeadCode = features.let {
+        val expectedDeadCode = deadlineCount + features.let {
             when {
                 features.featureMap[FeatureName.ASSERT] != 0 -> 1
                 else -> 0

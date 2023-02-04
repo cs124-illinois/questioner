@@ -1,12 +1,14 @@
 package edu.illinois.cs.cs125.questioner.plugin.save
 
 import edu.illinois.cs.cs125.jeed.core.FeatureName
+import edu.illinois.cs.cs125.jeed.core.KtLintArguments
 import edu.illinois.cs.cs125.jeed.core.SnippetArguments
 import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.complexity
 import edu.illinois.cs.cs125.jeed.core.countLines
 import edu.illinois.cs.cs125.jeed.core.features
 import edu.illinois.cs.cs125.jeed.core.fromSnippet
+import edu.illinois.cs.cs125.jeed.core.ktFormat
 import edu.illinois.cs.cs125.questioner.antlr.KotlinLexer
 import edu.illinois.cs.cs125.questioner.antlr.KotlinParser
 import edu.illinois.cs.cs125.questioner.lib.AlsoCorrect
@@ -14,6 +16,7 @@ import edu.illinois.cs.cs125.questioner.lib.Incorrect
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.Starter
 import edu.illinois.cs.cs125.questioner.lib.toReason
+import io.kotest.common.runBlocking
 import org.antlr.v4.runtime.BaseErrorListener
 import org.antlr.v4.runtime.CharStream
 import org.antlr.v4.runtime.CharStreams
@@ -93,9 +96,23 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
         topLevelClass!!.simpleIdentifier().text
     }
 
-    fun toAlternateFile(cleanSpec: CleanSpec): Question.FlatFile {
+    fun toAlternateFile(cleanSpec: CleanSpec): Question.FlatFile = runBlocking {
         check(alternateSolution != null) { "Not an alternate solution file" }
-        val solutionContent = clean(cleanSpec).trimStart()
+        val solutionContentWithDead = clean(cleanSpec).trimStart()
+        val deadlineCount = solutionContentWithDead.lines().filter {
+            it.trimEnd().endsWith("// dead code")
+        }.size
+        val unformattedContent = solutionContentWithDead.lines().joinToString("\n") {
+            it.trimEnd().removeSuffix("// dead code").trimEnd()
+        }
+        val solutionContent = try {
+            Source.fromKotlin(unformattedContent).ktFormat(
+                KtLintArguments(indent = 2, maxLineLength = 120)
+            ).contents
+        } catch (_: Exception) {
+            Source.fromKotlin(unformattedContent)
+                .ktFormat(KtLintArguments(script = true, indent = 2, maxLineLength = 120)).contents
+        }
         val source = if (cleanSpec.notClass) {
             Source.fromSnippet(solutionContent, SnippetArguments(fileType = Source.FileType.KOTLIN, noEmptyMain = true))
         } else {
@@ -119,7 +136,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
                 features.lookup("", "$className.kt")
             }
         }.features
-        val expectedDeadCode = features.let {
+        val expectedDeadCode = deadlineCount + features.let {
             when {
                 features.featureMap[FeatureName.ASSERT] > 0 -> features.featureMap[FeatureName.ASSERT]
                 else -> 0
@@ -136,11 +153,11 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
                 features.featureMap[FeatureName.CLASS_FIELD] > 0 && features.featureMap[FeatureName.CONSTRUCTOR] == 0 -> 1
                 else -> 0
             } + when {
-                features.featureMap[FeatureName.COMPANION_OBJECT] > 0 && features.featureMap[FeatureName.CONSTRUCTOR] == 0 -> 1
+                features.featureMap[FeatureName.COMPANION_OBJECT] > 0 -> 1
                 else -> 0
             }
         }
-        return Question.FlatFile(
+        return@runBlocking Question.FlatFile(
             className,
             solutionContent,
             Question.Language.kotlin,
@@ -251,6 +268,15 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
             topLevelClass!!.DelimitedComment()?.also { node ->
                 (node.symbol.startIndex.toLine()..node.symbol.stopIndex.toLine()).forEach { toRemove.add(it) }
             }
+            parseTree.preamble().fileAnnotations()?.fileAnnotation()?.flatMap { it.unescapedAnnotation() }
+                ?.filter { annotation ->
+                    annotation.identifier()?.text != null &&
+                        annotationsToRemove.contains(annotation.identifier().text.removePrefix("@"))
+                }?.forEach { context ->
+                    (context.start.startIndex.toLine()..context.stop.stopIndex.toLine()).forEach {
+                        toRemove.add(it)
+                    }
+                }
             topLevelClass.modifierList().annotations()
                 ?.filter {
                     it.annotation().LabelReference()?.text != null && annotationsToRemove.contains(
