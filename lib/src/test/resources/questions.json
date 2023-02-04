@@ -41,8 +41,7 @@
           "THROW": 1,
           "NEW_KEYWORD": 1,
           "VISIBILITY_MODIFIERS": 2,
-          "STATIC_METHOD": 1,
-          "RECURSION": 1
+          "STATIC_METHOD": 1
         },
         "importList": [],
         "typeList": [
@@ -70,6 +69,7 @@
             "COMPARISON_OPERATORS": 1,
             "IF_STATEMENTS": 1,
             "METHOD": 1,
+            "EQUALITY": 1,
             "REQUIRE_OR_CHECK": 1
           },
           "importList": [],
@@ -112,6 +112,7 @@
           "COMPARISON_OPERATORS": 1,
           "IF_STATEMENTS": 1,
           "METHOD": 1,
+          "EQUALITY": 1,
           "REQUIRE_OR_CHECK": 1
         },
         "importList": [],
@@ -158,8 +159,7 @@
             "THROW": 1,
             "NEW_KEYWORD": 1,
             "VISIBILITY_MODIFIERS": 2,
-            "STATIC_METHOD": 1,
-            "RECURSION": 1
+            "STATIC_METHOD": 1
           },
           "importList": [],
           "typeList": [
@@ -173,6 +173,7 @@
             "COMPARISON_OPERATORS": 1,
             "IF_STATEMENTS": 1,
             "METHOD": 1,
+            "EQUALITY": 1,
             "REQUIRE_OR_CHECK": 1
           },
           "importList": [],
@@ -341,6 +342,8 @@
           "INSTANCEOF": 1,
           "CLASS": 1,
           "ASSERT": 3,
+          "CLASS_FIELD": 3,
+          "EQUALITY": 2,
           "VISIBILITY_MODIFIERS": 6,
           "FINAL_FIELD": 3,
           "DOT_NOTATION": 4,
@@ -365,7 +368,7 @@
         "comment": 0,
         "blank": 3
       },
-      "expectedDeadCount": 4
+      "expectedDeadCount": 1
     },
     "alternativeSolutions": [
       {
@@ -379,8 +382,10 @@
             "COMPARISON_OPERATORS": 2,
             "LOGICAL_OPERATORS": 1,
             "METHOD": 1,
+            "CONSTRUCTOR": 1,
             "INSTANCEOF": 1,
             "CLASS": 1,
+            "EQUALITY": 2,
             "DOT_NOTATION": 2,
             "DOTTED_VARIABLE_ACCESS": 2,
             "REQUIRE_OR_CHECK": 2
@@ -415,8 +420,10 @@
           "COMPARISON_OPERATORS": 2,
           "LOGICAL_OPERATORS": 1,
           "METHOD": 1,
+          "CONSTRUCTOR": 1,
           "INSTANCEOF": 1,
           "CLASS": 1,
+          "EQUALITY": 2,
           "DOT_NOTATION": 2,
           "DOTTED_VARIABLE_ACCESS": 2,
           "REQUIRE_OR_CHECK": 2
@@ -468,6 +475,8 @@
             "INSTANCEOF": 1,
             "CLASS": 1,
             "ASSERT": 3,
+            "CLASS_FIELD": 3,
+            "EQUALITY": 2,
             "VISIBILITY_MODIFIERS": 6,
             "FINAL_FIELD": 3,
             "DOT_NOTATION": 4,
@@ -492,8 +501,10 @@
             "COMPARISON_OPERATORS": 2,
             "LOGICAL_OPERATORS": 1,
             "METHOD": 1,
+            "CONSTRUCTOR": 1,
             "INSTANCEOF": 1,
             "CLASS": 1,
+            "EQUALITY": 2,
             "DOT_NOTATION": 2,
             "DOTTED_VARIABLE_ACCESS": 2,
             "REQUIRE_OR_CHECK": 2
@@ -559,6 +570,7 @@
           "CONSTRUCTOR": 1,
           "GETTER": 1,
           "CLASS": 1,
+          "CLASS_FIELD": 1,
           "VISIBILITY_MODIFIERS": 6
         },
         "importList": [],
@@ -586,7 +598,9 @@
           "featureMap": {
             "VARIABLE_REASSIGNMENTS": 2,
             "METHOD": 2,
-            "CLASS": 1
+            "CONSTRUCTOR": 1,
+            "CLASS": 1,
+            "CLASS_FIELD": 1
           },
           "importList": [],
           "typeList": [],
@@ -617,7 +631,9 @@
         "featureMap": {
           "VARIABLE_REASSIGNMENTS": 2,
           "METHOD": 2,
-          "CLASS": 1
+          "CONSTRUCTOR": 1,
+          "CLASS": 1,
+          "CLASS_FIELD": 1
         },
         "importList": [],
         "typeList": [],
@@ -661,6 +677,7 @@
             "CONSTRUCTOR": 1,
             "GETTER": 1,
             "CLASS": 1,
+            "CLASS_FIELD": 1,
             "VISIBILITY_MODIFIERS": 6
           },
           "importList": [],
@@ -674,7 +691,9 @@
           "featureMap": {
             "VARIABLE_REASSIGNMENTS": 2,
             "METHOD": 2,
-            "CLASS": 1
+            "CONSTRUCTOR": 1,
+            "CLASS": 1,
+            "CLASS_FIELD": 1
           },
           "importList": [],
           "typeList": [],
@@ -788,7 +807,8 @@
         "complexity": 1,
         "features": {
           "featureMap": {
-            "PRINT_STATEMENTS": 1
+            "PRINT_STATEMENTS": 1,
+            "COMPANION_OBJECT": 1
           },
           "importList": [],
           "typeList": [],
@@ -800,7 +820,7 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 1
       }
     ],
     "incorrect": [
@@ -829,7 +849,8 @@
       "complexity": 1,
       "features": {
         "featureMap": {
-          "PRINT_STATEMENTS": 1
+          "PRINT_STATEMENTS": 1,
+          "COMPANION_OBJECT": 1
         },
         "importList": [],
         "typeList": [],
@@ -841,7 +862,7 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 1
     },
     "hasKotlin": true,
     "published": {
@@ -878,7 +899,8 @@
         },
         "kotlin": {
           "featureMap": {
-            "PRINT_STATEMENTS": 1
+            "PRINT_STATEMENTS": 1,
+            "COMPANION_OBJECT": 1
           },
           "importList": [],
           "typeList": [],
@@ -1137,19 +1159,19 @@
     "type": "KLASS",
     "klass": "Question",
     "metadata": {
-      "contentHash": "85cad84d1b50bd029f2262d40c3c9d1c",
+      "contentHash": "1c3c57254154d048ec5d4e479eacfb54",
       "packageName": "com.examples.testing.withconstructornotnull",
       "version": "2022.10.0",
       "author": "challen@illinois.edu",
       "javaDescription": "<p>Testing @NotNull annotation on constructor parameters.</p>",
       "usedFiles": [],
       "templateImports": [],
-      "focused": true
+      "focused": false
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.NotNull;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Testing @NotNull annotation on constructor parameters.\n */\n\n@Correct(\n    name = \"Test Constructor NotNull\",\n    version = \"2022.10.0\",\n    author = \"challen@illinois.edu\",\n    focused = true)\npublic class Question {\n  private final int stringLength;\n\n  public Question(@NotNull String value) {\n    stringLength = value.length();\n  }\n\n  public int getStringLength() {\n    return stringLength;\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.NotNull;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Testing @NotNull annotation on constructor parameters.\n */\n\n@Correct(\n    name = \"Test Constructor NotNull\",\n    version = \"2022.10.0\",\n    author = \"challen@illinois.edu\")\npublic class Question {\n  private final int stringLength;\n\n  public Question(@NotNull String value) {\n    stringLength = value.length();\n  }\n\n  public int getStringLength() {\n    return stringLength;\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withconstructornotnull/Question.java"
     },
@@ -1168,6 +1190,7 @@
           "GETTER": 1,
           "STRING": 1,
           "CLASS": 1,
+          "CLASS_FIELD": 1,
           "VISIBILITY_MODIFIERS": 4,
           "FINAL_FIELD": 1,
           "DOT_NOTATION": 1,
@@ -1224,6 +1247,7 @@
             "GETTER": 1,
             "STRING": 1,
             "CLASS": 1,
+            "CLASS_FIELD": 1,
             "VISIBILITY_MODIFIERS": 4,
             "FINAL_FIELD": 1,
             "DOT_NOTATION": 1,
@@ -1291,6 +1315,7 @@
           "NULL": 1,
           "CLASS": 1,
           "ASSERT": 3,
+          "CLASS_FIELD": 2,
           "VISIBILITY_MODIFIERS": 7,
           "FINAL_FIELD": 1
         },
@@ -1307,7 +1332,7 @@
         "comment": 0,
         "blank": 5
       },
-      "expectedDeadCount": 4
+      "expectedDeadCount": 1
     },
     "alternativeSolutions": [],
     "incorrect": [],
@@ -1347,6 +1372,7 @@
             "NULL": 1,
             "CLASS": 1,
             "ASSERT": 3,
+            "CLASS_FIELD": 2,
             "VISIBILITY_MODIFIERS": 7,
             "FINAL_FIELD": 1
           },
@@ -1406,6 +1432,7 @@
           "METHOD": 1,
           "RETURN": 1,
           "CLASS": 1,
+          "CLASS_FIELD": 1,
           "VISIBILITY_MODIFIERS": 2
         },
         "importList": [],
@@ -1437,6 +1464,7 @@
             "RETURN": 1,
             "CONSTRUCTOR": 1,
             "CLASS": 1,
+            "CLASS_FIELD": 1,
             "VISIBILITY_MODIFIERS": 3
           },
           "importList": [],
@@ -1485,6 +1513,7 @@
             "METHOD": 1,
             "RETURN": 1,
             "CLASS": 1,
+            "CLASS_FIELD": 1,
             "VISIBILITY_MODIFIERS": 2
           },
           "importList": [],
@@ -1567,7 +1596,8 @@
         "complexity": 1,
         "features": {
           "featureMap": {
-            "METHOD": 1
+            "METHOD": 1,
+            "COMPANION_OBJECT": 1
           },
           "importList": [],
           "typeList": [],
@@ -1579,7 +1609,7 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 1
       }
     ],
     "incorrect": [
@@ -1617,7 +1647,8 @@
       "complexity": 1,
       "features": {
         "featureMap": {
-          "METHOD": 1
+          "METHOD": 1,
+          "COMPANION_OBJECT": 1
         },
         "importList": [],
         "typeList": [],
@@ -1629,7 +1660,7 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 1
     },
     "hasKotlin": true,
     "published": {
@@ -1667,7 +1698,8 @@
         },
         "kotlin": {
           "featureMap": {
-            "METHOD": 1
+            "METHOD": 1,
+            "COMPANION_OBJECT": 1
           },
           "importList": [],
           "typeList": [],
@@ -1839,6 +1871,7 @@
           "STRING": 2,
           "NULL": 2,
           "ASSERT": 2,
+          "EQUALITY": 1,
           "DOT_NOTATION": 5,
           "DOTTED_METHOD_CALL": 5
         },
@@ -1858,7 +1891,7 @@
         "comment": 2,
         "blank": 0
       },
-      "expectedDeadCount": 3
+      "expectedDeadCount": 1
     },
     "alternativeSolutions": [],
     "incorrect": [
@@ -1907,6 +1940,7 @@
             "STRING": 2,
             "NULL": 2,
             "ASSERT": 2,
+            "EQUALITY": 1,
             "DOT_NOTATION": 5,
             "DOTTED_METHOD_CALL": 5
           },
@@ -2069,7 +2103,8 @@
             "FOR_LOOPS": 1,
             "METHOD": 1,
             "DOT_NOTATION": 4,
-            "DOTTED_METHOD_CALL": 4
+            "DOTTED_METHOD_CALL": 4,
+            "COMPANION_OBJECT": 1
           },
           "importList": [],
           "typeList": [],
@@ -2086,7 +2121,7 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 1
       }
     ],
     "incorrect": [],
@@ -2114,7 +2149,8 @@
           "FOR_LOOPS": 1,
           "METHOD": 1,
           "DOT_NOTATION": 4,
-          "DOTTED_METHOD_CALL": 4
+          "DOTTED_METHOD_CALL": 4,
+          "COMPANION_OBJECT": 1
         },
         "importList": [],
         "typeList": [],
@@ -2131,7 +2167,7 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 1
     },
     "hasKotlin": true,
     "published": {
@@ -2194,7 +2230,8 @@
             "FOR_LOOPS": 1,
             "METHOD": 1,
             "DOT_NOTATION": 4,
-            "DOTTED_METHOD_CALL": 4
+            "DOTTED_METHOD_CALL": 4,
+            "COMPANION_OBJECT": 1
           },
           "importList": [],
           "typeList": [],
@@ -2266,8 +2303,7 @@
           "THROW": 1,
           "NEW_KEYWORD": 1,
           "VISIBILITY_MODIFIERS": 3,
-          "STATIC_METHOD": 2,
-          "RECURSION": 1
+          "STATIC_METHOD": 2
         },
         "importList": [],
         "typeList": [
@@ -2329,8 +2365,7 @@
             "THROW": 1,
             "NEW_KEYWORD": 1,
             "VISIBILITY_MODIFIERS": 3,
-            "STATIC_METHOD": 2,
-            "RECURSION": 1
+            "STATIC_METHOD": 2
           },
           "importList": [],
           "typeList": [
@@ -2391,8 +2426,7 @@
           "THROW": 1,
           "NEW_KEYWORD": 1,
           "VISIBILITY_MODIFIERS": 2,
-          "STATIC_METHOD": 1,
-          "RECURSION": 1
+          "STATIC_METHOD": 1
         },
         "importList": [],
         "typeList": [
@@ -2486,8 +2520,7 @@
             "THROW": 1,
             "NEW_KEYWORD": 1,
             "VISIBILITY_MODIFIERS": 2,
-            "STATIC_METHOD": 1,
-            "RECURSION": 1
+            "STATIC_METHOD": 1
           },
           "importList": [],
           "typeList": [
@@ -2719,6 +2752,7 @@
           "CLASS": 1,
           "EXTENDS": 1,
           "SUPER": 1,
+          "CLASS_FIELD": 2,
           "VISIBILITY_MODIFIERS": 6,
           "FINAL_FIELD": 2,
           "DOT_NOTATION": 2,
@@ -2783,6 +2817,7 @@
             "CLASS": 1,
             "EXTENDS": 1,
             "SUPER": 1,
+            "CLASS_FIELD": 2,
             "VISIBILITY_MODIFIERS": 6,
             "FINAL_FIELD": 2,
             "DOT_NOTATION": 2,
@@ -3358,7 +3393,7 @@
     "type": "METHOD",
     "klass": "Question",
     "metadata": {
-      "contentHash": "cf69028309acfa6fae8cc88f3063f219",
+      "contentHash": "de06895ddbedb506a09965a2c6942941",
       "packageName": "com.examples.addone",
       "version": "2021.6.0",
       "author": "challen@illinois.edu",
@@ -3374,12 +3409,12 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/correct/kotlin/Question.kt"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": true
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\n\n/*\n * Write a method `addOne` that returns its `int` argument plus one.\n */\n\n@Correct(name = \"Add One\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\n@Wrap\npublic class Question {\n  // Here to avoid dead code errors in the memoization test\n  @FixedParameters\n  private static final List<Integer> FIXED = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);\n\n  int addOne(int value) {\n    return value + 1;\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\n\n/*\n * Write a method `addOne` that returns its `int` argument plus one.\n */\n\n@Correct(name = \"Add One\", author = \"challen@illinois.edu\", version = \"2021.6.0\", focused = true)\n@Wrap\npublic class Question {\n  // Here to avoid dead code errors in the memoization test\n  @FixedParameters\n  private static final List<Integer> FIXED = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);\n\n  int addOne(int value) {\n    return value + 1;\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/Question.java"
     },
@@ -3444,7 +3479,8 @@
         "complexity": 1,
         "features": {
           "featureMap": {
-            "METHOD": 1
+            "METHOD": 1,
+            "COMPANION_OBJECT": 1
           },
           "importList": [],
           "typeList": [],
@@ -3456,7 +3492,7 @@
           "comment": 3,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 1
       }
     ],
     "incorrect": [
@@ -3521,7 +3557,8 @@
       "complexity": 1,
       "features": {
         "featureMap": {
-          "METHOD": 1
+          "METHOD": 1,
+          "COMPANION_OBJECT": 1
         },
         "importList": [],
         "typeList": [],
@@ -3533,7 +3570,7 @@
         "comment": 3,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 1
     },
     "hasKotlin": true,
     "published": {
@@ -3571,7 +3608,8 @@
         },
         "kotlin": {
           "featureMap": {
-            "METHOD": 1
+            "METHOD": 1,
+            "COMPANION_OBJECT": 1
           },
           "importList": [],
           "typeList": [],
@@ -3655,7 +3693,7 @@
         "comment": 0,
         "blank": 1
       },
-      "expectedDeadCount": 2
+      "expectedDeadCount": 1
     },
     "alternativeSolutions": [
       {
@@ -3667,6 +3705,7 @@
         "features": {
           "featureMap": {
             "METHOD": 1,
+            "EQUALITY": 1,
             "DOT_NOTATION": 1,
             "DOTTED_VARIABLE_ACCESS": 1,
             "REQUIRE_OR_CHECK": 1
@@ -3723,6 +3762,7 @@
       "features": {
         "featureMap": {
           "METHOD": 1,
+          "EQUALITY": 1,
           "DOT_NOTATION": 1,
           "DOTTED_VARIABLE_ACCESS": 1,
           "REQUIRE_OR_CHECK": 1
@@ -3787,6 +3827,7 @@
         "kotlin": {
           "featureMap": {
             "METHOD": 1,
+            "EQUALITY": 1,
             "DOT_NOTATION": 1,
             "DOTTED_VARIABLE_ACCESS": 1,
             "REQUIRE_OR_CHECK": 1

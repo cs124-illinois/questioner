@@ -132,6 +132,12 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
             } + when {
                 features.featureMap[FeatureName.ELVIS_OPERATOR] > 0 -> features.featureMap[FeatureName.ELVIS_OPERATOR]
                 else -> 0
+            } + when {
+                features.featureMap[FeatureName.CLASS_FIELD] > 0 && features.featureMap[FeatureName.CONSTRUCTOR] == 0 -> 1
+                else -> 0
+            } + when {
+                features.featureMap[FeatureName.COMPANION_OBJECT] > 0 && features.featureMap[FeatureName.CONSTRUCTOR] == 0 -> 1
+                else -> 0
             }
         }
         return Question.FlatFile(

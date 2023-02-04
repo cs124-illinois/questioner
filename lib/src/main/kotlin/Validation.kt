@@ -99,7 +99,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             }
 
         val size = toJson().length
-        if (finalChecks && size > Question.DEFAULT_MAX_OUTPUT_SIZE || taskResults!!.truncatedLines > 0) {
+        if (finalChecks && (size > Question.DEFAULT_MAX_OUTPUT_SIZE || taskResults!!.truncatedLines > 0)) {
             throw TooMuchOutput(file.contents, file.path, size, Question.DEFAULT_MAX_OUTPUT_SIZE, file.language)
         }
 
@@ -107,7 +107,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             file.expectedDeadCount ?: correct.expectedDeadCount ?: error("Couldn't load dead code count")
         val deadCodeLimit = control.maxDeadCode!! + expectedDeadCode
 
-        if (finalChecks && complete.coverage!!.submission.missed > deadCodeLimit) {
+        if (finalChecks && (complete.coverage!!.submission.missed > deadCodeLimit)) {
             throw SolutionDeadCode(
                 file,
                 complete.coverage!!.submission.missed,
@@ -125,6 +125,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
                     }
                 )
             }
+
             Question.Language.kotlin -> {
                 kotlinClassWhitelist.addAll(
                     taskResults!!.sandboxedClassLoader!!.loadedClasses.filter { klass ->
@@ -187,7 +188,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
 
     val bootstrapSettings = Question.TestingSettings(
         seed = seed,
-        testCount = minTestCount,
+        testCount = maxTestCount,
         timeout = control.maxTimeout!!, // No timeout
         outputLimit = Question.UNLIMITED_OUTPUT_LINES, // No line limit
         perTestOutputLimit = Question.UNLIMITED_OUTPUT_LINES, // No per test line limit
@@ -456,39 +457,51 @@ private fun TestResults.validate(reason: Question.IncorrectFile.Reason) {
         Question.IncorrectFile.Reason.COMPILE -> require(failed.compileSubmission != null) {
             "Expected submission not to compile"
         }
+
         Question.IncorrectFile.Reason.CHECKSTYLE -> require(failed.checkstyle != null) {
             "Expected submission to fail checkstyle"
         }
+
         Question.IncorrectFile.Reason.DESIGN -> require(failed.checkCompiledSubmission != null || failed.checkExecutedSubmission != null) {
             "Expected submission to fail design"
         }
+
         Question.IncorrectFile.Reason.TIMEOUT -> require(timeout || !succeeded) {
             "Expected submission to timeout"
         }
+
         Question.IncorrectFile.Reason.DEADCODE -> require(complete.coverage?.failed == true) {
             "Expected submission to contain dead code"
         }
+
         Question.IncorrectFile.Reason.LINECOUNT -> require(complete.executionCount?.failed == true) {
             "Expected submission to execute too many lines"
         }
+
         Question.IncorrectFile.Reason.TOOLONG -> require(complete.lineCount?.failed == true) {
             "Expected submission to contain too many lines"
         }
+
         Question.IncorrectFile.Reason.MEMORYLIMIT -> require(complete.memoryAllocation?.failed == true) {
             "Expected submission to allocate too much memory: ${complete.memoryAllocation}"
         }
+
         Question.IncorrectFile.Reason.RECURSION -> require(failed.checkExecutedSubmission?.contains("was not implemented recursively") == true) {
             "Expected submission to not correctly provide a recursive method"
         }
+
         Question.IncorrectFile.Reason.COMPLEXITY -> require(complete.complexity?.failed == true) {
             "Expected submission to be too complex"
         }
+
         Question.IncorrectFile.Reason.FEATURES -> require(failed.features != null) {
             "Expected submission to fail feature check"
         }
+
         Question.IncorrectFile.Reason.MEMOIZATION -> require(failed.complexity != null && failed.complexity!!.contains("exceeds maximum")) {
             "Expected submission to be so complex as to suggest memoization"
         }
+
         else -> require(complete.testing?.passed == false) {
             "Expected submission to fail tests"
         }
