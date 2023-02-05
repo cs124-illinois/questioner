@@ -55,7 +55,7 @@
         "comment": 0,
         "blank": 1
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [
       {
@@ -244,7 +244,7 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [],
     "incorrect": [],
@@ -368,7 +368,7 @@
         "comment": 0,
         "blank": 3
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [
       {
@@ -768,7 +768,7 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [
       {
@@ -797,7 +797,7 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 1
+        "expectedDeadCount": 0
       },
       {
         "klass": "QuestionKt",
@@ -820,7 +820,7 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 1
+        "expectedDeadCount": 0
       }
     ],
     "incorrect": [
@@ -862,7 +862,7 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "hasKotlin": true,
     "published": {
@@ -971,7 +971,7 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [],
     "incorrect": [],
@@ -1084,7 +1084,7 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [],
     "incorrect": [],
@@ -1332,7 +1332,7 @@
         "comment": 0,
         "blank": 5
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [],
     "incorrect": [],
@@ -1450,7 +1450,7 @@
         "comment": 1,
         "blank": 1
       },
-      "expectedDeadCount": 2
+      "expectedDeadCount": 1
     },
     "alternativeSolutions": [
       {
@@ -1476,7 +1476,7 @@
           "comment": 0,
           "blank": 1
         },
-        "expectedDeadCount": 2
+        "expectedDeadCount": 1
       }
     ],
     "incorrect": [],
@@ -1508,7 +1508,7 @@
         "comment": 0,
         "blank": 1
       },
-      "expectedDeadCount": 2
+      "expectedDeadCount": 1
     },
     "hasKotlin": true,
     "published": {
@@ -1630,7 +1630,7 @@
         "comment": 0,
         "blank": 2
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [
       {
@@ -1768,7 +1768,7 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [
       {
@@ -1792,7 +1792,7 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 1
+        "expectedDeadCount": 0
       }
     ],
     "incorrect": [
@@ -1843,7 +1843,7 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "hasKotlin": true,
     "published": {
@@ -1956,7 +1956,7 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [],
     "incorrect": [],
@@ -2074,7 +2074,7 @@
         "comment": 2,
         "blank": 0
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [],
     "incorrect": [
@@ -2221,7 +2221,7 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [
       {
@@ -2270,7 +2270,7 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 1
+        "expectedDeadCount": 0
       },
       {
         "klass": "Question",
@@ -2304,7 +2304,7 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 1
+        "expectedDeadCount": 0
       }
     ],
     "incorrect": [],
@@ -2350,7 +2350,7 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "hasKotlin": true,
     "published": {
@@ -2500,7 +2500,7 @@
         "comment": 0,
         "blank": 2
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [],
     "incorrect": [
@@ -2623,7 +2623,7 @@
         "comment": 0,
         "blank": 1
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [
       {
@@ -2665,7 +2665,7 @@
           "comment": 0,
           "blank": 1
         },
-        "expectedDeadCount": 1
+        "expectedDeadCount": 0
       }
     ],
     "incorrect": [],
@@ -2775,7 +2775,7 @@
         "comment": 0,
         "blank": 1
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [
       {
@@ -3072,7 +3072,7 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [],
     "incorrect": [],
@@ -3192,7 +3192,7 @@
         "comment": 0,
         "blank": 2
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [
       {
@@ -3422,7 +3422,7 @@
         "comment": 0,
         "blank": 2
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [
       {
@@ -3625,7 +3625,7 @@
         "comment": 1,
         "blank": 1
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [
       {
@@ -3652,7 +3652,7 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 1
+        "expectedDeadCount": 0
       },
       {
         "klass": "Question",
@@ -3675,7 +3675,7 @@
           "comment": 3,
           "blank": 0
         },
-        "expectedDeadCount": 1
+        "expectedDeadCount": 0
       }
     ],
     "incorrect": [
@@ -3753,7 +3753,7 @@
         "comment": 3,
         "blank": 0
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "hasKotlin": true,
     "published": {
@@ -3876,7 +3876,7 @@
         "comment": 0,
         "blank": 1
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 0
     },
     "alternativeSolutions": [
       {

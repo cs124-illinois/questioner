@@ -2,7 +2,6 @@ package edu.illinois.cs.cs125.questioner.plugin.save
 
 import com.google.googlejavaformat.java.Formatter
 import edu.illinois.cs.cs125.jeed.core.CheckstyleArguments
-import edu.illinois.cs.cs125.jeed.core.FeatureName
 import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.checkstyle
 import edu.illinois.cs.cs125.jeed.core.complexity
@@ -118,7 +117,8 @@ data class ParsedJavaFile(val path: String, val contents: String) {
             annotations.first().let { annotation ->
                 @Suppress("TooGenericExceptionCaught")
                 try {
-                    annotation.parameterMap().let { it["suppressions"] ?: error("suppressions field not set on @CheckstyleSuppress") }
+                    annotation.parameterMap()
+                        .let { it["suppressions"] ?: error("suppressions field not set on @CheckstyleSuppress") }
                 } catch (e: Exception) {
                     error("Couldn't parse @CheckstyleSuppress suppressions for $path: $e")
                 }.let { names ->
@@ -310,6 +310,7 @@ $cleanContent
 }"""
                 )
             )
+
             Question.Type.SNIPPET -> Source.fromSnippet(cleanContent)
         }
         val complexity = source.complexity().let { results ->
@@ -329,15 +330,7 @@ $cleanContent
                 Question.Type.SNIPPET -> features.lookup("")
             }
         }.features
-        val expectedDeadCode = deadlineCount + features.let {
-            when {
-                features.featureMap[FeatureName.ASSERT] != 0 -> 1
-                else -> 0
-            } + when {
-                features.featureMap[FeatureName.ASSERT] == 0 && features.featureMap[FeatureName.CONSTRUCTOR] == 0 -> 1
-                else -> 0
-            }
-        }
+
         return@runBlocking Pair(
             Question.FlatFile(
                 className,
@@ -347,7 +340,7 @@ $cleanContent
                 complexity,
                 features,
                 lineCounts,
-                expectedDeadCode
+                deadlineCount
             ),
             questionType
         )
@@ -427,7 +420,18 @@ $cleanContent
 
     fun toAlternateFile(cleanSpec: CleanSpec): Question.FlatFile {
         check(alternateSolution != null) { "Not an alternate solution file" }
-        val cleanContent = clean(cleanSpec).trimStart()
+        val solutionContent = clean(cleanSpec, false).trimStart().let {
+            Source.fromJava(it).googleFormat().contents
+        }
+
+        val cleanContentWithDead = solutionContent.javaDeTemplate(cleanSpec.hasTemplate, cleanSpec.wrappedClass)
+        val deadlineCount = cleanContentWithDead.lines().filter {
+            it.trim().endsWith("// dead code")
+        }.size
+        val cleanContent = cleanContentWithDead.lines().map {
+            it.trimEnd().removeSuffix("// dead code").trimEnd()
+        }.joinToString("\n")
+
         val questionType = cleanContent.getType()
         val source = when (questionType) {
             Question.Type.KLASS -> Source(mapOf("$className.java" to cleanContent))
@@ -439,6 +443,7 @@ $cleanContent
                     """.trimMargin()
                 )
             )
+
             Question.Type.SNIPPET -> Source.fromSnippet(cleanContent)
         }
         val complexity = source.complexity().let { results ->
@@ -458,15 +463,6 @@ $cleanContent
                 Question.Type.SNIPPET -> features.lookup("")
             }
         }.features
-        val expectedDeadCode = features.let {
-            when {
-                features.featureMap[FeatureName.ASSERT] > 0 -> features.featureMap[FeatureName.ASSERT] + 1
-                else -> 0
-            } + when {
-                features.featureMap[FeatureName.ASSERT] == 0 && features.featureMap[FeatureName.CONSTRUCTOR] == 0 -> 1
-                else -> 0
-            }
-        }
         return Question.FlatFile(
             className,
             clean(cleanSpec).trimStart(),
@@ -475,7 +471,7 @@ $cleanContent
             complexity,
             features,
             lineCounts,
-            expectedDeadCode
+            deadlineCount
         )
     }
 
@@ -575,13 +571,14 @@ $cleanContent
                 }
             }
             classBodyDeclaration.memberDeclaration()?.constructorDeclaration()?.also { constructorDeclaration ->
-                constructorDeclaration.formalParameters()?.formalParameterList()?.formalParameter()?.forEach { parameters ->
-                    parameters.variableModifier().mapNotNull { it.annotation() }.forEach { annotation ->
-                        if (annotation.qualifiedName()?.asString()!! in annotationsToSnip) {
-                            toSnip.add(annotation.start.startIndex..annotation.stop.stopIndex)
+                constructorDeclaration.formalParameters()?.formalParameterList()?.formalParameter()
+                    ?.forEach { parameters ->
+                        parameters.variableModifier().mapNotNull { it.annotation() }.forEach { annotation ->
+                            if (annotation.qualifiedName()?.asString()!! in annotationsToSnip) {
+                                toSnip.add(annotation.start.startIndex..annotation.stop.stopIndex)
+                            }
                         }
                     }
-                }
             }
         }
 
@@ -646,6 +643,7 @@ $cleanContent
                     }.joinToString("\n").trimIndent().trim()
                 }
             }
+
             !hasTemplate -> this
             else -> {
                 val lines = split("\n")
@@ -731,8 +729,10 @@ fun JavaParser.AnnotationContext.comment(): String {
     return when {
         parent.parent is JavaParser.TypeDeclarationContext ->
             (parent.parent as JavaParser.TypeDeclarationContext).COMMENT()
+
         parent.parent.parent is JavaParser.ClassBodyDeclarationContext ->
             (parent.parent.parent as JavaParser.ClassBodyDeclarationContext).COMMENT()
+
         else -> error("Error retrieving comment")
     }?.toString()?.split("\n")?.joinToString(separator = "\n") { line ->
         line.trim()

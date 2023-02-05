@@ -253,6 +253,7 @@ data class Question(
         var solutionCoverage: TestResults.CoverageComparison.LineCoverage? = null,
         var solutionExecutionCount: LanguagesResourceUsage? = null,
         var solutionAllocation: LanguagesResourceUsage? = null,
+        var solutionDeadCode: LanguagesResourceUsage? = null,
         val checkBlacklist: Boolean = true,
         val disableLineCountLimit: Boolean = false,
         val disableAllocationLimit: Boolean = false,

@@ -5,6 +5,7 @@ import edu.illinois.cs.cs125.jeed.core.CheckstyleFailed
 import edu.illinois.cs.cs125.jeed.core.CompilationArguments
 import edu.illinois.cs.cs125.jeed.core.CompilationFailed
 import edu.illinois.cs.cs125.jeed.core.CompiledSource
+import edu.illinois.cs.cs125.jeed.core.FeatureName
 import edu.illinois.cs.cs125.jeed.core.Features
 import edu.illinois.cs.cs125.jeed.core.KompilationArguments
 import edu.illinois.cs.cs125.jeed.core.KtLintArguments
@@ -317,14 +318,29 @@ $contents
     return TestResults.ComplexityComparison(solutionComplexity, submissionComplexity, control.maxExtraComplexity!!)
 }
 
-fun Question.computeFeatures(
-    contents: String,
-    klassName: String,
+fun Question.checkFeatures(
+    submissionFeatures: Features,
     language: Question.Language
 ): TestResults.FeaturesComparison {
     val solutionFeatures = published.features[language]
     check(solutionFeatures != null) { "Solution features not available" }
-    val submissionFeatures = if (type == Question.Type.SNIPPET && contents.isEmpty()) {
+
+    val errors = if (featureChecker != null) {
+        @Suppress("UNCHECKED_CAST")
+        unwrap { featureChecker!!.invoke(null, solutionFeatures, submissionFeatures) } as List<String>
+    } else {
+        listOf()
+    }
+
+    return TestResults.FeaturesComparison(errors)
+}
+
+fun Question.computeFeatures(
+    contents: String,
+    klassName: String,
+    language: Question.Language
+): Features {
+    return if (type == Question.Type.SNIPPET && contents.isEmpty()) {
         Features()
     } else if (language == Question.Language.java) {
         when (type) {
@@ -375,15 +391,6 @@ ${contents.lines().joinToString("\n") { "  $it" }}
             else -> features.lookup(path, "$klassName.${language.extension()}")
         }
     }.features
-
-    val errors = if (featureChecker != null) {
-        @Suppress("UNCHECKED_CAST")
-        unwrap { featureChecker!!.invoke(null, solutionFeatures, submissionFeatures) } as List<String>
-    } else {
-        listOf()
-    }
-
-    return TestResults.FeaturesComparison(errors)
 }
 
 class MaxLineCountExceeded(message: String) : RuntimeException(message)
@@ -493,5 +500,40 @@ fun bindJeedCaptureOutputControlInput(
             jeedOutput.truncatedLines,
             resourceUsage
         )
+    }
+}
+
+fun Features.featuresDeadCode(language: Question.Language): Int {
+    return when (language) {
+        Question.Language.java -> {
+            when {
+                featureMap[FeatureName.ASSERT] != 0 -> 1
+                else -> 0
+            } + when {
+                featureMap[FeatureName.ASSERT] == 0 && featureMap[FeatureName.CONSTRUCTOR] == 0 -> 1
+                else -> 0
+            }
+        }
+        Question.Language.kotlin -> {
+            when {
+                featureMap[FeatureName.ASSERT] > 0 -> featureMap[FeatureName.ASSERT]
+                else -> 0
+            } + when {
+                featureMap[FeatureName.FOR_LOOP_STEP] > 0 -> featureMap[FeatureName.FOR_LOOP_STEP]
+                else -> 0
+            } + when {
+                featureMap[FeatureName.FOR_LOOP_RANGE] > 0 -> featureMap[FeatureName.FOR_LOOP_RANGE]
+                else -> 0
+            } + when {
+                featureMap[FeatureName.ELVIS_OPERATOR] > 0 -> featureMap[FeatureName.ELVIS_OPERATOR]
+                else -> 0
+            } + when {
+                featureMap[FeatureName.CLASS_FIELD] > 0 && featureMap[FeatureName.CONSTRUCTOR] == 0 -> 1
+                else -> 0
+            } + when {
+                featureMap[FeatureName.COMPANION_OBJECT] > 0 -> 1
+                else -> 0
+            }
+        }
     }
 }

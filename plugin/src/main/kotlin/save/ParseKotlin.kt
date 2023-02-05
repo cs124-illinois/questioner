@@ -1,6 +1,5 @@
 package edu.illinois.cs.cs125.questioner.plugin.save
 
-import edu.illinois.cs.cs125.jeed.core.FeatureName
 import edu.illinois.cs.cs125.jeed.core.KtLintArguments
 import edu.illinois.cs.cs125.jeed.core.SnippetArguments
 import edu.illinois.cs.cs125.jeed.core.Source
@@ -136,27 +135,6 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
                 features.lookup("", "$className.kt")
             }
         }.features
-        val expectedDeadCode = deadlineCount + features.let {
-            when {
-                features.featureMap[FeatureName.ASSERT] > 0 -> features.featureMap[FeatureName.ASSERT]
-                else -> 0
-            } + when {
-                features.featureMap[FeatureName.FOR_LOOP_STEP] > 0 -> features.featureMap[FeatureName.FOR_LOOP_STEP]
-                else -> 0
-            } + when {
-                features.featureMap[FeatureName.FOR_LOOP_RANGE] > 0 -> features.featureMap[FeatureName.FOR_LOOP_RANGE]
-                else -> 0
-            } + when {
-                features.featureMap[FeatureName.ELVIS_OPERATOR] > 0 -> features.featureMap[FeatureName.ELVIS_OPERATOR]
-                else -> 0
-            } + when {
-                features.featureMap[FeatureName.CLASS_FIELD] > 0 && features.featureMap[FeatureName.CONSTRUCTOR] == 0 -> 1
-                else -> 0
-            } + when {
-                features.featureMap[FeatureName.COMPANION_OBJECT] > 0 -> 1
-                else -> 0
-            }
-        }
         return@runBlocking Question.FlatFile(
             className,
             solutionContent,
@@ -165,7 +143,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
             complexity,
             features,
             lineCounts,
-            expectedDeadCode
+            deadlineCount
         )
     }
 

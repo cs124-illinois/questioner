@@ -86,8 +86,20 @@ suspend fun Question.test(
     }
 
     // features
+    val submissionFeatures = try {
+        computeFeatures(contents, klassName, language)
+    } catch (e: FeatureCheckException) {
+        results.failed.features = e.message!!
+        results.failedSteps.add(TestResults.Step.features)
+        return results
+    } catch (e: Exception) {
+        results.failed.features = e.message ?: "Unknown features failure"
+        results.failedSteps.add(TestResults.Step.features)
+        return results
+    }
+
     try {
-        results.complete.features = computeFeatures(contents, klassName, language)
+        results.complete.features = checkFeatures(submissionFeatures, language)
         results.completedSteps.add(TestResults.Step.features)
     } catch (e: FeatureCheckException) {
         results.failed.features = e.message!!
@@ -299,6 +311,14 @@ suspend fun Question.test(
 
 
     // coverage
+    check(settings.solutionDeadCode != null) { "Must set solutionDeadCode" }
+    val solutionDeadCode = if (language == Question.Language.java) {
+        settings.solutionDeadCode!!.java
+    } else {
+        settings.solutionDeadCode!!.kotlin
+    }!!
+    val featuresDeadCode = submissionFeatures.featuresDeadCode(language)
+
     val coverage = taskResults.pluginResult(Jacoco).classes.find { it.name == klassName }!!
     val missed = (coverage.firstLine..coverage.lastLine).toList().filter { line ->
         coverage.getLine(line).status == ICounter.NOT_COVERED || coverage.getLine(line).status == ICounter.PARTLY_COVERED
@@ -316,7 +336,7 @@ suspend fun Question.test(
         validationResults?.solutionCoverage ?: settings.solutionCoverage ?: submissionCoverage
 
     results.complete.coverage =
-        TestResults.CoverageComparison(solutionCoverage, submissionCoverage, missed, control.maxDeadCode!!)
+        TestResults.CoverageComparison(solutionCoverage, submissionCoverage, missed, solutionDeadCode.toInt() + featuresDeadCode)
     results.completedSteps.add(TestResults.Step.coverage)
 
     return results

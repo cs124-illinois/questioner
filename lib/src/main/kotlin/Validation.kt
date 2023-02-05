@@ -103,15 +103,11 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             throw TooMuchOutput(file.contents, file.path, size, Question.DEFAULT_MAX_OUTPUT_SIZE, file.language)
         }
 
-        val expectedDeadCode =
-            file.expectedDeadCount ?: correct.expectedDeadCount ?: error("Couldn't load dead code count")
-        val deadCodeLimit = control.maxDeadCode!! + expectedDeadCode
-
-        if (finalChecks && (complete.coverage!!.submission.missed > deadCodeLimit)) {
+        if (finalChecks && (complete.coverage!!.failed)) {
             throw SolutionDeadCode(
                 file,
                 complete.coverage!!.submission.missed,
-                deadCodeLimit,
+                complete.coverage!!.limit,
                 complete.coverage!!.missed
             )
         }
@@ -186,6 +182,15 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     val minTestCount = control.minTestCount!!.coerceAtMost(solution.maxCount)
     val maxTestCount = control.maxTestCount!!.coerceAtMost(solution.maxCount)
 
+    val solutionDeadCode = Question.LanguagesResourceUsage(
+        (setOf(correct) + alternativeSolutions).filter {
+            it.language === Question.Language.java
+        }.maxOf { it.expectedDeadCount ?: 0 }.toLong(),
+        (setOf(correct) + alternativeSolutions).filter {
+            it.language === Question.Language.kotlin
+        }.maxOfOrNull { it.expectedDeadCount ?: 0 }?.toLong()
+    )
+
     val bootstrapSettings = Question.TestingSettings(
         seed = seed,
         testCount = maxTestCount,
@@ -199,7 +204,9 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         executionCountLimit = Question.LanguagesResourceUsage(
             control.maxExecutionCountMultiplier!! * 1024,
             control.maxExecutionCountMultiplier!! * 1024
-        ) // No execution count limit
+        ),
+        solutionDeadCode = solutionDeadCode
+        // No execution count limit
         // No allocation limit
         // No known recursive methods yet
     )
@@ -300,7 +307,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             control.maxTestCount!! * control.maxExecutionCountMultiplier!! * 1024
         ),
         solutionAllocation = bootstrapSolutionAllocation,
-        solutionRecursiveMethods = solutionRecursiveMethods
+        solutionRecursiveMethods = solutionRecursiveMethods,
+        solutionDeadCode = solutionDeadCode
     )
     val incorrectResults = allIncorrect.map { wrong ->
         val specificIncorrectSettings = if (wrong.reason == Question.IncorrectFile.Reason.MEMORYLIMIT) {
@@ -379,7 +387,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             testCount * control.maxExecutionCountMultiplier!! * 1024,
             testCount * control.maxExecutionCountMultiplier!! * 1024
         ),
-        solutionRecursiveMethods = solutionRecursiveMethods
+        solutionRecursiveMethods = solutionRecursiveMethods,
+        solutionDeadCode = solutionDeadCode
     )
     val calibrationResults = (setOf(correct) + alternativeSolutions).map { right ->
         test(
@@ -423,7 +432,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             solutionAllocation.java * control.allocationLimitMultiplier!!,
             solutionAllocation.kotlin?.times(control.allocationLimitMultiplier!!)
         ),
-        solutionRecursiveMethods = solutionRecursiveMethods
+        solutionRecursiveMethods = solutionRecursiveMethods,
+        solutionDeadCode = solutionDeadCode
     )
 
     validationResults = Question.ValidationResults(
@@ -471,7 +481,7 @@ private fun TestResults.validate(reason: Question.IncorrectFile.Reason) {
         }
 
         Question.IncorrectFile.Reason.DEADCODE -> require(complete.coverage?.failed == true) {
-            "Expected submission to contain dead code"
+            "Expected submission to contain dead code: ${complete.coverage}"
         }
 
         Question.IncorrectFile.Reason.LINECOUNT -> require(complete.executionCount?.failed == true) {
