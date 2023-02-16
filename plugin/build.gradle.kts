@@ -58,6 +58,7 @@ tasks {
     val sourcesJar by creating(Jar::class) {
         archiveClassifier.set("sources")
         from(sourceSets["main"].allSource)
+        dependsOn(getTasksByName("generateGrammarSource", false))
     }
     artifacts {
         add("archives", sourcesJar)
