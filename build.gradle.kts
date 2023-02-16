@@ -8,7 +8,7 @@ plugins {
 }
 subprojects {
     group = "com.github.cs124-illinois.questioner"
-    version = "2023.2.0"
+    version = "2023.2.1"
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_17.toString()
@@ -44,7 +44,7 @@ allprojects {
 }
 tasks.dependencyUpdates {
     fun String.isNonStable() = !(
-        listOf("RELEASE", "FINAL", "GA", "JRE").any { toUpperCase().contains(it) }
+        listOf("RELEASE", "FINAL", "GA", "JRE").any { uppercase().contains(it) }
             || "^[0-9,.v-]+(-r)?$".toRegex().matches(this)
         )
     rejectVersionIf { candidate.version.isNonStable() }

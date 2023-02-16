@@ -83,7 +83,7 @@ suspend fun Question.testTests(
                 throw e.cause ?: e
             }
         }
-        val succeeded = taskResults.threw == null
+        @Suppress("UNUSED_VARIABLE") val succeeded = taskResults.threw == null
         // println("$succeeded ${taskResults.threw}")
     }
     return results

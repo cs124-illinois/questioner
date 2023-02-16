@@ -12,7 +12,7 @@ dependencies {
 
     implementation(gradleApi())
     implementation(project(":lib"))
-    implementation("org.jetbrains:markdown:0.3.6") {
+    implementation("org.jetbrains:markdown:0.4.0") {
         exclude(module = "kotlin-runtime")
         exclude(module = "kotlin-js")
     }
@@ -24,7 +24,7 @@ dependencies {
     implementation("com.github.slugify:slugify:3.0.2")
     implementation("org.apache.httpcomponents.client5:httpclient5-fluent:5.2.1")
 
-    testImplementation("io.kotest:kotest-runner-junit5:5.5.4")
+    testImplementation("io.kotest:kotest-runner-junit5:5.5.5")
 }
 tasks.compileKotlin {
     dependsOn(tasks.generateGrammarSource)

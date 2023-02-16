@@ -21,7 +21,7 @@ dependencies {
     implementation("io.ktor:ktor-server-call-logging:2.2.3")
     implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
     implementation("com.github.cs125-illinois:ktor-moshi:2022.9.0")
-    implementation("org.mongodb:mongodb-driver:3.12.11")
+    implementation("org.mongodb:mongodb-driver:3.12.12")
 
     implementation("org.slf4j:slf4j-api:2.0.6")
     implementation("ch.qos.logback:logback-classic:1.4.5")
