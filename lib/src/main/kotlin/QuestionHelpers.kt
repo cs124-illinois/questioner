@@ -286,7 +286,7 @@ $contents
                     )
                 )
 
-                Question.Type.SNIPPET -> Source.fromJavaSnippet(contents)
+                Question.Type.SNIPPET -> Source.fromJavaSnippet(contents, trim = false)
             }
             source.complexity().let { results ->
                 when (type) {
@@ -299,7 +299,7 @@ $contents
 
         language == Question.Language.kotlin -> {
             val source = when (type) {
-                Question.Type.SNIPPET -> Source.fromKotlinSnippet(contents)
+                Question.Type.SNIPPET -> Source.fromKotlinSnippet(contents, trim = false)
                 else -> Source(mapOf("$klass.kt" to contents))
             }
             source.complexity().let { results ->
@@ -354,11 +354,11 @@ ${contents.lines().joinToString("\n") { "  $it" }}
                 )
             )
 
-            Question.Type.SNIPPET -> Source.fromJavaSnippet(contents)
+            Question.Type.SNIPPET -> Source.fromJavaSnippet(contents, trim = false)
         }
     } else {
         when {
-            type == Question.Type.SNIPPET -> Source.fromKotlinSnippet(contents)
+            type == Question.Type.SNIPPET -> Source.fromKotlinSnippet(contents, trim = false)
             type == Question.Type.METHOD && !klassName.endsWith("kt") -> Source(
                 mapOf(
                     "$klassName.kt" to """

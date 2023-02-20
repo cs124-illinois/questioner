@@ -216,19 +216,19 @@ data class ServerResponse(val results: TestResults)
 val runtime: Runtime = Runtime.getRuntime()
 val counter = AtomicInteger()
 
-val CALL_START_TIME = AttributeKey<Instant>("CallStartTime")
+val CALL_START_TIME = AttributeKey<Long>("CallStartTime")
 
 @Suppress("LongMethod")
 fun Application.questioner() {
     intercept(ApplicationCallPipeline.Setup) {
-        call.attributes.put(CALL_START_TIME, Instant.now())
+        call.attributes.put(CALL_START_TIME, Instant.now().toEpochMilli())
     }
     install(CallLogging) {
         format { call ->
             val startTime = call.attributes.getOrNull(CALL_START_TIME)
             "${call.response.status()}: ${call.request.toLogString()} ${
             if (startTime != null) {
-                Instant.now().toEpochMilli() - startTime.toEpochMilli()
+                Instant.now().toEpochMilli() - startTime
             } else {
                 ""
             }
