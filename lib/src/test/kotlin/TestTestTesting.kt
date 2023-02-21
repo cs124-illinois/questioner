@@ -30,26 +30,31 @@ const val KOTLIN_EMPTY_SUITE = """fun test() {
 """
 
 class TestTestTesting : StringSpec({
-    "should test test suites for classes" {
+    "f: should test test suites for classes" {
         val (question) = validator.validate("Add One Class", force = true, testing = true).also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
         question.testTests(JAVA_EMPTY_SUITE_CLASS, Question.Language.java).also { results ->
             results.failedSteps.size shouldBe 0
+            results.complete.testTesting!!.succeeded shouldBe false
         }
         question.testTests(KOTLIN_EMPTY_SUITE, Question.Language.kotlin).also { results ->
             results.failedSteps.size shouldBe 0
+            results.complete.testTesting!!.succeeded shouldBe false
         }
+        println("Here")
         question.testTests(
             """
 public class TestQuestion {
   public static void test() {
     assert(Question.addOne(0) == 1);
+    assert(Question.addOne(1) == 2);
   }
 }""", Question.Language.java
         ).also { results ->
             results.failedSteps.size shouldBe 0
+            results.complete.testTesting!!.succeeded shouldBe true
         }
         question.testTests(
             """
@@ -59,6 +64,8 @@ fun test() {
 """, Question.Language.kotlin
         ).also { results ->
             results.failedSteps.size shouldBe 0
+            results.complete.testTesting!!.succeeded shouldBe false
+            results.complete.testTesting!!.incorrect shouldBe 1
         }
     }
     "should test test suites for methods" {
@@ -94,19 +101,19 @@ fun test() {
         }
 
         val compileTime = measureTimeMillis {
-            question.compileAllValidatedSubmissions()
+            question.compileAllValidationMutations()
         }
         val recompileTime = measureTimeMillis {
-            question.compileAllValidatedSubmissions()
+            question.compileAllValidationMutations()
         }
         recompileTime * 10 shouldBeLessThan compileTime
 
-        question.validationSubmissions shouldNotBe null
-        question.validationSubmissions!!.size shouldBeGreaterThan 0
-        question.validationSubmissions!!.forEach { incorrect ->
+        question.validationMutations shouldNotBe null
+        question.validationMutations!!.size shouldBeGreaterThan 0
+        question.validationMutations!!.forEach { incorrect ->
             incorrect.language shouldBe Question.Language.java
             incorrect.compiled(question).also {
-                (it as CopyableClassLoader).bytecodeForClasses.keys shouldContain question.klass
+                (it.classloader as CopyableClassLoader).bytecodeForClasses.keys shouldContain question.klass
             }
             question.test(incorrect.contents(question), incorrect.language).also {
                 it.complete.testing?.passed shouldBe false

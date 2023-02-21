@@ -321,7 +321,7 @@ data class Question(
     }
 
     @JsonClass(generateAdapter = true)
-    data class ValidationSubmission(
+    data class ValidationMutation(
         val deltas: List<String>,
         val language: Language,
         val incorrectIndex: Int?,
@@ -342,8 +342,8 @@ data class Question(
         }
 
         @Transient
-        private var _compiled: ClassLoader? = null
-        suspend fun compiled(question: Question): ClassLoader {
+        private var _compiled: TestTestingSource? = null
+        suspend fun compiled(question: Question): TestTestingSource {
             if (_compiled != null) {
                 return _compiled!!
             }
@@ -362,7 +362,7 @@ data class Question(
                         results
                     )
             }.let {
-                question.fixTestingMethods(it.classLoader)
+                TestTestingSource(contents(question), question.fixTestingMethods(it.classLoader))
             }.also {
                 _compiled = it
             }
@@ -396,6 +396,8 @@ data class Question(
         }
     }
 
+    data class TestTestingSource(val contents: String, val classloader: ClassLoader)
+
     @delegate:Transient
     val compiledSolutionForTesting by lazy {
         Source(mapOf("${question.klass}.java" to question.contents)).let { questionSource ->
@@ -411,7 +413,7 @@ data class Question(
                 )
             }
         }.let {
-            fixTestingMethods(it.classLoader)
+            TestTestingSource(question.contents, fixTestingMethods(it.classLoader))
         }
     }
 
@@ -481,9 +483,9 @@ data class Question(
 
     var fauxStatic: Boolean = false
 
-    var validationSubmissions: List<ValidationSubmission>? = null
-    suspend fun compileAllValidatedSubmissions() = validationSubmissions!!.forEach {
-        it.compiled(this)
+    var validationMutations: List<ValidationMutation>? = null
+    suspend fun compileAllValidationMutations() = validationMutations!!.forEach { validationMutation ->
+        validationMutation.compiled(this)
     }
 
     @Suppress("unused")

@@ -12,17 +12,18 @@ suspend fun Question.testTests(
     contents: String,
     language: Question.Language
 ): TestTestResults {
-    compileAllValidatedSubmissions()
+    compileAllValidationMutations()
 
     val testKlass = "Test$klass"
     val results = TestTestResults(language)
 
     val compilationClassLoader = when (language) {
         Question.Language.java -> InvertingClassLoader(
-            setOf(testKlass), compiledSolutionForTesting
+            setOf(testKlass), compiledSolutionForTesting.classloader
         )
+
         Question.Language.kotlin -> InvertingClassLoader(
-            setOf(testKlass, "${testKlass}Kt"), compiledSolutionForTesting
+            setOf(testKlass, "${testKlass}Kt"), compiledSolutionForTesting.classloader
         )
     }
     val compiledSubmission = try {
@@ -44,7 +45,7 @@ suspend fun Question.testTests(
     val klassName = checkCompiledTestSuite(compiledSubmission, results) ?: return results
 
     val testingLoaders =
-        setOf(compiledSolutionForTesting) + validationSubmissions!!.map { it.compiled(this) }
+        setOf(compiledSolutionForTesting) + validationMutations!!.map { it.compiled(this) }
             .toSet()
     val executionArguments = Sandbox.ExecutionArguments(
         timeout = testingSettings!!.timeout.toLong(),
@@ -61,8 +62,13 @@ suspend fun Question.testTests(
         }
     }
 
-    for (testingLoader in testingLoaders) {
-        val testingSuiteLoader = CopyableClassLoader.copy(compiledSubmission.classLoader, testingLoader)
+    var correct = 0
+    var incorrect = 0
+
+    for (testingLoader in testingLoaders.shuffled()) {
+        val isSolution = testingLoader == compiledSolutionForTesting
+
+        val testingSuiteLoader = CopyableClassLoader.copy(compiledSubmission.classLoader, testingLoader.classloader)
         val taskResults = Sandbox.execute(
             testingSuiteLoader,
             executionArguments
@@ -83,9 +89,23 @@ suspend fun Question.testTests(
                 throw e.cause ?: e
             }
         }
-        @Suppress("UNUSED_VARIABLE") val succeeded = taskResults.threw == null
-        // println("$succeeded ${taskResults.threw}")
+        val isCorrect = if (isSolution) {
+            taskResults.threw == null
+        } else {
+            taskResults.threw != null
+        }
+        if (isCorrect) {
+            correct++
+        } else {
+            incorrect++
+        }
     }
+
+    val succeeded = correct == testingLoaders.size && incorrect == 0
+    val shortCircuited = correct + incorrect < testingLoaders.size
+
+    results.addTestTestingResults(TestTestResults.TestTestingResults(succeeded, correct, incorrect, shortCircuited))
+
     return results
 }
 
@@ -103,6 +123,7 @@ fun Question.templateTestSuites(
 }
 """
                 }
+
                 Question.Language.kotlin -> {
                     """class Test${klass} : ${klass}() {
   {{{ contents }}}
@@ -110,6 +131,7 @@ fun Question.templateTestSuites(
                 }
             }
         }
+
         Question.Type.SNIPPET -> error("Testing not supported for snippets")
     }
 
@@ -218,6 +240,7 @@ fun Question.checkCompiledTestSuite(
             testResults.failedSteps.add(TestTestResults.Step.checkCompiledSubmission)
             return null
         }
+
         it.size > 1 -> {
             testResults.failed.checkCompiledSubmission = "Test suite defined multiple classes"
             testResults.failedSteps.add(TestTestResults.Step.checkCompiledSubmission)

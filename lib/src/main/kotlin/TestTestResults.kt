@@ -4,18 +4,11 @@ import com.squareup.moshi.JsonClass
 import edu.illinois.cs.cs125.jeed.core.CheckstyleFailed
 import edu.illinois.cs.cs125.jeed.core.CheckstyleResults
 import edu.illinois.cs.cs125.jeed.core.CompilationFailed
-import edu.illinois.cs.cs125.jeed.core.ComplexityFailed
 import edu.illinois.cs.cs125.jeed.core.KtLintFailed
 import edu.illinois.cs.cs125.jeed.core.KtLintResults
-import edu.illinois.cs.cs125.jeed.core.LineCounts
 import edu.illinois.cs.cs125.jeed.core.Sandbox
-import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.TemplatingFailed
-import edu.illinois.cs.cs125.jeed.core.getStackTraceForSource
 import edu.illinois.cs.cs125.jeed.core.moshi.CompiledSourceResult
-import edu.illinois.cs.cs125.jenisol.core.TestResult
-import edu.illinois.cs.cs125.jenisol.core.safePrint
-import edu.illinois.cs.cs125.jenisol.core.TestResult as JenisolTestResult
 
 @JsonClass(generateAdapter = true)
 data class TestTestResults(
@@ -40,6 +33,7 @@ data class TestTestResults(
         checkstyle,
         ktlint,
         checkCompiledSubmission,
+        testTesting
     }
 
     @JsonClass(generateAdapter = true)
@@ -49,6 +43,7 @@ data class TestTestResults(
         var checkstyle: CheckstyleResults? = null,
         var ktlint: KtLintResults? = null,
         // checkCompiledSubmission doesn't complete
+        var testTesting: TestTestingResults? = null
     )
 
     @JsonClass(generateAdapter = true)
@@ -70,6 +65,11 @@ data class TestTestResults(
         completedSteps.add(Step.ktlint)
         complete.ktlint = ktlint
         failedLinting = ktlint.errors.isNotEmpty()
+    }
+
+    fun addTestTestingResults(testTesting: TestTestingResults) {
+        completedSteps.add(Step.testTesting)
+        complete.testTesting = testTesting
     }
 
     val summary: String
@@ -94,4 +94,7 @@ data class TestTestResults(
 
     @Suppress("unused")
     fun toJson(): String = moshi.adapter(TestTestResults::class.java).toJson(this)
+
+    @JsonClass(generateAdapter = true)
+    data class TestTestingResults(val succeeded: Boolean, val correct: Int, val incorrect: Int, val shortCircuited: Boolean)
 }
