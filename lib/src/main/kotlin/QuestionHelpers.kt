@@ -5,7 +5,6 @@ import edu.illinois.cs.cs125.jeed.core.CheckstyleFailed
 import edu.illinois.cs.cs125.jeed.core.CompilationArguments
 import edu.illinois.cs.cs125.jeed.core.CompilationFailed
 import edu.illinois.cs.cs125.jeed.core.CompiledSource
-import edu.illinois.cs.cs125.jeed.core.FeatureName
 import edu.illinois.cs.cs125.jeed.core.Features
 import edu.illinois.cs.cs125.jeed.core.KompilationArguments
 import edu.illinois.cs.cs125.jeed.core.KtLintArguments
@@ -18,7 +17,6 @@ import edu.illinois.cs.cs125.jeed.core.checkstyle
 import edu.illinois.cs.cs125.jeed.core.compile
 import edu.illinois.cs.cs125.jeed.core.complexity
 import edu.illinois.cs.cs125.jeed.core.countLines
-import edu.illinois.cs.cs125.jeed.core.features
 import edu.illinois.cs.cs125.jeed.core.fromJavaSnippet
 import edu.illinois.cs.cs125.jeed.core.fromKotlinSnippet
 import edu.illinois.cs.cs125.jeed.core.fromTemplates
@@ -33,34 +31,37 @@ import java.io.ByteArrayInputStream
 import java.io.InputStream
 import kotlin.random.Random
 
-fun Question.templateSubmission(contents: String, language: Question.Language = Question.Language.java): Source {
+fun Question.templateSubmission(contents: String, language: Question.Language): Source {
     val template = getTemplate(language)
-    val fileName = "$klass.${language.extension()}"
     return if (template == null) {
-        Source(mapOf(fileName to contents))
+        Source(mapOf(filename(language) to contents))
     } else {
         Source.fromTemplates(
-            mapOf("$klass.${language.extension()}" to contents.trimEnd()),
-            mapOf("$klass.${language.extension()}.hbs" to template)
+            mapOf(filename(language) to contents.trimEnd()),
+            mapOf("${filename(language)}.hbs" to template)
         )
+    }
+}
+
+fun Question.contentsToSource(contents: String, language: Question.Language, testResults: TestResults): Source {
+    val cleanedContents = contents.lines().joinToString("\n") {
+        it.ifBlank { "" }
+    }
+    return templateSubmission(cleanedContents, language).also {
+        if (getTemplate(language) != null) {
+            testResults.completedSteps.add(TestResults.Step.templateSubmission)
+        }
     }
 }
 
 @Suppress("ThrowsCount")
 suspend fun Question.compileSubmission(
-    contents: String,
+    source: Source,
     parentClassLoader: ClassLoader,
     testResults: TestResults
 ): CompiledSource {
     return try {
         val actualParents = Pair(compiledCommon?.classLoader ?: parentClassLoader, compiledCommon?.fileManager)
-        val source = templateSubmission(contents.lines().joinToString("\n") {
-            it.ifBlank { "" }
-        }).also {
-            if (getTemplate(Question.Language.java) != null) {
-                testResults.completedSteps.add(TestResults.Step.templateSubmission)
-            }
-        }
         val compiledSource = source.compile(
             CompilationArguments(
                 parentClassLoader = actualParents.first,
@@ -97,19 +98,12 @@ suspend fun Question.compileSubmission(
 
 @Suppress("ThrowsCount")
 suspend fun Question.kompileSubmission(
-    contents: String,
+    source: Source,
     parentClassLoader: ClassLoader,
     testResults: TestResults
 ): CompiledSource {
     return try {
         val actualParents = Pair(compiledCommon?.classLoader ?: parentClassLoader, compiledCommon?.fileManager)
-        val source = templateSubmission(contents.lines().joinToString("\n") {
-            it.ifBlank { "" }
-        }, Question.Language.kotlin).also {
-            if (kotlinTemplate != null) {
-                testResults.completedSteps.add(TestResults.Step.templateSubmission)
-            }
-        }
         val compiledSource = source.kompile(
             KompilationArguments(
                 parentClassLoader = actualParents.first,
@@ -233,7 +227,7 @@ fun Question.mutations(seed: Int, count: Int) = templateSubmission(
         "// TEMPLATE_START\n" + correct.contents + "\n// TEMPLATE_END \n"
     } else {
         correct.contents
-    }
+    }, Question.Language.java
 ).allFixedMutations(random = Random(seed))
     .map {
         // Mutations will sometimes break the entire template
@@ -335,64 +329,6 @@ fun Question.checkFeatures(
     return TestResults.FeaturesComparison(errors)
 }
 
-fun Question.computeFeatures(
-    contents: String,
-    klassName: String,
-    language: Question.Language
-): Features {
-    return if (type == Question.Type.SNIPPET && contents.isEmpty()) {
-        Features()
-    } else if (language == Question.Language.java) {
-        when (type) {
-            Question.Type.KLASS -> Source(mapOf("$klassName.java" to contents))
-            Question.Type.METHOD -> Source(
-                mapOf(
-                    "$klassName.java" to """
-public class $klassName {
-${contents.lines().joinToString("\n") { "  $it" }}
-}""".trimStart()
-                )
-            )
-
-            Question.Type.SNIPPET -> Source.fromJavaSnippet(contents, trim = false)
-        }
-    } else {
-        when {
-            type == Question.Type.SNIPPET -> Source.fromKotlinSnippet(contents, trim = false)
-            type == Question.Type.METHOD && !klassName.endsWith("kt") -> Source(
-                mapOf(
-                    "$klassName.kt" to """
-class $klassName {
-${contents.lines().joinToString("\n") { "  $it" }}
-}""".trimStart()
-                )
-            )
-
-            else -> Source(mapOf("$klassName.kt" to contents))
-        }
-    }.features().let { features ->
-        val path = when (type) {
-            Question.Type.METHOD -> {
-                if (language == Question.Language.java) {
-                    klassName
-                } else {
-                    if (klassName.endsWith("Kt")) {
-                        ""
-                    } else {
-                        klassName
-                    }
-                }
-            }
-
-            else -> ""
-        }
-        when (type) {
-            Question.Type.SNIPPET -> features.lookup(path)
-            else -> features.lookup(path, "$klassName.${language.extension()}")
-        }
-    }.features
-}
-
 class MaxLineCountExceeded(message: String) : RuntimeException(message)
 
 fun Question.computeLineCounts(contents: String, language: Question.Language): TestResults.LineCountComparison {
@@ -446,10 +382,10 @@ class BumpingInputStream : InputStream() {
     private var index = 0
     private var usedIndex = false
 
-    fun setInputs(_inputs: List<ByteArray>) {
+    fun setInputs(ourInputs: List<ByteArray>) {
         index = 0
         usedIndex = false
-        inputs = _inputs
+        inputs = ourInputs
         stream = ByteArrayInputStream(inputs.getOrNull(index) ?: "".toByteArray())
     }
 
@@ -500,40 +436,5 @@ fun bindJeedCaptureOutputControlInput(
             jeedOutput.truncatedLines,
             resourceUsage
         )
-    }
-}
-
-fun Features.featuresDeadCode(language: Question.Language): Int {
-    return when (language) {
-        Question.Language.java -> {
-            when {
-                featureMap[FeatureName.ASSERT] != 0 -> 1
-                else -> 0
-            } + when {
-                featureMap[FeatureName.ASSERT] == 0 && featureMap[FeatureName.CONSTRUCTOR] == 0 -> 1
-                else -> 0
-            }
-        }
-        Question.Language.kotlin -> {
-            when {
-                featureMap[FeatureName.ASSERT] > 0 -> featureMap[FeatureName.ASSERT]
-                else -> 0
-            } + when {
-                featureMap[FeatureName.FOR_LOOP_STEP] > 0 -> featureMap[FeatureName.FOR_LOOP_STEP]
-                else -> 0
-            } + when {
-                featureMap[FeatureName.FOR_LOOP_RANGE] > 0 -> featureMap[FeatureName.FOR_LOOP_RANGE]
-                else -> 0
-            } + when {
-                featureMap[FeatureName.ELVIS_OPERATOR] > 0 -> featureMap[FeatureName.ELVIS_OPERATOR]
-                else -> 0
-            } + when {
-                featureMap[FeatureName.CLASS_FIELD] > 0 && featureMap[FeatureName.CONSTRUCTOR] == 0 -> 1
-                else -> 0
-            } + when {
-                featureMap[FeatureName.COMPANION_OBJECT] > 0 -> 1
-                else -> 0
-            }
-        }
     }
 }

@@ -116,14 +116,14 @@
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "BLOCK_START",
             "location": {
               "line": 3,
               "column": 20
             }
           },
           {
-            "feature": "BLOCK_START",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 3,
               "column": 20
@@ -158,21 +158,21 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 5,
-              "column": 4
-            }
-          },
-          {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 5,
-              "column": 4
-            }
-          },
-          {
             "feature": "BLOCK_END",
+            "location": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
             "location": {
               "line": 5,
               "column": 4
@@ -207,14 +207,14 @@
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "BLOCK_START",
             "location": {
               "line": 6,
               "column": 20
             }
           },
           {
-            "feature": "BLOCK_START",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 6,
               "column": 20
@@ -242,21 +242,21 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 8,
-              "column": 4
-            }
-          },
-          {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 8,
-              "column": 4
-            }
-          },
-          {
             "feature": "BLOCK_END",
+            "location": {
+              "line": 8,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 8,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
             "location": {
               "line": 8,
               "column": 4
@@ -436,14 +436,14 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
+              "feature": "BLOCK_END",
               "location": {
                 "line": 5,
                 "column": 2
               }
             },
             {
-              "feature": "BLOCK_END",
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 5,
                 "column": 2
@@ -630,14 +630,14 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
+            "feature": "BLOCK_END",
             "location": {
               "line": 5,
               "column": 2
             }
           },
           {
-            "feature": "BLOCK_END",
+            "feature": "STATEMENT_END",
             "location": {
               "line": 5,
               "column": 2
@@ -805,14 +805,14 @@
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "BLOCK_START",
               "location": {
                 "line": 3,
                 "column": 20
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 3,
                 "column": 20
@@ -847,21 +847,21 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 5,
-                "column": 4
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 5,
-                "column": 4
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 5,
                 "column": 4
@@ -896,14 +896,14 @@
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "BLOCK_START",
               "location": {
                 "line": 6,
                 "column": 20
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 6,
                 "column": 20
@@ -931,21 +931,21 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 8,
-                "column": 4
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 8,
-                "column": 4
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 8,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 8,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 8,
                 "column": 4
@@ -1111,14 +1111,14 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
+              "feature": "BLOCK_END",
               "location": {
                 "line": 5,
                 "column": 2
               }
             },
             {
-              "feature": "BLOCK_END",
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 5,
                 "column": 2
@@ -1721,14 +1721,14 @@
             }
           },
           {
-            "feature": "LOGICAL_OPERATORS",
+            "feature": "COMPARISON_OPERATORS",
             "location": {
               "line": 9,
               "column": 11
             }
           },
           {
-            "feature": "COMPARISON_OPERATORS",
+            "feature": "LOGICAL_OPERATORS",
             "location": {
               "line": 9,
               "column": 11
@@ -1868,14 +1868,14 @@
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "BLOCK_START",
             "location": {
               "line": 16,
               "column": 40
             }
           },
           {
-            "feature": "BLOCK_START",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 16,
               "column": 40
@@ -1903,21 +1903,21 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 18,
-              "column": 4
-            }
-          },
-          {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 18,
-              "column": 4
-            }
-          },
-          {
             "feature": "BLOCK_END",
+            "location": {
+              "line": 18,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 18,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
             "location": {
               "line": 18,
               "column": 4
@@ -1945,6 +1945,13 @@
             }
           },
           {
+            "feature": "EQUALITY",
+            "location": {
+              "line": 19,
+              "column": 11
+            }
+          },
+          {
             "feature": "DOT_NOTATION",
             "location": {
               "line": 19,
@@ -1953,13 +1960,6 @@
           },
           {
             "feature": "DOTTED_METHOD_CALL",
-            "location": {
-              "line": 19,
-              "column": 11
-            }
-          },
-          {
-            "feature": "EQUALITY",
             "location": {
               "line": 19,
               "column": 11
@@ -1980,6 +1980,13 @@
             }
           },
           {
+            "feature": "EQUALITY",
+            "location": {
+              "line": 19,
+              "column": 38
+            }
+          },
+          {
             "feature": "DOT_NOTATION",
             "location": {
               "line": 19,
@@ -1988,13 +1995,6 @@
           },
           {
             "feature": "DOTTED_METHOD_CALL",
-            "location": {
-              "line": 19,
-              "column": 38
-            }
-          },
-          {
-            "feature": "EQUALITY",
             "location": {
               "line": 19,
               "column": 38
@@ -2349,14 +2349,14 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
+              "feature": "BLOCK_END",
               "location": {
                 "line": 12,
                 "column": 4
               }
             },
             {
-              "feature": "BLOCK_END",
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 12,
                 "column": 4
@@ -2688,14 +2688,14 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
+            "feature": "BLOCK_END",
             "location": {
               "line": 12,
               "column": 4
             }
           },
           {
-            "feature": "BLOCK_END",
+            "feature": "STATEMENT_END",
             "location": {
               "line": 12,
               "column": 4
@@ -3005,14 +3005,14 @@
               }
             },
             {
-              "feature": "LOGICAL_OPERATORS",
+              "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 9,
                 "column": 11
               }
             },
             {
-              "feature": "COMPARISON_OPERATORS",
+              "feature": "LOGICAL_OPERATORS",
               "location": {
                 "line": 9,
                 "column": 11
@@ -3152,14 +3152,14 @@
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "BLOCK_START",
               "location": {
                 "line": 16,
                 "column": 40
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 16,
                 "column": 40
@@ -3187,21 +3187,21 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 18,
-                "column": 4
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 18,
-                "column": 4
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 18,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 18,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 18,
                 "column": 4
@@ -3229,6 +3229,13 @@
               }
             },
             {
+              "feature": "EQUALITY",
+              "location": {
+                "line": 19,
+                "column": 11
+              }
+            },
+            {
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 19,
@@ -3237,13 +3244,6 @@
             },
             {
               "feature": "DOTTED_METHOD_CALL",
-              "location": {
-                "line": 19,
-                "column": 11
-              }
-            },
-            {
-              "feature": "EQUALITY",
               "location": {
                 "line": 19,
                 "column": 11
@@ -3264,6 +3264,13 @@
               }
             },
             {
+              "feature": "EQUALITY",
+              "location": {
+                "line": 19,
+                "column": 38
+              }
+            },
+            {
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 19,
@@ -3272,13 +3279,6 @@
             },
             {
               "feature": "DOTTED_METHOD_CALL",
-              "location": {
-                "line": 19,
-                "column": 38
-              }
-            },
-            {
-              "feature": "EQUALITY",
               "location": {
                 "line": 19,
                 "column": 38
@@ -3619,14 +3619,14 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
+              "feature": "BLOCK_END",
               "location": {
                 "line": 12,
                 "column": 4
               }
             },
             {
-              "feature": "BLOCK_END",
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 12,
                 "column": 4
@@ -3825,14 +3825,14 @@
             }
           },
           {
-            "feature": "UNARY_OPERATORS",
+            "feature": "VARIABLE_REASSIGNMENTS",
             "location": {
               "line": 9,
               "column": 4
             }
           },
           {
-            "feature": "VARIABLE_REASSIGNMENTS",
+            "feature": "UNARY_OPERATORS",
             "location": {
               "line": 9,
               "column": 4
@@ -3881,14 +3881,14 @@
             }
           },
           {
-            "feature": "UNARY_OPERATORS",
+            "feature": "VARIABLE_REASSIGNMENTS",
             "location": {
               "line": 13,
               "column": 4
             }
           },
           {
-            "feature": "VARIABLE_REASSIGNMENTS",
+            "feature": "UNARY_OPERATORS",
             "location": {
               "line": 13,
               "column": 4
@@ -4513,14 +4513,14 @@
               }
             },
             {
-              "feature": "UNARY_OPERATORS",
+              "feature": "VARIABLE_REASSIGNMENTS",
               "location": {
                 "line": 9,
                 "column": 4
               }
             },
             {
-              "feature": "VARIABLE_REASSIGNMENTS",
+              "feature": "UNARY_OPERATORS",
               "location": {
                 "line": 9,
                 "column": 4
@@ -4569,14 +4569,14 @@
               }
             },
             {
-              "feature": "UNARY_OPERATORS",
+              "feature": "VARIABLE_REASSIGNMENTS",
               "location": {
                 "line": 13,
                 "column": 4
               }
             },
             {
-              "feature": "VARIABLE_REASSIGNMENTS",
+              "feature": "UNARY_OPERATORS",
               "location": {
                 "line": 13,
                 "column": 4
@@ -4898,14 +4898,14 @@
         },
         "featureList": [
           {
-            "feature": "PRINT_STATEMENTS",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 1,
               "column": 0
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "PRINT_STATEMENTS",
             "location": {
               "line": 1,
               "column": 0
@@ -4972,6 +4972,13 @@
               }
             },
             {
+              "feature": "COMPARISON_OPERATORS",
+              "location": {
+                "line": 1,
+                "column": 4
+              }
+            },
+            {
               "feature": "LOGICAL_OPERATORS",
               "location": {
                 "line": 1,
@@ -4979,13 +4986,6 @@
               }
             },
             {
-              "feature": "COMPARISON_OPERATORS",
-              "location": {
-                "line": 1,
-                "column": 4
-              }
-            },
-            {
               "feature": "REFERENCE_EQUALITY",
               "location": {
                 "line": 1,
@@ -5004,13 +5004,6 @@
               "location": {
                 "line": 1,
                 "column": 23
-              }
-            },
-            {
-              "feature": "STATEMENT_START",
-              "location": {
-                "line": 1,
-                "column": 40
               }
             },
             {
@@ -5021,14 +5014,21 @@
               }
             },
             {
-              "feature": "PRINT_STATEMENTS",
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 1,
+                "column": 40
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 2,
                 "column": 2
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "PRINT_STATEMENTS",
               "location": {
                 "line": 2,
                 "column": 2
@@ -5049,21 +5049,21 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 3,
-                "column": 0
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 3,
-                "column": 0
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 3,
+                "column": 0
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 3,
+                "column": 0
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 3,
                 "column": 0
@@ -5237,14 +5237,14 @@
           },
           "featureList": [
             {
-              "feature": "PRINT_STATEMENTS",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 1,
                 "column": 0
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "PRINT_STATEMENTS",
               "location": {
                 "line": 1,
                 "column": 0
@@ -5408,14 +5408,14 @@
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "BLOCK_START",
             "location": {
               "line": 3,
               "column": 22
             }
           },
           {
-            "feature": "BLOCK_START",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 3,
               "column": 22
@@ -5443,14 +5443,14 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
+            "feature": "BLOCK_END",
             "location": {
               "line": 5,
               "column": 2
             }
           },
           {
-            "feature": "BLOCK_END",
+            "feature": "STATEMENT_END",
             "location": {
               "line": 5,
               "column": 2
@@ -5464,14 +5464,14 @@
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "BLOCK_START",
             "location": {
               "line": 5,
               "column": 9
             }
           },
           {
-            "feature": "BLOCK_START",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 5,
               "column": 9
@@ -5499,21 +5499,21 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 7,
-              "column": 2
-            }
-          },
-          {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 7,
-              "column": 2
-            }
-          },
-          {
             "feature": "BLOCK_END",
+            "location": {
+              "line": 7,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 7,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
             "location": {
               "line": 7,
               "column": 2
@@ -5626,14 +5626,14 @@
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "BLOCK_START",
               "location": {
                 "line": 3,
                 "column": 22
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 3,
                 "column": 22
@@ -5661,14 +5661,14 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
+              "feature": "BLOCK_END",
               "location": {
                 "line": 5,
                 "column": 2
               }
             },
             {
-              "feature": "BLOCK_END",
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 5,
                 "column": 2
@@ -5682,14 +5682,14 @@
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "BLOCK_START",
               "location": {
                 "line": 5,
                 "column": 9
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 5,
                 "column": 9
@@ -5717,21 +5717,21 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 7,
-                "column": 2
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 7,
-                "column": 2
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 7,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 7,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 7,
                 "column": 2
@@ -5762,6 +5762,1233 @@
       },
       "lineCounts": {
         "java": {
+          "source": 7,
+          "comment": 0,
+          "blank": 0
+        }
+      },
+      "templateImports": []
+    },
+    "fauxStatic": false
+  },
+  "With Feature Dead Code": {
+    "name": "With Feature Dead Code",
+    "type": "METHOD",
+    "klass": "Question",
+    "metadata": {
+      "contentHash": "b1322a269dba5068be926e0bf0e901c9",
+      "packageName": "com.examples.testing.withfeaturedeadcode",
+      "version": "2023.2.0",
+      "author": "challen@illinois.edu",
+      "javaDescription": "<p>Test feature-based dead code correction.</p>",
+      "kotlinDescription": "<p>Test feature-based dead code correction.</p>",
+      "usedFiles": [
+        "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withfeaturedeadcode/correct/kotlin/Question.kt"
+      ],
+      "templateImports": [],
+      "focused": false
+    },
+    "annotatedControls": {},
+    "question": {
+      "klass": "Question",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\n\nimport java.util.ArrayList;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Test feature-based dead code correction.\n */\n@Correct(name = \"With Feature Dead Code\", author = \"challen@illinois.edu\", version = \"2023.2.0\")\n@Wrap\npublic class Question {\n  List<Integer> rangeToList(int value) {\n    List<Integer> values = new ArrayList<>();\n    for (int i = 0; i < value; i += 2) {\n      values.add(i);\n    }\n    return values;\n  }\n\n  @FixedParameters\n  private static final List<Integer> FIXED = Arrays.asList(0, 8);\n\n  @RandomParameters\n  private static int randomParameters(Random random) {\n    return random.nextInt(32);\n  }\n}",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withfeaturedeadcode/Question.java"
+    },
+    "correct": {
+      "klass": "Question",
+      "contents": "List<Integer> rangeToList(int value) {\n  List<Integer> values = new ArrayList<>();\n  for (int i = 0; i < value; i += 2) {\n    values.add(i);\n  }\n  return values;\n}",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withfeaturedeadcode/Question.java",
+      "complexity": 2,
+      "features": {
+        "featureMap": {
+          "LOCAL_VARIABLE_DECLARATIONS": 2,
+          "VARIABLE_ASSIGNMENTS": 2,
+          "VARIABLE_REASSIGNMENTS": 1,
+          "ASSIGNMENT_OPERATORS": 1,
+          "COMPARISON_OPERATORS": 1,
+          "FOR_LOOPS": 1,
+          "METHOD": 1,
+          "RETURN": 1,
+          "NEW_KEYWORD": 1,
+          "BOXING_CLASSES": 2,
+          "TYPE_PARAMETERS": 2,
+          "DOT_NOTATION": 1,
+          "DOTTED_METHOD_CALL": 1
+        },
+        "featureList": [
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 1,
+              "column": 22
+            }
+          },
+          {
+            "feature": "METHOD",
+            "location": {
+              "line": 2,
+              "column": 0
+            }
+          },
+          {
+            "feature": "TYPE_PARAMETERS",
+            "location": {
+              "line": 2,
+              "column": 4
+            }
+          },
+          {
+            "feature": "BOXING_CLASSES",
+            "location": {
+              "line": 2,
+              "column": 5
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 2,
+              "column": 37
+            }
+          },
+          {
+            "feature": "TYPE_PARAMETERS",
+            "location": {
+              "line": 3,
+              "column": 6
+            }
+          },
+          {
+            "feature": "BOXING_CLASSES",
+            "location": {
+              "line": 3,
+              "column": 7
+            }
+          },
+          {
+            "feature": "LOCAL_VARIABLE_DECLARATIONS",
+            "location": {
+              "line": 3,
+              "column": 16
+            }
+          },
+          {
+            "feature": "VARIABLE_ASSIGNMENTS",
+            "location": {
+              "line": 3,
+              "column": 16
+            }
+          },
+          {
+            "feature": "NEW_KEYWORD",
+            "location": {
+              "line": 3,
+              "column": 25
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 4,
+              "column": 2
+            }
+          },
+          {
+            "feature": "FOR_LOOPS",
+            "location": {
+              "line": 4,
+              "column": 2
+            }
+          },
+          {
+            "feature": "LOCAL_VARIABLE_DECLARATIONS",
+            "location": {
+              "line": 4,
+              "column": 11
+            }
+          },
+          {
+            "feature": "VARIABLE_ASSIGNMENTS",
+            "location": {
+              "line": 4,
+              "column": 11
+            }
+          },
+          {
+            "feature": "COMPARISON_OPERATORS",
+            "location": {
+              "line": 4,
+              "column": 18
+            }
+          },
+          {
+            "feature": "VARIABLE_REASSIGNMENTS",
+            "location": {
+              "line": 4,
+              "column": 29
+            }
+          },
+          {
+            "feature": "ASSIGNMENT_OPERATORS",
+            "location": {
+              "line": 4,
+              "column": 29
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 4,
+              "column": 37
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 4,
+              "column": 37
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          {
+            "feature": "DOT_NOTATION",
+            "location": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          {
+            "feature": "DOTTED_METHOD_CALL",
+            "location": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 5,
+              "column": 17
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 6,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 6,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 6,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 7,
+              "column": 2
+            }
+          },
+          {
+            "feature": "RETURN",
+            "location": {
+              "line": 7,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 7,
+              "column": 15
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 8,
+              "column": 0
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 9,
+              "column": 0
+            }
+          }
+        ],
+        "importList": [],
+        "typeList": [
+          "List<Integer>",
+          "Integer",
+          "int"
+        ],
+        "identifierList": [
+          "values",
+          "i"
+        ],
+        "dottedMethodList": [
+          "add"
+        ]
+      },
+      "lineCount": {
+        "source": 7,
+        "comment": 0,
+        "blank": 0
+      },
+      "expectedDeadCount": 0
+    },
+    "alternativeSolutions": [
+      {
+        "klass": "Question",
+        "contents": "fun rangeToList(value: Int): List<Int> {\n  val values = mutableListOf<Int>()\n  for (i in 0 until value step 2) {\n    values.add(i)\n  }\n  return values\n}",
+        "language": "kotlin",
+        "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withfeaturedeadcode/correct/kotlin/Question.kt",
+        "complexity": 2,
+        "features": {
+          "featureMap": {
+            "LOCAL_VARIABLE_DECLARATIONS": 1,
+            "VARIABLE_ASSIGNMENTS": 1,
+            "FINAL_VARIABLE": 1,
+            "FOR_LOOPS": 1,
+            "METHOD": 1,
+            "RETURN": 1,
+            "TYPE_INFERENCE": 2,
+            "STATIC_METHOD": 1,
+            "TYPE_PARAMETERS": 2,
+            "DOT_NOTATION": 1,
+            "DOTTED_METHOD_CALL": 1,
+            "FOR_LOOP_STEP": 1
+          },
+          "featureList": [
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 1,
+                "column": 0
+              }
+            },
+            {
+              "feature": "STATIC_METHOD",
+              "location": {
+                "line": 1,
+                "column": 0
+              }
+            },
+            {
+              "feature": "TYPE_PARAMETERS",
+              "location": {
+                "line": 1,
+                "column": 34
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 1,
+                "column": 39
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "FINAL_VARIABLE",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "LOCAL_VARIABLE_DECLARATIONS",
+              "location": {
+                "line": 2,
+                "column": 6
+              }
+            },
+            {
+              "feature": "VARIABLE_ASSIGNMENTS",
+              "location": {
+                "line": 2,
+                "column": 6
+              }
+            },
+            {
+              "feature": "TYPE_INFERENCE",
+              "location": {
+                "line": 2,
+                "column": 6
+              }
+            },
+            {
+              "feature": "TYPE_PARAMETERS",
+              "location": {
+                "line": 2,
+                "column": 29
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 2,
+                "column": 34
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 3,
+                "column": 2
+              }
+            },
+            {
+              "feature": "FOR_LOOPS",
+              "location": {
+                "line": 3,
+                "column": 2
+              }
+            },
+            {
+              "feature": "TYPE_INFERENCE",
+              "location": {
+                "line": 3,
+                "column": 7
+              }
+            },
+            {
+              "feature": "FOR_LOOP_STEP",
+              "location": {
+                "line": 3,
+                "column": 26
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 3,
+                "column": 34
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 4,
+                "column": 4
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 4,
+                "column": 10
+              }
+            },
+            {
+              "feature": "DOTTED_METHOD_CALL",
+              "location": {
+                "line": 4,
+                "column": 14
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 4,
+                "column": 16
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 5,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 5,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 6,
+                "column": 2
+              }
+            },
+            {
+              "feature": "RETURN",
+              "location": {
+                "line": 6,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 6,
+                "column": 9
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 7,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [],
+          "identifierList": [],
+          "dottedMethodList": [
+            "add"
+          ]
+        },
+        "lineCount": {
+          "source": 7,
+          "comment": 0,
+          "blank": 0
+        },
+        "expectedDeadCount": 0
+      }
+    ],
+    "incorrect": [],
+    "common": [],
+    "javaTemplate": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Question {\n  {{{ contents }}}\n}",
+    "kotlinTemplate": "class Question {\n  {{{ contents }}}\n}",
+    "importWhitelist": [],
+    "importBlacklist": [],
+    "checkstyleSuppressions": [],
+    "slug": "with-feature-dead-code",
+    "kotlinSolution": {
+      "klass": "Question",
+      "contents": "fun rangeToList(value: Int): List<Int> {\n  val values = mutableListOf<Int>()\n  for (i in 0 until value step 2) {\n    values.add(i)\n  }\n  return values\n}",
+      "language": "kotlin",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withfeaturedeadcode/correct/kotlin/Question.kt",
+      "complexity": 2,
+      "features": {
+        "featureMap": {
+          "LOCAL_VARIABLE_DECLARATIONS": 1,
+          "VARIABLE_ASSIGNMENTS": 1,
+          "FINAL_VARIABLE": 1,
+          "FOR_LOOPS": 1,
+          "METHOD": 1,
+          "RETURN": 1,
+          "TYPE_INFERENCE": 2,
+          "STATIC_METHOD": 1,
+          "TYPE_PARAMETERS": 2,
+          "DOT_NOTATION": 1,
+          "DOTTED_METHOD_CALL": 1,
+          "FOR_LOOP_STEP": 1
+        },
+        "featureList": [
+          {
+            "feature": "METHOD",
+            "location": {
+              "line": 1,
+              "column": 0
+            }
+          },
+          {
+            "feature": "STATIC_METHOD",
+            "location": {
+              "line": 1,
+              "column": 0
+            }
+          },
+          {
+            "feature": "TYPE_PARAMETERS",
+            "location": {
+              "line": 1,
+              "column": 34
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 1,
+              "column": 39
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 2,
+              "column": 2
+            }
+          },
+          {
+            "feature": "FINAL_VARIABLE",
+            "location": {
+              "line": 2,
+              "column": 2
+            }
+          },
+          {
+            "feature": "LOCAL_VARIABLE_DECLARATIONS",
+            "location": {
+              "line": 2,
+              "column": 6
+            }
+          },
+          {
+            "feature": "VARIABLE_ASSIGNMENTS",
+            "location": {
+              "line": 2,
+              "column": 6
+            }
+          },
+          {
+            "feature": "TYPE_INFERENCE",
+            "location": {
+              "line": 2,
+              "column": 6
+            }
+          },
+          {
+            "feature": "TYPE_PARAMETERS",
+            "location": {
+              "line": 2,
+              "column": 29
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 2,
+              "column": 34
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 3,
+              "column": 2
+            }
+          },
+          {
+            "feature": "FOR_LOOPS",
+            "location": {
+              "line": 3,
+              "column": 2
+            }
+          },
+          {
+            "feature": "TYPE_INFERENCE",
+            "location": {
+              "line": 3,
+              "column": 7
+            }
+          },
+          {
+            "feature": "FOR_LOOP_STEP",
+            "location": {
+              "line": 3,
+              "column": 26
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 3,
+              "column": 34
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 4,
+              "column": 4
+            }
+          },
+          {
+            "feature": "DOT_NOTATION",
+            "location": {
+              "line": 4,
+              "column": 10
+            }
+          },
+          {
+            "feature": "DOTTED_METHOD_CALL",
+            "location": {
+              "line": 4,
+              "column": 14
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 4,
+              "column": 16
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 5,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 5,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 6,
+              "column": 2
+            }
+          },
+          {
+            "feature": "RETURN",
+            "location": {
+              "line": 6,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 6,
+              "column": 9
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 7,
+              "column": 0
+            }
+          }
+        ],
+        "importList": [],
+        "typeList": [],
+        "identifierList": [],
+        "dottedMethodList": [
+          "add"
+        ]
+      },
+      "lineCount": {
+        "source": 7,
+        "comment": 0,
+        "blank": 0
+      },
+      "expectedDeadCount": 0
+    },
+    "hasKotlin": true,
+    "published": {
+      "name": "With Feature Dead Code",
+      "type": "METHOD",
+      "path": "with-feature-dead-code",
+      "author": "challen@illinois.edu",
+      "version": "2023.2.0",
+      "packageName": "com.examples.testing.withfeaturedeadcode",
+      "languages": [
+        "java",
+        "kotlin"
+      ],
+      "descriptions": {
+        "java": "<p>Test feature-based dead code correction.</p>",
+        "kotlin": "<p>Test feature-based dead code correction.</p>"
+      },
+      "complexity": {
+        "java": 2,
+        "kotlin": 2
+      },
+      "features": {
+        "java": {
+          "featureMap": {
+            "LOCAL_VARIABLE_DECLARATIONS": 2,
+            "VARIABLE_ASSIGNMENTS": 2,
+            "VARIABLE_REASSIGNMENTS": 1,
+            "ASSIGNMENT_OPERATORS": 1,
+            "COMPARISON_OPERATORS": 1,
+            "FOR_LOOPS": 1,
+            "METHOD": 1,
+            "RETURN": 1,
+            "NEW_KEYWORD": 1,
+            "BOXING_CLASSES": 2,
+            "TYPE_PARAMETERS": 2,
+            "DOT_NOTATION": 1,
+            "DOTTED_METHOD_CALL": 1
+          },
+          "featureList": [
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 1,
+                "column": 22
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 2,
+                "column": 0
+              }
+            },
+            {
+              "feature": "TYPE_PARAMETERS",
+              "location": {
+                "line": 2,
+                "column": 4
+              }
+            },
+            {
+              "feature": "BOXING_CLASSES",
+              "location": {
+                "line": 2,
+                "column": 5
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 2,
+                "column": 37
+              }
+            },
+            {
+              "feature": "TYPE_PARAMETERS",
+              "location": {
+                "line": 3,
+                "column": 6
+              }
+            },
+            {
+              "feature": "BOXING_CLASSES",
+              "location": {
+                "line": 3,
+                "column": 7
+              }
+            },
+            {
+              "feature": "LOCAL_VARIABLE_DECLARATIONS",
+              "location": {
+                "line": 3,
+                "column": 16
+              }
+            },
+            {
+              "feature": "VARIABLE_ASSIGNMENTS",
+              "location": {
+                "line": 3,
+                "column": 16
+              }
+            },
+            {
+              "feature": "NEW_KEYWORD",
+              "location": {
+                "line": 3,
+                "column": 25
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 4,
+                "column": 2
+              }
+            },
+            {
+              "feature": "FOR_LOOPS",
+              "location": {
+                "line": 4,
+                "column": 2
+              }
+            },
+            {
+              "feature": "LOCAL_VARIABLE_DECLARATIONS",
+              "location": {
+                "line": 4,
+                "column": 11
+              }
+            },
+            {
+              "feature": "VARIABLE_ASSIGNMENTS",
+              "location": {
+                "line": 4,
+                "column": 11
+              }
+            },
+            {
+              "feature": "COMPARISON_OPERATORS",
+              "location": {
+                "line": 4,
+                "column": 18
+              }
+            },
+            {
+              "feature": "VARIABLE_REASSIGNMENTS",
+              "location": {
+                "line": 4,
+                "column": 29
+              }
+            },
+            {
+              "feature": "ASSIGNMENT_OPERATORS",
+              "location": {
+                "line": 4,
+                "column": 29
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 4,
+                "column": 37
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 4,
+                "column": 37
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "DOTTED_METHOD_CALL",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 5,
+                "column": 17
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 6,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 6,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 6,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 7,
+                "column": 2
+              }
+            },
+            {
+              "feature": "RETURN",
+              "location": {
+                "line": 7,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 7,
+                "column": 15
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 8,
+                "column": 0
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 9,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [
+            "List<Integer>",
+            "Integer",
+            "int"
+          ],
+          "identifierList": [
+            "values",
+            "i"
+          ],
+          "dottedMethodList": [
+            "add"
+          ]
+        },
+        "kotlin": {
+          "featureMap": {
+            "LOCAL_VARIABLE_DECLARATIONS": 1,
+            "VARIABLE_ASSIGNMENTS": 1,
+            "FINAL_VARIABLE": 1,
+            "FOR_LOOPS": 1,
+            "METHOD": 1,
+            "RETURN": 1,
+            "TYPE_INFERENCE": 2,
+            "STATIC_METHOD": 1,
+            "TYPE_PARAMETERS": 2,
+            "DOT_NOTATION": 1,
+            "DOTTED_METHOD_CALL": 1,
+            "FOR_LOOP_STEP": 1
+          },
+          "featureList": [
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 1,
+                "column": 0
+              }
+            },
+            {
+              "feature": "STATIC_METHOD",
+              "location": {
+                "line": 1,
+                "column": 0
+              }
+            },
+            {
+              "feature": "TYPE_PARAMETERS",
+              "location": {
+                "line": 1,
+                "column": 34
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 1,
+                "column": 39
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "FINAL_VARIABLE",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "LOCAL_VARIABLE_DECLARATIONS",
+              "location": {
+                "line": 2,
+                "column": 6
+              }
+            },
+            {
+              "feature": "VARIABLE_ASSIGNMENTS",
+              "location": {
+                "line": 2,
+                "column": 6
+              }
+            },
+            {
+              "feature": "TYPE_INFERENCE",
+              "location": {
+                "line": 2,
+                "column": 6
+              }
+            },
+            {
+              "feature": "TYPE_PARAMETERS",
+              "location": {
+                "line": 2,
+                "column": 29
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 2,
+                "column": 34
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 3,
+                "column": 2
+              }
+            },
+            {
+              "feature": "FOR_LOOPS",
+              "location": {
+                "line": 3,
+                "column": 2
+              }
+            },
+            {
+              "feature": "TYPE_INFERENCE",
+              "location": {
+                "line": 3,
+                "column": 7
+              }
+            },
+            {
+              "feature": "FOR_LOOP_STEP",
+              "location": {
+                "line": 3,
+                "column": 26
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 3,
+                "column": 34
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 4,
+                "column": 4
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 4,
+                "column": 10
+              }
+            },
+            {
+              "feature": "DOTTED_METHOD_CALL",
+              "location": {
+                "line": 4,
+                "column": 14
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 4,
+                "column": 16
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 5,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 5,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 6,
+                "column": 2
+              }
+            },
+            {
+              "feature": "RETURN",
+              "location": {
+                "line": 6,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 6,
+                "column": 9
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 7,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [],
+          "identifierList": [],
+          "dottedMethodList": [
+            "add"
+          ]
+        }
+      },
+      "lineCounts": {
+        "java": {
+          "source": 7,
+          "comment": 0,
+          "blank": 0
+        },
+        "kotlin": {
           "source": 7,
           "comment": 0,
           "blank": 0
@@ -7546,7 +8773,7 @@
     "type": "KLASS",
     "klass": "Question",
     "metadata": {
-      "contentHash": "8a2c3438f0a1179829d6de0cc97edd72",
+      "contentHash": "e6faa3e6584ced8d8d78063838805eb6",
       "packageName": "com.examples.testing.withdeadcodeannotation",
       "version": "2023.2.0",
       "author": "challen@illinois.edu",
@@ -7556,12 +8783,12 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withdeadcodeannotation/correct/kotlin/Question.kt"
       ],
       "templateImports": [],
-      "focused": true
+      "focused": false
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Testing dead code comments.\n */\n@Correct(name = \"With Dead Code Annotation\", version = \"2023.2.0\", author = \"challen@illinois.edu\", focused = true)\npublic class Question {\n  public static int whatever(int value) {\n    if (value % 2 == 0) {\n      return value * 2;\n    }\n    assert false;\n    // mutate-disable\n    return -1; // dead code\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Testing dead code comments.\n */\n@Correct(name = \"With Dead Code Annotation\", version = \"2023.2.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  public static int whatever(int value) {\n    if (value % 2 == 0) {\n      return value * 2;\n    }\n    assert false;\n    // mutate-disable\n    return -1; // dead code\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withdeadcodeannotation/Question.java"
     },
@@ -7649,6 +8876,13 @@
             }
           },
           {
+            "feature": "ARITHMETIC_OPERATORS",
+            "location": {
+              "line": 3,
+              "column": 8
+            }
+          },
+          {
             "feature": "COMPARISON_OPERATORS",
             "location": {
               "line": 3,
@@ -7663,21 +8897,14 @@
             }
           },
           {
-            "feature": "ARITHMETIC_OPERATORS",
-            "location": {
-              "line": 3,
-              "column": 8
-            }
-          },
-          {
-            "feature": "STATEMENT_START",
+            "feature": "BLOCK_START",
             "location": {
               "line": 3,
               "column": 24
             }
           },
           {
-            "feature": "BLOCK_START",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 3,
               "column": 24
@@ -7712,21 +8939,21 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 5,
-              "column": 4
-            }
-          },
-          {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 5,
-              "column": 4
-            }
-          },
-          {
             "feature": "BLOCK_END",
+            "location": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
             "location": {
               "line": 5,
               "column": 4
@@ -7898,14 +9125,14 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
+              "feature": "BLOCK_END",
               "location": {
                 "line": 4,
                 "column": 2
               }
             },
             {
-              "feature": "BLOCK_END",
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 4,
                 "column": 2
@@ -8074,14 +9301,14 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
+            "feature": "BLOCK_END",
             "location": {
               "line": 4,
               "column": 2
             }
           },
           {
-            "feature": "BLOCK_END",
+            "feature": "STATEMENT_END",
             "location": {
               "line": 4,
               "column": 2
@@ -8248,6 +9475,13 @@
               }
             },
             {
+              "feature": "ARITHMETIC_OPERATORS",
+              "location": {
+                "line": 3,
+                "column": 8
+              }
+            },
+            {
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 3,
@@ -8262,21 +9496,14 @@
               }
             },
             {
-              "feature": "ARITHMETIC_OPERATORS",
-              "location": {
-                "line": 3,
-                "column": 8
-              }
-            },
-            {
-              "feature": "STATEMENT_START",
+              "feature": "BLOCK_START",
               "location": {
                 "line": 3,
                 "column": 24
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 3,
                 "column": 24
@@ -8311,21 +9538,21 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 5,
-                "column": 4
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 5,
-                "column": 4
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 5,
                 "column": 4
@@ -8483,14 +9710,14 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
+              "feature": "BLOCK_END",
               "location": {
                 "line": 4,
                 "column": 2
               }
             },
             {
-              "feature": "BLOCK_END",
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 4,
                 "column": 2
@@ -8672,14 +9899,14 @@
             }
           },
           {
-            "feature": "UNARY_OPERATORS",
+            "feature": "VARIABLE_REASSIGNMENTS",
             "location": {
               "line": 5,
               "column": 11
             }
           },
           {
-            "feature": "VARIABLE_REASSIGNMENTS",
+            "feature": "UNARY_OPERATORS",
             "location": {
               "line": 5,
               "column": 11
@@ -8853,14 +10080,14 @@
               }
             },
             {
-              "feature": "UNARY_OPERATORS",
+              "feature": "VARIABLE_REASSIGNMENTS",
               "location": {
                 "line": 9,
                 "column": 11
               }
             },
             {
-              "feature": "VARIABLE_REASSIGNMENTS",
+              "feature": "UNARY_OPERATORS",
               "location": {
                 "line": 9,
                 "column": 11
@@ -9002,14 +10229,14 @@
               }
             },
             {
-              "feature": "UNARY_OPERATORS",
+              "feature": "VARIABLE_REASSIGNMENTS",
               "location": {
                 "line": 5,
                 "column": 11
               }
             },
             {
-              "feature": "VARIABLE_REASSIGNMENTS",
+              "feature": "UNARY_OPERATORS",
               "location": {
                 "line": 5,
                 "column": 11
@@ -9203,14 +10430,14 @@
           },
           "featureList": [
             {
-              "feature": "STATIC_METHOD",
+              "feature": "METHOD",
               "location": {
                 "line": 1,
                 "column": 0
               }
             },
             {
-              "feature": "METHOD",
+              "feature": "STATIC_METHOD",
               "location": {
                 "line": 1,
                 "column": 0
@@ -9328,14 +10555,14 @@
         },
         "featureList": [
           {
-            "feature": "STATIC_METHOD",
+            "feature": "METHOD",
             "location": {
               "line": 1,
               "column": 0
             }
           },
           {
-            "feature": "METHOD",
+            "feature": "STATIC_METHOD",
             "location": {
               "line": 1,
               "column": 0
@@ -9532,14 +10759,14 @@
           },
           "featureList": [
             {
-              "feature": "STATIC_METHOD",
+              "feature": "METHOD",
               "location": {
                 "line": 1,
                 "column": 0
               }
             },
             {
-              "feature": "METHOD",
+              "feature": "STATIC_METHOD",
               "location": {
                 "line": 1,
                 "column": 0
@@ -10140,6 +11367,13 @@
             }
           },
           {
+            "feature": "EQUALITY",
+            "location": {
+              "line": 5,
+              "column": 6
+            }
+          },
+          {
             "feature": "DOT_NOTATION",
             "location": {
               "line": 5,
@@ -10154,21 +11388,14 @@
             }
           },
           {
-            "feature": "EQUALITY",
-            "location": {
-              "line": 5,
-              "column": 6
-            }
-          },
-          {
-            "feature": "STATEMENT_START",
+            "feature": "BLOCK_START",
             "location": {
               "line": 5,
               "column": 28
             }
           },
           {
-            "feature": "BLOCK_START",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 5,
               "column": 28
@@ -10196,13 +11423,6 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 9,
-              "column": 2
-            }
-          },
-          {
             "feature": "BLOCK_END",
             "location": {
               "line": 9,
@@ -10210,14 +11430,21 @@
             }
           },
           {
-            "feature": "ELSE_IF",
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 9,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
             "location": {
               "line": 9,
               "column": 9
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "ELSE_IF",
             "location": {
               "line": 9,
               "column": 9
@@ -10259,14 +11486,14 @@
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "BLOCK_START",
             "location": {
               "line": 9,
               "column": 47
             }
           },
           {
-            "feature": "BLOCK_START",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 9,
               "column": 47
@@ -10308,13 +11535,6 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 11,
-              "column": 2
-            }
-          },
-          {
             "feature": "BLOCK_END",
             "location": {
               "line": 11,
@@ -10322,7 +11542,14 @@
             }
           },
           {
-            "feature": "ELSE_STATEMENTS",
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 11,
+              "column": 2
+            }
+          },
+          {
+            "feature": "BLOCK_START",
             "location": {
               "line": 11,
               "column": 9
@@ -10336,7 +11563,7 @@
             }
           },
           {
-            "feature": "BLOCK_START",
+            "feature": "ELSE_STATEMENTS",
             "location": {
               "line": 11,
               "column": 9
@@ -10378,28 +11605,28 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 13,
-              "column": 2
-            }
-          },
-          {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 13,
-              "column": 2
-            }
-          },
-          {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 13,
-              "column": 2
-            }
-          },
-          {
             "feature": "BLOCK_END",
+            "location": {
+              "line": 13,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 13,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 13,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
             "location": {
               "line": 13,
               "column": 2
@@ -10625,6 +11852,13 @@
               }
             },
             {
+              "feature": "EQUALITY",
+              "location": {
+                "line": 5,
+                "column": 6
+              }
+            },
+            {
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 5,
@@ -10639,21 +11873,14 @@
               }
             },
             {
-              "feature": "EQUALITY",
-              "location": {
-                "line": 5,
-                "column": 6
-              }
-            },
-            {
-              "feature": "STATEMENT_START",
+              "feature": "BLOCK_START",
               "location": {
                 "line": 5,
                 "column": 28
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 5,
                 "column": 28
@@ -10681,13 +11908,6 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 9,
-                "column": 2
-              }
-            },
-            {
               "feature": "BLOCK_END",
               "location": {
                 "line": 9,
@@ -10695,14 +11915,21 @@
               }
             },
             {
-              "feature": "ELSE_IF",
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 9,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 9,
                 "column": 9
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "ELSE_IF",
               "location": {
                 "line": 9,
                 "column": 9
@@ -10744,14 +11971,14 @@
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "BLOCK_START",
               "location": {
                 "line": 9,
                 "column": 47
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 9,
                 "column": 47
@@ -10793,13 +12020,6 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 11,
-                "column": 2
-              }
-            },
-            {
               "feature": "BLOCK_END",
               "location": {
                 "line": 11,
@@ -10807,7 +12027,14 @@
               }
             },
             {
-              "feature": "ELSE_STATEMENTS",
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 11,
+                "column": 2
+              }
+            },
+            {
+              "feature": "BLOCK_START",
               "location": {
                 "line": 11,
                 "column": 9
@@ -10821,7 +12048,7 @@
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "ELSE_STATEMENTS",
               "location": {
                 "line": 11,
                 "column": 9
@@ -10863,28 +12090,28 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 13,
-                "column": 2
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 13,
-                "column": 2
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 13,
-                "column": 2
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 13,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 13,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 13,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 13,
                 "column": 2
@@ -11049,6 +12276,13 @@
             }
           },
           {
+            "feature": "LOCAL_VARIABLE_DECLARATIONS",
+            "location": {
+              "line": 4,
+              "column": 2
+            }
+          },
+          {
             "feature": "FOR_LOOPS",
             "location": {
               "line": 4,
@@ -11057,13 +12291,6 @@
           },
           {
             "feature": "ENHANCED_FOR",
-            "location": {
-              "line": 4,
-              "column": 2
-            }
-          },
-          {
-            "feature": "LOCAL_VARIABLE_DECLARATIONS",
             "location": {
               "line": 4,
               "column": 2
@@ -11091,14 +12318,14 @@
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "BLOCK_START",
             "location": {
               "line": 4,
               "column": 39
             }
           },
           {
-            "feature": "BLOCK_START",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 4,
               "column": 39
@@ -11168,14 +12395,14 @@
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "BLOCK_START",
             "location": {
               "line": 6,
               "column": 34
             }
           },
           {
-            "feature": "BLOCK_START",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 6,
               "column": 34
@@ -11203,21 +12430,21 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 8,
-              "column": 4
-            }
-          },
-          {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 8,
-              "column": 4
-            }
-          },
-          {
             "feature": "BLOCK_END",
+            "location": {
+              "line": 8,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 8,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
             "location": {
               "line": 8,
               "column": 4
@@ -11252,21 +12479,21 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 10,
-              "column": 2
-            }
-          },
-          {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 10,
-              "column": 2
-            }
-          },
-          {
             "feature": "BLOCK_END",
+            "location": {
+              "line": 10,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 10,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
             "location": {
               "line": 10,
               "column": 2
@@ -11434,6 +12661,13 @@
               }
             },
             {
+              "feature": "LOCAL_VARIABLE_DECLARATIONS",
+              "location": {
+                "line": 4,
+                "column": 2
+              }
+            },
+            {
               "feature": "FOR_LOOPS",
               "location": {
                 "line": 4,
@@ -11442,13 +12676,6 @@
             },
             {
               "feature": "ENHANCED_FOR",
-              "location": {
-                "line": 4,
-                "column": 2
-              }
-            },
-            {
-              "feature": "LOCAL_VARIABLE_DECLARATIONS",
               "location": {
                 "line": 4,
                 "column": 2
@@ -11476,14 +12703,14 @@
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "BLOCK_START",
               "location": {
                 "line": 4,
                 "column": 39
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 4,
                 "column": 39
@@ -11546,13 +12773,6 @@
               }
             },
             {
-              "feature": "DOTTED_METHOD_CALL",
-              "location": {
-                "line": 6,
-                "column": 8
-              }
-            },
-            {
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 6,
@@ -11567,14 +12787,21 @@
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "DOTTED_METHOD_CALL",
+              "location": {
+                "line": 6,
+                "column": 8
+              }
+            },
+            {
+              "feature": "BLOCK_START",
               "location": {
                 "line": 6,
                 "column": 43
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 6,
                 "column": 43
@@ -11602,21 +12829,21 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 8,
-                "column": 4
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 8,
-                "column": 4
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 8,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 8,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 8,
                 "column": 4
@@ -11651,21 +12878,21 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 10,
-                "column": 2
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 10,
-                "column": 2
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 10,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 10,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 10,
                 "column": 2
@@ -11757,14 +12984,14 @@
           },
           "featureList": [
             {
-              "feature": "STATIC_METHOD",
+              "feature": "METHOD",
               "location": {
                 "line": 1,
                 "column": 0
               }
             },
             {
-              "feature": "METHOD",
+              "feature": "STATIC_METHOD",
               "location": {
                 "line": 1,
                 "column": 0
@@ -11988,14 +13215,14 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
+              "feature": "BLOCK_END",
               "location": {
                 "line": 7,
                 "column": 4
               }
             },
             {
-              "feature": "BLOCK_END",
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 7,
                 "column": 4
@@ -12030,14 +13257,14 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
+              "feature": "BLOCK_END",
               "location": {
                 "line": 9,
                 "column": 2
               }
             },
             {
-              "feature": "BLOCK_END",
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 9,
                 "column": 2
@@ -12125,14 +13352,14 @@
         },
         "featureList": [
           {
-            "feature": "STATIC_METHOD",
+            "feature": "METHOD",
             "location": {
               "line": 1,
               "column": 0
             }
           },
           {
-            "feature": "METHOD",
+            "feature": "STATIC_METHOD",
             "location": {
               "line": 1,
               "column": 0
@@ -12356,14 +13583,14 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
+            "feature": "BLOCK_END",
             "location": {
               "line": 7,
               "column": 4
             }
           },
           {
-            "feature": "BLOCK_END",
+            "feature": "STATEMENT_END",
             "location": {
               "line": 7,
               "column": 4
@@ -12398,14 +13625,14 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
+            "feature": "BLOCK_END",
             "location": {
               "line": 9,
               "column": 2
             }
           },
           {
-            "feature": "BLOCK_END",
+            "feature": "STATEMENT_END",
             "location": {
               "line": 9,
               "column": 2
@@ -12565,6 +13792,13 @@
               }
             },
             {
+              "feature": "LOCAL_VARIABLE_DECLARATIONS",
+              "location": {
+                "line": 4,
+                "column": 2
+              }
+            },
+            {
               "feature": "FOR_LOOPS",
               "location": {
                 "line": 4,
@@ -12573,13 +13807,6 @@
             },
             {
               "feature": "ENHANCED_FOR",
-              "location": {
-                "line": 4,
-                "column": 2
-              }
-            },
-            {
-              "feature": "LOCAL_VARIABLE_DECLARATIONS",
               "location": {
                 "line": 4,
                 "column": 2
@@ -12607,14 +13834,14 @@
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "BLOCK_START",
               "location": {
                 "line": 4,
                 "column": 39
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 4,
                 "column": 39
@@ -12684,14 +13911,14 @@
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "BLOCK_START",
               "location": {
                 "line": 6,
                 "column": 34
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 6,
                 "column": 34
@@ -12719,21 +13946,21 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 8,
-                "column": 4
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 8,
-                "column": 4
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 8,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 8,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 8,
                 "column": 4
@@ -12768,21 +13995,21 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 10,
-                "column": 2
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 10,
-                "column": 2
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 10,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 10,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 10,
                 "column": 2
@@ -12859,14 +14086,14 @@
           },
           "featureList": [
             {
-              "feature": "STATIC_METHOD",
+              "feature": "METHOD",
               "location": {
                 "line": 1,
                 "column": 0
               }
             },
             {
-              "feature": "METHOD",
+              "feature": "STATIC_METHOD",
               "location": {
                 "line": 1,
                 "column": 0
@@ -13090,14 +14317,14 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
+              "feature": "BLOCK_END",
               "location": {
                 "line": 7,
                 "column": 4
               }
             },
             {
-              "feature": "BLOCK_END",
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 7,
                 "column": 4
@@ -13132,14 +14359,14 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
+              "feature": "BLOCK_END",
               "location": {
                 "line": 9,
                 "column": 2
               }
             },
             {
-              "feature": "BLOCK_END",
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 9,
                 "column": 2
@@ -13326,14 +14553,14 @@
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "BLOCK_START",
             "location": {
               "line": 3,
               "column": 20
             }
           },
           {
-            "feature": "BLOCK_START",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 3,
               "column": 20
@@ -13361,21 +14588,21 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 5,
-              "column": 4
-            }
-          },
-          {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 5,
-              "column": 4
-            }
-          },
-          {
             "feature": "BLOCK_END",
+            "location": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
             "location": {
               "line": 5,
               "column": 4
@@ -13473,14 +14700,14 @@
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "BLOCK_START",
             "location": {
               "line": 10,
               "column": 19
             }
           },
           {
-            "feature": "BLOCK_START",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 10,
               "column": 19
@@ -13515,21 +14742,21 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 12,
-              "column": 4
-            }
-          },
-          {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 12,
-              "column": 4
-            }
-          },
-          {
             "feature": "BLOCK_END",
+            "location": {
+              "line": 12,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 12,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
             "location": {
               "line": 12,
               "column": 4
@@ -13713,14 +14940,14 @@
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "BLOCK_START",
               "location": {
                 "line": 3,
                 "column": 20
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 3,
                 "column": 20
@@ -13748,21 +14975,21 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 5,
-                "column": 4
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 5,
-                "column": 4
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 5,
                 "column": 4
@@ -13860,14 +15087,14 @@
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "BLOCK_START",
               "location": {
                 "line": 10,
                 "column": 19
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 10,
                 "column": 19
@@ -13902,21 +15129,21 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 12,
-                "column": 4
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 12,
-                "column": 4
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 12,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 12,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 12,
                 "column": 4
@@ -14092,14 +15319,14 @@
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "BLOCK_START",
             "location": {
               "line": 3,
               "column": 20
             }
           },
           {
-            "feature": "BLOCK_START",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 3,
               "column": 20
@@ -14134,21 +15361,21 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 5,
-              "column": 4
-            }
-          },
-          {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 5,
-              "column": 4
-            }
-          },
-          {
             "feature": "BLOCK_END",
+            "location": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
             "location": {
               "line": 5,
               "column": 4
@@ -14183,14 +15410,14 @@
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "BLOCK_START",
             "location": {
               "line": 6,
               "column": 20
             }
           },
           {
-            "feature": "BLOCK_START",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 6,
               "column": 20
@@ -14218,21 +15445,21 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 8,
-              "column": 4
-            }
-          },
-          {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 8,
-              "column": 4
-            }
-          },
-          {
             "feature": "BLOCK_END",
+            "location": {
+              "line": 8,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 8,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
             "location": {
               "line": 8,
               "column": 4
@@ -14399,14 +15626,14 @@
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "BLOCK_START",
               "location": {
                 "line": 3,
                 "column": 20
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 3,
                 "column": 20
@@ -14441,21 +15668,21 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 5,
-                "column": 4
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 5,
-                "column": 4
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 5,
                 "column": 4
@@ -14511,13 +15738,6 @@
               }
             },
             {
-              "feature": "UNARY_OPERATORS",
-              "location": {
-                "line": 7,
-                "column": 51
-              }
-            },
-            {
               "feature": "VARIABLE_REASSIGNMENTS",
               "location": {
                 "line": 7,
@@ -14525,10 +15745,10 @@
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "UNARY_OPERATORS",
               "location": {
                 "line": 7,
-                "column": 65
+                "column": 51
               }
             },
             {
@@ -14540,6 +15760,20 @@
             },
             {
               "feature": "STATEMENT_START",
+              "location": {
+                "line": 7,
+                "column": 65
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 8,
+                "column": 6
+              }
+            },
+            {
+              "feature": "VARIABLE_REASSIGNMENTS",
               "location": {
                 "line": 8,
                 "column": 6
@@ -14553,13 +15787,6 @@
               }
             },
             {
-              "feature": "VARIABLE_REASSIGNMENTS",
-              "location": {
-                "line": 8,
-                "column": 6
-              }
-            },
-            {
               "feature": "STATEMENT_END",
               "location": {
                 "line": 8,
@@ -14567,21 +15794,21 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 9,
-                "column": 4
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 9,
-                "column": 4
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 9,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 9,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 9,
                 "column": 4
@@ -14751,14 +15978,14 @@
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "BLOCK_START",
               "location": {
                 "line": 3,
                 "column": 20
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 3,
                 "column": 20
@@ -14793,21 +16020,21 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 5,
-                "column": 4
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 5,
-                "column": 4
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 5,
                 "column": 4
@@ -14842,14 +16069,14 @@
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "BLOCK_START",
               "location": {
                 "line": 6,
                 "column": 20
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 6,
                 "column": 20
@@ -14877,21 +16104,21 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 8,
-                "column": 4
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 8,
-                "column": 4
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 8,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 8,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 8,
                 "column": 4
@@ -15797,14 +17024,14 @@
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "BLOCK_START",
             "location": {
               "line": 16,
               "column": 41
             }
           },
           {
-            "feature": "BLOCK_START",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 16,
               "column": 41
@@ -15832,21 +17059,21 @@
             }
           },
           {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 18,
-              "column": 4
-            }
-          },
-          {
-            "feature": "STATEMENT_END",
-            "location": {
-              "line": 18,
-              "column": 4
-            }
-          },
-          {
             "feature": "BLOCK_END",
+            "location": {
+              "line": 18,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 18,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
             "location": {
               "line": 18,
               "column": 4
@@ -15867,14 +17094,14 @@
             }
           },
           {
-            "feature": "LOGICAL_OPERATORS",
+            "feature": "COMPARISON_OPERATORS",
             "location": {
               "line": 19,
               "column": 11
             }
           },
           {
-            "feature": "COMPARISON_OPERATORS",
+            "feature": "LOGICAL_OPERATORS",
             "location": {
               "line": 19,
               "column": 11
@@ -16285,14 +17512,14 @@
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "BLOCK_START",
               "location": {
                 "line": 16,
                 "column": 41
               }
             },
             {
-              "feature": "BLOCK_START",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 16,
                 "column": 41
@@ -16320,21 +17547,21 @@
               }
             },
             {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 18,
-                "column": 4
-              }
-            },
-            {
-              "feature": "STATEMENT_END",
-              "location": {
-                "line": 18,
-                "column": 4
-              }
-            },
-            {
               "feature": "BLOCK_END",
+              "location": {
+                "line": 18,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 18,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
               "location": {
                 "line": 18,
                 "column": 4
@@ -16355,14 +17582,14 @@
               }
             },
             {
-              "feature": "LOGICAL_OPERATORS",
+              "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 19,
                 "column": 11
               }
             },
             {
-              "feature": "COMPARISON_OPERATORS",
+              "feature": "LOGICAL_OPERATORS",
               "location": {
                 "line": 19,
                 "column": 11
@@ -16495,14 +17722,14 @@
         },
         "featureList": [
           {
-            "feature": "PRINT_STATEMENTS",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 1,
               "column": 0
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "PRINT_STATEMENTS",
             "location": {
               "line": 1,
               "column": 0
@@ -16562,14 +17789,14 @@
           },
           "featureList": [
             {
-              "feature": "PRINT_STATEMENTS",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 1,
                 "column": 0
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "PRINT_STATEMENTS",
               "location": {
                 "line": 1,
                 "column": 0
@@ -16707,14 +17934,14 @@
             }
           },
           {
-            "feature": "PRINT_STATEMENTS",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 5,
               "column": 4
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "PRINT_STATEMENTS",
             "location": {
               "line": 5,
               "column": 4
@@ -16798,14 +18025,14 @@
             }
           },
           {
-            "feature": "PRINT_STATEMENTS",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 8,
               "column": 4
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "PRINT_STATEMENTS",
             "location": {
               "line": 8,
               "column": 4
@@ -16861,14 +18088,14 @@
             }
           },
           {
-            "feature": "PRINT_STATEMENTS",
+            "feature": "STATEMENT_START",
             "location": {
               "line": 10,
               "column": 4
             }
           },
           {
-            "feature": "STATEMENT_START",
+            "feature": "PRINT_STATEMENTS",
             "location": {
               "line": 10,
               "column": 4
@@ -17667,14 +18894,14 @@
               }
             },
             {
-              "feature": "PRINT_STATEMENTS",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 5,
                 "column": 4
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "PRINT_STATEMENTS",
               "location": {
                 "line": 5,
                 "column": 4
@@ -17758,14 +18985,14 @@
               }
             },
             {
-              "feature": "PRINT_STATEMENTS",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 8,
                 "column": 4
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "PRINT_STATEMENTS",
               "location": {
                 "line": 8,
                 "column": 4
@@ -17821,14 +19048,14 @@
               }
             },
             {
-              "feature": "PRINT_STATEMENTS",
+              "feature": "STATEMENT_START",
               "location": {
                 "line": 10,
                 "column": 4
               }
             },
             {
-              "feature": "STATEMENT_START",
+              "feature": "PRINT_STATEMENTS",
               "location": {
                 "line": 10,
                 "column": 4
@@ -19126,14 +20353,14 @@
           },
           "featureList": [
             {
-              "feature": "STATIC_METHOD",
+              "feature": "METHOD",
               "location": {
                 "line": 4,
                 "column": 0
               }
             },
             {
-              "feature": "METHOD",
+              "feature": "STATIC_METHOD",
               "location": {
                 "line": 4,
                 "column": 0
@@ -19264,14 +20491,14 @@
         },
         "featureList": [
           {
-            "feature": "STATIC_METHOD",
+            "feature": "METHOD",
             "location": {
               "line": 4,
               "column": 0
             }
           },
           {
-            "feature": "METHOD",
+            "feature": "STATIC_METHOD",
             "location": {
               "line": 4,
               "column": 0
@@ -19440,14 +20667,14 @@
           },
           "featureList": [
             {
-              "feature": "STATIC_METHOD",
+              "feature": "METHOD",
               "location": {
                 "line": 4,
                 "column": 0
               }
             },
             {
-              "feature": "METHOD",
+              "feature": "STATIC_METHOD",
               "location": {
                 "line": 4,
                 "column": 0

@@ -2,7 +2,7 @@ plugins {
     kotlin("jvm")
     `maven-publish`
     id("com.google.devtools.ksp")
-    id("com.ryandens.javaagent-test") version "0.4.2"
+    id("com.ryandens.javaagent-test") version "0.5.0"
 }
 dependencies {
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
@@ -15,7 +15,7 @@ dependencies {
     implementation("org.ow2.asm:asm:9.4")
 
     api("com.beyondgrader.resource-agent:agent:2022.9.3")
-    api("com.github.cs124-illinois.jeed:core:2023.2.2")
+    api("com.github.cs124-illinois.jeed:core:2023.2.3")
     api("com.github.cs124-illinois:jenisol:2023.2.0")
     api("io.kotest:kotest-runner-junit5:5.5.5")
     api("com.google.truth:truth:1.1.3")

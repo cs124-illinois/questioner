@@ -348,16 +348,17 @@ data class Question(
                 return _compiled!!
             }
             val results = TestResults(language)
+            val source = question.contentsToSource(contents(question), language, results)
             return when (language) {
                 Language.java ->
                     question.compileSubmission(
-                        contents(question),
+                        source,
                         InvertingClassLoader(setOf(question.klass)),
                         results
                     )
                 Language.kotlin ->
                     question.kompileSubmission(
-                        contents(question),
+                        source,
                         InvertingClassLoader(setOf(question.klass, "${question.klass}Kt")),
                         results
                     )
@@ -487,6 +488,8 @@ data class Question(
     suspend fun compileAllValidationMutations() = validationMutations!!.forEach { validationMutation ->
         validationMutation.compiled(this)
     }
+
+    fun filename(language: Language) = "$klass.${language.extension()}"
 
     @Suppress("unused")
     companion object {

@@ -7,12 +7,17 @@ import edu.illinois.cs.cs125.jeed.core.ComplexityFailed
 import edu.illinois.cs.cs125.jeed.core.ConfiguredSandboxPlugin
 import edu.illinois.cs.cs125.jeed.core.Jacoco
 import edu.illinois.cs.cs125.jeed.core.KtLintFailed
+import edu.illinois.cs.cs125.jeed.core.LineCoverage
 import edu.illinois.cs.cs125.jeed.core.Sandbox
 import edu.illinois.cs.cs125.jeed.core.SnippetTransformationFailed
+import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.TemplatingFailed
+import edu.illinois.cs.cs125.jeed.core.UnitFeatures
+import edu.illinois.cs.cs125.jeed.core.adjustWithFeatures
+import edu.illinois.cs.cs125.jeed.core.features
+import edu.illinois.cs.cs125.jeed.core.processCoverage
 import edu.illinois.cs.cs125.jenisol.core.Settings
 import edu.illinois.cs.cs125.jenisol.core.SubmissionDesignError
-import org.jacoco.core.analysis.ICounter
 import org.objectweb.asm.Type
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
@@ -35,6 +40,8 @@ suspend fun Question.test(
     val results = TestResults(language)
 
     // templateSubmission
+    val source = contentsToSource(contents, language, results)
+
     // compileSubmission
     // checkstyle || ktlint
     @Suppress("SwallowedException")
@@ -42,13 +49,14 @@ suspend fun Question.test(
         when (language) {
             Question.Language.java ->
                 compileSubmission(
-                    contents,
+                    source,
                     InvertingClassLoader(setOf(klass)),
                     results
                 )
+
             Question.Language.kotlin ->
                 kompileSubmission(
-                    contents,
+                    source,
                     InvertingClassLoader(setOf(klass, "${klass}Kt")),
                     results
                 )
@@ -86,8 +94,8 @@ suspend fun Question.test(
     }
 
     // features
-    val submissionFeatures = try {
-        computeFeatures(contents, klassName, language)
+    val submissionFeatureResults = try {
+        source.features()
     } catch (e: FeatureCheckException) {
         results.failed.features = e.message!!
         results.failedSteps.add(TestResults.Step.features)
@@ -98,8 +106,11 @@ suspend fun Question.test(
         return results
     }
 
+    val submissionFeatures = submissionFeatureResults.lookup("", filename(language))
+    check(submissionFeatures is UnitFeatures) { "Invalid submissionFeatures" }
+
     try {
-        results.complete.features = checkFeatures(submissionFeatures, language)
+        results.complete.features = checkFeatures(submissionFeatures.features, language)
         results.completedSteps.add(TestResults.Step.features)
     } catch (e: FeatureCheckException) {
         results.failed.features = e.message!!
@@ -204,10 +215,13 @@ suspend fun Question.test(
         when (threw) {
             is ClassNotFoundException -> results.failed.checkExecutedSubmission =
                 "Class design error:\n  Could not find class $klass"
+
             is SubmissionDesignError -> results.failed.checkExecutedSubmission =
                 "Class design error:\n  ${threw.message}"
+
             is NoClassDefFoundError -> results.failed.checkExecutedSubmission =
                 "Class design error:\n  Attempted to use unavailable class ${threw.message}"
+
             is OutOfMemoryError -> results.failed.checkExecutedSubmission =
                 "Allocated too much memory: ${threw.message}, already used ${resourceUsage.allocatedMemory} bytes"
             // TODO: Adjust Jenisol to let OutOfMemoryError escape the testing loop or remove this case
@@ -217,7 +231,8 @@ suspend fun Question.test(
                     is InvocationTargetException -> threw.targetException ?: threw
                     else -> threw
                 }
-                results.failed.checkExecutedSubmission = "Testing generated an unexpected error: $actualException\n${actualException.stackTraceToString()}"
+                results.failed.checkExecutedSubmission =
+                    "Testing generated an unexpected error: $actualException\n${actualException.stackTraceToString()}"
             }
         }
         return results
@@ -317,26 +332,27 @@ suspend fun Question.test(
     } else {
         settings.solutionDeadCode!!.kotlin
     }!!
-    val featuresDeadCode = submissionFeatures.featuresDeadCode(language)
 
-    val coverage = taskResults.pluginResult(Jacoco).classes.find { it.name == klassName }!!
-    val missed = (coverage.firstLine..coverage.lastLine).toList().filter { line ->
-        coverage.getLine(line).status == ICounter.NOT_COVERED || coverage.getLine(line).status == ICounter.PARTLY_COVERED
-    }.map { line ->
-        line - when (language) {
-            Question.Language.java -> javaTemplateAddsLines
-            Question.Language.kotlin -> kotlinTemplateAddsLines
-        }
+    val filetype = when (language) {
+        Question.Language.kotlin -> Source.FileType.KOTLIN
+        Question.Language.java -> Source.FileType.JAVA
     }
-    val submissionCoverage = TestResults.CoverageComparison.LineCoverage(
-        coverage.lineCounter.totalCount - missed.size,
-        coverage.lineCounter.totalCount
-    )
+    val coverageResult = source.processCoverage(taskResults.pluginResult(Jacoco))
+        .adjustWithFeatures(submissionFeatureResults, filetype).byFile[filename(language)]!!
+    val covered = coverageResult.count { it.value == LineCoverage.COVERED || it.value == LineCoverage.IGNORED }
+    val total = coverageResult.count { it.value != LineCoverage.EMPTY }
+    check(total - covered >= 0)
+
+    val missed = coverageResult
+        .filter { it.value == LineCoverage.NOT_COVERED || it.value == LineCoverage.PARTLY_COVERED }
+        .map { it.key }
+
+    val submissionCoverage = TestResults.CoverageComparison.LineCoverage(covered, total)
     val solutionCoverage =
         validationResults?.solutionCoverage ?: settings.solutionCoverage ?: submissionCoverage
 
     results.complete.coverage =
-        TestResults.CoverageComparison(solutionCoverage, submissionCoverage, missed, solutionDeadCode.toInt() + featuresDeadCode)
+        TestResults.CoverageComparison(solutionCoverage, submissionCoverage, missed, solutionDeadCode.toInt())
     results.completedSteps.add(TestResults.Step.coverage)
 
     return results
