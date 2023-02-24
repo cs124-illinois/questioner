@@ -72,26 +72,6 @@ data class TestTestResults(
         complete.testTesting = testTesting
     }
 
-    val summary: String
-        get() = if (failed.templateSubmission != null) {
-            "Templating failed${failed.templateSubmission?.message?.let { ": $it" } ?: ""}"
-        } else if (failed.compileSubmission != null) {
-            "Compiling submission failed${failed.compileSubmission?.let { ": $it" } ?: ""}"
-        } else if (failed.checkstyle != null) {
-            "Checkstyle failed:${failed.checkstyle?.let { ": $it" } ?: ""}"
-        } else if (failed.ktlint != null) {
-            "Ktlint failed:${failed.ktlint?.let { ": $it" } ?: ""}"
-        } else if (failed.checkCompiledSubmission != null) {
-            "Checking submission failed: ${failed.checkCompiledSubmission}"
-        } else if (timeout) {
-            "Testing timed out"
-        } else if (!completed) {
-            "Didn't complete all required tests: $failedSteps"
-        } else {
-            check(succeeded)
-            "Passed"
-        }
-
     @Suppress("unused")
     fun toJson(): String = moshi.adapter(TestTestResults::class.java).toJson(this)
 

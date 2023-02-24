@@ -12,7 +12,7 @@ dependencies {
 
     implementation(gradleApi())
     implementation(project(":lib"))
-    implementation("org.jetbrains:markdown:0.4.0") {
+    implementation("org.jetbrains:markdown:0.4.1") {
         exclude(module = "kotlin-runtime")
         exclude(module = "kotlin-js")
     }

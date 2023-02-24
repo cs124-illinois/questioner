@@ -66,6 +66,17 @@ fun test() {
             results.complete.testTesting!!.succeeded shouldBe false
             results.complete.testTesting!!.incorrect shouldBe 1
         }
+        question.testTests(
+            """
+fun test() {
+  check(Question.addOne(0) == 1)
+  check(Question.addOne(1) == 2)
+}
+""", Question.Language.kotlin
+        ).also { results ->
+            results.failedSteps.size shouldBe 0
+            results.complete.testTesting!!.succeeded shouldBe true
+        }
     }
     "should test test suites for methods" {
         val (question) = validator.validate("Add One", force = true, testing = true).also { (question, report) ->

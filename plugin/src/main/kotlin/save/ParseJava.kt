@@ -296,9 +296,9 @@ data class ParsedJavaFile(val path: String, val contents: String) {
         val deadlineCount = cleanContentWithDead.lines().filter {
             it.trim().endsWith("// dead code")
         }.size
-        val cleanContent = cleanContentWithDead.lines().map {
+        val cleanContent = cleanContentWithDead.lines().joinToString("\n") {
             it.trimEnd().removeSuffix("// dead code").trimEnd()
-        }.joinToString("\n")
+        }
 
         val questionType = cleanContent.getType()
         val source = when (questionType) {
@@ -428,9 +428,9 @@ $cleanContent
         val deadlineCount = cleanContentWithDead.lines().filter {
             it.trim().endsWith("// dead code")
         }.size
-        val cleanContent = cleanContentWithDead.lines().map {
+        val cleanContent = cleanContentWithDead.lines().joinToString("\n") {
             it.trimEnd().removeSuffix("// dead code").trimEnd()
-        }.joinToString("\n")
+        }
 
         val questionType = cleanContent.getType()
         val source = when (questionType) {

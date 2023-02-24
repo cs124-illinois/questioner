@@ -264,7 +264,7 @@ fun Question.computeComplexity(contents: String, language: Question.Language): T
     val solutionComplexity = published.complexity[language]
     check(solutionComplexity != null) { "Solution complexity not available" }
 
-    val maxComplexity = (control.maxComplexityMultiplier!! * solutionComplexity)
+    val maxComplexity = (control.maxComplexityMultiplier!! * solutionComplexity).coerceAtLeast(Question.TestingControl.DEFAULT_MIN_FAIL_FAST_COMPLEXITY)
 
     val submissionComplexity = when {
         type == Question.Type.SNIPPET && contents.isBlank() -> 0

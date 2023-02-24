@@ -140,8 +140,8 @@ suspend fun Question.test(
     val classLoaderConfiguration = when (language) {
         Question.Language.java -> settings.javaWhitelist
         Question.Language.kotlin -> settings.kotlinWhitelist
-    }?.let {
-        Sandbox.ClassLoaderConfiguration(isWhiteList = true, whitelistedClasses = it)
+    }?.let { whitelistedClasses ->
+        Sandbox.ClassLoaderConfiguration(isWhiteList = true, whitelistedClasses = whitelistedClasses)
     } ?: Sandbox.ClassLoaderConfiguration()
 
     val jenisolSettings = Settings(

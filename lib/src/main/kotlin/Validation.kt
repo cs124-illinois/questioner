@@ -112,25 +112,16 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             )
         }
         check(failedSteps.isEmpty()) { "Failed steps: $failedSteps" }
-        when (file.language) {
-            Question.Language.java -> {
-                javaClassWhitelist.addAll(
-                    taskResults!!.sandboxedClassLoader!!.loadedClasses.filter { klass ->
-                        !klass.startsWith("edu.illinois.cs.cs125.jeed.core") &&
-                            !klass.startsWith("java.lang.invoke.MethodHandles")
-                    }
-                )
-            }
-
-            Question.Language.kotlin -> {
-                kotlinClassWhitelist.addAll(
-                    taskResults!!.sandboxedClassLoader!!.loadedClasses.filter { klass ->
-                        !klass.startsWith("edu.illinois.cs.cs125.jeed.core") &&
-                            !klass.startsWith("java.lang.invoke.MethodHandles")
-                    }
-                )
-            }
+        val classWhiteList = when (file.language) {
+            Question.Language.java -> javaClassWhitelist
+            Question.Language.kotlin -> kotlinClassWhitelist
         }
+        classWhiteList.addAll(
+            taskResults!!.sandboxedClassLoader!!.loadedClasses.filter { klass ->
+                !klass.startsWith("edu.illinois.cs.cs125.jeed.core") &&
+                    !klass.startsWith("java.lang.invoke.MethodHandles")
+            }
+        )
     }
 
     fun TestResults.checkIncorrect(file: Question.IncorrectFile, mutated: Boolean) {

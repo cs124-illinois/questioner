@@ -9,7 +9,6 @@ import edu.illinois.cs.cs125.jeed.core.*
 import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
 import java.io.File
 import java.lang.reflect.ReflectPermission
-import java.util.Locale
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.primaryConstructor
 import edu.illinois.cs.cs125.jeed.core.moshi.Adapters as JeedAdapters
@@ -26,6 +25,7 @@ private val sharedClassWhitelist = setOf(
     "kotlin.Metadata",
     "kotlin.reflect.jvm.",
     "java.util.Iterator",
+    "java.util.Collection"
 )
 
 @Suppress("MemberVisibilityCanBePrivate", "LargeClass", "TooManyFunctions")
@@ -207,6 +207,7 @@ data class Question(
             const val DEFAULT_SEED = -1
             const val DEFAULT_MAX_COMPLEXITY_MULTIPLIER = 8
             const val DEFAULT_MAX_LINECOUNT_MULTIPLIER = 8
+            const val DEFAULT_MIN_FAIL_FAST_COMPLEXITY = 16
 
             val DEFAULTS = TestingControl(
                 DEFAULT_SOLUTION_THROWS,
@@ -457,14 +458,6 @@ data class Question(
         Language.kotlin -> "kt"
     }
 
-    val javaTemplateAddsLines = javaTemplate?.lines()?.indexOfFirst {
-        it.trim().startsWith("{{{")
-    } ?: 0
-
-    val kotlinTemplateAddsLines = kotlinTemplate?.lines()?.indexOfFirst {
-        it.trim().startsWith("{{{")
-    } ?: 0
-
     @Transient
     val defaultJavaClassWhitelist = importWhitelist.toMutableSet().also {
         it.addAll(sharedClassWhitelist)
@@ -592,7 +585,7 @@ fun File.saveQuestions(questions: Map<String, Question>) =
     )
 
 @Suppress("SpellCheckingInspection")
-fun String.toReason() = when (uppercase(Locale.getDefault())) {
+fun String.toReason() = when (uppercase()) {
     "DESIGN" -> Question.IncorrectFile.Reason.DESIGN
     "TEST" -> Question.IncorrectFile.Reason.TEST
     "COMPILE" -> Question.IncorrectFile.Reason.COMPILE
