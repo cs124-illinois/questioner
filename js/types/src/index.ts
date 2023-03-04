@@ -217,6 +217,39 @@ export const FeaturesComparison = Record({
 })
 export type FeaturesComparison = Static<typeof FeaturesComparison>
 
+export const PassedTestCount = Record({
+  passed: Number,
+  total: Number,
+  completed: Boolean,
+})
+export type PassedTestCount = Static<typeof PassedTestCount>
+
+export const PassedMutantCount = Record({
+  passed: Number,
+  total: Number,
+  completed: Boolean,
+})
+export type PassedMutantCount = Static<typeof PassedMutantCount>
+
+export const PassedSteps = Record({
+  compiled: Boolean,
+  design: Boolean,
+  partiallyCorrect: Boolean,
+  fullyCorrect: Boolean,
+  quality: Boolean,
+})
+export type PassedSteps = Static<typeof PassedSteps>
+
+export const PartialCredit = Record({
+  passedSteps: PassedSteps,
+}).And(
+  Partial({
+    passedTestCount: PassedTestCount,
+    passedMutantCount: PassedMutantCount,
+  })
+)
+export type PartialCredit = Static<typeof PartialCredit>
+
 export const CompletedTasks = Partial({
   // templateSubmission doesn't complete
   compileSubmission: CompiledSourceResult,
@@ -226,6 +259,7 @@ export const CompletedTasks = Partial({
   complexity: ComplexityComparison,
   features: FeaturesComparison,
   lineCount: LineCountComparison,
+  partial: PartialCredit,
   // execution
   // checkExecutedSubmission doesn't complete
   executionCount: ExecutionCountComparison,
@@ -262,6 +296,7 @@ export const Step = Union(
   Literal("complexity"),
   Literal("features"),
   Literal("lineCount"),
+  Literal("partial"),
   // execution
   Literal("checkExecutedSubmission"),
   Literal("executioncount"),
@@ -280,6 +315,7 @@ export const TestingOrder: Array<Step> = [
   "complexity",
   "features",
   "lineCount",
+  "partial",
   // execution
   "checkExecutedSubmission",
   "executioncount",

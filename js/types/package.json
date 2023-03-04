@@ -1,6 +1,6 @@
 {
   "name": "@cs124/questioner-types",
-  "version": "2023.2.4",
+  "version": "2023.3.0",
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
@@ -23,16 +23,16 @@
   },
   "devDependencies": {
     "@cs124/jeed-types": "2023.2.3",
-    "@typescript-eslint/eslint-plugin": "5.53.0",
-    "@typescript-eslint/parser": "5.53.0",
+    "@typescript-eslint/eslint-plugin": "5.54.0",
+    "@typescript-eslint/parser": "5.54.0",
     "depcheck": "1.4.3",
-    "eslint": "8.34.0",
+    "eslint": "8.35.0",
     "eslint-config-prettier": "8.6.0",
-    "npm-check-updates": "16.7.9",
+    "npm-check-updates": "16.7.10",
     "prettier": "2.8.4",
     "prettier-package-json": "2.8.0",
     "prettier-plugin-organize-imports": "3.2.2",
-    "rimraf": "4.1.2",
+    "rimraf": "4.3.0",
     "runtypes": "6.6.0",
     "typescript": "4.9.5"
   }

@@ -49,6 +49,7 @@ data class TestResults(
         complexity,
         features,
         lineCount,
+        partial,
 
         // execution
         checkExecutedSubmission,
@@ -68,6 +69,7 @@ data class TestResults(
         var complexity: ComplexityComparison? = null,
         var features: FeaturesComparison? = null,
         var lineCount: LineCountComparison? = null,
+        var partial: PartialCredit? = null,
         // execution
         // checkExecutedSubmission doesn't complete
         var executionCount: ResourceUsageComparison? = null,
@@ -158,6 +160,28 @@ data class TestResults(
         val errors: List<String>,
         val failed: Boolean = errors.isNotEmpty()
     )
+
+    @JsonClass(generateAdapter = true)
+    data class PartialCredit(
+        val passedSteps: PassedSteps = PassedSteps(),
+        var passedTestCount: PassedTestCount? = null,
+        var passedMutantCount: PassedMutantCount? = null
+    ) {
+        @JsonClass(generateAdapter = true)
+        data class PassedSteps(
+            var compiled: Boolean = false,
+            var design: Boolean = false,
+            var partiallyCorrect: Boolean = false,
+            var fullyCorrect: Boolean = false,
+            var quality: Boolean = false
+        )
+
+        @JsonClass(generateAdapter = true)
+        data class PassedTestCount(val passed: Int, val total: Int, val completed: Boolean)
+
+        @JsonClass(generateAdapter = true)
+        data class PassedMutantCount(val passed: Int, val total: Int, val completed: Boolean)
+    }
 
     @JsonClass(generateAdapter = true)
     data class TestingResult(

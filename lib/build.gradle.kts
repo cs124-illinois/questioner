@@ -16,7 +16,7 @@ dependencies {
 
     api("com.beyondgrader.resource-agent:agent:2022.9.3")
     api("com.github.cs124-illinois.jeed:core:2023.2.3")
-    api("com.github.cs124-illinois:jenisol:2023.2.1")
+    api("com.github.cs124-illinois:jenisol:2023.3.0")
     api("io.kotest:kotest-runner-junit5:5.5.5")
     api("com.google.truth:truth:1.1.3")
     api("com.github.cs124-illinois:libcs1:2023.2.0")

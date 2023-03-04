@@ -18,6 +18,7 @@ import edu.illinois.cs.cs125.jeed.core.features
 import edu.illinois.cs.cs125.jeed.core.processCoverage
 import edu.illinois.cs.cs125.jenisol.core.Settings
 import edu.illinois.cs.cs125.jenisol.core.SubmissionDesignError
+import edu.illinois.cs.cs125.jenisol.core.TestResult
 import org.objectweb.asm.Type
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
@@ -38,6 +39,10 @@ suspend fun Question.test(
     check(settings != null) { "No test settings provided" }
 
     val results = TestResults(language)
+
+    // initialize partial credit information
+    results.complete.partial = TestResults.PartialCredit()
+    results.completedSteps.add(TestResults.Step.partial)
 
     // templateSubmission
     val source = contentsToSource(contents, language, results)
@@ -70,6 +75,8 @@ suspend fun Question.test(
     } catch (e: KtLintFailed) {
         return results
     }
+
+    results.complete.partial!!.passedSteps.compiled = true
 
     // checkCompiledSubmission
     val klassName = checkCompiledSubmission(compiledSubmission, results) ?: return results
@@ -242,6 +249,8 @@ suspend fun Question.test(
         return results
     }
 
+    results.complete.partial!!.passedSteps.design = true
+
     // testing
     if (taskResults.returned == null) {
         results.failedSteps.add(TestResults.Step.testing)
@@ -249,14 +258,36 @@ suspend fun Question.test(
     }
 
     val testingResults = taskResults.returned!!.map { it.asTestResult(compiledSubmission.source) }
-    results.addTestingResults(
-        TestResults.TestingResult(
-            testingResults,
-            taskResults.returned!!.settings.testCount,
-            taskResults.completed && !timeout,
-            !taskResults.returned!!.finishedReceivers
-        )
+    val taskTestingResults = TestResults.TestingResult(
+        testingResults,
+        taskResults.returned!!.settings.testCount,
+        taskResults.completed && !timeout,
+        !taskResults.returned!!.finishedReceivers
     )
+    results.addTestingResults(taskTestingResults)
+
+    // tests passed partial credit
+
+    val passedTestCount = testingResults.filter {
+        !(fauxStatic && it.type == TestResult.Type.CONSTRUCTOR)
+    }.count { it.passed }
+
+    results.complete.partial!!.passedSteps.partiallyCorrect = passedTestCount > 0
+    results.complete.partial!!.passedSteps.fullyCorrect = taskTestingResults.passed
+
+    results.complete.partial!!.passedTestCount = TestResults.PartialCredit.PassedTestCount(
+        passedTestCount,
+        taskTestingResults.testCount,
+        taskTestingResults.completed
+    )
+
+    validationMutations?.also {
+        results.complete.partial!!.passedMutantCount = TestResults.PartialCredit.PassedMutantCount(
+            validationMutations!!.count { it.testCount < passedTestCount },
+            validationMutations!!.size,
+            taskTestingResults.completed
+        )
+    }
 
     fun List<TestResults.TestingResult.TestResult>.recursiveMethods() = asSequence().filter {
         it.submissionResourceUsage!!.invokedRecursiveFunctions.isNotEmpty()
@@ -354,6 +385,18 @@ suspend fun Question.test(
     results.complete.coverage =
         TestResults.CoverageComparison(solutionCoverage, submissionCoverage, missed, solutionDeadCode.toInt())
     results.completedSteps.add(TestResults.Step.coverage)
+
+    results.complete.partial!!.passedSteps.quality =
+        results.complete.partial!!.passedSteps.fullyCorrect && results.complete.let {
+            it.checkstyle?.errors?.isNotEmpty() == true ||
+                it.ktlint?.errors?.isNotEmpty() == true ||
+                it.complexity?.failed == true ||
+                it.features?.failed == true ||
+                it.lineCount?.failed == true ||
+                it.executionCount?.failed == true ||
+                it.memoryAllocation?.failed == true ||
+                it.coverage?.failed == true
+        } == false
 
     return results
 }

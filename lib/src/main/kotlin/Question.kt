@@ -329,6 +329,7 @@ data class Question(
         val mutation: Mutation.Type?,
         val testCount: Int
     ) {
+
         @Transient
         private var _contents: String? = null
         fun contents(question: Question): String {

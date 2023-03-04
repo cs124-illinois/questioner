@@ -5776,7 +5776,7 @@
     "type": "METHOD",
     "klass": "Question",
     "metadata": {
-      "contentHash": "b1322a269dba5068be926e0bf0e901c9",
+      "contentHash": "77bdcd71d97f86ae94f04145693d0cce",
       "packageName": "com.examples.testing.withfeaturedeadcode",
       "version": "2023.2.0",
       "author": "challen@illinois.edu",
@@ -5791,7 +5791,7 @@
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\n\nimport java.util.ArrayList;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Test feature-based dead code correction.\n */\n@Correct(name = \"With Feature Dead Code\", author = \"challen@illinois.edu\", version = \"2023.2.0\")\n@Wrap\npublic class Question {\n  List<Integer> rangeToList(int value) {\n    List<Integer> values = new ArrayList<>();\n    for (int i = 0; i < value; i += 2) {\n      values.add(i);\n    }\n    return values;\n  }\n\n  @FixedParameters\n  private static final List<Integer> FIXED = Arrays.asList(0, 8);\n\n  @RandomParameters\n  private static int randomParameters(Random random) {\n    return random.nextInt(32);\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.ArrayList;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Test feature-based dead code correction.\n */\n@Correct(name = \"With Feature Dead Code\", author = \"challen@illinois.edu\", version = \"2023.2.0\")\n@Wrap\npublic class Question {\n  List<Integer> rangeToList(int value) {\n    List<Integer> values = new ArrayList<>();\n    for (int i = 0; i < value; i += 2) {\n      values.add(i);\n    }\n    return values;\n  }\n\n  @FixedParameters private static final List<Integer> FIXED = Arrays.asList(0, 8);\n\n  @RandomParameters\n  private static int randomParameters(Random random) {\n    return random.nextInt(32);\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withfeaturedeadcode/Question.java"
     },
@@ -7331,7 +7331,7 @@
     "type": "KLASS",
     "klass": "Question",
     "metadata": {
-      "contentHash": "1c3c57254154d048ec5d4e479eacfb54",
+      "contentHash": "c2e94f610ee78dff8dc9187ab167ff00",
       "packageName": "com.examples.testing.withconstructornotnull",
       "version": "2022.10.0",
       "author": "challen@illinois.edu",
@@ -7343,7 +7343,7 @@
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.NotNull;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Testing @NotNull annotation on constructor parameters.\n */\n\n@Correct(\n    name = \"Test Constructor NotNull\",\n    version = \"2022.10.0\",\n    author = \"challen@illinois.edu\")\npublic class Question {\n  private final int stringLength;\n\n  public Question(@NotNull String value) {\n    stringLength = value.length();\n  }\n\n  public int getStringLength() {\n    return stringLength;\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.NotNull;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Testing @NotNull annotation on constructor parameters.\n */\n\n@Correct(name = \"Test Constructor NotNull\", version = \"2022.10.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  private final int stringLength;\n\n  public Question(@NotNull String value) {\n    stringLength = value.length();\n  }\n\n  public int getStringLength() {\n    return stringLength;\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withconstructornotnull/Question.java"
     },
@@ -20123,7 +20123,7 @@
     "type": "METHOD",
     "klass": "Question",
     "metadata": {
-      "contentHash": "0a5189ba8f5f59390b82b1409847ec30",
+      "contentHash": "bb8bb70b606f9e613a76603cf86097d6",
       "packageName": "com.examples.addone",
       "version": "2021.6.0",
       "author": "challen@illinois.edu",
@@ -20146,7 +20146,7 @@
     },
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\n\n/*\n * Write a method `addOne` that returns its `int` argument plus one.\n */\n\n@Correct(name = \"Add One\", author = \"challen@illinois.edu\", version = \"2021.6.0\", maxLineCountMultiplier = 16)\n@Wrap\npublic class Question {\n  // Here to avoid dead code errors in the memoization test\n  @FixedParameters\n  private static final List<Integer> FIXED = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);\n\n  int addOne(int value) {\n    return value + 1;\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\n\n/*\n * Write a method `addOne` that returns its `int` argument plus one.\n */\n\n@Correct(\n    name = \"Add One\",\n    author = \"challen@illinois.edu\",\n    version = \"2021.6.0\",\n    maxLineCountMultiplier = 16)\n@Wrap\npublic class Question {\n  // Here to avoid dead code errors in the memoization test\n  @FixedParameters\n  private static final List<Integer> FIXED =\n      Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);\n\n  int addOne(int value) {\n    return value + 1;\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/Question.java"
     },

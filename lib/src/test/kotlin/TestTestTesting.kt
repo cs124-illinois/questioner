@@ -127,7 +127,7 @@ fun test() {
             }
             question.test(incorrect.contents(question), incorrect.language).also {
                 it.complete.testing?.passed shouldBe false
-                it.tests()?.size shouldBe incorrect.testCount
+                it.tests()?.size shouldBe incorrect.testCount + 1
             }
         }
     }

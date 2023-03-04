@@ -77,6 +77,7 @@ data class AnalyzeClass(val klass: Class<*>) {
         return this
     }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     val isKotlin = klass.getAnnotation(Metadata::class.java) != null
     val hasInnerClasses = klass.declaredClasses.isNotEmpty()
     val isLambda = when (isKotlin) {

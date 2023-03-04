@@ -6,6 +6,7 @@ import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
 import edu.illinois.cs.cs125.jeed.core.suppressionComment
 import edu.illinois.cs.cs125.jenisol.core.ParameterGroup
+import edu.illinois.cs.cs125.jenisol.core.TestResult
 import edu.illinois.cs.cs125.jenisol.core.fullName
 import edu.illinois.cs.cs125.jenisol.core.isBoth
 import java.lang.reflect.Constructor
@@ -339,14 +340,32 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         } else {
             null
         }
-        Question.ValidationMutation(
-            unifiedDiffs,
-            result.incorrect.language,
-            incorrectIndex,
-            allIncorrect[i].mutation?.mutations?.first()?.mutation?.mutationType,
-            result.results.tests()!!.indexOfFirst { !it.passed } + 1
+
+        // Ignore constructor invocation for faux static methods
+        val failureIndex = result.results.tests()!!.filter {
+            if (fauxStatic) {
+                it.type != TestResult.Type.CONSTRUCTOR
+            } else {
+                true
+            }
+        }.indexOfFirst { !it.passed }
+
+        Pair(
+            Question.ValidationMutation(
+                unifiedDiffs,
+                result.incorrect.language,
+                incorrectIndex,
+                allIncorrect[i].mutation?.mutations?.first()?.mutation?.mutationType,
+                failureIndex
+            ), result.incorrect.contents
         )
     }.filterNotNull()
+        .sortedWith(
+            compareBy(
+                { (validationMutation, _) -> validationMutation.testCount },
+                { (_, content) -> content.hashCode() })
+        )
+        .map { (validationMutation, _) -> validationMutation }
 
     var requiredTestCount = incorrectResults
         .filter { !it.results.timeout && !it.results.succeeded }
