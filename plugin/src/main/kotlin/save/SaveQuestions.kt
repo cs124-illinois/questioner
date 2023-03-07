@@ -435,7 +435,7 @@ fun List<ParsedJavaFile>.findQuestions(
                 kotlinSolution?.toAlternateFile(kotlinCleanSpec)
             )
         } catch (e: Exception) {
-            throw Exception("Process ${solution.path} failed: $e", e)
+            throw Exception("Processing ${solution.path} failed: $e", e)
         }
     }
     allPaths.filter { !usedFiles.containsKey(it) && !skippedFiles.contains(it) }.forEach {
