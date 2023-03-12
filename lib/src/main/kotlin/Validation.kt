@@ -253,12 +253,12 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     }
 
     val bootstrapSolutionExecutionCount =
-        firstCorrectResults.setResourceUsage(control.maxTestCount!! / control.minTestCount!!.toDouble()) {
+        firstCorrectResults.setResourceUsage {
             it.executionCount
         }
 
     val bootstrapSolutionAllocation =
-        firstCorrectResults.setResourceUsage(1.0) {
+        firstCorrectResults.setResourceUsage {
             it.memoryAllocation
         }
 
