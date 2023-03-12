@@ -67,8 +67,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         tests()
             ?.filter {
                 it.jenisol!!.solution.threw == null
-                    && it.jenisol.parameters.toList().isNotEmpty()
-                    && !(it.jenisol.solutionExecutable is Method && (it.jenisol.solutionExecutable as Method).isBoth())
+                        && it.jenisol.parameters.toList().isNotEmpty()
+                        && !(it.jenisol.solutionExecutable is Method && (it.jenisol.solutionExecutable as Method).isBoth())
             }?.let { results ->
                 val executableReturns = mutableMapOf<Executable, MutableList<Any>>()
                 for (result in results) {
@@ -120,7 +120,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         classWhiteList.addAll(
             taskResults!!.sandboxedClassLoader!!.loadedClasses.filter { klass ->
                 !klass.startsWith("edu.illinois.cs.cs125.jeed.core") &&
-                    !klass.startsWith("java.lang.invoke.MethodHandles")
+                        !klass.startsWith("java.lang.invoke.MethodHandles")
             }
         )
     }
@@ -155,8 +155,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         }?.find {
             val exception = it.jenisol!!.solution.threw!!
             exception !is AssertionError
-                && exception !is IllegalArgumentException
-                && exception !is IllegalStateException
+                    && exception !is IllegalArgumentException
+                    && exception !is IllegalStateException
         }
         if (!control.solutionThrows!! && solutionThrew != null) {
             throw SolutionThrew(correct, solutionThrew.jenisol!!.solution.threw!!, solutionThrew.jenisol.parameters)
@@ -252,15 +252,13 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         return Question.LanguagesResourceUsage(javaSolutionExecutionCount, kotlinSolutionExecutionCount)
     }
 
-    val bootstrapSolutionExecutionCount =
-        firstCorrectResults.setResourceUsage {
-            it.executionCount
-        }
+    val bootstrapSolutionExecutionCount = firstCorrectResults.setResourceUsage {
+        it.executionCount
+    }
 
-    val bootstrapSolutionAllocation =
-        firstCorrectResults.setResourceUsage {
-            it.memoryAllocation
-        }
+    val bootstrapSolutionAllocation = firstCorrectResults.setResourceUsage {
+        it.memoryAllocation
+    }
 
     val bootstrapLength = Instant.now().toEpochMilli() - bootStrapStart.toEpochMilli()
 
@@ -439,8 +437,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             solutionExecutionCounts.kotlin?.times(control.executionTimeoutMultiplier!!)
         ),
         allocationLimit = Question.LanguagesResourceUsage(
-            solutionAllocation.java * control.allocationLimitMultiplier!!,
-            solutionAllocation.kotlin?.times(control.allocationLimitMultiplier!!)
+            (solutionAllocation.java.toDouble() * control.allocationLimitMultiplier!!).toLong(),
+            (solutionAllocation.kotlin?.toDouble()?.times(control.allocationLimitMultiplier!!))?.toLong()
         ),
         solutionRecursiveMethods = solutionRecursiveMethods,
         solutionDeadCode = solutionDeadCode
@@ -698,7 +696,7 @@ class IncorrectPassed(
         |${
                 if (incorrect.mutation != null) {
                     "If the code is correct, you may need to disable this mutation using " +
-                        "// ${incorrect.mutation.mutations.first().mutation.mutationType.suppressionComment()}"
+                            "// ${incorrect.mutation.mutations.first().mutation.mutationType.suppressionComment()}"
                 } else {
                     ""
                 }
@@ -721,7 +719,7 @@ class IncorrectTooManyTests(
         |${
                 if (incorrect.mutation != null) {
                     "If the code is correct, you may need to disable this mutation using " +
-                        "// ${incorrect.mutation.mutations.first().mutation.mutationType.suppressionComment()}\n"
+                            "// ${incorrect.mutation.mutations.first().mutation.mutationType.suppressionComment()}\n"
                 } else {
                     ""
                 }

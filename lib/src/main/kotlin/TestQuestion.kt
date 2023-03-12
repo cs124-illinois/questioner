@@ -351,10 +351,10 @@ suspend fun Question.test(
     results.complete.memoryAllocation = TestResults.ResourceUsageComparison(
         solutionAllocation,
         submissionAllocation,
-        (solutionAllocation * control.allocationFailureMultiplier!!).coerceAtLeast(MIN_ALLOCATION_FAILURE_BYTES)
+        ((solutionAllocation.toDouble() * control.allocationFailureMultiplier!!)).toLong()
+            .coerceAtLeast(MIN_ALLOCATION_FAILURE_BYTES)
     )
     results.completedSteps.add(TestResults.Step.memoryAllocation)
-
 
     // coverage
     check(settings.solutionDeadCode != null) { "Must set solutionDeadCode" }
@@ -389,13 +389,13 @@ suspend fun Question.test(
     results.complete.partial!!.passedSteps.quality =
         results.complete.partial!!.passedSteps.fullyCorrect && results.complete.let {
             it.checkstyle?.errors?.isNotEmpty() == true ||
-                it.ktlint?.errors?.isNotEmpty() == true ||
-                it.complexity?.failed == true ||
-                it.features?.failed == true ||
-                it.lineCount?.failed == true ||
-                it.executionCount?.failed == true ||
-                it.memoryAllocation?.failed == true ||
-                it.coverage?.failed == true
+                    it.ktlint?.errors?.isNotEmpty() == true ||
+                    it.complexity?.failed == true ||
+                    it.features?.failed == true ||
+                    it.lineCount?.failed == true ||
+                    it.executionCount?.failed == true ||
+                    it.memoryAllocation?.failed == true ||
+                    it.coverage?.failed == true
         } == false
 
     return results

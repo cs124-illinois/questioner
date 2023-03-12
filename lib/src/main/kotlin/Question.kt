@@ -178,8 +178,8 @@ data class Question(
         val maxExecutionCountMultiplier: Long?,
         val executionFailureMultiplier: Int?,
         val executionTimeoutMultiplier: Int?,
-        val allocationFailureMultiplier: Int?,
-        val allocationLimitMultiplier: Int?,
+        val allocationFailureMultiplier: Double?,
+        val allocationLimitMultiplier: Double?,
         val minExtraSourceLines: Int?,
         val sourceLinesMultiplier: Double?,
         val seed: Int?,
@@ -200,8 +200,8 @@ data class Question(
             const val DEFAULT_MAX_EXECUTION_COUNT_MULTIPLIER = 256L
             const val DEFAULT_EXECUTION_COUNT_FAILURE_MULTIPLIER = 4
             const val DEFAULT_EXECUTION_COUNT_TIMEOUT_MULTIPLIER = 16
-            const val DEFAULT_ALLOCATION_FAILURE_MULTIPLIER = 4
-            const val DEFAULT_ALLOCATION_LIMIT_MULTIPLIER = 16
+            const val DEFAULT_ALLOCATION_FAILURE_MULTIPLIER = 4.0
+            const val DEFAULT_ALLOCATION_LIMIT_MULTIPLIER = 16.0
             const val DEFAULT_MIN_EXTRA_SOURCE_LINES = 2
             const val DEFAULT_SOURCE_LINES_MULTIPLIER = 1.5
             const val DEFAULT_SEED = -1
