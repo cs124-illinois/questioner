@@ -13,7 +13,7 @@ import java.lang.reflect.ParameterizedType
 annotation class Correct(
     val name: String,
     val version: String,
-    val author: String,
+    val author: String = "",
     val path: String = "",
     val solutionThrows: Boolean = Question.TestingControl.DEFAULT_SOLUTION_THROWS,
     val focused: Boolean = Question.Metadata.DEFAULT_FOCUSED,
