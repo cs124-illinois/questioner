@@ -81,7 +81,7 @@ abstract class SaveQuestions : DefaultTask() {
 @Suppress("LongMethod", "ComplexMethod")
 fun List<ParsedJavaFile>.findQuestions(
     allPaths: List<String>,
-    existingQuestions: Map<String, Question> = mapOf()
+    existingQuestions: Map<String, Question> = mapOf(),
 ): List<Question> {
     map { it.fullName }.groupingBy { it }.eachCount().filter { it.value > 1 }.also { duplicates ->
         if (duplicates.isNotEmpty()) {
@@ -197,10 +197,10 @@ fun List<ParsedJavaFile>.findQuestions(
                         }
                         it.firstOrNull()
                     }?.also {
-                        require(it.path !in usedFiles) { "File $it.path was already used as ${usedFiles[it.path]}" }
-                        usedFiles[it.path] = "Starter"
-                        myUsedFiles.add(it.path)
-                    }
+                    require(it.path !in usedFiles) { "File $it.path was already used as ${usedFiles[it.path]}" }
+                    usedFiles[it.path] = "Starter"
+                    myUsedFiles.add(it.path)
+                }
             if (solution.autoStarter) {
                 check(javaStarter == null) {
                     "autoStarter set to true but found a file marked as @Starter. Please remove it.\n" +
@@ -257,13 +257,13 @@ fun List<ParsedJavaFile>.findQuestions(
 
             if (hasJavaTemplate && javaTemplate == null && solution.wrapWith == null) {
                 javaTemplate = solution.extractTemplate() ?: error(
-                    "Can't extract Java template"
+                    "Can't extract Java template",
                 )
             }
 
             if (hasKotlinTemplate && kotlinTemplate == null && solution.wrapWith == null) {
                 kotlinTemplate = kotlinSolution!!.extractTemplate() ?: error(
-                    "Can't extract Kotlin template"
+                    "Can't extract Kotlin template",
                 )
             }
 
@@ -286,7 +286,7 @@ fun List<ParsedJavaFile>.findQuestions(
                                     usedFiles[it.path] = "Incorrect"
                                     myUsedFiles.add(it.path)
                                 }
-                                .map { it.toIncorrectFile(kotlinCleanSpec) }
+                                .map { it.toIncorrectFile(kotlinCleanSpec) },
                         )
                     }
 
@@ -312,7 +312,7 @@ fun List<ParsedJavaFile>.findQuestions(
                                     usedFiles[it.path] = "Correct"
                                     myUsedFiles.add(it.path)
                                 }
-                                .map { it.toAlternateFile(kotlinCleanSpec) }
+                                .map { it.toAlternateFile(kotlinCleanSpec) },
                         )
                     }.toList()
 
@@ -413,14 +413,14 @@ fun List<ParsedJavaFile>.findQuestions(
                     solution.citation,
                     myUsedFiles,
                     solution.templateImports.toSet(),
-                    solution.correct.focused
+                    solution.correct.focused,
                 ),
                 solution.correct.control,
                 Question.FlatFile(
                     solution.className,
                     solution.removeImports(importNames).stripPackage(),
                     Question.Language.java,
-                    solution.path
+                    solution.path,
                 ),
                 cleanSolution,
                 alternateSolutions,
@@ -432,7 +432,7 @@ fun List<ParsedJavaFile>.findQuestions(
                 solution.blacklist,
                 solution.checkstyleSuppress,
                 solution.correct.path ?: slugify.slugify(solution.correct.name),
-                kotlinSolution?.toAlternateFile(kotlinCleanSpec)
+                kotlinSolution?.toAlternateFile(kotlinCleanSpec),
             )
         } catch (e: Exception) {
             throw Exception("Processing ${solution.path} failed: $e", e)
@@ -462,7 +462,7 @@ val annotationsToRemove =
         Cite::class.java.simpleName,
         Limit::class.java.simpleName,
         ProvideSystemIn::class.java.simpleName,
-        CheckstyleSuppress::class.java.simpleName
+        CheckstyleSuppress::class.java.simpleName,
     )
 val annotationsToDestroy =
     setOf(
@@ -477,7 +477,7 @@ val annotationsToDestroy =
         InstanceValidator::class.java.simpleName,
         CheckFeatures::class.java.simpleName,
         Ignore::class.java.simpleName,
-        Compare::class.java.simpleName
+        Compare::class.java.simpleName,
     )
 val annotationsToSnip = setOf(NotNull::class.java.simpleName)
 
@@ -492,7 +492,7 @@ private val emailRegex = Pattern.compile(
         "(" +
         "\\." +
         "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-        ")+"
+        ")+",
 )
 
 fun String.isEmail(): Boolean = emailRegex.matcher(this).matches()
@@ -500,7 +500,7 @@ fun String.isEmail(): Boolean = emailRegex.matcher(this).matches()
 data class CleanSpec(
     val hasTemplate: Boolean = false,
     val wrappedClass: String? = null,
-    val importNames: List<String> = listOf()
+    val importNames: List<String> = listOf(),
 ) {
     val notClass = hasTemplate || wrappedClass != null
 }

@@ -218,8 +218,8 @@ data class ParsedJavaFile(val path: String, val contents: String) {
                         sourceLinesMultiplier,
                         seed,
                         maxComplexityMultiplier,
-                        maxLineCountMultiplier
-                    )
+                        maxLineCountMultiplier,
+                    ),
                 )
             }
         } catch (e: Exception) {
@@ -309,8 +309,8 @@ data class ParsedJavaFile(val path: String, val contents: String) {
                 mapOf(
                     "$className.java" to """public class $className {
 $cleanContent
-}"""
-                )
+}""",
+                ),
             )
 
             Question.Type.SNIPPET -> Source.fromSnippet(cleanContent)
@@ -342,9 +342,9 @@ $cleanContent
                 complexity,
                 features,
                 lineCounts,
-                deadlineCount
+                deadlineCount,
             ),
-            questionType
+            questionType,
         )
     }
 
@@ -403,7 +403,7 @@ $cleanContent
                 Question.IncorrectFile.Reason.TEST,
                 Question.Language.java,
                 null,
-                true
+                true,
             )
         }
     }
@@ -416,7 +416,7 @@ $cleanContent
             incorrect.toReason(),
             Question.Language.java,
             path,
-            starter != null
+            starter != null,
         )
     }
 
@@ -442,8 +442,8 @@ $cleanContent
                     "$className.java" to """public class $className {
                     |$cleanContent
                     }
-                    """.trimMargin()
-                )
+                    """.trimMargin(),
+                ),
             )
 
             Question.Type.SNIPPET -> Source.fromSnippet(cleanContent)
@@ -473,7 +473,7 @@ $cleanContent
             complexity,
             features,
             lineCounts,
-            deadlineCount
+            deadlineCount,
         )
     }
 
@@ -485,7 +485,7 @@ $cleanContent
             incorrect?.toReason() ?: "test".toReason(),
             Question.Language.java,
             path,
-            true
+            true,
         )
     }
 
@@ -591,7 +591,7 @@ $cleanContent
                 for (range in toSnip.sortedBy { it.first }) {
                     snipped = snipped.substring(0, range.first - shift) + snipped.substring(
                         range.last + 1 - shift,
-                        snipped.length
+                        snipped.length,
                     )
                     shift += (range.last - range.first) + 1
                 }
@@ -638,7 +638,7 @@ $cleanContent
                         require(
                             lines.find {
                                 it.contains("TEMPLATE_START") || it.contains("TEMPLATE_END")
-                            } == null
+                            } == null,
                         ) {
                             "@Wrap should not use template delimiters"
                         }
@@ -661,7 +661,7 @@ $cleanContent
 
 data class ParsedJavaContent(
     val tree: JavaParser.CompilationUnitContext,
-    val stream: CharStream
+    val stream: CharStream,
 )
 
 internal fun String.parseJava() = CharStreams.fromStream(StringInputStream(this)).let { stream ->
@@ -677,7 +677,7 @@ internal fun String.parseJava() = CharStreams.fromStream(StringInputStream(this)
                             line: Int,
                             charPositionInLine: Int,
                             msg: String?,
-                            e: RecognitionException?
+                            e: RecognitionException?,
                         ) {
                             // Ignore messages that are not errors...
                             if (e == null) {
@@ -685,7 +685,7 @@ internal fun String.parseJava() = CharStreams.fromStream(StringInputStream(this)
                             }
                             throw e
                         }
-                    }
+                    },
                 )
             }
         }.compilationUnit()

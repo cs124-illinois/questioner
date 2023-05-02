@@ -85,7 +85,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
             incorrect.toReason(),
             Question.Language.kotlin,
             path,
-            starter != null
+            starter != null,
         )
     }
 
@@ -106,7 +106,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
         }
         val solutionContent = try {
             Source.fromKotlin(unformattedContent).ktFormat(
-                KtLintArguments(indent = 2, maxLineLength = 120)
+                KtLintArguments(indent = 2, maxLineLength = 120),
             ).contents
         } catch (_: Exception) {
             Source.fromKotlin(unformattedContent)
@@ -143,7 +143,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
             complexity,
             features,
             lineCounts,
-            deadlineCount
+            deadlineCount,
         )
     }
 
@@ -155,7 +155,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
             incorrect?.toReason() ?: "test".toReason(),
             Question.Language.kotlin,
             path,
-            true
+            true,
         )
     }
 
@@ -258,7 +258,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
             topLevelClass.modifierList().annotations()
                 ?.filter {
                     it.annotation().LabelReference()?.text != null && annotationsToRemove.contains(
-                        it.annotation().LabelReference().text.removePrefix("@")
+                        it.annotation().LabelReference().text.removePrefix("@"),
                     )
                 }?.forEach { context ->
                     (context.start.startIndex.toLine()..context.stop.stopIndex.toLine()).forEach {
@@ -366,7 +366,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
                     Question.IncorrectFile.Reason.TEST,
                     Question.Language.kotlin,
                     null,
-                    true
+                    true,
                 )
             }
     }
@@ -389,7 +389,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
                     require(
                         lines.find {
                             it.contains("TEMPLATE_START") || it.contains("TEMPLATE_END")
-                        } == null
+                        } == null,
                     ) {
                         "@Wrap should not use template delimiters"
                     }
@@ -423,7 +423,7 @@ internal fun String.parseKotlin() = CharStreams.fromStream(StringInputStream(thi
                             line: Int,
                             charPositionInLine: Int,
                             msg: String?,
-                            e: RecognitionException?
+                            e: RecognitionException?,
                         ) {
                             // Ignore messages that are not errors...
                             if (e == null) {
@@ -431,7 +431,7 @@ internal fun String.parseKotlin() = CharStreams.fromStream(StringInputStream(thi
                             }
                             throw e
                         }
-                    }
+                    },
                 )
             }
         }.kotlinFile()

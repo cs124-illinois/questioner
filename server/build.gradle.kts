@@ -8,7 +8,7 @@ plugins {
     kotlin("kapt")
     application
     id("org.jmailen.kotlinter")
-    id("com.github.johnrengelman.shadow") version "8.1.0"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.google.devtools.ksp")
 }
 dependencies {
@@ -16,15 +16,15 @@ dependencies {
 
     implementation(project(":lib"))
 
-    implementation("io.ktor:ktor-server-netty:2.2.4")
-    implementation("io.ktor:ktor-server-content-negotiation:2.2.4")
-    implementation("io.ktor:ktor-server-call-logging:2.2.4")
+    implementation("io.ktor:ktor-server-netty:2.3.0")
+    implementation("io.ktor:ktor-server-content-negotiation:2.3.0")
+    implementation("io.ktor:ktor-server-call-logging:2.3.0")
     implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
     implementation("com.github.cs125-illinois:ktor-moshi:2022.9.0")
-    implementation("org.mongodb:mongodb-driver:3.12.12")
+    implementation("org.mongodb:mongodb-driver:3.12.13")
 
-    implementation("org.slf4j:slf4j-api:2.0.6")
-    implementation("ch.qos.logback:logback-classic:1.4.5")
+    implementation("org.slf4j:slf4j-api:2.0.7")
+    implementation("ch.qos.logback:logback-classic:1.4.7")
     implementation("io.github.microutils:kotlin-logging:3.0.5")
 }
 task("createProperties") {
@@ -53,9 +53,6 @@ tasks.shadowJar {
 }
 application {
     mainClass.set("edu.illinois.cs.cs125.questioner.server.MainKt")
-}
-kotlin {
-    kotlinDaemonJvmArgs = listOf("-Dfile.encoding=UTF-8")
 }
 tasks.withType<ShadowJar> {
     isZip64 = true

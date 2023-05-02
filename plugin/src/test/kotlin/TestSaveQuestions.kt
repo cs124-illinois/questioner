@@ -35,7 +35,7 @@ public class Second {
   public void correct(@NotNull String input) { }
   public void also(@NotNull String input) { }
 }
-""".trim()
+""".trim(),
             ).also { parsedFile ->
                 parsedFile.packageName shouldBe "examples"
                 parsedFile.className shouldBe "Second"
@@ -68,7 +68,7 @@ import edu.illinois.cs.cs125.questioner.AlsoCorrect
  */
 
 fun correct() { }
-""".trim()
+""".trim(),
             ).also { parsedFile ->
                 parsedFile.className shouldBe "SecondKt"
                 parsedFile.alternateSolution shouldNotBe null
@@ -94,7 +94,7 @@ import edu.illinois.cs.cs125.questioner.lib.AlsoCorrect
 class Second {
   fun correct() { }
 }
-""".trim()
+""".trim(),
             ).also { parsedFile ->
                 parsedFile.className shouldBe "Second"
                 parsedFile.alternateSolution shouldNotBe null
@@ -120,7 +120,7 @@ import edu.illinois.cs.cs125.questioner.lib.Starter
  * Test me.
  */
 fun incorrect() { }
-""".trim()
+""".trim(),
             ).also { parsedFile ->
                 parsedFile.className shouldBe "SecondKt"
                 parsedFile.incorrect shouldBe "test"
@@ -140,7 +140,7 @@ package examples;
 public class Example {
   public void correct() { }
 }
-""".trim()
+""".trim(),
                     ),
                     ParsedJavaFile(
                         "Another.java",
@@ -153,8 +153,8 @@ package examples;
 public class Another {
   public void correct() { }
 }
-""".trim()
-                    )
+""".trim(),
+                    ),
                 ).findQuestions(listOf("Another.java"))
             }
         }
@@ -172,7 +172,7 @@ package examples.first;
 public class Example {
   public void correct() { }
 }
-""".trim()
+""".trim(),
                     ),
                     ParsedJavaFile(
                         "examples/first/another/Another.java",
@@ -185,10 +185,10 @@ package examples.first.second;
 public class Another {
   public void correct() { }
 }
-""".trim()
-                    )
+""".trim(),
+                    ),
                 ).findQuestions(listOf("examples/first/Example.java", "examples/first/another/Another.java"))
             }
         }
-    }
+    },
 )

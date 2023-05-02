@@ -17,14 +17,14 @@ dependencies {
         exclude(module = "kotlin-js")
     }
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    implementation("com.google.googlejavaformat:google-java-format:1.16.0")
+    implementation("com.google.googlejavaformat:google-java-format:1.17.0")
     implementation("com.google.guava:guava:31.1-jre")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2")
-    implementation("com.github.slugify:slugify:3.0.2")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.0")
+    implementation("com.github.slugify:slugify:3.0.4")
     implementation("org.apache.httpcomponents.client5:httpclient5-fluent:5.2.1")
 
-    testImplementation("io.kotest:kotest-runner-junit5:5.5.5")
+    testImplementation("io.kotest:kotest-runner-junit5:5.6.1")
 }
 tasks.compileKotlin {
     dependsOn(tasks.generateGrammarSource)

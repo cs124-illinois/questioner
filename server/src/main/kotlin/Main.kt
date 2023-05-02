@@ -99,7 +99,7 @@ data class QuestionPath(val path: String, val version: String, val author: Strin
 
 object Questions {
     private fun getQuestion(path: String) = collection.find(
-        Filters.and(Filters.eq("published.path", path), Filters.eq("latest", true))
+        Filters.and(Filters.eq("published.path", path), Filters.eq("latest", true)),
     ).sort(Sorts.descending("updated")).let {
         @Suppress("ReplaceSizeZeroCheckWithIsEmpty")
         if (it.count() == 0) {
@@ -119,8 +119,8 @@ object Questions {
             Filters.eq("published.path", path.path),
             Filters.eq("published.version", path.version),
             Filters.eq("published.author", path.author),
-            Filters.eq("latest", true)
-        )
+            Filters.eq("latest", true),
+        ),
     ).sort(Sorts.descending("updated")).let {
         @Suppress("ReplaceSizeZeroCheckWithIsEmpty")
         if (it.count() == 0) {
@@ -156,13 +156,13 @@ object Questions {
         val settings = question.testingSettings!!.copy(
             timeout = timeout,
             disableLineCountLimit = submission.disableLineCountLimit,
-            disableAllocationLimit = submission.disableAllocationLimit
+            disableAllocationLimit = submission.disableAllocationLimit,
         )
         logger.trace { "Testing ${question.name} with settings $settings" }
         return question.test(
             submission.contents,
             language = submission.language,
-            settings = settings
+            settings = settings,
         ).also {
             logger.trace { "Tested ${question.name} in ${Instant.now().toEpochMilli() - start}" }
         }
@@ -177,7 +177,7 @@ data class Submission(
     val disableLineCountLimit: Boolean = false,
     val disableAllocationLimit: Boolean = true, // TODO: Switch to false when ready for allocation limiting
     val version: String?,
-    val author: String?
+    val author: String?,
 )
 
 @JsonClass(generateAdapter = true)
@@ -188,7 +188,7 @@ data class QuestionDescription(
     val description: String,
     val author: String,
     val packageName: String,
-    val starter: String?
+    val starter: String?,
 )
 
 private val serverStarted = Instant.now()
@@ -207,7 +207,7 @@ val versionString = run {
 @JsonClass(generateAdapter = true)
 data class Status(
     val started: Instant = serverStarted,
-    val version: String = versionString
+    val version: String = versionString,
 )
 
 @JsonClass(generateAdapter = true)
@@ -227,11 +227,11 @@ fun Application.questioner() {
         format { call ->
             val startTime = call.attributes.getOrNull(CALL_START_TIME)
             "${call.response.status()}: ${call.request.toLogString()} ${
-            if (startTime != null) {
-                Instant.now().toEpochMilli() - startTime
-            } else {
-                ""
-            }
+                if (startTime != null) {
+                    Instant.now().toEpochMilli() - startTime
+                } else {
+                    ""
+                }
             }"
         }
     }
@@ -257,7 +257,7 @@ fun Application.questioner() {
                 val endMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
                 logger.debug {
                     "$runCount: ${submission.path}: $startMemory -> $endMemory (${
-                    Instant.now().toEpochMilli() - start
+                        Instant.now().toEpochMilli() - start
                     })"
                 }
             } catch (e: StackOverflowError) {
@@ -279,7 +279,7 @@ fun Application.questioner() {
                         ManagementFactory.newPlatformMXBeanProxy(
                             ManagementFactory.getPlatformMBeanServer(),
                             "com.sun.management:type=HotSpotDiagnostic",
-                            HotSpotDiagnosticMXBean::class.java
+                            HotSpotDiagnosticMXBean::class.java,
                         ).dumpHeap("questioner.hprof", false)
                     }
                 }
@@ -296,8 +296,8 @@ fun Application.questioner() {
                     question.metadata.javaDescription,
                     question.metadata.author,
                     question.metadata.packageName,
-                    question.detemplatedJavaStarter
-                )
+                    question.detemplatedJavaStarter,
+                ),
             )
         }
         get("/question/kotlin/{path}") {
@@ -314,8 +314,8 @@ fun Application.questioner() {
                     question.metadata.kotlinDescription!!,
                     question.metadata.author,
                     question.metadata.packageName,
-                    starter = question.detemplatedKotlinStarter
-                )
+                    starter = question.detemplatedKotlinStarter,
+                ),
             )
         }
     }
