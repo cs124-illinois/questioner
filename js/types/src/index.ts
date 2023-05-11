@@ -9,13 +9,13 @@ import {
   TemplatingFailed,
 } from "@cs124/jeed-types"
 import {
-  Array as RuntypeArray,
   Boolean,
   Dictionary,
   Literal,
   Number,
   Partial,
   Record,
+  Array as RuntypeArray,
   Static,
   String,
   Union,
