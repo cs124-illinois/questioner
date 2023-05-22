@@ -12,7 +12,6 @@ suspend fun Question.testTests(
     contents: String,
     language: Question.Language
 ): TestTestResults {
-    compileAllValidationMutations()
 
     val testKlass = "Test$klass"
     val results = TestTestResults(language)

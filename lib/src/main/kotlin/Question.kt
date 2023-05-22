@@ -1,11 +1,19 @@
 package edu.illinois.cs.cs125.questioner.lib
 
+import com.github.benmanes.caffeine.cache.Cache
+import com.github.benmanes.caffeine.cache.Caffeine
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
-import edu.illinois.cs.cs125.jeed.core.*
+import edu.illinois.cs.cs125.jeed.core.CompilationArguments
+import edu.illinois.cs.cs125.jeed.core.Features
+import edu.illinois.cs.cs125.jeed.core.LineCounts
+import edu.illinois.cs.cs125.jeed.core.MutatedSource
+import edu.illinois.cs.cs125.jeed.core.Mutation
+import edu.illinois.cs.cs125.jeed.core.Source
+import edu.illinois.cs.cs125.jeed.core.compile
 import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
 import java.io.File
 import java.lang.reflect.ReflectPermission
@@ -343,14 +351,16 @@ data class Question(
             }
         }
 
-        @Transient
-        private var _compiled: TestTestingSource? = null
         suspend fun compiled(question: Question): TestTestingSource {
-            if (_compiled != null) {
-                return _compiled!!
-            }
             val results = TestResults(language)
             val source = question.contentsToSource(contents(question), language, results)
+            val md5 = source.md5
+
+            val cachedResult = compilationCache.getIfPresent(md5)
+            if (cachedResult != null) {
+                return cachedResult
+            }
+
             return when (language) {
                 Language.java ->
                     question.compileSubmission(
@@ -358,6 +368,7 @@ data class Question(
                         InvertingClassLoader(setOf(question.klass)),
                         results
                     )
+
                 Language.kotlin ->
                     question.kompileSubmission(
                         source,
@@ -367,7 +378,7 @@ data class Question(
             }.let {
                 TestTestingSource(contents(question), question.fixTestingMethods(it.classLoader))
             }.also {
-                _compiled = it
+                compilationCache.put(md5, it)
             }
         }
     }
@@ -614,3 +625,10 @@ private inline infix fun <reified T : Any> T.merge(other: T): T {
     }
     return primaryConstructor.callBy(args)
 }
+
+val compilationCache: Cache<String, Question.TestTestingSource> =
+    Caffeine.newBuilder()
+        .softValues()
+        .recordStats()
+        .build()
+
