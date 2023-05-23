@@ -7,10 +7,12 @@ import edu.illinois.cs.cs125.jenisol.core.isPrivate
 import edu.illinois.cs.cs125.jenisol.core.isStatic
 import org.objectweb.asm.*
 import java.lang.reflect.InvocationTargetException
+import kotlin.random.Random
 
 suspend fun Question.testTests(
     contents: String,
-    language: Question.Language
+    language: Question.Language,
+    settings: Question.TestTestingSettings = Question.TestTestingSettings(false, Int.MAX_VALUE)
 ): TestTestResults {
 
     val testKlass = "Test$klass"
@@ -43,9 +45,15 @@ suspend fun Question.testTests(
     // checkCompiledSubmission
     val klassName = checkCompiledTestSuite(compiledSubmission, results) ?: return results
 
-    val testingLoaders =
-        setOf(compiledSolutionForTesting) + validationMutations!!.map { it.compiled(this) }
-            .toSet()
+    val testingLoaders = testTestingIncorrect!!.sortedBy {
+        it.testCount * if (settings.hardestFirst) {
+            -1
+        } else {
+            1
+        }
+    }.map { it.compiled(this) }.take(settings.limit).toMutableList()
+    testingLoaders.add(Random.nextInt(testingLoaders.size + 1), compiledSolutionForTesting)
+
     val executionArguments = Sandbox.ExecutionArguments(
         timeout = testingSettings!!.timeout.toLong(),
         maxOutputLines = testingSettings!!.outputLimit,
@@ -64,7 +72,7 @@ suspend fun Question.testTests(
     var correct = 0
     var incorrect = 0
 
-    for (testingLoader in testingLoaders.shuffled()) {
+    for (testingLoader in testingLoaders) {
         val isSolution = testingLoader == compiledSolutionForTesting
 
         val testingSuiteLoader = CopyableClassLoader.copy(compiledSubmission.classLoader, testingLoader.classloader)
@@ -98,12 +106,12 @@ suspend fun Question.testTests(
         } else {
             incorrect++
         }
+        if (incorrect > 0 && settings.shortCircuit) {
+            break
+        }
     }
 
-    val succeeded = correct == testingLoaders.size && incorrect == 0
-    val shortCircuited = correct + incorrect < testingLoaders.size
-
-    results.addTestTestingResults(TestTestResults.TestTestingResults(succeeded, correct, incorrect, shortCircuited))
+    results.addTestTestingResults(TestTestResults.TestTestingResults(correct, incorrect, testingLoaders.size))
 
     return results
 }

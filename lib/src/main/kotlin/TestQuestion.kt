@@ -281,10 +281,10 @@ suspend fun Question.test(
         taskTestingResults.completed
     )
 
-    validationMutations?.also {
+    testTestingIncorrect?.also {
         results.complete.partial!!.passedMutantCount = TestResults.PartialCredit.PassedMutantCount(
-            validationMutations!!.count { it.testCount < passedTestCount },
-            validationMutations!!.size,
+            testTestingIncorrect!!.count { it.testCount < passedTestCount },
+            testTestingIncorrect!!.size,
             taskTestingResults.completed
         )
     }

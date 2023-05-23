@@ -76,5 +76,8 @@ data class TestTestResults(
     fun toJson(): String = moshi.adapter(TestTestResults::class.java).toJson(this)
 
     @JsonClass(generateAdapter = true)
-    data class TestTestingResults(val succeeded: Boolean, val correct: Int, val incorrect: Int, val shortCircuited: Boolean)
+    data class TestTestingResults(val correct: Int, val incorrect: Int, val total: Int) {
+        val succeeded = correct == total && incorrect == 0
+        val shortCircuited = correct + incorrect < total
+    }
 }

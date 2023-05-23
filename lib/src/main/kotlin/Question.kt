@@ -272,6 +272,13 @@ data class Question(
     )
 
     @JsonClass(generateAdapter = true)
+    data class TestTestingSettings(
+        val shortCircuit: Boolean = false,
+        val limit: Int = Int.MAX_VALUE,
+        val hardestFirst: Boolean = true
+    )
+
+    @JsonClass(generateAdapter = true)
     data class ValidationResults(
         val seed: Int,
         val requiredTestCount: Int,
@@ -320,6 +327,7 @@ data class Question(
         val path: String?,
         val starter: Boolean,
         var needed: Boolean = true,
+        var testCount: Int = -1,
         @Transient
         val mutation: MutatedSource? = null
     ) {
@@ -327,10 +335,44 @@ data class Question(
         enum class Reason {
             DESIGN, COMPILE, TEST, CHECKSTYLE, TIMEOUT, DEADCODE, LINECOUNT, TOOLONG, MEMORYLIMIT, RECURSION, COMPLEXITY, FEATURES, TOOMUCHOUTPUT, MEMOIZATION
         }
+
+        suspend fun compiled(question: Question): TestTestingSource {
+            check(reason == Reason.TEST) {
+                "@Incorrect should only be used when it fails testing"
+            }
+            val results = TestResults(language)
+            val source = question.contentsToSource(contents, language, results)
+            val md5 = source.md5
+
+            val cachedResult = compilationCache.getIfPresent(md5)
+            if (cachedResult != null) {
+                return cachedResult
+            }
+
+            return when (language) {
+                Language.java ->
+                    question.compileSubmission(
+                        source,
+                        InvertingClassLoader(setOf(question.klass)),
+                        results
+                    )
+
+                Language.kotlin ->
+                    question.kompileSubmission(
+                        source,
+                        InvertingClassLoader(setOf(question.klass, "${question.klass}Kt")),
+                        results
+                    )
+            }.let {
+                TestTestingSource(contents, question.fixTestingMethods(it.classLoader))
+            }.also {
+                compilationCache.put(md5, it)
+            }
+        }
     }
 
     @JsonClass(generateAdapter = true)
-    data class ValidationMutation(
+    data class TestTestingMutation(
         val deltas: List<String>,
         val language: Language,
         val incorrectIndex: Int?,
@@ -489,8 +531,8 @@ data class Question(
 
     var fauxStatic: Boolean = false
 
-    var validationMutations: List<ValidationMutation>? = null
-    suspend fun compileAllValidationMutations() = validationMutations!!.forEach { validationMutation ->
+    var testTestingIncorrect: List<TestTestingMutation>? = null
+    suspend fun compileAllTestTestingIncorrect() = testTestingIncorrect!!.forEach { validationMutation ->
         validationMutation.compiled(this)
     }
 

@@ -318,7 +318,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     }
     val incorrectLength = Instant.now().toEpochMilli() - incorrectStart.toEpochMilli()
 
-    validationMutations = incorrectResults.mapIndexed { i, result ->
+    testTestingIncorrect = incorrectResults.mapIndexed { i, result ->
         if ((result.results.failureCount ?: 0) == 0) {
             return@mapIndexed null
         }
@@ -349,7 +349,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         }.indexOfFirst { !it.passed }
 
         Pair(
-            Question.ValidationMutation(
+            Question.TestTestingMutation(
                 unifiedDiffs,
                 result.incorrect.language,
                 incorrectIndex,
