@@ -16,8 +16,10 @@ import edu.illinois.cs.cs125.jeed.core.warm
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring
 import edu.illinois.cs.cs125.questioner.lib.TestResults
+import edu.illinois.cs.cs125.questioner.lib.TestTestResults
 import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
 import edu.illinois.cs.cs125.questioner.lib.test
+import edu.illinois.cs.cs125.questioner.lib.testTests
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCallPipeline
@@ -94,6 +96,8 @@ data class QuestionPath(val path: String, val version: String, val author: Strin
     companion object {
         fun fromSubmission(submission: Submission) =
             QuestionPath(submission.path, submission.version!!, submission.author!!)
+        fun fromTestSubmission(submission: TestSubmission) =
+            QuestionPath(submission.path, submission.version!!, submission.author!!)
     }
 }
 
@@ -167,6 +171,29 @@ object Questions {
             logger.trace { "Tested ${question.name} in ${Instant.now().toEpochMilli() - start}" }
         }
     }
+
+    fun loadTest(submission: TestSubmission): Question? {
+        return if (submission.version != null && submission.author != null) {
+            getQuestionByPath(QuestionPath.fromTestSubmission(submission))
+        } else {
+            check(submission.version == null && submission.author == null) { "Bad submission with partial information" }
+            getQuestion(submission.path)
+        }
+    }
+
+    @Suppress("SpellCheckingInspection")
+    suspend fun testtest(submission: TestSubmission): TestTestResults {
+        val question = loadTest(submission) ?: error("No question ${submission.path}")
+        check(question.validated) { "Question ${submission.path} is not validated" }
+        val start = Instant.now().toEpochMilli()
+        logger.trace { "Test tests for ${question.name}" }
+        return question.testTests(
+            submission.contents,
+            language = submission.language,
+        ).also {
+            logger.trace { "Tests tested for ${question.name} in ${Instant.now().toEpochMilli() - start}" }
+        }
+    }
 }
 
 @JsonClass(generateAdapter = true)
@@ -175,7 +202,16 @@ data class Submission(
     val contents: String,
     val language: Question.Language,
     val disableLineCountLimit: Boolean = false,
-    val disableAllocationLimit: Boolean = true, // TODO: Switch to false when ready for allocation limiting
+    val disableAllocationLimit: Boolean = false,
+    val version: String?,
+    val author: String?,
+)
+
+@JsonClass(generateAdapter = true)
+data class TestSubmission(
+    val path: String,
+    val contents: String,
+    val language: Question.Language,
     val version: String?,
     val author: String?,
 )
@@ -212,6 +248,9 @@ data class Status(
 
 @JsonClass(generateAdapter = true)
 data class ServerResponse(val results: TestResults)
+
+@JsonClass(generateAdapter = true)
+data class ServerTestResponse(val results: TestTestResults)
 
 val runtime: Runtime = Runtime.getRuntime()
 val counter = AtomicInteger()
@@ -257,6 +296,46 @@ fun Application.questioner() {
                 val endMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
                 logger.debug {
                     "$runCount: ${submission.path}: $startMemory -> $endMemory (${
+                        Instant.now().toEpochMilli() - start
+                    })"
+                }
+            } catch (e: StackOverflowError) {
+                e.printStackTrace()
+                call.respond(HttpStatusCode.BadRequest)
+            } catch (e: Error) {
+                e.printStackTrace()
+                logger.debug { submission }
+                logger.error { e.toString() }
+                exitProcess(-1)
+            } catch (e: Throwable) {
+                e.printStackTrace()
+                logger.warn { e.toString() }
+                call.respond(HttpStatusCode.BadRequest)
+            } finally {
+                System.getenv("DUMP_AT_SUBMISSION")?.toInt()?.also {
+                    if (it == runCount) {
+                        logger.debug { "Dumping heap" }
+                        ManagementFactory.newPlatformMXBeanProxy(
+                            ManagementFactory.getPlatformMBeanServer(),
+                            "com.sun.management:type=HotSpotDiagnostic",
+                            HotSpotDiagnosticMXBean::class.java,
+                        ).dumpHeap("questioner.hprof", false)
+                    }
+                }
+            }
+        }
+        post("/tests") {
+            val start = Instant.now().toEpochMilli()
+            val submission = call.receive<TestSubmission>()
+            Questions.loadTest(submission) ?: return@post call.respond(HttpStatusCode.NotFound)
+            val runCount = counter.incrementAndGet()
+            @Suppress("TooGenericExceptionCaught")
+            try {
+                val startMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
+                call.respond(ServerTestResponse(Questions.testtest(submission)))
+                val endMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
+                logger.debug {
+                    "$runCount: test/${submission.path}: $startMemory -> $endMemory (${
                         Instant.now().toEpochMilli() - start
                     })"
                 }
