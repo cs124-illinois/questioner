@@ -513,7 +513,8 @@
         "language": "java",
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/recursivefactorial/incorrect/java/iterative/Question.java",
         "starter": false,
-        "needed": true
+        "needed": true,
+        "testCount": -1
       }
     ],
     "common": [],
@@ -5146,7 +5147,8 @@
         "language": "java",
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/printsum/incorrect/java/toomuchoutput/Question.java",
         "starter": false,
-        "needed": true
+        "needed": true,
+        "testCount": -1
       }
     ],
     "common": [],
@@ -10521,7 +10523,8 @@
         "language": "java",
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withfeaturecheck/incorrect/java/usesloop/Question.java",
         "starter": false,
-        "needed": true
+        "needed": true,
+        "testCount": -1
       },
       {
         "klass": "Question",
@@ -10530,7 +10533,8 @@
         "language": "kotlin",
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withfeaturecheck/incorrect/kotlin/usesloop/Question.kt",
         "starter": false,
-        "needed": true
+        "needed": true,
+        "testCount": -1
       }
     ],
     "common": [],
@@ -11674,7 +11678,8 @@
         "language": "java",
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/fancystringcompare/incorrect/badequals/Question.java",
         "starter": false,
-        "needed": true
+        "needed": true,
+        "testCount": -1
       }
     ],
     "common": [],
@@ -14821,7 +14826,8 @@
         "language": "java",
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/privaterecursivehelper/incorrect/java/iterative/Question.java",
         "starter": false,
-        "needed": true
+        "needed": true,
+        "testCount": -1
       }
     ],
     "common": [],
@@ -20433,7 +20439,8 @@
         "language": "java",
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/memoization/Question.java",
         "starter": false,
-        "needed": true
+        "needed": true,
+        "testCount": -1
       },
       {
         "klass": "Question",
@@ -20442,7 +20449,8 @@
         "language": "java",
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/addeleven/Question.java",
         "starter": false,
-        "needed": true
+        "needed": true,
+        "testCount": -1
       },
       {
         "klass": "Question",
@@ -20451,7 +20459,8 @@
         "language": "java",
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/timeout/Question.java",
         "starter": false,
-        "needed": true
+        "needed": true,
+        "testCount": -1
       },
       {
         "klass": "Question",
@@ -20460,7 +20469,8 @@
         "language": "java",
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/toolong/Question.java",
         "starter": false,
-        "needed": true
+        "needed": true,
+        "testCount": -1
       },
       {
         "klass": "Question",
@@ -20469,7 +20479,8 @@
         "language": "java",
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/memorylimit/Question.java",
         "starter": false,
-        "needed": true
+        "needed": true,
+        "testCount": -1
       },
       {
         "klass": "Question",
@@ -20478,7 +20489,8 @@
         "language": "java",
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/deadcode/Question.java",
         "starter": false,
-        "needed": true
+        "needed": true,
+        "testCount": -1
       }
     ],
     "common": [],
@@ -20762,7 +20774,7 @@
     "type": "KLASS",
     "klass": "Question",
     "metadata": {
-      "contentHash": "1dd99e7ac3924f1494c070aa28019d6d",
+      "contentHash": "3f3a1de0a351393e71e917311165c97e",
       "packageName": "com.examples.kotlinnulltest",
       "version": "2022.6.0",
       "author": "challen@illinois.edu",
@@ -20972,19 +20984,16 @@
     "alternativeSolutions": [
       {
         "klass": "QuestionKt",
-        "contents": "fun length(test: String?): Int {\n  require(test != null)\n  return test.length\n}",
+        "contents": "fun length(test: String?): Int {\n  requireNotNull(test)\n  return test.length\n}",
         "language": "kotlin",
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/kotlinnulltest/correct/kotlin/reference/Question.kt",
-        "complexity": 2,
+        "complexity": 1,
         "features": {
           "featureMap": {
             "METHOD": 1,
             "RETURN": 1,
-            "NULL": 1,
-            "EQUALITY": 1,
             "DOT_NOTATION": 1,
-            "DOTTED_VARIABLE_ACCESS": 1,
-            "REQUIRE_OR_CHECK": 1
+            "DOTTED_VARIABLE_ACCESS": 1
           },
           "featureList": [
             {
@@ -21009,31 +21018,10 @@
               }
             },
             {
-              "feature": "REQUIRE_OR_CHECK",
-              "location": {
-                "line": 2,
-                "column": 2
-              }
-            },
-            {
-              "feature": "EQUALITY",
-              "location": {
-                "line": 2,
-                "column": 15
-              }
-            },
-            {
-              "feature": "NULL",
-              "location": {
-                "line": 2,
-                "column": 18
-              }
-            },
-            {
               "feature": "STATEMENT_END",
               "location": {
                 "line": 2,
-                "column": 22
+                "column": 21
               }
             },
             {
@@ -21183,19 +21171,16 @@
     "slug": "kotlin-null-test",
     "kotlinSolution": {
       "klass": "QuestionKt",
-      "contents": "fun length(test: String?): Int {\n  require(test != null)\n  return test.length\n}",
+      "contents": "fun length(test: String?): Int {\n  requireNotNull(test)\n  return test.length\n}",
       "language": "kotlin",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/kotlinnulltest/correct/kotlin/reference/Question.kt",
-      "complexity": 2,
+      "complexity": 1,
       "features": {
         "featureMap": {
           "METHOD": 1,
           "RETURN": 1,
-          "NULL": 1,
-          "EQUALITY": 1,
           "DOT_NOTATION": 1,
-          "DOTTED_VARIABLE_ACCESS": 1,
-          "REQUIRE_OR_CHECK": 1
+          "DOTTED_VARIABLE_ACCESS": 1
         },
         "featureList": [
           {
@@ -21220,31 +21205,10 @@
             }
           },
           {
-            "feature": "REQUIRE_OR_CHECK",
-            "location": {
-              "line": 2,
-              "column": 2
-            }
-          },
-          {
-            "feature": "EQUALITY",
-            "location": {
-              "line": 2,
-              "column": 15
-            }
-          },
-          {
-            "feature": "NULL",
-            "location": {
-              "line": 2,
-              "column": 18
-            }
-          },
-          {
             "feature": "STATEMENT_END",
             "location": {
               "line": 2,
-              "column": 22
+              "column": 21
             }
           },
           {
@@ -21501,11 +21465,8 @@
           "featureMap": {
             "METHOD": 1,
             "RETURN": 1,
-            "NULL": 1,
-            "EQUALITY": 1,
             "DOT_NOTATION": 1,
-            "DOTTED_VARIABLE_ACCESS": 1,
-            "REQUIRE_OR_CHECK": 1
+            "DOTTED_VARIABLE_ACCESS": 1
           },
           "featureList": [
             {
@@ -21530,31 +21491,10 @@
               }
             },
             {
-              "feature": "REQUIRE_OR_CHECK",
-              "location": {
-                "line": 2,
-                "column": 2
-              }
-            },
-            {
-              "feature": "EQUALITY",
-              "location": {
-                "line": 2,
-                "column": 15
-              }
-            },
-            {
-              "feature": "NULL",
-              "location": {
-                "line": 2,
-                "column": 18
-              }
-            },
-            {
               "feature": "STATEMENT_END",
               "location": {
                 "line": 2,
-                "column": 22
+                "column": 21
               }
             },
             {

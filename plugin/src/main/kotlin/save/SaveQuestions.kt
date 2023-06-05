@@ -197,10 +197,10 @@ fun List<ParsedJavaFile>.findQuestions(
                         }
                         it.firstOrNull()
                     }?.also {
-                    require(it.path !in usedFiles) { "File $it.path was already used as ${usedFiles[it.path]}" }
-                    usedFiles[it.path] = "Starter"
-                    myUsedFiles.add(it.path)
-                }
+                        require(it.path !in usedFiles) { "File $it.path was already used as ${usedFiles[it.path]}" }
+                        usedFiles[it.path] = "Starter"
+                        myUsedFiles.add(it.path)
+                    }
             if (solution.autoStarter) {
                 check(javaStarter == null) {
                     "autoStarter set to true but found a file marked as @Starter. Please remove it.\n" +
