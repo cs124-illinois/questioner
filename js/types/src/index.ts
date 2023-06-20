@@ -270,6 +270,7 @@ export const CompletedTasks = Partial({
 export type CompletedTasks = Static<typeof CompletedTasks>
 
 export const FailedTasks = Partial({
+  checkInitialSubmission: String,
   templateSubmission: TemplatingFailed,
   compileSubmission: CompilationFailed,
   checkstyle: CheckstyleFailed,
@@ -288,6 +289,7 @@ export const FailedTasks = Partial({
 export type FailedTasks = Static<typeof FailedTasks>
 
 export const Step = Union(
+  Literal("checkInitialSubmission"),
   Literal("templateSubmission"),
   Literal("compileSubmission"),
   Literal("checkstyle"),
@@ -307,6 +309,7 @@ export const Step = Union(
 export type Step = Static<typeof Step>
 
 export const TestingOrder: Array<Step> = [
+  "checkInitialSubmission",
   "templateSubmission",
   "compileSubmission",
   "checkstyle",
