@@ -1,9 +1,11 @@
 package edu.illinois.cs.cs125.questioner.lib
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.string.shouldContain
 
 import java.nio.file.Path
 
@@ -145,6 +147,38 @@ int addOne(int value) {
                     it.fullyCorrect shouldBe true
                     it.quality shouldBe true
                 }
+            }
+        }
+    }
+    "it should identify incorrect submissions to a method problem" {
+        val (question) = validator.validate("Add One", force = true, testing = true).also { (question, report) ->
+            question.validated shouldBe true
+            report shouldNotBe null
+            report!!.requiredTestCount shouldBeGreaterThan 0
+        }
+
+        """
+int addOne(int value) {
+  return value + 1;
+}
+System.out.println("Hello, world!");
+""".trim().also { incorrect ->
+            question.test(incorrect, Question.Language.java).also {
+                it.failedSteps.size shouldBe 1
+                it.failedSteps shouldContain TestResults.Step.checkInitialSubmission
+                it.failed.checkInitialSubmission shouldContain "no code outside"
+            }
+        }
+        """
+int addOne(int value) {
+  return value + 1;
+}
+class Testing { }
+""".trim().also { incorrect ->
+            question.test(incorrect, Question.Language.java).also {
+                it.failedSteps.size shouldBe 1
+                it.failedSteps shouldContain TestResults.Step.checkInitialSubmission
+                it.failed.checkInitialSubmission shouldContain "Class declarations are not allowed"
             }
         }
     }

@@ -41,6 +41,7 @@ data class TestResults(
 
     @Suppress("EnumNaming", "EnumEntryName")
     enum class Step {
+        checkInitialSubmission,
         templateSubmission,
         compileSubmission,
         checkstyle,
@@ -79,6 +80,7 @@ data class TestResults(
     )
 
     fun checkAll() {
+        check(failed.checkInitialSubmission == null) { failed.checkInitialSubmission!! }
         check(failed.checkCompiledSubmission == null) { failed.checkCompiledSubmission!! }
         check(failed.checkExecutedSubmission == null) { failed.checkExecutedSubmission!! }
         check(failedSteps.isEmpty()) { "Failed steps: ${failedSteps.joinToString("\n")}" }
@@ -94,6 +96,7 @@ data class TestResults(
 
     @JsonClass(generateAdapter = true)
     data class FailedTasks(
+        var checkInitialSubmission: String? = null,
         var templateSubmission: TemplatingFailed? = null,
         var compileSubmission: CompilationFailed? = null,
         var checkstyle: CheckstyleFailed? = null,

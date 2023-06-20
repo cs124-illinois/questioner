@@ -44,6 +44,12 @@ suspend fun Question.test(
     results.complete.partial = TestResults.PartialCredit()
     results.completedSteps.add(TestResults.Step.partial)
 
+    // checkInitialSubmission
+
+    if (!(checkInitialSubmission(contents, language, results))) {
+        return results
+    }
+
     // templateSubmission
     val source = contentsToSource(contents, language, results)
 

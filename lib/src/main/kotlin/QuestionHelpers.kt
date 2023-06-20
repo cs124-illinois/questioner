@@ -54,6 +54,67 @@ fun Question.contentsToSource(contents: String, language: Question.Language, tes
     }
 }
 
+fun Question.checkInitialSubmission(contents: String, language: Question.Language, testResults: TestResults): Boolean {
+    val snippetProperties = try {
+        when (language) {
+            Question.Language.java -> Source.fromJavaSnippet(contents)
+            Question.Language.kotlin -> Source.fromKotlinSnippet(contents)
+        }.snippetProperties
+    } catch (e: Exception) {
+        testResults.completedSteps.add(TestResults.Step.checkInitialSubmission)
+        // If the code doesn't parse as a snippet, fall back to compiler error messages which are usually more useful
+        return true
+    }
+    when (type) {
+        Question.Type.SNIPPET -> {
+            if (snippetProperties.importCount > 0) {
+                testResults.failed.checkInitialSubmission = "import statements are not allowed for this problem"
+            } else if (snippetProperties.methodCount > 0) {
+                testResults.failed.checkInitialSubmission = "Method declarations are not allowed for this problem"
+            } else if (snippetProperties.classCount > 0) {
+                testResults.failed.checkInitialSubmission = "Class declarations are not allowed for this problem"
+            }
+        }
+
+        Question.Type.METHOD -> {
+            if (snippetProperties.importCount > 0) {
+                testResults.failed.checkInitialSubmission = "import statements are not allowed for this problem"
+            } else if (snippetProperties.classCount > 0) {
+                testResults.failed.checkInitialSubmission = "Class declarations are not allowed for this problem"
+            } else if (snippetProperties.looseCount > 0) {
+                testResults.failed.checkInitialSubmission =
+                    "Submission should be a single method declaration with no code outside"
+            }
+        }
+
+        Question.Type.KLASS -> {
+            if (language == Question.Language.java) {
+                if (snippetProperties.methodCount > 0) {
+                    testResults.failed.checkInitialSubmission =
+                        "Top-level method declarations are not allowed for this problem"
+                }
+            } else if (language == Question.Language.kotlin) {
+                if (snippetProperties.classCount > 0 && snippetProperties.methodCount > 0) {
+                    testResults.failed.checkInitialSubmission =
+                        "Can't mix top-level classes and methods for this problem"
+                }
+            }
+            if (snippetProperties.looseCount > 0) {
+                testResults.failed.checkInitialSubmission = "Submission should be a single class with no code outside"
+            } else if (snippetProperties.classCount > 1) {
+                testResults.failed.checkInitialSubmission = "Submission should define a single class"
+            }
+        }
+    }
+    return if (testResults.failed.checkInitialSubmission != null) {
+        testResults.failedSteps.add(TestResults.Step.checkInitialSubmission)
+        false
+    } else {
+        testResults.completedSteps.add(TestResults.Step.checkInitialSubmission)
+        true
+    }
+}
+
 @Suppress("ThrowsCount")
 suspend fun Question.compileSubmission(
     source: Source,
@@ -264,7 +325,8 @@ fun Question.computeComplexity(contents: String, language: Question.Language): T
     val solutionComplexity = published.complexity[language]
     check(solutionComplexity != null) { "Solution complexity not available" }
 
-    val maxComplexity = (control.maxComplexityMultiplier!! * solutionComplexity).coerceAtLeast(Question.TestingControl.DEFAULT_MIN_FAIL_FAST_COMPLEXITY)
+    val maxComplexity =
+        (control.maxComplexityMultiplier!! * solutionComplexity).coerceAtLeast(Question.TestingControl.DEFAULT_MIN_FAIL_FAST_COMPLEXITY)
 
     val submissionComplexity = when {
         type == Question.Type.SNIPPET && contents.isBlank() -> 0
