@@ -18,14 +18,14 @@
   "types": "dist/index.d.ts",
   "dependencies": {
     "@cs124/jeed-types": "2023.6.0",
-    "@cs124/questioner-types": "2023.6.1",
+    "@cs124/questioner-types": "2023.6.2",
     "capitalize": "2.0.4",
     "indent-string": "4.0.0"
   },
   "devDependencies": {
     "@types/capitalize": "2.0.0",
-    "@typescript-eslint/eslint-plugin": "5.60.0",
-    "@typescript-eslint/parser": "5.60.0",
+    "@typescript-eslint/eslint-plugin": "5.60.1",
+    "@typescript-eslint/parser": "5.60.1",
     "depcheck": "1.4.3",
     "eslint": "8.43.0",
     "eslint-config-prettier": "8.8.0",
