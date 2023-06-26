@@ -1,30 +1,31 @@
 {
-  "name": "@cs124/questioner-types",
-  "version": "2023.6.2",
+  "name": "@cs124/questioner-output",
+  "version": "2023.6.0",
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "rimraf dist && tsc",
     "checker": "yarn depcheck && yarn prettier && yarn eslint && yarn tsc",
     "clean": "rimraf dist",
-    "depcheck": "depcheck --ignores=prettier-plugin-*,rimraf --ignore-dirs=dist",
+    "depcheck": "depcheck --ignores=prettier-plugin-*,rimraf",
     "eslint": "eslint src/**",
     "ncu": "ncu",
     "prettier": "prettier -w --plugin=prettier-plugin-organize-imports . && prettier-package-json --write",
     "prepublish": "rimraf dist && tsc",
-    "start": "tsc -w",
-    "tsc": "tsc --noEmit",
+    "start": "yarn watch",
     "watch": "tsc -w"
   },
   "types": "dist/index.d.ts",
-  "peerDependencies": {
-    "@cs124/jeed-types": ">= 2021",
-    "runtypes": ">= 6"
+  "dependencies": {
+    "@cs124/jeed-types": "2023.6.0",
+    "@cs124/questioner-types": "2023.6.1",
+    "capitalize": "2.0.4",
+    "indent-string": "4.0.0"
   },
   "devDependencies": {
-    "@cs124/jeed-types": "2023.6.0",
-    "@typescript-eslint/eslint-plugin": "5.60.1",
-    "@typescript-eslint/parser": "5.60.1",
+    "@types/capitalize": "2.0.0",
+    "@typescript-eslint/eslint-plugin": "5.60.0",
+    "@typescript-eslint/parser": "5.60.0",
     "depcheck": "1.4.3",
     "eslint": "8.43.0",
     "eslint-config-prettier": "8.8.0",

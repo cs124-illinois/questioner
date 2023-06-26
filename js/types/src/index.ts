@@ -142,6 +142,18 @@ export const TestResult = Record({
   runnerID: Number,
   stepCount: Number,
   methodCall: String,
+  differs: RuntypeArray(
+    Union(
+      Literal("STDOUT"),
+      Literal("STDERR"),
+      Literal("INTERLEAVED_OUTPUT"),
+      Literal("RETURN"),
+      Literal("THREW"),
+      Literal("PARAMETERS"),
+      Literal("VERIFIER_THREW"),
+      Literal("INSTANCE_VALIDATION_THREW")
+    )
+  ),
 }).And(
   Partial({
     message: String,
