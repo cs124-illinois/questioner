@@ -31,6 +31,10 @@ import java.io.ByteArrayInputStream
 import java.io.InputStream
 import kotlin.random.Random
 
+internal fun String.pluralize(count: Int, plural: String? = null) = if (count == 1) {
+    this
+} else plural ?: "${this}s"
+
 fun Question.templateSubmission(contents: String, language: Question.Language): Source {
     val template = getTemplate(language)
     return if (template == null) {
@@ -369,7 +373,10 @@ $contents
         else -> error("Shouldn't get here")
     }
     if (submissionComplexity > maxComplexity) {
-        throw MaxComplexityExceeded("Submission complexity $submissionComplexity exceeds maximum of $maxComplexity")
+        throw MaxComplexityExceeded(
+            "Submission complexity $submissionComplexity exceeds maximum of $maxComplexity.\n" +
+                "The solution has $solutionComplexity code ${"path".pluralize(solutionComplexity)}."
+        )
     }
     return TestResults.ComplexityComparison(solutionComplexity, submissionComplexity, control.maxExtraComplexity!!)
 }
@@ -405,7 +412,9 @@ fun Question.computeLineCounts(contents: String, language: Question.Language): T
     }
     val submissionLineCount = contents.countLines(type)
     if (submissionLineCount.source > maxLineCount) {
-        throw MaxLineCountExceeded("Submission line count ${submissionLineCount.source} exceeds maximum of $maxLineCount")
+        throw MaxLineCountExceeded(
+            "Submission line count ${submissionLineCount.source} exceeds maximum of $maxLineCount.\n" +
+                "The solution has ${solutionLineCount.source} source ${"line".pluralize(solutionLineCount.source)}.")
     }
     return TestResults.LineCountComparison(
         solutionLineCount,

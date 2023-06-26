@@ -8,6 +8,7 @@ import edu.illinois.cs.cs125.jeed.core.ConfiguredSandboxPlugin
 import edu.illinois.cs.cs125.jeed.core.Jacoco
 import edu.illinois.cs.cs125.jeed.core.KtLintFailed
 import edu.illinois.cs.cs125.jeed.core.LineCoverage
+import edu.illinois.cs.cs125.jeed.core.LineLimitExceeded
 import edu.illinois.cs.cs125.jeed.core.Sandbox
 import edu.illinois.cs.cs125.jeed.core.SnippetTransformationFailed
 import edu.illinois.cs.cs125.jeed.core.Source
@@ -237,6 +238,22 @@ suspend fun Question.test(
 
             is OutOfMemoryError -> results.failed.checkExecutedSubmission =
                 "Allocated too much memory: ${threw.message}, already used ${resourceUsage.allocatedMemory} bytes"
+
+            is LineLimitExceeded -> {
+                val solutionLineUsage = if (language == Question.Language.java) {
+                    validationResults?.executionCounts?.java ?: settings.solutionExecutionCount?.java
+                } else {
+                    validationResults?.executionCounts?.kotlin ?: settings.solutionExecutionCount?.kotlin
+                }
+                results.failed.checkExecutedSubmission = "Executed too many lines: Already executed $lineCountLimit ${"line".pluralize(lineCountLimit!!.toInt())}${
+                    if (solutionLineUsage != null) {
+                        ", solution needed only $solutionLineUsage total"
+                    } else {
+                        ""
+                    }
+                }"
+            }
+
             // TODO: Adjust Jenisol to let OutOfMemoryError escape the testing loop or remove this case
             // (currently it will never be reached)
             else -> {

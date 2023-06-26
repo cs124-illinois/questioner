@@ -202,6 +202,7 @@ data class TestResults(
             val runnerID: Int,
             val stepCount: Int,
             val methodCall: String,
+            val differs: Set<edu.illinois.cs.cs125.jenisol.core.TestResult.Differs>,
             val message: String? = null,
             val arguments: String? = null,
             val expected: String? = null,
@@ -276,6 +277,7 @@ fun TestResult<*, *>.asTestResult(source: Source) = TestResults.TestingResult.Te
     runnerID,
     stepCount,
     submissionMethodString,
+    differs,
     verifierThrew?.message,
     parameters.toString(),
     @Suppress("TooGenericExceptionCaught")
