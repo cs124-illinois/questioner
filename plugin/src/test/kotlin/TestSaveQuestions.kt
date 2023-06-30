@@ -19,7 +19,7 @@ class TestSaveQuestions : StringSpec(
 package examples;
 
 import edu.illinois.cs.cs125.questioner.lib.Correct;
-import edu.illinois.cs.cs125.questioner.lib.NotNull;
+import edu.illinois.cs.cs125.jenisol.core.NotNull;
 
 /*
  * Here is a _description_.

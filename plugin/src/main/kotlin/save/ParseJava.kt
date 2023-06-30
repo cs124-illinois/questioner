@@ -9,6 +9,7 @@ import edu.illinois.cs.cs125.jeed.core.countLines
 import edu.illinois.cs.cs125.jeed.core.features
 import edu.illinois.cs.cs125.jeed.core.fromSnippet
 import edu.illinois.cs.cs125.jeed.core.googleFormat
+import edu.illinois.cs.cs125.jenisol.core.NotNull
 import edu.illinois.cs.cs125.questioner.antlr.JavaLexer
 import edu.illinois.cs.cs125.questioner.antlr.JavaParser
 import edu.illinois.cs.cs125.questioner.lib.AlsoCorrect
@@ -53,6 +54,14 @@ data class ParsedJavaFile(val path: String, val contents: String) {
 
     val listedImports = parseTree.importDeclaration().map { it.qualifiedName().asString() }.filter {
         it !in importsToRemove
+    }.also { imports ->
+        imports.filter { it.endsWith(".NotNull") || it.endsWith(".NonNull") }
+            .filter { it != NotNull::class.java.name }
+            .also {
+                require(it.isEmpty()) {
+                    "Please use the Questioner @NotNull annotation from ${NotNull::class.java.name}"
+                }
+            }
     }
 
     val whitelist = (

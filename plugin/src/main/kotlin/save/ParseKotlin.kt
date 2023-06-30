@@ -159,6 +159,17 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
         )
     }
 
+    init {
+        parseTree.preamble().importList().importHeader().map { it.identifier().text }.also { imports ->
+            imports.filter { it.endsWith(".NotNull") || it.endsWith(".NonNull") }
+                .also {
+                    require(it.isEmpty()) {
+                        "@NotNull or @NonNull annotations will not be applied when used in Kotlin solutions"
+                    }
+                }
+        }
+    }
+
     @Suppress("unused")
     private fun removeImports(importNames: List<String>): String {
         val toRemove = mutableSetOf<Int>()

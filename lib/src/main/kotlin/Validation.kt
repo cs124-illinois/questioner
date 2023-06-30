@@ -42,7 +42,18 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
                 throw SolutionFailed(file, summary)
             } else {
                 check(complete.testing?.failedReceiverGeneration == true) {
-                    failedSteps
+                    when {
+                        failedSteps.contains(TestResults.Step.compileSubmission) -> {
+                            """Error compiling solution:
+                                |---
+                                |${file.contents}
+                                |---
+                                |${failed.compileSubmission!!.message ?: failed.compileSubmission!!.errors.joinToString("\n")}
+                            """.trimMargin()
+
+                        }
+                        else -> failedSteps
+                    }
                 }
                 throw SolutionReceiverGeneration(file)
             }

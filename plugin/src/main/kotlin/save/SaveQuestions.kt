@@ -69,7 +69,13 @@ abstract class SaveQuestions : DefaultTask() {
     fun save() {
         val existingQuestions = outputFile.loadQuestions().values.associateBy { it.metadata.contentHash }
         inputFiles.filter { it.name.endsWith(".java") }
-            .map { ParsedJavaFile(it) }
+            .map {
+                try {
+                    ParsedJavaFile(it)
+                } catch (e: Exception) {
+                    throw Exception("${e.message} ${it.path}")
+                }
+            }
             .findQuestions(inputFiles.map { it.path }, existingQuestions)
             .associateBy { it.name }
             .also {
@@ -180,7 +186,11 @@ fun List<ParsedJavaFile>.findQuestions(
             } else {
                 setOf<String>()
             }.map {
-                ParsedKotlinFile(File(it))
+                try {
+                    ParsedKotlinFile(File(it))
+                } catch (e: Exception) {
+                    throw Exception("${e.message} $it")
+                }
             }.filter {
                 it.isQuestioner
             }
@@ -351,19 +361,38 @@ fun List<ParsedJavaFile>.findQuestions(
                 kotlinStarterFile = autoStarter
             }
 
+            // Needed to set imports properly
+            solution.clean(javaCleanSpec)
+
+            val javaImports = (solution.usedImports + solution.templateImports).toSet()
+            val kotlinImports = ((kotlinSolution?.usedImports ?: listOf()) + solution.templateImports).toSet()
+
+            javaImports
+                .filter { it.endsWith(".NotNull") || it.endsWith(".NonNull") }
+                .filter { it != NotNull::class.java.name }
+                .also {
+                    require(it.isEmpty()) {
+                        "Please use the Questioner @NotNull annotation from ${NotNull::class.java.name}"
+                    }
+                }
+
+            kotlinImports
+                .filter { it.endsWith(".NotNull") || it.endsWith(".NonNull") }
+                .also {
+                    require(it.isEmpty()) {
+                        "@NotNull or @NonNull annotations will not be applied when used in Kotlin solutions"
+                    }
+                }
+
             if (solution.wrapWith != null) {
                 require(javaTemplate == null && kotlinTemplate == null) {
                     "Can't use both a template and @Wrap"
                 }
 
-                // Needed to set imports properly
-                solution.clean(javaCleanSpec)
-
                 javaTemplate = """public class ${solution.wrapWith} {
                 |  {{{ contents }}}
                 |}
                 """.trimMargin()
-                val javaImports = (solution.usedImports + solution.templateImports).toSet()
                 if (javaImports.isNotEmpty()) {
                     javaTemplate = javaImports.joinToString("\n") { "import $it;" } + "\n\n$javaTemplate"
                 }
@@ -378,7 +407,6 @@ fun List<ParsedJavaFile>.findQuestions(
                         """.trimMargin()
                     }
 
-                    val kotlinImports = (kotlinSolution.usedImports + solution.templateImports).toSet()
                     if (kotlinImports.isNotEmpty()) {
                         kotlinTemplate = kotlinImports.joinToString("\n") { "import $it" } + "\n\n$kotlinTemplate"
                     }
