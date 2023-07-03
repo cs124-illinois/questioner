@@ -52,7 +52,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
                             """.trimMargin()
 
                         }
-                        else -> failedSteps
+                        else -> summary
                     }
                 }
                 throw SolutionReceiverGeneration(file)
