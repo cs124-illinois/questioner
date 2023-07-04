@@ -97,4 +97,11 @@ class TestValidation : StringSpec({
                 report!!.requiredTestCount shouldBeGreaterThan 0
             }
     }
+    "it should validate a question testing Kotlin faux properties" {
+        validator.validate("Kotlin Faux Property Testing", force = true, testing = true).also { (question, report) ->
+            question.validated shouldBe true
+            report shouldNotBe null
+            report!!.requiredTestCount shouldBeGreaterThan 0
+        }
+    }
 })

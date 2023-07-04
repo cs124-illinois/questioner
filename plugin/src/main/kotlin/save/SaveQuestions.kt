@@ -11,6 +11,7 @@ import edu.illinois.cs.cs125.jenisol.core.EdgeType
 import edu.illinois.cs.cs125.jenisol.core.FilterParameters
 import edu.illinois.cs.cs125.jenisol.core.FixedParameters
 import edu.illinois.cs.cs125.jenisol.core.InstanceValidator
+import edu.illinois.cs.cs125.jenisol.core.KotlinMirrorOK
 import edu.illinois.cs.cs125.jenisol.core.Limit
 import edu.illinois.cs.cs125.jenisol.core.NotNull
 import edu.illinois.cs.cs125.jenisol.core.ProvideSystemIn
@@ -491,6 +492,7 @@ val annotationsToRemove =
         Limit::class.java.simpleName,
         ProvideSystemIn::class.java.simpleName,
         CheckstyleSuppress::class.java.simpleName,
+        KotlinMirrorOK::class.java.simpleName,
     )
 val annotationsToDestroy =
     setOf(

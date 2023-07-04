@@ -9797,6 +9797,735 @@
     },
     "fauxStatic": false
   },
+  "Kotlin Faux Property Testing": {
+    "name": "Kotlin Faux Property Testing",
+    "type": "KLASS",
+    "klass": "Book",
+    "metadata": {
+      "contentHash": "b3eb2909d0061c08aeb08c6f4c2d96f8",
+      "packageName": "com.examples.testing.withkotlinfauxproperty",
+      "version": "2023.7.0",
+      "author": "challen@illinois.edu",
+      "javaDescription": "<p>Question to test detection of Kotlin faux properties in Jenisol 2023.7.0.</p>",
+      "kotlinDescription": "<p>Question to test detection of Kotlin faux properties in Jenisol 2023.7.0.</p>",
+      "usedFiles": [
+        "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withkotlinfauxproperty/incorrect/withfauxproperty/Book.kt",
+        "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withkotlinfauxproperty/correct/kotlin/Book.kt"
+      ],
+      "templateImports": [],
+      "focused": false
+    },
+    "annotatedControls": {},
+    "question": {
+      "klass": "Book",
+      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Question to test detection of Kotlin faux properties in Jenisol 2023.7.0.\n */\n@Correct(name = \"Kotlin Faux Property Testing\", version = \"2023.7.0\", author = \"challen@illinois.edu\")\npublic class Book {\n  private String name;\n\n  public void setName(String setName) {\n    name = setName;\n  }\n\n  public String getName() {\n    return name;\n  }\n}",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withkotlinfauxproperty/Book.java"
+    },
+    "correct": {
+      "klass": "Book",
+      "contents": "public class Book {\n  private String name;\n\n  public void setName(String setName) {\n    name = setName;\n  }\n\n  public String getName() {\n    return name;\n  }\n}\n",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withkotlinfauxproperty/Book.java",
+      "complexity": 2,
+      "features": {
+        "featureMap": {
+          "VARIABLE_REASSIGNMENTS": 1,
+          "METHOD": 2,
+          "RETURN": 1,
+          "GETTER": 1,
+          "SETTER": 1,
+          "STRING": 3,
+          "CLASS": 1,
+          "CLASS_FIELD": 1,
+          "VISIBILITY_MODIFIERS": 4
+        },
+        "featureList": [
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 1,
+              "column": 0
+            }
+          },
+          {
+            "feature": "CLASS",
+            "location": {
+              "line": 1,
+              "column": 7
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 1,
+              "column": 18
+            }
+          },
+          {
+            "feature": "CLASS_FIELD",
+            "location": {
+              "line": 2,
+              "column": 2
+            }
+          },
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 2,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STRING",
+            "location": {
+              "line": 2,
+              "column": 10
+            }
+          },
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 4,
+              "column": 2
+            }
+          },
+          {
+            "feature": "METHOD",
+            "location": {
+              "line": 4,
+              "column": 9
+            }
+          },
+          {
+            "feature": "SETTER",
+            "location": {
+              "line": 4,
+              "column": 9
+            }
+          },
+          {
+            "feature": "STRING",
+            "location": {
+              "line": 4,
+              "column": 22
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 4,
+              "column": 38
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          {
+            "feature": "VARIABLE_REASSIGNMENTS",
+            "location": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 5,
+              "column": 18
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 6,
+              "column": 2
+            }
+          },
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 8,
+              "column": 2
+            }
+          },
+          {
+            "feature": "METHOD",
+            "location": {
+              "line": 8,
+              "column": 9
+            }
+          },
+          {
+            "feature": "GETTER",
+            "location": {
+              "line": 8,
+              "column": 9
+            }
+          },
+          {
+            "feature": "STRING",
+            "location": {
+              "line": 8,
+              "column": 9
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 8,
+              "column": 26
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 9,
+              "column": 4
+            }
+          },
+          {
+            "feature": "RETURN",
+            "location": {
+              "line": 9,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 9,
+              "column": 15
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 10,
+              "column": 2
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 11,
+              "column": 0
+            }
+          }
+        ],
+        "importList": [],
+        "typeList": [
+          "String"
+        ],
+        "identifierList": [],
+        "dottedMethodList": []
+      },
+      "lineCount": {
+        "source": 9,
+        "comment": 0,
+        "blank": 3
+      },
+      "expectedDeadCount": 0
+    },
+    "alternativeSolutions": [
+      {
+        "klass": "Book",
+        "contents": "class Book {\n  var name: String? = null\n}",
+        "language": "kotlin",
+        "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withkotlinfauxproperty/correct/kotlin/Book.kt",
+        "complexity": 0,
+        "features": {
+          "featureMap": {
+            "STRING": 1,
+            "NULL": 1,
+            "CLASS": 1,
+            "CLASS_FIELD": 1,
+            "NULLABLE_TYPE": 1,
+            "EXPLICIT_TYPE": 1
+          },
+          "featureList": [
+            {
+              "feature": "CLASS",
+              "location": {
+                "line": 1,
+                "column": 0
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 1,
+                "column": 11
+              }
+            },
+            {
+              "feature": "CLASS_FIELD",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 2,
+                "column": 12
+              }
+            },
+            {
+              "feature": "NULLABLE_TYPE",
+              "location": {
+                "line": 2,
+                "column": 12
+              }
+            },
+            {
+              "feature": "EXPLICIT_TYPE",
+              "location": {
+                "line": 2,
+                "column": 12
+              }
+            },
+            {
+              "feature": "NULL",
+              "location": {
+                "line": 2,
+                "column": 22
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 3,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [],
+          "identifierList": [],
+          "dottedMethodList": []
+        },
+        "lineCount": {
+          "source": 3,
+          "comment": 0,
+          "blank": 0
+        },
+        "expectedDeadCount": 0
+      }
+    ],
+    "incorrect": [
+      {
+        "klass": "Book",
+        "contents": "class Book {\n  private var name: String? = null\n  fun getName(): String? = name\n  fun setName(setName: String?) {\n    name = setName\n  }\n}",
+        "reason": "DESIGN",
+        "language": "kotlin",
+        "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withkotlinfauxproperty/incorrect/withfauxproperty/Book.kt",
+        "starter": false,
+        "needed": true,
+        "testCount": -1
+      }
+    ],
+    "common": [],
+    "importWhitelist": [],
+    "importBlacklist": [],
+    "checkstyleSuppressions": [],
+    "slug": "kotlin-faux-property-testing",
+    "kotlinSolution": {
+      "klass": "Book",
+      "contents": "class Book {\n  var name: String? = null\n}",
+      "language": "kotlin",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withkotlinfauxproperty/correct/kotlin/Book.kt",
+      "complexity": 0,
+      "features": {
+        "featureMap": {
+          "STRING": 1,
+          "NULL": 1,
+          "CLASS": 1,
+          "CLASS_FIELD": 1,
+          "NULLABLE_TYPE": 1,
+          "EXPLICIT_TYPE": 1
+        },
+        "featureList": [
+          {
+            "feature": "CLASS",
+            "location": {
+              "line": 1,
+              "column": 0
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 1,
+              "column": 11
+            }
+          },
+          {
+            "feature": "CLASS_FIELD",
+            "location": {
+              "line": 2,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STRING",
+            "location": {
+              "line": 2,
+              "column": 12
+            }
+          },
+          {
+            "feature": "NULLABLE_TYPE",
+            "location": {
+              "line": 2,
+              "column": 12
+            }
+          },
+          {
+            "feature": "EXPLICIT_TYPE",
+            "location": {
+              "line": 2,
+              "column": 12
+            }
+          },
+          {
+            "feature": "NULL",
+            "location": {
+              "line": 2,
+              "column": 22
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 3,
+              "column": 0
+            }
+          }
+        ],
+        "importList": [],
+        "typeList": [],
+        "identifierList": [],
+        "dottedMethodList": []
+      },
+      "lineCount": {
+        "source": 3,
+        "comment": 0,
+        "blank": 0
+      },
+      "expectedDeadCount": 0
+    },
+    "hasKotlin": true,
+    "published": {
+      "name": "Kotlin Faux Property Testing",
+      "type": "KLASS",
+      "path": "kotlin-faux-property-testing",
+      "author": "challen@illinois.edu",
+      "version": "2023.7.0",
+      "packageName": "com.examples.testing.withkotlinfauxproperty",
+      "languages": [
+        "java",
+        "kotlin"
+      ],
+      "descriptions": {
+        "java": "<p>Question to test detection of Kotlin faux properties in Jenisol 2023.7.0.</p>",
+        "kotlin": "<p>Question to test detection of Kotlin faux properties in Jenisol 2023.7.0.</p>"
+      },
+      "complexity": {
+        "java": 2,
+        "kotlin": 0
+      },
+      "features": {
+        "java": {
+          "featureMap": {
+            "VARIABLE_REASSIGNMENTS": 1,
+            "METHOD": 2,
+            "RETURN": 1,
+            "GETTER": 1,
+            "SETTER": 1,
+            "STRING": 3,
+            "CLASS": 1,
+            "CLASS_FIELD": 1,
+            "VISIBILITY_MODIFIERS": 4
+          },
+          "featureList": [
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 1,
+                "column": 0
+              }
+            },
+            {
+              "feature": "CLASS",
+              "location": {
+                "line": 1,
+                "column": 7
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 1,
+                "column": 18
+              }
+            },
+            {
+              "feature": "CLASS_FIELD",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 2,
+                "column": 10
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 4,
+                "column": 2
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 4,
+                "column": 9
+              }
+            },
+            {
+              "feature": "SETTER",
+              "location": {
+                "line": 4,
+                "column": 9
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 4,
+                "column": 22
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 4,
+                "column": 38
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "VARIABLE_REASSIGNMENTS",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 5,
+                "column": 18
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 6,
+                "column": 2
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 8,
+                "column": 2
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 8,
+                "column": 9
+              }
+            },
+            {
+              "feature": "GETTER",
+              "location": {
+                "line": 8,
+                "column": 9
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 8,
+                "column": 9
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 8,
+                "column": 26
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 9,
+                "column": 4
+              }
+            },
+            {
+              "feature": "RETURN",
+              "location": {
+                "line": 9,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 9,
+                "column": 15
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 10,
+                "column": 2
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 11,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [
+            "String"
+          ],
+          "identifierList": [],
+          "dottedMethodList": []
+        },
+        "kotlin": {
+          "featureMap": {
+            "STRING": 1,
+            "NULL": 1,
+            "CLASS": 1,
+            "CLASS_FIELD": 1,
+            "NULLABLE_TYPE": 1,
+            "EXPLICIT_TYPE": 1
+          },
+          "featureList": [
+            {
+              "feature": "CLASS",
+              "location": {
+                "line": 1,
+                "column": 0
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 1,
+                "column": 11
+              }
+            },
+            {
+              "feature": "CLASS_FIELD",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 2,
+                "column": 12
+              }
+            },
+            {
+              "feature": "NULLABLE_TYPE",
+              "location": {
+                "line": 2,
+                "column": 12
+              }
+            },
+            {
+              "feature": "EXPLICIT_TYPE",
+              "location": {
+                "line": 2,
+                "column": 12
+              }
+            },
+            {
+              "feature": "NULL",
+              "location": {
+                "line": 2,
+                "column": 22
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 3,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [],
+          "identifierList": [],
+          "dottedMethodList": []
+        }
+      },
+      "lineCounts": {
+        "java": {
+          "source": 9,
+          "comment": 0,
+          "blank": 3
+        },
+        "kotlin": {
+          "source": 3,
+          "comment": 0,
+          "blank": 0
+        }
+      },
+      "templateImports": []
+    },
+    "fauxStatic": false
+  },
   "Test Empty Constructor": {
     "name": "Test Empty Constructor",
     "type": "KLASS",
