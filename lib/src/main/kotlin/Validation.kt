@@ -205,8 +205,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         shrink = false,
         checkBlacklist = false,
         executionCountLimit = Question.LanguagesResourceUsage(
-            control.maxExecutionCountMultiplier!! * 1024,
-            control.maxExecutionCountMultiplier!! * 1024
+            Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT,
+            Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
         ),
         solutionDeadCode = solutionDeadCode
         // No execution count limit

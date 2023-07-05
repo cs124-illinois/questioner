@@ -216,6 +216,7 @@ data class Question(
             const val DEFAULT_MAX_COMPLEXITY_MULTIPLIER = 8
             const val DEFAULT_MAX_LINECOUNT_MULTIPLIER = 8
             const val DEFAULT_MIN_FAIL_FAST_COMPLEXITY = 16
+            const val DEFAULT_MAX_EXECUTION_COUNT: Long = DEFAULT_MAX_TIMEOUT.toLong() * 1024 * 1024
 
             val DEFAULTS = TestingControl(
                 DEFAULT_SOLUTION_THROWS,
