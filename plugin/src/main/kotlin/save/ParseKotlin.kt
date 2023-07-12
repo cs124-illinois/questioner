@@ -37,14 +37,17 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
     private val parsedSource = contents.parseKotlin()
     private val parseTree = parsedSource.tree
 
-    val topLevelFile =
-        parseTree.preamble().fileAnnotations()
-            ?.getAnnotation(AlsoCorrect::class.java, Incorrect::class.java, Starter::class.java) != null
+    val topLevelFile = parseTree
+        .preamble()
+        .fileAnnotations()
+        ?.getAnnotation(AlsoCorrect::class.java, Incorrect::class.java, Starter::class.java) != null
 
     private val topLevelClass = if (!topLevelFile) {
-        parseTree.topLevelObject().filter { it.classDeclaration() != null }.also {
-            require(it.size == 1) { "Kotlin files must only contain a single top-level class declaration: ${it.size}" }
-        }.first().classDeclaration()
+        parseTree.topLevelObject()
+            .filter { it.classDeclaration() != null }
+            .also {
+                require(it.size == 1) { "Kotlin files must only contain a single top-level class declaration: ${it.size}" }
+            }.first().classDeclaration()
     } else {
         null
     }
