@@ -9802,7 +9802,7 @@
     "type": "KLASS",
     "klass": "Book",
     "metadata": {
-      "contentHash": "b3eb2909d0061c08aeb08c6f4c2d96f8",
+      "contentHash": "e577be71089c12d823ed93c99c60783a",
       "packageName": "com.examples.testing.withkotlinfauxproperty",
       "version": "2023.7.0",
       "author": "challen@illinois.edu",
@@ -9818,7 +9818,7 @@
     "annotatedControls": {},
     "question": {
       "klass": "Book",
-      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Question to test detection of Kotlin faux properties in Jenisol 2023.7.0.\n */\n@Correct(name = \"Kotlin Faux Property Testing\", version = \"2023.7.0\", author = \"challen@illinois.edu\")\npublic class Book {\n  private String name;\n\n  public void setName(String setName) {\n    name = setName;\n  }\n\n  public String getName() {\n    return name;\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Question to test detection of Kotlin faux properties in Jenisol 2023.7.0.\n */\n@Correct(\n    name = \"Kotlin Faux Property Testing\",\n    version = \"2023.7.0\",\n    author = \"challen@illinois.edu\")\npublic class Book {\n  private String name;\n\n  public void setName(String setName) {\n    name = setName;\n  }\n\n  public String getName() {\n    return name;\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withkotlinfauxproperty/Book.java"
     },
@@ -12894,7 +12894,7 @@
     "type": "METHOD",
     "klass": "Question",
     "metadata": {
-      "contentHash": "4ff2df55e08159ba932b9bc29d0be75b",
+      "contentHash": "848fc37fe58894f89831bf5323eb8e78",
       "packageName": "com.examples.stringduplicates",
       "version": "2022.2.0",
       "author": "challen@illinois.edu",
@@ -12913,7 +12913,7 @@
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.NotNull;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Generators;\nimport edu.illinois.cs.cs125.questioner.lib.TemplateImports;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\n\nimport java.util.HashSet;\nimport java.util.Random;\nimport java.util.Set;\n\n/*\n * Given a non-`null` `String` containing comma-separated values, write a method `detectDuplicates`\n * that returns `true` if the `String` includes duplicate values, and `false` otherwise.\n * Trim whitespace from all `String`s.\n */\n\n@Correct(name = \"String Duplicates\", author = \"challen@illinois.edu\", version = \"2022.2.0\")\n@Wrap\n@TemplateImports(paths = \"java.util.Map, java.util.HashMap\")\npublic class Question {\n  boolean detectDuplicates(@NotNull String input) {\n    Set<String> values = new HashSet<>();\n    for (String part : input.split(\",\")) {\n      String current = part.trim();\n      if (values.contains(current)) {\n        return true;\n      }\n      values.add(current);\n    }\n    return false;\n  }\n\n  @RandomParameters\n  private static String randomParameters(Random random) {\n    String[] values = new String[random.nextInt(32) + 32];\n    for (int i = 0; i < values.length; i++) {\n      String current = Generators.randomAlphanumericString(random, 32);\n      if (random.nextBoolean()) {\n        values[i] = \" \" + current;\n      } else {\n        values[i] = current + \" \";\n      }\n    }\n    if (random.nextBoolean()) {\n      values[random.nextInt(values.length)] =\n          new String(values[random.nextInt(values.length)].toCharArray());\n    }\n    return String.join(\",\", values);\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.NotNull;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Generators;\nimport edu.illinois.cs.cs125.questioner.lib.TemplateImports;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.HashSet;\nimport java.util.Random;\nimport java.util.Set;\n\n/*\n * Given a non-`null` `String` containing comma-separated values, write a method `detectDuplicates`\n * that returns `true` if the `String` includes duplicate values, and `false` otherwise.\n * Trim whitespace from all `String`s.\n */\n\n@Correct(name = \"String Duplicates\", author = \"challen@illinois.edu\", version = \"2022.2.0\")\n@Wrap\n@TemplateImports(paths = \"java.util.Map, java.util.HashMap\")\npublic class Question {\n  boolean detectDuplicates(@NotNull String input) {\n    Set<String> values = new HashSet<>();\n    for (String part : input.split(\",\")) {\n      String current = part.trim();\n      if (values.contains(current)) {\n        return true;\n      }\n      values.add(current);\n    }\n    return false;\n  }\n\n  @RandomParameters\n  private static String randomParameters(Random random) {\n    String[] values = new String[random.nextInt(32) + 32];\n    for (int i = 0; i < values.length; i++) {\n      String current = Generators.randomAlphanumericString(random, 32);\n      if (random.nextBoolean()) {\n        values[i] = \" \" + current;\n      } else {\n        values[i] = current + \" \";\n      }\n    }\n    if (random.nextBoolean()) {\n      values[random.nextInt(values.length)] =\n          new String(values[random.nextInt(values.length)].toCharArray());\n    }\n    return String.join(\",\", values);\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/stringduplicates/Question.java"
     },
@@ -20858,7 +20858,7 @@
     "type": "METHOD",
     "klass": "Question",
     "metadata": {
-      "contentHash": "4eba87a720d25148cbc66e7ad5b80a65",
+      "contentHash": "865587bfa2515741808d71c31a5b8f9f",
       "packageName": "com.examples.addone",
       "version": "2021.6.0",
       "author": "challen@illinois.edu",
@@ -20882,7 +20882,7 @@
     },
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\n\nimport java.util.Arrays;\nimport java.util.List;\n\n/*\n * Write a method `addOne` that returns its `int` argument plus one.\n */\n\n@Correct(\n  name = \"Add One\",\n  author = \"challen@illinois.edu\",\n  version = \"2021.6.0\",\n  maxLineCountMultiplier = 16)\n@Wrap\npublic class Question {\n  // Here to avoid dead code errors in the memoization test\n  @FixedParameters\n  private static final List<Integer> FIXED =\n    Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);\n\n  int addOne(int value) {\n    return value + 1;\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\n\n/*\n * Write a method `addOne` that returns its `int` argument plus one.\n */\n\n@Correct(\n    name = \"Add One\",\n    author = \"challen@illinois.edu\",\n    version = \"2021.6.0\",\n    maxLineCountMultiplier = 16)\n@Wrap\npublic class Question {\n  // Here to avoid dead code errors in the memoization test\n  @FixedParameters\n  private static final List<Integer> FIXED =\n      Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);\n\n  int addOne(int value) {\n    return value + 1;\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/Question.java"
     },
