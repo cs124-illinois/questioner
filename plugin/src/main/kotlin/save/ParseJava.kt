@@ -509,7 +509,7 @@ $cleanContent
         return lines
     }
 
-    fun removeImports(importNames: List<String>): String {
+    fun removeImports(importNames: Set<String>): String {
         val toRemove = mutableSetOf<Int>()
         parseTree.importDeclaration().forEach { packageContext ->
             val packageName = packageContext.qualifiedName().asString()

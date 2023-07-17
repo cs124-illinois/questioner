@@ -169,7 +169,7 @@ fun List<ParsedJavaFile>.findQuestions(
                 return@map question
             }
 
-            val neighborImports = Files.walk(Paths.get(solution.path).parent, 1).filter {
+            fun getNeighborImports(path: String) = Files.walk(Paths.get(path).parent, 1).filter {
                 Files.isRegularFile(it)
             }.map { File(it.toString()) }.filter {
                 it.path != solution.path && it.path.endsWith(".java")
@@ -219,7 +219,11 @@ fun List<ParsedJavaFile>.findQuestions(
                 }
             }
 
-            val importNames = solution.listedImports.filter { it in byFullName } + neighborImports
+            val importNames = (
+                solution.listedImports.filter { it in byFullName }.map {
+                    getNeighborImports(byFullName[it]!!.path) + it
+                }.flatten() + getNeighborImports(solution.path)
+                ).toSet()
 
             var javaTemplate = File("${solution.path}.hbs").let {
                 if (it.exists()) {
@@ -530,7 +534,7 @@ fun String.isEmail(): Boolean = emailRegex.matcher(this).matches()
 data class CleanSpec(
     val hasTemplate: Boolean = false,
     val wrappedClass: String? = null,
-    val importNames: List<String> = listOf(),
+    val importNames: Set<String> = setOf(),
 ) {
     val notClass = hasTemplate || wrappedClass != null
 }
