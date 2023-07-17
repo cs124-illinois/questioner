@@ -109,7 +109,7 @@ object Questions {
         if (it.count() == 0) {
             return null
         }
-        check(it.count() == 1) { "Found multiple full-path matches" }
+        check(it.count() == 1) { "Found multiple path-only matches" }
         try {
             moshi.adapter(Question::class.java).fromJson(it.first()!!.toJson())
         } catch (e: Exception) {
@@ -118,6 +118,25 @@ object Questions {
         }
     }
 
+    private fun getQuestionByAuthor(path: String, author: String) = collection.find(
+        Filters.and(
+            Filters.eq("published.path", path),
+            Filters.eq("published.author", author),
+            Filters.eq("latest", true),
+        ),
+    ).sort(Sorts.descending("updated")).let {
+        @Suppress("ReplaceSizeZeroCheckWithIsEmpty")
+        if (it.count() == 0) {
+            return null
+        }
+        check(it.count() == 1) { "Found multiple path and author matches" }
+        try {
+            moshi.adapter(Question::class.java).fromJson(it.first()!!.toJson())
+        } catch (e: Exception) {
+            logger.warn { "Couldn't load question $path, which might use an old schema: $e" }
+            null
+        }
+    }
     private fun getQuestionByPath(path: QuestionPath) = collection.find(
         Filters.and(
             Filters.eq("published.path", path.path),
@@ -146,8 +165,9 @@ object Questions {
     fun load(submission: Submission): Question? {
         return if (submission.version != null && submission.author != null) {
             getQuestionByPath(QuestionPath.fromSubmission(submission))
+        } else if (submission.author != null) {
+            getQuestionByAuthor(submission.path, submission.author)
         } else {
-            check(submission.version == null && submission.author == null) { "Bad submission with partial information" }
             getQuestion(submission.path)
         }
     }
@@ -175,8 +195,9 @@ object Questions {
     fun loadTest(submission: TestSubmission): Question? {
         return if (submission.version != null && submission.author != null) {
             getQuestionByPath(QuestionPath.fromTestSubmission(submission))
+        } else if (submission.author != null) {
+            getQuestionByAuthor(submission.path, submission.author)
         } else {
-            check(submission.version == null && submission.author == null) { "Bad submission with partial information" }
             getQuestion(submission.path)
         }
     }
