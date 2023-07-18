@@ -5,7 +5,6 @@ import java.util.Properties
 
 plugins {
     kotlin("jvm")
-    kotlin("kapt")
     application
     id("org.jmailen.kotlinter")
     id("com.github.johnrengelman.shadow") version "8.1.1"
