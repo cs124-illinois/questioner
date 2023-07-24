@@ -48,10 +48,15 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
                                 |---
                                 |${file.contents}
                                 |---
-                                |${failed.compileSubmission!!.message ?: failed.compileSubmission!!.errors.joinToString("\n")}
+                                |${
+                                failed.compileSubmission!!.message ?: failed.compileSubmission!!.errors.joinToString(
+                                    "\n"
+                                )
+                            }
                             """.trimMargin()
 
                         }
+
                         else -> summary
                     }
                 }
@@ -78,8 +83,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         tests()
             ?.filter {
                 it.jenisol!!.solution.threw == null
-                        && it.jenisol.parameters.toList().isNotEmpty()
-                        && !(it.jenisol.solutionExecutable is Method && (it.jenisol.solutionExecutable as Method).isBoth())
+                    && it.jenisol.parameters.toList().isNotEmpty()
+                    && !(it.jenisol.solutionExecutable is Method && (it.jenisol.solutionExecutable as Method).isBoth())
             }?.let { results ->
                 val executableReturns = mutableMapOf<Executable, MutableList<Any>>()
                 for (result in results) {
@@ -131,14 +136,19 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         classWhiteList.addAll(
             taskResults!!.sandboxedClassLoader!!.loadedClasses.filter { klass ->
                 !klass.startsWith("edu.illinois.cs.cs125.jeed.core") &&
-                        !klass.startsWith("java.lang.invoke.MethodHandles")
+                    !klass.startsWith("java.lang.invoke.MethodHandles")
             }
         )
     }
 
     fun TestResults.checkIncorrect(file: Question.IncorrectFile, mutated: Boolean) {
         if (!mutated && failedLinting == true) {
-            throw IncorrectFailedLinting(file, correct)
+            val errors = if (language == Question.Language.java) {
+                complete.checkstyle!!.errors.joinToString("\n") { it.message }
+            } else {
+                complete.ktlint!!.errors.joinToString("\n") { it.message }
+            }
+            throw IncorrectFailedLinting(file, correct, errors)
         }
         if (mutated) {
             if (succeeded) {
@@ -166,8 +176,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         }?.find {
             val exception = it.jenisol!!.solution.threw!!
             exception !is AssertionError
-                    && exception !is IllegalArgumentException
-                    && exception !is IllegalStateException
+                && exception !is IllegalArgumentException
+                && exception !is IllegalStateException
         }
         if (!control.solutionThrows!! && solutionThrew != null) {
             throw SolutionThrew(correct, solutionThrew.jenisol!!.solution.threw!!, solutionThrew.jenisol.parameters)
@@ -678,18 +688,19 @@ class TooMuchOutput(
 }
 
 class IncorrectFailedLinting(
-    val incorrect: Question.IncorrectFile, val correct: Question.FlatFile
+    val incorrect: Question.IncorrectFile, val correct: Question.FlatFile, val errors: String
 ) : ValidationFailed() {
     override val message: String
         get() {
             val contents = incorrect.mutation?.marked()?.contents ?: incorrect.contents
             return """
-        |Incorrect code failed linting with ${'$'}{
-        if (solution.language == Question.Language.kotlin) {
-            "ktlint"
-        } else {
-            "checkstyle"
-        }
+        |Incorrect code failed linting with ${
+                if (incorrect.language == Question.Language.kotlin) {
+                    "ktlint\n$errors"
+                } else {
+                    "checkstyle\n$errors"
+                }
+            }
         |${printContents(contents, incorrect.path ?: correct.path)}""".trimMargin()
         }
 }
@@ -707,7 +718,7 @@ class IncorrectPassed(
         |${
                 if (incorrect.mutation != null) {
                     "If the code is correct, you may need to disable this mutation using " +
-                            "// ${incorrect.mutation.mutations.first().mutation.mutationType.suppressionComment()}"
+                        "// ${incorrect.mutation.mutations.first().mutation.mutationType.suppressionComment()}"
                 } else {
                     ""
                 }
@@ -730,7 +741,7 @@ class IncorrectTooManyTests(
         |${
                 if (incorrect.mutation != null) {
                     "If the code is correct, you may need to disable this mutation using " +
-                            "// ${incorrect.mutation.mutations.first().mutation.mutationType.suppressionComment()}\n"
+                        "// ${incorrect.mutation.mutations.first().mutation.mutationType.suppressionComment()}\n"
                 } else {
                     ""
                 }
