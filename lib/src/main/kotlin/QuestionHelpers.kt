@@ -287,41 +287,67 @@ fun Question.checkExecutedSubmission(
     }
 }
 
-fun Question.mutations(seed: Int, count: Int) = templateSubmission(
-    if (getTemplate(Question.Language.java) != null) {
-        "// TEMPLATE_START\n" + correct.contents + "\n// TEMPLATE_END \n"
-    } else {
-        correct.contents
-    }, Question.Language.java
-).allFixedMutations(random = Random(seed))
-    .map {
-        // Mutations will sometimes break the entire template
-        Pair(
-            try {
-                it.contents.deTemplate(getTemplate(Question.Language.java))
-            } catch (e: Exception) {
-                correct.contents
-            }, it
-        )
+suspend fun Question.mutations(seed: Int, count: Int) =
+    templateSubmission(
+        if (getTemplate(Question.Language.java) != null) {
+            "// TEMPLATE_START\n" + correct.contents + "\n// TEMPLATE_END \n"
+        } else {
+            correct.contents
+        }, Question.Language.java
+    ).allFixedMutations(random = Random(seed)).mapNotNull {
+        try {
+            it.formatted()
+        } catch (e: Exception) {
+            println(
+                """
+Failed to format mutation sources for mutation type: ${it.mutations.firstOrNull()!!.mutation.mutationType}
+
+Mutated:
+---
+${it.contents}
+---
+
+Original:
+---
+${it.originalSources.contents}
+---
+
+Please report a bug so that we can improve the mutation engine.
+            """.trimIndent()
+            )
+            null
+        }
     }
-    // Templated questions sometimes will mutate the template
-    .filter { (contents, _) -> contents != correct.contents }
-    .distinctBy { (contents, _) ->
-        contents.stripComments(Source.FileType.JAVA).hashCode()
-    }
-    .shuffled(random = Random(seed))
-    .take(count)
-    .map { (contents, source) ->
-        Question.IncorrectFile(
-            klass,
-            contents,
-            Question.IncorrectFile.Reason.TEST,
-            Question.Language.java,
-            null,
-            false,
-            mutation = source
-        )
-    }
+        .map {
+            // Mutations will sometimes break the entire template
+            Pair(
+                try {
+                    it.contents.deTemplate(getTemplate(Question.Language.java))
+                } catch (e: Exception) {
+                    correct.contents
+                }, it
+            )
+        }
+        .filter { (contents, _) ->
+            // Templated questions sometimes will mutate the template
+            contents != correct.contents
+        }
+        .distinctBy { (contents, _) ->
+            contents.stripComments(Source.FileType.JAVA).hashCode()
+        }
+        .shuffled(random = Random(seed))
+        .take(count)
+        .map { (contents, source) ->
+            Question.IncorrectFile(
+                klass,
+                contents,
+                Question.IncorrectFile.Reason.TEST,
+                Question.Language.java,
+                null,
+                false,
+                mutation = source
+            )
+        }
 
 class MaxComplexityExceeded(message: String) : RuntimeException(message)
 
@@ -414,7 +440,8 @@ fun Question.computeLineCounts(contents: String, language: Question.Language): T
     if (submissionLineCount.source > maxLineCount) {
         throw MaxLineCountExceeded(
             "Submission line count ${submissionLineCount.source} exceeds maximum of $maxLineCount.\n" +
-                "The solution has ${solutionLineCount.source} source ${"line".pluralize(solutionLineCount.source)}.")
+                "The solution has ${solutionLineCount.source} source ${"line".pluralize(solutionLineCount.source)}."
+        )
     }
     return TestResults.LineCountComparison(
         solutionLineCount,
