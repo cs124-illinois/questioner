@@ -219,10 +219,38 @@ fun List<ParsedJavaFile>.findQuestions(
                 }
             }
 
+            val wildcardImportNames = mutableListOf<String>()
             val importNames = (
-                solution.listedImports.filter { it in byFullName }.map {
-                    getNeighborImports(byFullName[it]!!.path) + it
-                }.flatten() + getNeighborImports(solution.path)
+                solution.listedImports
+                    .asSequence()
+                    .filter { !it.endsWith(".*") }
+                    .filter { it in byFullName }
+                    .map {
+                        getNeighborImports(byFullName[it]!!.path) + it
+                    }.flatten()
+                    .toList() +
+
+                    solution.listedImports
+                        .asSequence()
+                        .filter { it.endsWith(".*") }
+                        .map { importName ->
+                            val prefix = importName.removeSuffix(".*")
+                            val prefixLength = prefix.split(".").size
+                            byFullName.keys.filter {
+                                it.startsWith(prefix) && it.split(".").size == prefixLength + 1
+                            }.also {
+                                if (it.isNotEmpty()) {
+                                    wildcardImportNames += importName
+                                }
+                            }
+                        }.flatten()
+                        .map {
+                            getNeighborImports(byFullName[it]!!.path) + it
+                        }.flatten()
+                        .toList() +
+
+                    getNeighborImports(solution.path)
+
                 ).toSet()
 
             var javaTemplate = File("${solution.path}.hbs").let {
@@ -267,8 +295,8 @@ fun List<ParsedJavaFile>.findQuestions(
                 lines.any { it.contains("TEMPLATE_START") } && lines.any { it.contains("TEMPLATE_END") }
             } ?: false
 
-            val javaCleanSpec = CleanSpec(hasJavaTemplate, solution.wrapWith, importNames)
-            val kotlinCleanSpec = CleanSpec(hasKotlinTemplate, solution.wrapWith, importNames)
+            val javaCleanSpec = CleanSpec(hasJavaTemplate, solution.wrapWith, importNames + wildcardImportNames)
+            val kotlinCleanSpec = CleanSpec(hasKotlinTemplate, solution.wrapWith, importNames + wildcardImportNames)
 
             if (hasJavaTemplate && javaTemplate == null && solution.wrapWith == null) {
                 javaTemplate = solution.extractTemplate() ?: error(
@@ -451,7 +479,7 @@ fun List<ParsedJavaFile>.findQuestions(
                 solution.correct.control,
                 Question.FlatFile(
                     solution.className,
-                    solution.removeImports(importNames).stripPackage(),
+                    solution.removeImports(importNames + wildcardImportNames).stripPackage(),
                     Question.Language.java,
                     solution.path,
                 ),

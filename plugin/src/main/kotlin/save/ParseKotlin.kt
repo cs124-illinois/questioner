@@ -10,6 +10,7 @@ import edu.illinois.cs.cs125.jeed.core.fromSnippet
 import edu.illinois.cs.cs125.jeed.core.ktFormat
 import edu.illinois.cs.cs125.questioner.antlr.KotlinLexer
 import edu.illinois.cs.cs125.questioner.antlr.KotlinParser
+import edu.illinois.cs.cs125.questioner.antlr.KotlinParser.ImportHeaderContext
 import edu.illinois.cs.cs125.questioner.lib.AlsoCorrect
 import edu.illinois.cs.cs125.questioner.lib.Incorrect
 import edu.illinois.cs.cs125.questioner.lib.Question
@@ -162,8 +163,14 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
         )
     }
 
+    private fun ImportHeaderContext.toFullName() = identifier().text + if (MULT() != null) {
+        ".*"
+    } else {
+        ""
+    }
+
     init {
-        parseTree.preamble().importList().importHeader().map { it.identifier().text }.also { imports ->
+        parseTree.preamble().importList().importHeader().map { it.toFullName() }.also { imports ->
             imports.filter { it.endsWith(".NotNull") || it.endsWith(".NonNull") }
                 .also {
                     require(it.isEmpty()) {
@@ -177,7 +184,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
     private fun removeImports(importNames: List<String>): String {
         val toRemove = mutableSetOf<Int>()
         parseTree.preamble().importList().importHeader().forEach { importHeaderContext ->
-            val packageName = importHeaderContext.identifier().text
+            val packageName = importHeaderContext.toFullName()
             if (packageName in importNames) {
                 toRemove.add(importHeaderContext.start.startIndex.toLine())
             }
@@ -224,7 +231,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
             toRemove.add(it.start.startIndex.toLine())
         }
         parseTree.preamble().importList().importHeader().forEach { importHeaderContext ->
-            val packageName = importHeaderContext.identifier().text
+            val packageName = importHeaderContext.toFullName()
             if (packageName in importsToRemove ||
                 packageName in importNames ||
                 packagesToRemove.any { packageName.startsWith(it) }
@@ -387,12 +394,12 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
 
     private fun String.kotlinDeTemplate(hasTemplate: Boolean, wrappedClass: String?) = when {
         wrappedClass != null && topLevelFile -> {
-            usedImports = parseKotlin().tree.preamble().importList().importHeader().map { it.identifier().text }
+            usedImports = parseKotlin().tree.preamble().importList().importHeader().map { it.toFullName() }
             this
         }
 
         wrappedClass != null && !topLevelFile -> parseKotlin().tree.also { context ->
-            usedImports = context.preamble().importList().importHeader().map { it.identifier().text }
+            usedImports = context.preamble().importList().importHeader().map { it.toFullName() }
         }.topLevelObject()
             .filter { it.classDeclaration() != null }.also {
                 require(it.size == 1) { "Kotlin files must only contain a single top-level class declaration: $this" }

@@ -12,6 +12,7 @@ import edu.illinois.cs.cs125.jeed.core.googleFormat
 import edu.illinois.cs.cs125.jenisol.core.NotNull
 import edu.illinois.cs.cs125.questioner.antlr.JavaLexer
 import edu.illinois.cs.cs125.questioner.antlr.JavaParser
+import edu.illinois.cs.cs125.questioner.antlr.JavaParser.ImportDeclarationContext
 import edu.illinois.cs.cs125.questioner.lib.AlsoCorrect
 import edu.illinois.cs.cs125.questioner.lib.Blacklist
 import edu.illinois.cs.cs125.questioner.lib.CheckstyleSuppress
@@ -52,17 +53,24 @@ data class ParsedJavaFile(val path: String, val contents: String) {
 
     val fullName = "$packageName.$className"
 
-    val listedImports = parseTree.importDeclaration().map { it.qualifiedName().asString() }.filter {
-        it !in importsToRemove
-    }.also { imports ->
-        imports.filter { it.endsWith(".NotNull") || it.endsWith(".NonNull") }
-            .filter { it != NotNull::class.java.name }
-            .also {
-                require(it.isEmpty()) {
-                    "Please use the Questioner @NotNull annotation from ${NotNull::class.java.name}"
-                }
-            }
+    private fun ImportDeclarationContext.toFullName() = qualifiedName().asString() + if (MUL() != null) {
+        ".*"
+    } else {
+        ""
     }
+
+    val listedImports = parseTree.importDeclaration()
+        .map { it.toFullName() }
+        .filter { it !in importsToRemove }
+        .also { imports ->
+            imports.filter { it.endsWith(".NotNull") || it.endsWith(".NonNull") }
+                .filter { it != NotNull::class.java.name }
+                .also {
+                    require(it.isEmpty()) {
+                        "Please use the Questioner @NotNull annotation from ${NotNull::class.java.name}"
+                    }
+                }
+        }
 
     val whitelist = (
         topLevelClass.getAnnotations(Whitelist::class.java).let { annotations ->
@@ -512,7 +520,7 @@ $cleanContent
     fun removeImports(importNames: Set<String>): String {
         val toRemove = mutableSetOf<Int>()
         parseTree.importDeclaration().forEach { packageContext ->
-            val packageName = packageContext.qualifiedName().asString()
+            val packageName = packageContext.toFullName()
             if (packageName in importNames) {
                 toRemove.add(packageContext.start.startIndex.toLine())
             }
@@ -534,7 +542,7 @@ $cleanContent
             toRemove.add(it.start.startIndex.toLine())
         }
         parseTree.importDeclaration().forEach { packageContext ->
-            val packageName = packageContext.qualifiedName().asString()
+            val packageName = packageContext.toFullName()
             if (packageName in importsToRemove ||
                 packageName in importNames ||
                 packagesToRemove.any { packageName.startsWith(it) }
@@ -639,7 +647,7 @@ $cleanContent
         return when {
             wrappedClass != null -> {
                 parseJava().tree.also { context ->
-                    usedImports = context.importDeclaration().map { it.qualifiedName().asString() }
+                    usedImports = context.importDeclaration().map { it.toFullName() }
                 }.topLevelClass().let { context ->
                     val start = context.classDeclaration().start.line
                     val end = context.classDeclaration().stop.line

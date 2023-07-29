@@ -336,40 +336,6 @@ data class Question(
         enum class Reason {
             DESIGN, COMPILE, TEST, CHECKSTYLE, TIMEOUT, DEADCODE, LINECOUNT, TOOLONG, MEMORYLIMIT, RECURSION, COMPLEXITY, FEATURES, TOOMUCHOUTPUT, MEMOIZATION
         }
-
-        suspend fun compiled(question: Question): TestTestingSource {
-            check(reason == Reason.TEST) {
-                "@Incorrect should only be used when it fails testing"
-            }
-            val results = TestResults(language)
-            val source = question.contentsToSource(contents, language, results)
-            val md5 = source.md5
-
-            val cachedResult = compilationCache.getIfPresent(md5)
-            if (cachedResult != null) {
-                return cachedResult
-            }
-
-            return when (language) {
-                Language.java ->
-                    question.compileSubmission(
-                        source,
-                        InvertingClassLoader(setOf(question.klass)),
-                        results
-                    )
-
-                Language.kotlin ->
-                    question.kompileSubmission(
-                        source,
-                        InvertingClassLoader(setOf(question.klass, "${question.klass}Kt")),
-                        results
-                    )
-            }.let {
-                TestTestingSource(contents, question.fixTestingMethods(it.classLoader))
-            }.also {
-                compilationCache.put(md5, it)
-            }
-        }
     }
 
     @JsonClass(generateAdapter = true)
@@ -439,16 +405,27 @@ data class Question(
     @delegate:Transient
     val compiledSolution by lazy {
         Source(mapOf("${question.klass}.java" to question.contents)).let { questionSource ->
-            if (compiledCommon == null) {
-                questionSource.compile(CompilationArguments(isolatedClassLoader = true, parameters = true))
-            } else {
-                questionSource.compile(
-                    CompilationArguments(
-                        parentClassLoader = compiledCommon!!.classLoader,
-                        parentFileManager = compiledCommon!!.fileManager,
-                        parameters = true
+            try {
+                if (compiledCommon == null) {
+                    questionSource.compile(CompilationArguments(isolatedClassLoader = true, parameters = true))
+                } else {
+                    questionSource.compile(
+                        CompilationArguments(
+                            parentClassLoader = compiledCommon!!.classLoader,
+                            parentFileManager = compiledCommon!!.fileManager,
+                            parameters = true
+                        )
                     )
+                }
+            } catch (e: Exception) {
+                System.err.println(
+                    """
+Failed compiling solution control class:
+---
+${question.contents}
+---"""
                 )
+                throw e
             }
         }
     }
@@ -457,20 +434,31 @@ data class Question(
 
     @delegate:Transient
     val compiledSolutionForTesting by lazy {
-        Source(mapOf("${question.klass}.java" to question.contents)).let { questionSource ->
-            if (compiledCommon == null) {
-                questionSource.compile(CompilationArguments(isolatedClassLoader = true, parameters = true))
-            } else {
-                questionSource.compile(
-                    CompilationArguments(
-                        parentClassLoader = compiledCommon!!.classLoader,
-                        parentFileManager = compiledCommon!!.fileManager,
-                        parameters = true
+        try {
+            Source(mapOf("${question.klass}.java" to question.contents)).let { questionSource ->
+                if (compiledCommon == null) {
+                    questionSource.compile(CompilationArguments(isolatedClassLoader = true, parameters = true))
+                } else {
+                    questionSource.compile(
+                        CompilationArguments(
+                            parentClassLoader = compiledCommon!!.classLoader,
+                            parentFileManager = compiledCommon!!.fileManager,
+                            parameters = true
+                        )
                     )
-                )
+                }
+            }.let {
+                TestTestingSource(question.contents, fixTestingMethods(it.classLoader))
             }
-        }.let {
-            TestTestingSource(question.contents, fixTestingMethods(it.classLoader))
+        } catch (e: Exception) {
+            System.err.println(
+                """
+Failed compiling solution control class:
+---
+${question.contents}
+---"""
+            )
+            throw e
         }
     }
 
