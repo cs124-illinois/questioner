@@ -184,6 +184,7 @@ data class ParsedJavaFile(val path: String, val contents: String) {
                     }
                 }
                 val focused = parameters["focused"]?.toBoolean() ?: Question.Metadata.DEFAULT_FOCUSED
+                val publish = parameters["publish"]?.toBoolean() ?: Question.Metadata.DEFAULT_PUBLISH
 
                 val solutionThrows = parameters["solutionThrows"]?.toBoolean()
                 val minTestCount = parameters["minTestCount"]?.toInt()
@@ -214,6 +215,7 @@ data class ParsedJavaFile(val path: String, val contents: String) {
                     author,
                     description,
                     focused,
+                    publish,
                     Question.TestingControl(
                         solutionThrows,
                         minTestCount,

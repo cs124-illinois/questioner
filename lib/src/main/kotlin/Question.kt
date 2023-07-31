@@ -130,6 +130,7 @@ data class Question(
         val author: String,
         val description: String,
         val focused: Boolean,
+        val publish: Boolean,
         val control: TestingControl
     )
 
@@ -163,10 +164,12 @@ data class Question(
         val citation: Citation?,
         val usedFiles: List<String> = listOf(),
         val templateImports: Set<String> = setOf(),
-        val focused: Boolean? = null
+        val focused: Boolean? = null,
+        val publish: Boolean? = null
     ) {
         companion object {
             const val DEFAULT_FOCUSED = false
+            const val DEFAULT_PUBLISH = true
         }
     }
 

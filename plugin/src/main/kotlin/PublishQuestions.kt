@@ -30,7 +30,13 @@ open class PublishQuestions : DefaultTask() {
         val uri = URI(destination)
         require(uri.scheme == "http" || uri.scheme == "https") { "Invalid destination scheme: ${uri.scheme}" }
         val questions =
-            loadFromPath(File(project.buildDir, "questioner/questions.json"), project.javaSourceDir().path).values
+            loadFromPath(
+                File(project.buildDir, "questioner/questions.json"),
+                project.javaSourceDir().path,
+            ).values.filter {
+                it.metadata.publish != false
+            }
+        require(questions.isNotEmpty()) { "No questions to publish" }
         require(questions.all { it.validated }) { "Cannot publish until all questions are validated" }
         Request
             .post(uri)

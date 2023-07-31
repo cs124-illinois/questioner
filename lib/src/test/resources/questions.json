@@ -15,7 +15,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/recursivefactorial/correct/kotlin/Question.kt"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -1202,7 +1203,8 @@
       "javaDescription": "<p>Write a method named <code>equals88</code> that returns <code>true</code> if its <code>int</code> argument is equal to 88, our magic number.</p>",
       "usedFiles": [],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -1451,7 +1453,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/tripleequals/correct/kotlin/Squirrel.kt"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -3685,7 +3688,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/counterobject/correct/kotlin/Counter.kt"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -4875,7 +4879,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/printsum/correct/kotlin/Question.kt"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {
       "maxDeadCode": 2
@@ -5343,7 +5348,8 @@
       "javaDescription": "<p>Write a method <code>larger</code> that returns the larger of two <code>int</code> arguments.</p>",
       "usedFiles": [],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -5788,7 +5794,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withfeaturedeadcode/correct/kotlin/Question.kt"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -7016,7 +7023,8 @@
         "java.util.ArrayList",
         "java.util.Arrays"
       ],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -7340,7 +7348,8 @@
       "javaDescription": "<p>Testing @NotNull annotation on constructor parameters.</p>",
       "usedFiles": [],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -7815,7 +7824,8 @@
       "javaDescription": "<p>Getter and setter testing.</p>",
       "usedFiles": [],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -8785,7 +8795,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withdeadcodeannotation/correct/kotlin/Question.kt"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -9813,7 +9824,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withkotlinfauxproperty/correct/kotlin/Book.kt"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -10540,7 +10552,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withemptyconstructor/correct/java/emptyconstructor/Question.java"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -11031,7 +11044,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withfeaturecheck/correct/kotlin/Question.kt"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -11596,7 +11610,8 @@
       "javaDescription": "<p>Write a function <code>combine</code> that, given two <code>String</code> arguments, returns the second appended to the first.\nExcept you should omit the first two characters of each <code>String</code>.\nFor example, given <code>Java</code> and <code>Kotlin</code>, you would return <code>vatlin</code>.\nYou can assume that each <code>String</code> is of length at least two.</p>",
       "usedFiles": [],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -11934,7 +11949,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/fancystringcompare/incorrect/badequals/Question.java"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -12908,7 +12924,8 @@
         "java.util.Map",
         "java.util.HashMap"
       ],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -15179,7 +15196,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/privaterecursivehelper/incorrect/java/iterative/Question.java"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -15953,7 +15971,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/mayberecursivefactorial/correct/java/iterative/Question.java"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -16943,7 +16962,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/addoneclass/correct/kotlin/Question.kt"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -17455,7 +17475,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/cougarfeliform/Feliform.java"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -18436,7 +18457,8 @@
       "javaDescription": "<p>Print &quot;Hello!&quot; without the quotes.\nUsing to test support for @Limit annotations.</p>",
       "usedFiles": [],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -18579,7 +18601,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/inputinterleavingtest/correct/kotlin/Question.kt"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -20179,7 +20202,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/withimports/correct/kotlin/Question.kt"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {
@@ -20875,7 +20899,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/correct/kotlin/Question.kt"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {
       "maxLineCountMultiplier": 16
@@ -21514,7 +21539,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/kotlinnulltest/correct/kotlin/nonnullparameter/Question.kt"
       ],
       "templateImports": [],
-      "focused": false
+      "focused": false,
+      "publish": true
     },
     "annotatedControls": {},
     "question": {

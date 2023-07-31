@@ -17,6 +17,7 @@ annotation class Correct(
     val path: String = "",
     val solutionThrows: Boolean = Question.TestingControl.DEFAULT_SOLUTION_THROWS,
     val focused: Boolean = Question.Metadata.DEFAULT_FOCUSED,
+    val publish: Boolean = Question.Metadata.DEFAULT_PUBLISH,
     val minTestCount: Int = Question.TestingControl.DEFAULT_MIN_TEST_COUNT,
     val maxTestCount: Int = Question.TestingControl.DEFAULT_MAX_TEST_COUNT,
     val minTimeout: Int = Question.TestingControl.DEFAULT_MIN_TIMEOUT,

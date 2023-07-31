@@ -475,6 +475,7 @@ fun List<ParsedJavaFile>.findQuestions(
                     myUsedFiles,
                     solution.templateImports.toSet(),
                     solution.correct.focused,
+                    solution.correct.publish,
                 ),
                 solution.correct.control,
                 Question.FlatFile(
