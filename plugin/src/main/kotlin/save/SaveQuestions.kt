@@ -299,13 +299,13 @@ fun List<ParsedJavaFile>.findQuestions(
             val kotlinCleanSpec = CleanSpec(hasKotlinTemplate, solution.wrapWith, importNames + wildcardImportNames)
 
             if (hasJavaTemplate && javaTemplate == null && solution.wrapWith == null) {
-                javaTemplate = solution.extractTemplate() ?: error(
+                javaTemplate = solution.extractTemplate(importNames + wildcardImportNames) ?: error(
                     "Can't extract Java template",
                 )
             }
 
             if (hasKotlinTemplate && kotlinTemplate == null && solution.wrapWith == null) {
-                kotlinTemplate = kotlinSolution!!.extractTemplate() ?: error(
+                kotlinTemplate = kotlinSolution!!.extractTemplate(importNames + wildcardImportNames) ?: error(
                     "Can't extract Kotlin template",
                 )
             }

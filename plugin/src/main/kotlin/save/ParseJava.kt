@@ -367,8 +367,8 @@ $cleanContent
         )
     }
 
-    fun extractTemplate(): String? {
-        val correctSolution = toCleanSolution(CleanSpec(false, null)).first.contents
+    fun extractTemplate(importNames: Set<String>): String? {
+        val correctSolution = toCleanSolution(CleanSpec(false, null, importNames)).first.contents
         val templateStart = Regex("""//.*TEMPLATE_START""").find(correctSolution)?.range?.start ?: return null
         val templateEnd = correctSolution.indexOf("TEMPLATE_END")
         val start = correctSolution.substring(0 until templateStart)

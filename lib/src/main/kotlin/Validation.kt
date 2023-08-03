@@ -44,9 +44,25 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
                 check(complete.testing?.failedReceiverGeneration == true) {
                     when {
                         failedSteps.contains(TestResults.Step.compileSubmission) -> {
+                            val templated = if (getTemplate(file.language) != null) {
+                                templateSubmission(file.contents, language)
+                            } else {
+                                null
+                            }
                             """Error compiling solution:
                                 |---
                                 |${file.contents}
+                                |${
+                                if (templated != null) {
+                                    """
+                                    |--- (After templating)
+                                    |${templated.contents}
+                                    ---
+                                    """.trimMargin()
+                                } else {
+                                    ""
+                                }
+                            }
                                 |---
                                 |${
                                 failed.compileSubmission!!.message ?: failed.compileSubmission!!.errors.joinToString(

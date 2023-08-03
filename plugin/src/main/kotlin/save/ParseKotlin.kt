@@ -303,8 +303,8 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
 
     var usedImports: List<String> = listOf()
 
-    fun extractTemplate(): String? {
-        val correctSolution = clean(CleanSpec(false, null)).trimStart()
+    fun extractTemplate(importNames: Set<String>): String? {
+        val correctSolution = clean(CleanSpec(false, null, importNames)).trimStart()
         val templateStart = Regex("""//.*TEMPLATE_START""").find(correctSolution)?.range?.start ?: return null
         val templateEnd = correctSolution.indexOf("TEMPLATE_END")
         val start = correctSolution.substring(0 until templateStart)
