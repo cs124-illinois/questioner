@@ -7012,7 +7012,7 @@
     "type": "METHOD",
     "klass": "Question",
     "metadata": {
-      "contentHash": "c89221c76a84f3162a726fdc8ee8ab4a",
+      "contentHash": "9ba5d15c09fcac4cca0428c5db63b8a0",
       "packageName": "com.examples.testing.withtemplateimports",
       "version": "2022.7.0",
       "author": "challen@illinois.edu",
@@ -7029,13 +7029,13 @@
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.TemplateImports;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\n\n/*\n * Example to test use of import statements in method templates.\n */\n\n@Correct(name = \"With Template Imports\", version = \"2022.7.0\", author = \"challen@illinois.edu\")\n@Wrap\n@TemplateImports(paths = \"java.util.List,java.util.ArrayList,java.util.Arrays\")\npublic class Question {\n  public static List<Integer> max(int first, int second) {\n    return Arrays.asList(first, second);\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.TemplateImports;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\n\n/*\n * Example to test use of import statements in method templates.\n */\n\n@Correct(name = \"With Template Imports\", version = \"2022.7.0\", author = \"challen@illinois.edu\")\n@Wrap\n@TemplateImports(paths = \"java.util.List,java.util.ArrayList,java.util.Arrays\")\npublic class Question {\n  List<Integer> max(int first, int second) {\n    return Arrays.asList(first, second);\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withtemplateimports/Question.java"
     },
     "correct": {
       "klass": "Question",
-      "contents": "public static List<Integer> max(int first, int second) {\n  return Arrays.asList(first, second);\n}",
+      "contents": "List<Integer> max(int first, int second) {\n  return Arrays.asList(first, second);\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withtemplateimports/Question.java",
       "complexity": 1,
@@ -7043,8 +7043,6 @@
         "featureMap": {
           "METHOD": 1,
           "RETURN": 1,
-          "VISIBILITY_MODIFIERS": 1,
-          "STATIC_METHOD": 1,
           "BOXING_CLASSES": 1,
           "TYPE_PARAMETERS": 1,
           "DOT_NOTATION": 1,
@@ -7059,45 +7057,31 @@
             }
           },
           {
-            "feature": "VISIBILITY_MODIFIERS",
+            "feature": "METHOD",
             "location": {
               "line": 2,
               "column": 0
             }
           },
           {
-            "feature": "STATIC_METHOD",
-            "location": {
-              "line": 2,
-              "column": 7
-            }
-          },
-          {
-            "feature": "METHOD",
-            "location": {
-              "line": 2,
-              "column": 14
-            }
-          },
-          {
             "feature": "TYPE_PARAMETERS",
             "location": {
               "line": 2,
-              "column": 18
+              "column": 4
             }
           },
           {
             "feature": "BOXING_CLASSES",
             "location": {
               "line": 2,
-              "column": 19
+              "column": 5
             }
           },
           {
             "feature": "BLOCK_START",
             "location": {
               "line": 2,
-              "column": 55
+              "column": 41
             }
           },
           {
@@ -7202,8 +7186,6 @@
           "featureMap": {
             "METHOD": 1,
             "RETURN": 1,
-            "VISIBILITY_MODIFIERS": 1,
-            "STATIC_METHOD": 1,
             "BOXING_CLASSES": 1,
             "TYPE_PARAMETERS": 1,
             "DOT_NOTATION": 1,
@@ -7218,45 +7200,31 @@
               }
             },
             {
-              "feature": "VISIBILITY_MODIFIERS",
+              "feature": "METHOD",
               "location": {
                 "line": 2,
                 "column": 0
               }
             },
             {
-              "feature": "STATIC_METHOD",
-              "location": {
-                "line": 2,
-                "column": 7
-              }
-            },
-            {
-              "feature": "METHOD",
-              "location": {
-                "line": 2,
-                "column": 14
-              }
-            },
-            {
               "feature": "TYPE_PARAMETERS",
               "location": {
                 "line": 2,
-                "column": 18
+                "column": 4
               }
             },
             {
               "feature": "BOXING_CLASSES",
               "location": {
                 "line": 2,
-                "column": 19
+                "column": 5
               }
             },
             {
               "feature": "BLOCK_START",
               "location": {
                 "line": 2,
-                "column": 55
+                "column": 41
               }
             },
             {

@@ -295,7 +295,8 @@ data class Question(
         val solutionCoverage: TestResults.CoverageComparison.LineCoverage,
         val executionCounts: LanguagesResourceUsage,
         val memoryAllocation: LanguagesResourceUsage,
-        val solutionRecursiveMethods: LanguagesRecursiveMethods
+        val solutionRecursiveMethods: LanguagesRecursiveMethods,
+        val solutionLoadedClasses: LanguagesSolutionLoadedClasses
     )
 
     @JsonClass(generateAdapter = true)
@@ -305,6 +306,12 @@ data class Question(
     data class LanguagesRecursiveMethods(
         val java: Set<ResourceMonitoringResults.MethodInfo>,
         val kotlin: Set<ResourceMonitoringResults.MethodInfo>? = null
+    )
+
+    @JsonClass(generateAdapter = true)
+    data class LanguagesSolutionLoadedClasses(
+        val java: Set<String>,
+        val kotlin: Set<String>? = null
     )
 
     @JsonClass(generateAdapter = true)

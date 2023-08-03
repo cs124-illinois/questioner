@@ -801,3 +801,27 @@ fun String.getType(): Question.Type {
         return Question.Type.METHOD
     }
 }
+
+fun String.methodIsMarkedPublicOrStatic(): Boolean {
+    """public class Main {
+            |$this
+    """.trimMargin().parseJava().also { parsed ->
+        return parsed.tree
+            .typeDeclaration(0)
+            .classDeclaration()
+            .classBody().classBodyDeclaration().any { declaration ->
+                declaration.memberDeclaration()?.methodDeclaration() != null && declaration.modifier().any {
+                    it.classOrInterfaceModifier()?.PUBLIC() != null
+                }
+            } || parsed.tree
+            .typeDeclaration(0)
+            .classDeclaration()
+            .classBody().classBodyDeclaration().any { declaration ->
+                declaration.memberDeclaration()?.methodDeclaration() != null && declaration.modifier().all {
+                    it.classOrInterfaceModifier()?.PRIVATE() == null
+                } && declaration.modifier().any {
+                    it.classOrInterfaceModifier()?.STATIC() != null
+                }
+            }
+    }
+}

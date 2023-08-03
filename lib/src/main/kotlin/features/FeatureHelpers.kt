@@ -10,3 +10,6 @@ fun Features.usesLoop() = featureMap[FeatureName.WHILE_LOOPS] > 0
     || featureMap[FeatureName.FOR_LOOPS] > 0
     || featureMap[FeatureName.DO_WHILE_LOOPS] > 0
     || dottedMethodList.contains("forEach")
+
+fun Features.hasFeature(feature: FeatureName) = featureMap[feature] > 0
+fun Features.doesNotHaveFeature(feature: FeatureName) = featureMap[feature] == 0

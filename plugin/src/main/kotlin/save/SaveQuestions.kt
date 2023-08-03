@@ -460,6 +460,12 @@ fun List<ParsedJavaFile>.findQuestions(
 
             val (cleanSolution, questionType) = solution.toCleanSolution(javaCleanSpec)
 
+            if (questionType == Question.Type.METHOD) {
+                check(!cleanSolution.contents.methodIsMarkedPublicOrStatic()) {
+                    "Do not use public modifiers on method-only problems, and use static only on private helpers"
+                }
+            }
+
             Question(
                 solution.correct.name,
                 questionType,

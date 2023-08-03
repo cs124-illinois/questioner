@@ -429,6 +429,33 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             CorrectResults(right, it)
         }
     }
+
+    fun String.filterLoadedClass() = !startsWith("java.lang.invoke.") &&
+        !startsWith("edu.illinois.cs.cs125.jeed") &&
+        !startsWith("edu.illinois.cs.cs125.questioner") &&
+        !startsWith("jdk.internal.") &&
+        !startsWith("kotlin.jvm.internal.") &&
+        this != "kotlin.Metadata" &&
+        this != question.klass &&
+        this != "${question.klass}Kt"
+
+    val solutionLoadedClassesJava = calibrationResults
+        .asSequence()
+        .filter { it.results.language == Question.Language.java }
+        .map { it.results.taskResults!!.sandboxedClassLoader!!.loadedClasses }.flatten()
+        .filter { it.filterLoadedClass() }.toSet()
+    val solutionLoadedClassesKotlin = if (calibrationResults.any { it.results.language == Question.Language.kotlin }) {
+        calibrationResults
+            .asSequence()
+            .filter { it.results.language == Question.Language.kotlin }
+            .map { it.results.taskResults!!.sandboxedClassLoader!!.loadedClasses }.flatten()
+            .filter { it.filterLoadedClass() }.toSet()
+    } else {
+        null
+    }
+    val solutionLoadedClasses =
+        Question.LanguagesSolutionLoadedClasses(solutionLoadedClassesJava, solutionLoadedClassesKotlin)
+
     val calibrationLength = Instant.now().toEpochMilli() - calibrationStart.toEpochMilli()
 
     val solutionMaxRuntime = calibrationResults.maxOf { it.results.taskResults!!.interval.length.toInt() }
@@ -477,7 +504,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         solutionCoverage = solutionCoverage,
         executionCounts = solutionExecutionCounts,
         memoryAllocation = solutionAllocation,
-        solutionRecursiveMethods = solutionRecursiveMethods
+        solutionRecursiveMethods = solutionRecursiveMethods,
+        solutionLoadedClasses = solutionLoadedClasses
     )
     published.validationResults = validationResults
 
