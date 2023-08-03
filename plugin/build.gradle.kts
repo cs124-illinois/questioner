@@ -72,3 +72,8 @@ gradlePlugin {
         }
     }
 }
+configurations.all {
+    resolutionStrategy.capabilitiesResolution.withCapability("com.google.collections:google-collections:32.1.2-jre") {
+        selectHighestVersion()
+    }
+}

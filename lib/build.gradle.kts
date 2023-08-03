@@ -16,7 +16,7 @@ dependencies {
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.7")
 
     api("com.beyondgrader.resource-agent:agent:2023.4.0")
-    api("com.github.cs124-illinois.jeed:core:2023.7.5")
+    api("com.github.cs124-illinois.jeed:core:2023.8.0")
     api("com.github.cs124-illinois:jenisol:2023.7.1")
     api("io.kotest:kotest-runner-junit5:5.6.2")
     api("com.google.truth:truth:1.1.5")
