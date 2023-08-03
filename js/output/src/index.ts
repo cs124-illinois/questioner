@@ -59,7 +59,7 @@ const pluralize = (input: string, count: number, plural?: string): string => {
 export const terminalOutput = (
   results: TestResults,
   contents: string,
-  options: OutputOptions = DEFAULT_OPTIONS
+  options: OutputOptions = DEFAULT_OPTIONS,
 ): string => {
   const outputOptions = { ...DEFAULT_OPTIONS, ...options }
 
@@ -73,7 +73,7 @@ export const terminalOutput = (
     if (results.timeout) {
       return `Testing your submission timed out.\n${indentString(
         `Check for unterminated loops.\nOr your algorithm may be too slow.`,
-        indentation
+        indentation,
       )}`
     } else if (failed.templateSubmission) {
       return `Templating failed. Please report a bug.`
@@ -127,7 +127,7 @@ export const terminalOutput = (
     } else if (failed.checkCompiledSubmission || failed.checkExecutedSubmission || failed.features) {
       return `Your submission had errors:\n${indentString(
         (failed.checkCompiledSubmission || failed.checkExecutedSubmission || failed.features) as string,
-        indentation
+        indentation,
       )}`
     } else if (failed.complexity) {
       return `Your submission was too complex to test:\n${indentString(failed.complexity, indentation)}`
@@ -173,7 +173,7 @@ export const terminalOutput = (
     const { solution, submission } = complete.complexity
     warnings["complexity"] = `Your submission is a bit too complicated:\n${indentString(
       `The solution has ${solution} code ${pluralize("path", solution)}.\nYour submission has ${submission}.`,
-      indentation
+      indentation,
     )}`
   }
   if (complete.features?.failed === true) {
@@ -186,13 +186,13 @@ export const terminalOutput = (
       `The solution has ${solution.source} source ${pluralize("line", solution.source)}.\nYour submission has ${
         submission.source
       }.`,
-      indentation
+      indentation,
     )}`
   }
   if (complete.coverage?.failed === true) {
     warnings["coverage"] = `Your submission contains unexecuted code:\n${indentString(
       `You have ${complete.coverage.increase} more lines of unexecuted code than the solution.\nWhich exceeds the limit of ${complete.coverage.limit}.`,
-      indentation
+      indentation,
     )}`
   }
   if (complete.executionCount?.failed === true) {
@@ -200,18 +200,18 @@ export const terminalOutput = (
     warnings["executioncount"] = `Your submission is too inefficient:\n${indentString(
       `The solution executed ${solution} ${pluralize(
         "line",
-        solution
+        solution,
       )} to complete the tests.\nYour submission took ${submission} (${Math.round((submission / solution) * 100)}%).`,
-      indentation
+      indentation,
     )}`
   }
   if (complete.memoryAllocation?.failed === true) {
     const { solution, submission } = complete.memoryAllocation
     warnings["executioncount"] = `Your submission uses too much memory:\n${indentString(
       `The solution allocated ${solution} bytes to complete the tests.\nYour submission needed ${submission} (${Math.round(
-        (submission / solution) * 100
+        (submission / solution) * 100,
       )}%).`,
-      indentation
+      indentation,
     )}`
   }
   if (results.succeeded !== true) {
@@ -249,7 +249,7 @@ export const terminalOutput = (
     if (failures.length > 1) {
       message += `\n\nTesting method sequence:\n${indentString(
         failures.map((test) => test.methodCall).join("\n"),
-        indentation
+        indentation,
       )}`
     }
 
@@ -277,12 +277,12 @@ export const terminalOutput = (
         if (treatAsErrors && treatAsErrors.includes(which)) {
           return `Your code the tests, but was considered incorrect because of this error:\n${indentString(
             warnings[which] as string,
-            indentation
+            indentation,
           )}`
         } else {
           return `Your code passed all the tests! ${wellDone}!\n\nBut we noticed something you could improve:\n${indentString(
             warnings[which] as string,
-            indentation
+            indentation,
           )}`
         }
       }

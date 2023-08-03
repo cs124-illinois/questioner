@@ -26,9 +26,18 @@ export const LanguagesResourceUsage = Record({
 }).And(
   Partial({
     kotlin: Number,
-  })
+  }),
 )
 export type LanguagesResourceUsage = Static<typeof LanguagesResourceUsage>
+
+export const LanguagesSolutionLoadedClasses = Record({
+  java: RuntypeArray(String),
+}).And(
+  Partial({
+    kotlin: RuntypeArray(String),
+  }),
+)
+export type LanguagesSolutionLoadedClasses = Static<typeof LanguagesSolutionLoadedClasses>
 
 export const MethodInfo = Record({
   className: String,
@@ -42,7 +51,7 @@ export const LanguagesRecursiveMethods = Record({
 }).And(
   Partial({
     kotlin: RuntypeArray(MethodInfo),
-  })
+  }),
 )
 export type LanguagesRecursiveMethods = Static<typeof LanguagesRecursiveMethods>
 
@@ -66,6 +75,7 @@ export const ValidationResults = Record({
   executionCounts: LanguagesResourceUsage,
   memoryAllocation: LanguagesResourceUsage,
   solutionRecursiveMethods: LanguagesRecursiveMethods,
+  solutionLoadedClasses: LanguagesSolutionLoadedClasses,
 })
 export type ValidationResults = Static<typeof ValidationResults>
 
@@ -85,7 +95,7 @@ export const QuestionDescription = QuestionPath.And(
     description: String,
     packageName: String,
     starter: String,
-  })
+  }),
 )
 export type QuestionDescription = Static<typeof QuestionDescription>
 
@@ -107,13 +117,13 @@ export const Question = QuestionPath.And(
     features: Dictionary(FeatureValue, Languages),
     lineCounts: Dictionary(LineCounts, Languages),
     templateImports: RuntypeArray(String),
-  })
+  }),
 ).And(
   Partial({
     citation: Record({ source: String }).And(Partial({ link: String })),
     starters: Dictionary(String, Languages),
     validationResults: ValidationResults,
-  })
+  }),
 )
 export type Question = Static<typeof Question>
 
@@ -124,7 +134,7 @@ export const Submission = Record({
 }).And(
   Partial({
     disableLineCountLimit: Boolean,
-  })
+  }),
 )
 export type Submission = Static<typeof Submission>
 
@@ -137,7 +147,7 @@ export const TestResult = Record({
     Literal("METHOD"),
     Literal("STATIC_METHOD"),
     Literal("FACTORY_METHOD"),
-    Literal("COPY_CONSTRUCTOR")
+    Literal("COPY_CONSTRUCTOR"),
   ),
   runnerID: Number,
   stepCount: Number,
@@ -161,10 +171,10 @@ export const TestResult = Record({
         Literal("THREW"),
         Literal("PARAMETERS"),
         Literal("VERIFIER_THREW"),
-        Literal("INSTANCE_VALIDATION_THREW")
-      )
+        Literal("INSTANCE_VALIDATION_THREW"),
+      ),
     ),
-  })
+  }),
 )
 export type TestResult = Static<typeof TestResult>
 
@@ -258,7 +268,7 @@ export const PartialCredit = Record({
   Partial({
     passedTestCount: PassedTestCount,
     passedMutantCount: PassedMutantCount,
-  })
+  }),
 )
 export type PartialCredit = Static<typeof PartialCredit>
 
@@ -316,7 +326,7 @@ export const Step = Union(
   Literal("executioncount"),
   Literal("memoryAllocation"),
   Literal("testing"),
-  Literal("coverage")
+  Literal("coverage"),
 )
 export type Step = Static<typeof Step>
 
@@ -353,6 +363,6 @@ export const TestResults = Record({
   Partial({
     failedLinting: Boolean,
     failureCount: Number,
-  })
+  }),
 )
 export type TestResults = Static<typeof TestResults>
