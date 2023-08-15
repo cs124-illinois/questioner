@@ -23,7 +23,7 @@ dependencies {
     implementation("org.mongodb:mongodb-driver:3.12.14")
 
     implementation("org.slf4j:slf4j-api:2.0.7")
-    implementation("ch.qos.logback:logback-classic:1.4.9")
+    implementation("ch.qos.logback:logback-classic:1.4.11")
     implementation("io.github.microutils:kotlin-logging:3.0.5")
 }
 task("createProperties") {

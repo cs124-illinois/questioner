@@ -2,13 +2,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.9.0" apply false
-    id("org.jmailen.kotlinter") version "3.15.0" apply false
+    id("org.jmailen.kotlinter") version "3.16.0" apply false
     id("com.github.ben-manes.versions") version "0.47.0"
     id("com.google.devtools.ksp").version("1.9.0-1.0.13") apply false
 }
 subprojects {
     group = "com.github.cs124-illinois.questioner"
-    version = "2023.8.2"
+    version = "2023.8.3"
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_17.toString()
