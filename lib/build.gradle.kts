@@ -16,11 +16,11 @@ dependencies {
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 
     api("com.beyondgrader.resource-agent:agent:2023.4.0")
-    api("com.github.cs124-illinois.jeed:core:2023.8.2")
-    api("com.github.cs124-illinois:jenisol:2023.8.1")
+    api("com.github.cs124-illinois.jeed:core:2023.8.3")
+    api("com.github.cs124-illinois:jenisol:2023.8.2")
     api("io.kotest:kotest-runner-junit5:5.6.2")
     api("com.google.truth:truth:1.1.5")
-    api("com.github.cs124-illinois:libcs1:2023.7.0")
+    api("com.github.cs124-illinois:libcs1:2023.8.0")
 }
 tasks {
     val sourcesJar by creating(Jar::class) {
