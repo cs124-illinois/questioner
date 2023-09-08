@@ -163,7 +163,6 @@ suspend fun Question.test(
         testCount = settings.testCount,
         minTestCount = settings.minTestCount,
         maxTestCount = settings.maxTestCount,
-        removeOutputOnSuccess = true
     )
     val systemInStream = BumpingInputStream()
 
