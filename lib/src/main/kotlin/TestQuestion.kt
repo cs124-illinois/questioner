@@ -46,7 +46,6 @@ suspend fun Question.test(
     results.completedSteps.add(TestResults.Step.partial)
 
     // checkInitialSubmission
-
     if (!(checkInitialSubmission(contents, language, results))) {
         return results
     }
