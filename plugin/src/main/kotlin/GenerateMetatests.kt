@@ -26,7 +26,7 @@ abstract class GenerateMetatests : DefaultTask() {
     @InputFiles
     val inputFiles = project.extensions.getByType(JavaPluginExtension::class.java)
         .sourceSets.getByName("main").allSource.filter { it.name == ".validation.json" }
-        .toMutableList() + File(project.buildDir, "questioner/questions.json")
+        .toMutableList() + project.layout.buildDirectory.dir("questioner/questions.json").get().asFile
 
     @OutputFiles
     val outputs = listOf("TestAllQuestions", "TestUnvalidatedQuestions", "TestFocusedQuestions").map {
@@ -35,7 +35,7 @@ abstract class GenerateMetatests : DefaultTask() {
 
     @TaskAction
     fun generate() {
-        val input = File(project.buildDir, "questioner/questions.json")
+        val input = project.layout.buildDirectory.dir("questioner/questions.json").get().asFile
 
         val sourceRoot = project.javaSourceDir()
         val tests = loadFromPath(input, sourceRoot.path).values.organizeTests()
