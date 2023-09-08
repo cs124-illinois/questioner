@@ -28,7 +28,7 @@ class CachePoisonedException(message: String) : RuntimeException(message)
 
 private const val MAX_INDIVIDUAL_ALLOCATION_BYTES: Long = 1024 * 1024
 private const val MIN_ALLOCATION_FAILURE_BYTES: Long = 2 * 1024 // Account for nondeterminism due to JIT
-private const val MIN_ALLOCATION_LIMIT_BYTES: Long = 16 * 1024 * 1024 // Leave room for string concat in println debugging
+private const val MIN_ALLOCATION_LIMIT_BYTES: Long = 32 * 1024 * 1024 // Leave room for string concat in println debugging
 
 @Suppress("ReturnCount", "LongMethod", "ComplexMethod", "LongParameterList")
 suspend fun Question.test(
@@ -236,7 +236,7 @@ suspend fun Question.test(
                 "Class design error:\n  Attempted to use unavailable class ${threw.message}"
 
             is OutOfMemoryError -> results.failed.checkExecutedSubmission =
-                "Allocated too much memory: ${threw.message}, already used ${resourceUsage.allocatedMemory} bytes"
+                "Allocated too much memory: ${threw.message}, already used ${resourceUsage.allocatedMemory} bytes.\nIf you are printing for debug purposes, consider less verbose output."
 
             is LineLimitExceeded -> {
                 val solutionLineUsage = if (language == Question.Language.java) {
@@ -253,8 +253,6 @@ suspend fun Question.test(
                 }"
             }
 
-            // TODO: Adjust Jenisol to let OutOfMemoryError escape the testing loop or remove this case
-            // (currently it will never be reached)
             else -> {
                 val actualException = when (threw) {
                     is InvocationTargetException -> threw.targetException ?: threw
