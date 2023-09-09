@@ -516,7 +516,7 @@ fun bindJeedCaptureOutputControlInput(
             override fun stderr(int: Int) {}
         }
         var resourceUsage: ResourceMonitoringCheckpoint? = null
-        val jeedOutput = Sandbox.redirectOutput(outputListener, perTestOutputLimit) {
+        val jeedOutput = Sandbox.redirectOutput(outputListener, perTestOutputLimit, squashNormalOutput = true) {
             ResourceMonitoring.beginSubmissionCall()
             try {
                 run()
