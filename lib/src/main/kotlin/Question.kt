@@ -56,6 +56,7 @@ data class Question(
     val checkstyleSuppressions: Set<String>,
     val slug: String,
     val kotlinSolution: FlatFile?,
+    val questionerVersion: String? = null,
     val detemplatedJavaStarter: String? = incorrect.find { it.language == Language.java && it.starter }?.contents,
     val detemplatedKotlinStarter: String? = incorrect.find { it.language == Language.kotlin && it.starter }?.contents,
     val hasKotlin: Boolean =
@@ -108,7 +109,7 @@ data class Question(
             }
         },
         metadata.templateImports
-    )
+    ),
 ) {
     @Transient
     val correctByLanguage = mutableMapOf(Language.java to correct.contents).apply {
@@ -165,7 +166,8 @@ data class Question(
         val usedFiles: List<String> = listOf(),
         val templateImports: Set<String> = setOf(),
         val focused: Boolean? = null,
-        val publish: Boolean? = null
+        val publish: Boolean? = null,
+        val questionerVersion: String?
     ) {
         companion object {
             const val DEFAULT_FOCUSED = false

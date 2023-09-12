@@ -16,7 +16,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -1204,7 +1205,8 @@
       "usedFiles": [],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -1454,7 +1456,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -3689,7 +3692,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -4880,7 +4884,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {
       "maxDeadCode": 2
@@ -5349,7 +5354,8 @@
       "usedFiles": [],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -5795,7 +5801,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -7024,7 +7031,8 @@
         "java.util.Arrays"
       ],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -7317,7 +7325,8 @@
       "usedFiles": [],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -7793,7 +7802,8 @@
       "usedFiles": [],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -8764,7 +8774,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -9793,7 +9804,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -10521,7 +10533,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -11013,7 +11026,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -11579,7 +11593,8 @@
       "usedFiles": [],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -11918,7 +11933,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -12893,7 +12909,8 @@
         "java.util.HashMap"
       ],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -15165,7 +15182,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -15940,7 +15958,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -16931,7 +16950,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -17444,7 +17464,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -18426,7 +18447,8 @@
       "usedFiles": [],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -18570,7 +18592,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -20171,7 +20194,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {
@@ -20868,7 +20892,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {
       "maxLineCountMultiplier": 16
@@ -21508,7 +21533,8 @@
       ],
       "templateImports": [],
       "focused": false,
-      "publish": true
+      "publish": true,
+      "questionerVersion": "2023.9.4"
     },
     "annotatedControls": {},
     "question": {

@@ -10,7 +10,6 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 import org.gradle.internal.impldep.com.google.api.client.http.HttpStatusCodes
-import java.io.File
 import java.net.URI
 
 open class PublishQuestions : DefaultTask() {
@@ -31,7 +30,7 @@ open class PublishQuestions : DefaultTask() {
         require(uri.scheme == "http" || uri.scheme == "https") { "Invalid destination scheme: ${uri.scheme}" }
         val questions =
             loadFromPath(
-                File(project.buildDir, "questioner/questions.json"),
+                project.layout.buildDirectory.dir("questioner/questions.json").get().asFile,
                 project.javaSourceDir().path,
             ).values.filter {
                 it.metadata.publish != false

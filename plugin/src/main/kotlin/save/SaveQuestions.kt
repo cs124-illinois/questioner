@@ -47,10 +47,15 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.security.DigestInputStream
 import java.security.MessageDigest
+import java.util.Properties
 import java.util.regex.Pattern
 import java.util.stream.Collectors
 
 private val slugify = Slugify.builder().build()
+
+val VERSION: String = Properties().also {
+    it.load((object {}).javaClass.getResourceAsStream("/edu.illinois.cs.cs124.questioner.lib.version"))
+}.getProperty("version")
 
 @Suppress("unused")
 abstract class SaveQuestions : DefaultTask() {
@@ -64,7 +69,7 @@ abstract class SaveQuestions : DefaultTask() {
         .sourceSets.getByName("main").allSource.filter { it.name.endsWith(".java") || it.name.endsWith(".kt") }
 
     @OutputFile
-    val outputFile = File(project.buildDir, "questioner/questions.json")
+    val outputFile: File = project.layout.buildDirectory.dir("questioner/questions.json").get().asFile
 
     @TaskAction
     fun save() {
@@ -90,6 +95,8 @@ fun List<ParsedJavaFile>.findQuestions(
     allPaths: List<String>,
     existingQuestions: Map<String, Question> = mapOf(),
 ): List<Question> {
+    println(VERSION)
+
     map { it.fullName }.groupingBy { it }.eachCount().filter { it.value > 1 }.also { duplicates ->
         if (duplicates.isNotEmpty()) {
             error("Files with duplicate qualified names found: ${duplicates.keys}")
@@ -482,6 +489,7 @@ fun List<ParsedJavaFile>.findQuestions(
                     solution.templateImports.toSet(),
                     solution.correct.focused,
                     solution.correct.publish,
+                    VERSION,
                 ),
                 solution.correct.control,
                 Question.FlatFile(
