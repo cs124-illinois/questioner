@@ -95,7 +95,6 @@ fun List<ParsedJavaFile>.findQuestions(
     allPaths: List<String>,
     existingQuestions: Map<String, Question> = mapOf(),
 ): List<Question> {
-    println(VERSION)
 
     map { it.fullName }.groupingBy { it }.eachCount().filter { it.value > 1 }.also { duplicates ->
         if (duplicates.isNotEmpty()) {
