@@ -5,7 +5,7 @@
     "outDir": "dist",
     "target": "es6",
     "module": "commonjs",
-    "lib": ["es6"],
+    "lib": ["es2016"],
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,

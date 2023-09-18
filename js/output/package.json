@@ -1,6 +1,6 @@
 {
   "name": "@cs124/questioner-output",
-  "version": "2023.8.0",
+  "version": "2023.9.1",
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
@@ -10,31 +10,31 @@
     "depcheck": "depcheck --ignores=prettier-plugin-*,rimraf",
     "eslint": "eslint src/**",
     "ncu": "ncu",
-    "prettier": "prettier -w --plugin=prettier-plugin-organize-imports . && prettier-package-json --write",
+    "prettier": "prettier -w --cache --plugin=prettier-plugin-organize-imports . && prettier-package-json --write",
     "prepublish": "rimraf dist && tsc",
     "start": "yarn watch",
     "watch": "tsc -w"
   },
   "types": "dist/index.d.ts",
   "dependencies": {
-    "@cs124/jeed-types": "2023.6.0",
-    "@cs124/questioner-types": "2023.8.0",
+    "@cs124/jeed-types": "2023.8.0",
+    "@cs124/questioner-types": "2023.9.1",
     "capitalize": "2.0.4",
     "indent-string": "4.0.0"
   },
   "devDependencies": {
     "@types/capitalize": "2.0.0",
-    "@typescript-eslint/eslint-plugin": "6.2.1",
-    "@typescript-eslint/parser": "6.2.1",
-    "depcheck": "1.4.3",
-    "eslint": "8.46.0",
-    "eslint-config-prettier": "8.9.0",
-    "npm-check-updates": "16.10.17",
-    "prettier": "3.0.0",
-    "prettier-package-json": "2.8.0",
+    "@typescript-eslint/eslint-plugin": "6.7.0",
+    "@typescript-eslint/parser": "6.7.0",
+    "depcheck": "1.4.6",
+    "eslint": "8.49.0",
+    "eslint-config-prettier": "9.0.0",
+    "npm-check-updates": "16.14.4",
+    "prettier": "3.0.3",
+    "prettier-package-json": "gchallen/prettier-package-json#2023.8.0",
     "prettier-plugin-organize-imports": "3.2.3",
     "rimraf": "5.0.1",
     "runtypes": "6.7.0",
-    "typescript": "5.1.6"
+    "typescript": "5.2.2"
   }
 }

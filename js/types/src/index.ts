@@ -106,6 +106,9 @@ export const LineCounts = Record({
 })
 export type LineCounts = Static<typeof LineCounts>
 
+export const Citation = Record({ source: String }).And(Partial({ link: String }))
+export type Citation = Static<typeof Citation>
+
 export const Question = QuestionPath.And(
   Record({
     name: String,
@@ -117,15 +120,35 @@ export const Question = QuestionPath.And(
     features: Dictionary(FeatureValue, Languages),
     lineCounts: Dictionary(LineCounts, Languages),
     templateImports: RuntypeArray(String),
+    questionerVersion: String,
   }),
 ).And(
   Partial({
-    citation: Record({ source: String }).And(Partial({ link: String })),
+    citation: Citation,
     starters: Dictionary(String, Languages),
     validationResults: ValidationResults,
   }),
 )
 export type Question = Static<typeof Question>
+
+export const QuestionMetadata = Record({
+  contentHash: String,
+  packageName: String,
+  version: String,
+  author: String,
+  javaDescription: String,
+}).And(
+  Partial({
+    kotlinDescription: String,
+    citation: Citation,
+    usedFiles: RuntypeArray(String),
+    templateImports: RuntypeArray(String),
+    focused: Boolean,
+    publish: Boolean,
+    questionerVersion: String,
+  }),
+)
+export type QuestionMetadata = Static<typeof Question>
 
 export const Submission = Record({
   path: String,

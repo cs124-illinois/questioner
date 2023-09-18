@@ -108,7 +108,8 @@ data class Question(
                 put(Language.kotlin, kotlinSolution!!.lineCount!!)
             }
         },
-        metadata.templateImports
+        metadata.templateImports,
+        metadata.questionerVersion,
     ),
 ) {
     @Transient
@@ -151,6 +152,7 @@ data class Question(
         val features: Map<Language, Features>,
         val lineCounts: Map<Language, LineCounts>,
         val templateImports: Set<String>,
+        val questionerVersion: String?,
         var validationResults: ValidationResults? = null
     )
 
@@ -172,6 +174,7 @@ data class Question(
         init {
             check(templateImports.size == templateImports.toSet().size)
         }
+
         companion object {
             const val DEFAULT_FOCUSED = false
             const val DEFAULT_PUBLISH = true
