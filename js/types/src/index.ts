@@ -120,13 +120,13 @@ export const Question = QuestionPath.And(
     features: Dictionary(FeatureValue, Languages),
     lineCounts: Dictionary(LineCounts, Languages),
     templateImports: RuntypeArray(String),
-    questionerVersion: String,
   }),
 ).And(
   Partial({
     citation: Citation,
     starters: Dictionary(String, Languages),
     validationResults: ValidationResults,
+    questionerVersion: String,
   }),
 )
 export type Question = Static<typeof Question>
