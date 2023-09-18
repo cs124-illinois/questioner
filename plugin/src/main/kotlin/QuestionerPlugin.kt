@@ -71,7 +71,7 @@ class QuestionerPlugin : Plugin<Project> {
             }
         }
         project.extensions.getByType(JavaPluginExtension::class.java)
-            .sourceSets.getByName("main").resources { it.srcDirs(File(project.buildDir, "questioner")) }
+            .sourceSets.getByName("main").resources { it.srcDirs(project.layout.buildDirectory.dir("questioner")) }
         project.tasks.register("cleanQuestions", CleanQuestions::class.java)
         project.tasks.register("printSlowQuestions", PrintSlowQuestions::class.java)
         val reconfigureTesting = project.tasks.register("reconfigureTesting", ReconfigureTesting::class.java).get()

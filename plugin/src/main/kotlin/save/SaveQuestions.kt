@@ -95,7 +95,6 @@ fun List<ParsedJavaFile>.findQuestions(
     allPaths: List<String>,
     existingQuestions: Map<String, Question> = mapOf(),
 ): List<Question> {
-
     map { it.fullName }.groupingBy { it }.eachCount().filter { it.value > 1 }.also { duplicates ->
         if (duplicates.isNotEmpty()) {
             error("Files with duplicate qualified names found: ${duplicates.keys}")
@@ -485,7 +484,7 @@ fun List<ParsedJavaFile>.findQuestions(
                     kotlinSolution?.description,
                     solution.citation,
                     myUsedFiles,
-                    solution.templateImports.toSet(),
+                    javaImports,
                     solution.correct.focused,
                     solution.correct.publish,
                     VERSION,

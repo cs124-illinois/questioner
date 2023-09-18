@@ -169,6 +169,9 @@ data class Question(
         val publish: Boolean? = null,
         val questionerVersion: String?
     ) {
+        init {
+            check(templateImports.size == templateImports.toSet().size)
+        }
         companion object {
             const val DEFAULT_FOCUSED = false
             const val DEFAULT_PUBLISH = true

@@ -5799,7 +5799,10 @@
       "usedFiles": [
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withfeaturedeadcode/correct/kotlin/Question.kt"
       ],
-      "templateImports": [],
+      "templateImports": [
+        "java.util.ArrayList",
+        "java.util.List"
+      ],
       "focused": false,
       "publish": true,
       "questionerVersion": "2023.9.4"
@@ -7010,7 +7013,10 @@
           "blank": 0
         }
       },
-      "templateImports": []
+      "templateImports": [
+        "java.util.ArrayList",
+        "java.util.List"
+      ]
     },
     "fauxStatic": false
   },
@@ -7026,9 +7032,9 @@
       "javaDescription": "<p>Example to test use of import statements in method templates.</p>",
       "usedFiles": [],
       "templateImports": [
+        "java.util.Arrays",
         "java.util.List",
-        "java.util.ArrayList",
-        "java.util.Arrays"
+        "java.util.ArrayList"
       ],
       "focused": false,
       "publish": true,
@@ -7305,9 +7311,9 @@
         }
       },
       "templateImports": [
+        "java.util.Arrays",
         "java.util.List",
-        "java.util.ArrayList",
-        "java.util.Arrays"
+        "java.util.ArrayList"
       ]
     },
     "fauxStatic": false
@@ -12905,6 +12911,8 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/stringduplicates/correct/kotlin/Question.kt"
       ],
       "templateImports": [
+        "java.util.HashSet",
+        "java.util.Set",
         "java.util.Map",
         "java.util.HashMap"
       ],
@@ -15161,6 +15169,8 @@
         }
       },
       "templateImports": [
+        "java.util.HashSet",
+        "java.util.Set",
         "java.util.Map",
         "java.util.HashMap"
       ]
