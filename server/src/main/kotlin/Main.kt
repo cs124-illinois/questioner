@@ -379,7 +379,11 @@ fun Application.questioner() {
                         Instant.now().toEpochMilli() - submitted.toEpochMilli()
                     })"
                 }
-                addStumperSolution(submitted, submission, testResults, question)
+                try {
+                    addStumperSolution(submitted, submission, testResults, question)
+                } catch (e: Exception) {
+                    logger.warn { e }
+                }
             } catch (e: StackOverflowError) {
                 e.printStackTrace()
                 call.respond(HttpStatusCode.BadRequest)
