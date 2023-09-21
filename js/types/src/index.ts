@@ -157,6 +157,8 @@ export const Submission = Record({
 }).And(
   Partial({
     disableLineCountLimit: Boolean,
+    email: String,
+    originalID: String,
   }),
 )
 export type Submission = Static<typeof Submission>
