@@ -26,23 +26,6 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.4.11")
     implementation("io.github.microutils:kotlin-logging:3.0.5")
 }
-task("createProperties") {
-    doLast {
-        val properties = Properties().also {
-            it["version"] = project.version.toString()
-        }
-        File(projectDir, "src/main/resources/edu.illinois.cs.cs125.questioner.server.version")
-            .printWriter().use { printWriter ->
-                printWriter.print(
-                    StringWriter().also { properties.store(it, null) }.buffer.toString()
-                        .lines().drop(1).joinToString(separator = "\n").trim()
-                )
-            }
-    }
-}
-tasks.processResources {
-    dependsOn("createProperties")
-}
 tasks.shadowJar {
     manifest {
         attributes["Launcher-Agent-Class"] = "com.beyondgrader.resourceagent.AgentKt"

@@ -18,6 +18,14 @@ import edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring
 import edu.illinois.cs.cs125.questioner.lib.TestResults
 import edu.illinois.cs.cs125.questioner.lib.TestTestResults
 import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
+import edu.illinois.cs.cs125.questioner.lib.stumpers.Candidate
+import edu.illinois.cs.cs125.questioner.lib.stumpers.Solution
+import edu.illinois.cs.cs125.questioner.lib.stumpers.clean
+import edu.illinois.cs.cs125.questioner.lib.stumpers.cleanedHashExists
+import edu.illinois.cs.cs125.questioner.lib.stumpers.createSolutionIndices
+import edu.illinois.cs.cs125.questioner.lib.stumpers.md5
+import edu.illinois.cs.cs125.questioner.lib.stumpers.originalHashExists
+import edu.illinois.cs.cs125.questioner.lib.stumpers.originalIDExists
 import edu.illinois.cs.cs125.questioner.lib.test
 import edu.illinois.cs.cs125.questioner.lib.testTests
 import io.ktor.http.HttpStatusCode
@@ -65,20 +73,20 @@ private val moshi = Moshi.Builder().apply {
 }.build()
 private val logger = KotlinLogging.logger {}
 
-private val collection: MongoCollection<BsonDocument> = run {
-    val trustAllCerts = object : X509TrustManager {
-        override fun getAcceptedIssuers(): Array<X509Certificate>? {
-            return null
-        }
-
-        override fun checkClientTrusted(certs: Array<X509Certificate?>?, authType: String?) {}
-        override fun checkServerTrusted(certs: Array<X509Certificate?>?, authType: String?) {}
+private val trustAllCerts = object : X509TrustManager {
+    override fun getAcceptedIssuers(): Array<X509Certificate>? {
+        return null
     }
 
-    val sc = SSLContext.getInstance("SSL").apply {
-        init(null, arrayOf(trustAllCerts), SecureRandom())
-    }
+    override fun checkClientTrusted(certs: Array<X509Certificate?>?, authType: String?) {}
+    override fun checkServerTrusted(certs: Array<X509Certificate?>?, authType: String?) {}
+}
 
+private val sc = SSLContext.getInstance("SSL").apply {
+    init(null, arrayOf(trustAllCerts), SecureRandom())
+}
+
+private val questionerCollection: MongoCollection<BsonDocument> = run {
     require(System.getenv("MONGODB") != null) { "MONGODB environment variable not set" }
     val keystore = System.getenv("KEYSTORE_FILE")
     if (keystore != null) {
@@ -92,17 +100,31 @@ private val collection: MongoCollection<BsonDocument> = run {
     MongoClient(mongoUri).getDatabase(database).getCollection(collection, BsonDocument::class.java)
 }
 
+private val stumperSolutionCollection: MongoCollection<BsonDocument> = run {
+    require(System.getenv("STUMPERDB") != null) { "STUMPERDB environment variable not set" }
+    val keystore = System.getenv("KEYSTORE_FILE")
+    if (keystore != null) {
+        require(System.getenv("KEYSTORE_PASSWORD") != null) { "Must set KEYSTORE_PASSWORD" }
+        System.setProperty("javax.net.ssl.trustStore", keystore)
+        System.setProperty("javax.net.ssl.trustStorePassword", System.getenv("KEYSTORE_PASSWORD"))
+    }
+    val mongoUri = MongoClientURI(System.getenv("STUMPERDB")!!, MongoClientOptions.builder().sslContext(sc))
+    val database = mongoUri.database ?: error("STUMPERDB must specify database to use")
+    MongoClient(mongoUri).getDatabase(database).getCollection("solutions", BsonDocument::class.java)
+}
+
 data class QuestionPath(val path: String, val version: String, val author: String) {
     companion object {
         fun fromSubmission(submission: Submission) =
             QuestionPath(submission.path, submission.version!!, submission.author!!)
+
         fun fromTestSubmission(submission: TestSubmission) =
             QuestionPath(submission.path, submission.version!!, submission.author!!)
     }
 }
 
 object Questions {
-    private fun getQuestion(path: String) = collection.find(
+    private fun getQuestion(path: String) = questionerCollection.find(
         Filters.and(Filters.eq("published.path", path), Filters.eq("latest", true)),
     ).sort(Sorts.descending("updated")).let {
         @Suppress("ReplaceSizeZeroCheckWithIsEmpty")
@@ -118,7 +140,7 @@ object Questions {
         }
     }
 
-    private fun getQuestionByAuthor(path: String, author: String) = collection.find(
+    private fun getQuestionByAuthor(path: String, author: String) = questionerCollection.find(
         Filters.and(
             Filters.eq("published.path", path),
             Filters.eq("published.author", author),
@@ -137,7 +159,8 @@ object Questions {
             null
         }
     }
-    private fun getQuestionByPath(path: QuestionPath) = collection.find(
+
+    private fun getQuestionByPath(path: QuestionPath) = questionerCollection.find(
         Filters.and(
             Filters.eq("published.path", path.path),
             Filters.eq("published.version", path.version),
@@ -158,10 +181,6 @@ object Questions {
         }
     }
 
-    fun load(path: String): Question? {
-        return getQuestion(path)
-    }
-
     fun load(submission: Submission): Question? {
         return if (submission.version != null && submission.author != null) {
             getQuestionByPath(QuestionPath.fromSubmission(submission))
@@ -172,9 +191,7 @@ object Questions {
         }
     }
 
-    suspend fun test(submission: Submission): TestResults {
-        val question = load(submission) ?: error("No question ${submission.path}")
-        check(question.validated) { "Question ${submission.path} is not validated" }
+    suspend fun test(submission: Submission, question: Question): TestResults {
         val start = Instant.now().toEpochMilli()
         val timeout = question.testingSettings!!.timeout * (System.getenv("TIMEOUT_MULTIPLIER")?.toInt() ?: 1)
         val settings = question.testingSettings!!.copy(
@@ -203,9 +220,7 @@ object Questions {
     }
 
     @Suppress("SpellCheckingInspection")
-    suspend fun testtest(submission: TestSubmission): TestTestResults {
-        val question = loadTest(submission) ?: error("No question ${submission.path}")
-        check(question.validated) { "Question ${submission.path} is not validated" }
+    suspend fun testtest(submission: TestSubmission, question: Question): TestTestResults {
         val start = Instant.now().toEpochMilli()
         logger.trace { "Test tests for ${question.name}" }
         return question.testTests(
@@ -226,6 +241,8 @@ data class Submission(
     val disableAllocationLimit: Boolean = false,
     val version: String?,
     val author: String?,
+    val email: String?,
+    val originalID: String?,
 )
 
 @JsonClass(generateAdapter = true)
@@ -250,21 +267,14 @@ data class QuestionDescription(
 
 private val serverStarted = Instant.now()
 
-val versionString = run {
-    @Suppress("TooGenericExceptionCaught")
-    try {
-        val versionFile = object {}::class.java.getResource("/edu.illinois.cs.cs125.questioner.server.version")
-        Properties().also { it.load(versionFile!!.openStream()) }["version"] as String
-    } catch (e: Exception) {
-        println(e)
-        "unspecified"
-    }
-}
+val VERSION: String = Properties().also {
+    it.load((object {}).javaClass.getResourceAsStream("/edu.illinois.cs.cs124.questioner.lib.version"))
+}.getProperty("version")
 
 @JsonClass(generateAdapter = true)
 data class Status(
     val started: Instant = serverStarted,
-    val version: String = versionString,
+    val version: String = VERSION,
 )
 
 @JsonClass(generateAdapter = true)
@@ -277,6 +287,49 @@ val runtime: Runtime = Runtime.getRuntime()
 val counter = AtomicInteger()
 
 val CALL_START_TIME = AttributeKey<Long>("CallStartTime")
+
+suspend fun addStumperSolution(
+    submitted: Instant,
+    submission: Submission,
+    testResults: TestResults,
+    question: Question,
+) {
+    if (!(testResults.complete.partial?.passedSteps?.quality == true && submission.email != null && submission.originalID != null)) {
+        return
+    }
+    if (stumperSolutionCollection.originalIDExists(submission.originalID)) {
+        return
+    }
+    val originalHash = submission.contents.md5()
+    if (stumperSolutionCollection.originalHashExists(originalHash)) {
+        return
+    }
+    val solution = try {
+        Candidate(
+            submitted,
+            submission.contents,
+            submission.email,
+            submission.originalID,
+            question,
+            submission.language,
+        ).clean().copy(
+            valid = true,
+            validation = Solution.Validation(
+                submitted,
+                question.published.version,
+                question.metadata.contentHash,
+                VERSION,
+            ),
+        )
+    } catch (e: Exception) {
+        logger.warn { e }
+        return
+    }
+    if (stumperSolutionCollection.cleanedHashExists(solution.hashes.cleaned)) {
+        return
+    }
+    solution.save(stumperSolutionCollection)
+}
 
 @Suppress("LongMethod")
 fun Application.questioner() {
@@ -306,20 +359,27 @@ fun Application.questioner() {
             call.respond(Status())
         }
         post("/") {
-            val start = Instant.now().toEpochMilli()
-            val submission = call.receive<Submission>()
-            Questions.load(submission) ?: return@post call.respond(HttpStatusCode.NotFound)
+            val submitted = Instant.now()
             val runCount = counter.incrementAndGet()
+
+            val submission = call.receive<Submission>()
+
+            val question = Questions.load(submission) ?: return@post call.respond(HttpStatusCode.NotFound)
+            if (!question.validated) {
+                return@post call.respond(HttpStatusCode.BadRequest)
+            }
             @Suppress("TooGenericExceptionCaught")
             try {
                 val startMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
-                call.respond(ServerResponse(Questions.test(submission)))
+                val testResults = Questions.test(submission, question)
+                call.respond(ServerResponse(testResults))
                 val endMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
                 logger.debug {
                     "$runCount: ${submission.path}: $startMemory -> $endMemory (${
-                        Instant.now().toEpochMilli() - start
+                        Instant.now().toEpochMilli() - submitted.toEpochMilli()
                     })"
                 }
+                addStumperSolution(submitted, submission, testResults, question)
             } catch (e: StackOverflowError) {
                 e.printStackTrace()
                 call.respond(HttpStatusCode.BadRequest)
@@ -347,13 +407,18 @@ fun Application.questioner() {
         }
         post("/tests") {
             val start = Instant.now().toEpochMilli()
-            val submission = call.receive<TestSubmission>()
-            Questions.loadTest(submission) ?: return@post call.respond(HttpStatusCode.NotFound)
             val runCount = counter.incrementAndGet()
+
+            val submission = call.receive<TestSubmission>()
+            val question = Questions.loadTest(submission) ?: return@post call.respond(HttpStatusCode.NotFound)
+            if (!question.validated) {
+                return@post call.respond(HttpStatusCode.BadRequest)
+            }
+
             @Suppress("TooGenericExceptionCaught")
             try {
                 val startMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
-                call.respond(ServerTestResponse(Questions.testtest(submission)))
+                call.respond(ServerTestResponse(Questions.testtest(submission, question)))
                 val endMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
                 logger.debug {
                     "$runCount: test/${submission.path}: $startMemory -> $endMemory (${
@@ -385,6 +450,7 @@ fun Application.questioner() {
                 }
             }
         }
+        /*
         get("/question/java/{path}") {
             val path = call.parameters["path"] ?: return@get call.respond(HttpStatusCode.BadRequest)
             val question = Questions.load(path) ?: return@get call.respond(HttpStatusCode.NotFound)
@@ -418,6 +484,7 @@ fun Application.questioner() {
                 ),
             )
         }
+         */
     }
 }
 
@@ -445,6 +512,9 @@ fun main() {
     } ?: logger.warn { "Memory management interface not found" }
 
     logger.debug { Status() }
-    CoroutineScope(Dispatchers.IO).launch { warm(2, failLint = false) }
+    CoroutineScope(Dispatchers.IO).launch {
+        warm(2, failLint = false)
+        stumperSolutionCollection.createSolutionIndices()
+    }
     embeddedServer(Netty, port = 8888, module = Application::questioner).start(wait = true)
 }

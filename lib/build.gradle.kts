@@ -18,13 +18,15 @@ dependencies {
     implementation("io.github.java-diff-utils:java-diff-utils:4.12")
     implementation("org.ow2.asm:asm:9.5")
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
+    implementation("org.mongodb:mongodb-driver:3.12.14")
 
     api("com.beyondgrader.resource-agent:agent:2023.9.0")
     api("com.github.cs124-illinois.jeed:core:2023.9.4")
     api("com.github.cs124-illinois:jenisol:2023.9.1")
+    api("com.github.cs124-illinois:libcs1:2023.8.0")
+
     api("io.kotest:kotest-runner-junit5:5.7.2")
     api("com.google.truth:truth:1.1.5")
-    api("com.github.cs124-illinois:libcs1:2023.8.0")
 }
 tasks {
     val sourcesJar by creating(Jar::class) {
