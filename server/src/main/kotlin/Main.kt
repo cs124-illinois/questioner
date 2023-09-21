@@ -22,10 +22,11 @@ import edu.illinois.cs.cs125.questioner.lib.stumpers.Candidate
 import edu.illinois.cs.cs125.questioner.lib.stumpers.Solution
 import edu.illinois.cs.cs125.questioner.lib.stumpers.clean
 import edu.illinois.cs.cs125.questioner.lib.stumpers.cleanedHashExists
-import edu.illinois.cs.cs125.questioner.lib.stumpers.createSolutionIndices
+import edu.illinois.cs.cs125.questioner.lib.stumpers.createInsertionIndices
 import edu.illinois.cs.cs125.questioner.lib.stumpers.md5
 import edu.illinois.cs.cs125.questioner.lib.stumpers.originalHashExists
 import edu.illinois.cs.cs125.questioner.lib.stumpers.originalIDExists
+import edu.illinois.cs.cs125.questioner.lib.stumpers.validated
 import edu.illinois.cs.cs125.questioner.lib.test
 import edu.illinois.cs.cs125.questioner.lib.testTests
 import io.ktor.http.HttpStatusCode
@@ -294,7 +295,7 @@ suspend fun addStumperSolution(
     testResults: TestResults,
     question: Question,
 ) {
-    if (!(testResults.complete.partial?.passedSteps?.quality == true && submission.email != null && submission.originalID != null)) {
+    if (!(testResults.validated() && submission.email != null && submission.originalID != null)) {
         return
     }
     if (stumperSolutionCollection.originalIDExists(submission.originalID)) {
@@ -454,41 +455,6 @@ fun Application.questioner() {
                 }
             }
         }
-        /*
-        get("/question/java/{path}") {
-            val path = call.parameters["path"] ?: return@get call.respond(HttpStatusCode.BadRequest)
-            val question = Questions.load(path) ?: return@get call.respond(HttpStatusCode.NotFound)
-            call.respond(
-                QuestionDescription(
-                    path,
-                    question.name,
-                    question.metadata.version,
-                    question.metadata.javaDescription,
-                    question.metadata.author,
-                    question.metadata.packageName,
-                    question.detemplatedJavaStarter,
-                ),
-            )
-        }
-        get("/question/kotlin/{path}") {
-            val path = call.parameters["path"] ?: return@get call.respond(HttpStatusCode.BadRequest)
-            val question = Questions.load(path) ?: return@get call.respond(HttpStatusCode.NotFound)
-            if (!question.hasKotlin) {
-                return@get call.respond(HttpStatusCode.NotFound)
-            }
-            call.respond(
-                QuestionDescription(
-                    path,
-                    question.name,
-                    question.metadata.version,
-                    question.metadata.kotlinDescription!!,
-                    question.metadata.author,
-                    question.metadata.packageName,
-                    starter = question.detemplatedKotlinStarter,
-                ),
-            )
-        }
-         */
     }
 }
 
@@ -518,7 +484,7 @@ fun main() {
     logger.debug { Status() }
     CoroutineScope(Dispatchers.IO).launch {
         warm(2, failLint = false)
-        stumperSolutionCollection.createSolutionIndices()
+        stumperSolutionCollection.createInsertionIndices()
     }
     embeddedServer(Netty, port = 8888, module = Application::questioner).start(wait = true)
 }

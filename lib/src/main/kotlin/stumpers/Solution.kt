@@ -13,6 +13,7 @@ import org.bson.Document
 import org.bson.json.JsonWriterSettings
 import java.time.Instant
 import edu.illinois.cs.cs125.questioner.lib.moshi
+import kotlin.random.Random
 
 private val jsonWriterSettings = JsonWriterSettings
     .builder()
@@ -39,6 +40,8 @@ data class Solution(
     val coordinates: Coordinates,
     val valid: Boolean,
     val validation: Validation? = null,
+    val processed: Boolean = false,
+    val randomValue: Int = Random.nextInt()
 ) {
     @JsonClass(generateAdapter = true)
     data class Hashes(val original: String, val cleaned: String)
@@ -72,18 +75,10 @@ data class Solution(
     }
 }
 
-fun MongoCollection<BsonDocument>.createSolutionIndices() {
-    apply {
-        createIndex(
-            Document()
-                .append("valid", 1)
-                .append("hasBadWords", 1)
-                .append("hashes.original", 1)
-                .append("hashes.cleaned", 1)
-                .append("originalID", 1)
-        )
-    }
+fun MongoCollection<BsonDocument>.createInsertionIndices() = apply {
+    createIndex(Document().append("originalID", 1).append("hashes.original", 1).append("hashes.cleaned", 1))
 }
+
 
 fun MongoCollection<BsonDocument>.getUnvalidated(limit: Int = Int.MAX_VALUE): Sequence<Solution> {
     return find(
