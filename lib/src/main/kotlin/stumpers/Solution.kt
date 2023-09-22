@@ -65,6 +65,17 @@ data class Solution(
         }
     }
 
+    fun exists(collection: MongoCollection<BsonDocument>) =
+        collection.countDocuments(Filters.eq("originalID", originalID)) > 0 ||
+            collection.countDocuments(
+                Filters.and(
+                    Filters.eq("coordinates.language", coordinates.language.toString()),
+                    Filters.eq("coordinates.path", coordinates.path),
+                    Filters.eq("coordinates.author", coordinates.author),
+                    Filters.eq("hashes.cleaned", hashes.cleaned)
+                )
+            ) > 0
+
     fun save(collection: MongoCollection<BsonDocument>? = from) {
         check(collection != null) { "Can't save into an empty collection" }
         collection.updateOne(
@@ -76,7 +87,11 @@ data class Solution(
 }
 
 fun MongoCollection<BsonDocument>.createInsertionIndices() = apply {
-    createIndex(Document().append("originalID", 1).append("hashes.original", 1).append("hashes.cleaned", 1))
+    createIndex(Document().append("originalID", 1))
+    val coordinateDocument =
+        Document().append("coordinates.language", 1).append("coordinates.path", 1).append("coordinates.author", 1)
+    createIndex(coordinateDocument.append("hashes.original", 1))
+    createIndex(coordinateDocument.append("hashes.cleaned", 1))
 }
 
 
@@ -92,13 +107,3 @@ fun MongoCollection<BsonDocument>.getUnvalidated(limit: Int = Int.MAX_VALUE): Se
         }
     }.filterNotNull()
 }
-
-fun MongoCollection<BsonDocument>.originalIDExists(originalID: String) =
-    find(Filters.eq("originalID", originalID)).first() != null
-
-fun MongoCollection<BsonDocument>.originalHashExists(hash: String) =
-    find(Filters.eq("hashes.original", hash)).first() != null
-
-fun MongoCollection<BsonDocument>.cleanedHashExists(hash: String) =
-    find(Filters.eq("hashes.cleaned", hash)).first() != null
-

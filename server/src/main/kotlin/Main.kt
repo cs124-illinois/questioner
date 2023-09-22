@@ -21,11 +21,8 @@ import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
 import edu.illinois.cs.cs125.questioner.lib.stumpers.Candidate
 import edu.illinois.cs.cs125.questioner.lib.stumpers.Solution
 import edu.illinois.cs.cs125.questioner.lib.stumpers.clean
-import edu.illinois.cs.cs125.questioner.lib.stumpers.cleanedHashExists
 import edu.illinois.cs.cs125.questioner.lib.stumpers.createInsertionIndices
-import edu.illinois.cs.cs125.questioner.lib.stumpers.md5
-import edu.illinois.cs.cs125.questioner.lib.stumpers.originalHashExists
-import edu.illinois.cs.cs125.questioner.lib.stumpers.originalIDExists
+import edu.illinois.cs.cs125.questioner.lib.stumpers.isEmail
 import edu.illinois.cs.cs125.questioner.lib.stumpers.validated
 import edu.illinois.cs.cs125.questioner.lib.test
 import edu.illinois.cs.cs125.questioner.lib.testTests
@@ -295,25 +292,22 @@ suspend fun addStumperSolution(
     testResults: TestResults,
     question: Question,
 ) {
-    if (!(testResults.validated() && submission.email != null && submission.originalID != null)) {
+    if (!testResults.validated() || submission.email?.isEmail() != true || submission.originalID == null) {
         return
     }
-    if (stumperSolutionCollection.originalIDExists(submission.originalID)) {
-        return
-    }
-    val originalHash = submission.contents.md5()
-    if (stumperSolutionCollection.originalHashExists(originalHash)) {
+    val candidate = Candidate(
+        submitted,
+        submission.contents,
+        submission.email,
+        submission.originalID,
+        question,
+        submission.language,
+    )
+    if (candidate.exists(stumperSolutionCollection)) {
         return
     }
     val solution = try {
-        Candidate(
-            submitted,
-            submission.contents,
-            submission.email,
-            submission.originalID,
-            question,
-            submission.language,
-        ).clean().copy(
+        candidate.clean().copy(
             valid = true,
             validation = Solution.Validation(
                 submitted,
@@ -326,7 +320,7 @@ suspend fun addStumperSolution(
         logger.warn { e }
         return
     }
-    if (stumperSolutionCollection.cleanedHashExists(solution.hashes.cleaned)) {
+    if (solution.exists(stumperSolutionCollection)) {
         return
     }
     solution.save(stumperSolutionCollection)
