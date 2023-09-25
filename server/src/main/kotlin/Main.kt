@@ -323,7 +323,11 @@ suspend fun addStumperSolution(
     if (solution.exists(stumperSolutionCollection)) {
         return
     }
-    solution.save(stumperSolutionCollection)
+    try {
+        solution.save(stumperSolutionCollection)
+    } catch (e: Exception) {
+        logger.warn { e }
+    }
 }
 
 @Suppress("LongMethod")

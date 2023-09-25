@@ -4,6 +4,7 @@ package edu.illinois.cs.cs125.questioner.lib.stumpers
 
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
+import com.mongodb.client.model.IndexOptions
 import com.mongodb.client.model.UpdateOptions
 import com.squareup.moshi.JsonClass
 import edu.illinois.cs.cs125.questioner.lib.Question
@@ -87,11 +88,15 @@ data class Solution(
 }
 
 fun MongoCollection<BsonDocument>.createInsertionIndices() = apply {
-    createIndex(Document().append("originalID", 1))
-    val coordinateDocument =
+    createIndex(Document().append("originalID", 1), IndexOptions().unique(true))
+    createIndex(
         Document().append("coordinates.language", 1).append("coordinates.path", 1).append("coordinates.author", 1)
-    createIndex(coordinateDocument.append("hashes.original", 1))
-    createIndex(coordinateDocument.append("hashes.cleaned", 1))
+            .append("hashes.original", 1), IndexOptions().unique(true)
+    )
+    createIndex(
+        Document().append("coordinates.language", 1).append("coordinates.path", 1).append("coordinates.author", 1)
+            .append("hashes.cleaned", 1), IndexOptions().unique(true)
+    )
 }
 
 
