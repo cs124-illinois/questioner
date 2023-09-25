@@ -36,7 +36,6 @@ data class Solution(
     val contents: String,
     val hashes: Hashes,
     val hasBadWords: Boolean,
-    val email: String,
     val originalID: String,
     val coordinates: Coordinates,
     val valid: Boolean,

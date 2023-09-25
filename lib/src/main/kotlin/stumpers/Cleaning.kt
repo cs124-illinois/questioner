@@ -20,15 +20,10 @@ import java.time.Instant
 data class Candidate(
     val submitted: Instant,
     val contents: String,
-    val email: String,
     val originalID: String,
     val question: Question,
     val language: Question.Language
 ) {
-    init {
-        check(email.isEmail()) { "Invalid email: $email" }
-    }
-
     val contentsHash = contents.md5()
 
     fun exists(collection: MongoCollection<BsonDocument>) =
@@ -73,7 +68,6 @@ suspend fun Candidate.clean(): Solution {
         formattedSource,
         Solution.Hashes(contentsHash, formattedSource.md5()),
         hasBadWords,
-        email,
         originalID,
         Coordinates(language, question.published.path, question.published.author),
         valid = false

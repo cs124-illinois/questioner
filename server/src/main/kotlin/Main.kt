@@ -22,7 +22,6 @@ import edu.illinois.cs.cs125.questioner.lib.stumpers.Candidate
 import edu.illinois.cs.cs125.questioner.lib.stumpers.Solution
 import edu.illinois.cs.cs125.questioner.lib.stumpers.clean
 import edu.illinois.cs.cs125.questioner.lib.stumpers.createInsertionIndices
-import edu.illinois.cs.cs125.questioner.lib.stumpers.isEmail
 import edu.illinois.cs.cs125.questioner.lib.stumpers.validated
 import edu.illinois.cs.cs125.questioner.lib.test
 import edu.illinois.cs.cs125.questioner.lib.testTests
@@ -292,13 +291,12 @@ suspend fun addStumperSolution(
     testResults: TestResults,
     question: Question,
 ) {
-    if (!testResults.validated() || submission.email?.isEmail() != true || submission.originalID == null) {
+    if (!testResults.validated() || submission.originalID == null) {
         return
     }
     val candidate = Candidate(
         submitted,
         submission.contents,
-        submission.email,
         submission.originalID,
         question,
         submission.language,
