@@ -182,4 +182,40 @@ class Testing { }
             }
         }
     }
+    "it should test a Map question with extra imports" {
+        val (question) = validator.validate("With Map Extras", force = true, testing = true)
+            .also { (question, report) ->
+                question.validated shouldBe true
+                report shouldNotBe null
+                report!!.requiredTestCount shouldBeGreaterThan 0
+            }
+        """
+int mapSize(Map<String, Integer> map) {
+  return map.size();
+}
+""".trim().also { incorrect ->
+            question.test(incorrect, Question.Language.java).also { results ->
+                results.complete.partial!!.passedSteps.quality shouldBe true
+            }
+        }
+        """
+int mapSize(Map<String, Integer> map) {
+  return map.keySet().size();
+}
+""".trim().also { incorrect ->
+            question.test(incorrect, Question.Language.java).also { results ->
+                results.complete.partial!!.passedSteps.fullyCorrect shouldBe true
+            }
+        }
+        """
+int mapSize(Map<String, Integer> map) {
+  Set<String> keys = map.keySet();
+  return keys.size();
+}
+""".trim().also { incorrect ->
+            question.test(incorrect, Question.Language.java).also { results ->
+                results.complete.partial!!.passedSteps.fullyCorrect shouldBe true
+            }
+        }
+    }
 })

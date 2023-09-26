@@ -149,12 +149,15 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             Question.Language.java -> javaClassWhitelist
             Question.Language.kotlin -> kotlinClassWhitelist
         }
-        classWhiteList.addAll(
-            taskResults!!.sandboxedClassLoader!!.loadedClasses.filter { klass ->
-                !klass.startsWith("edu.illinois.cs.cs125.jeed.core") &&
-                    !klass.startsWith("java.lang.invoke.MethodHandles")
-            }
-        )
+        val newClasses = taskResults!!.sandboxedClassLoader!!.loadedClasses.filter { klass ->
+            !klass.startsWith("edu.illinois.cs.cs125.jeed.core") &&
+                !klass.startsWith("java.lang.invoke.MethodHandles")
+        }.toMutableSet()
+        // HACK HACK: Allow java.util.Set methods when java.util.Map is used
+        if (file.language == Question.Language.java && newClasses.contains("java.util.Map")) {
+            newClasses += "java.util.Set"
+        }
+        classWhiteList.addAll(newClasses)
     }
 
     fun TestResults.checkIncorrect(file: Question.IncorrectFile, mutated: Boolean) {
@@ -469,8 +472,9 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     } else {
         null
     }
+
     val solutionLoadedClasses =
-        Question.LanguagesSolutionLoadedClasses(solutionLoadedClassesJava, solutionLoadedClassesKotlin)
+        Question.LanguagesSolutionLoadedClasses(solutionLoadedClassesJava.toSet(), solutionLoadedClassesKotlin)
 
     val calibrationLength = Instant.now().toEpochMilli() - calibrationStart.toEpochMilli()
 

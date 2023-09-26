@@ -145,6 +145,8 @@ data class ParsedJavaFile(val path: String, val contents: String) {
         }
     }.toSet()
 
+    val hasTemplateImports = topLevelClass.getAnnotation(TemplateImports::class.java) != null
+
     val templateImports = topLevelClass.getAnnotations(TemplateImports::class.java).let { annotations ->
         check(annotations.size <= 1) { "Found multiple @TemplateImports annotations" }
         if (annotations.isEmpty()) {

@@ -402,7 +402,11 @@ fun List<ParsedJavaFile>.findQuestions(
             // Needed to set imports properly
             solution.clean(javaCleanSpec)
 
-            val javaImports = (solution.usedImports + solution.templateImports).toSet()
+            val javaImports = (solution.usedImports + solution.templateImports).toMutableSet()
+            // HACK HACK: Allow java.util.Set methods when java.util.Map is used and no @TemplateImports
+            if (!solution.hasTemplateImports && javaImports.contains("java.util.Map")) {
+                javaImports += "java.util.Set"
+            }
             val kotlinImports = ((kotlinSolution?.usedImports ?: listOf()) + solution.templateImports).toSet()
 
             javaImports

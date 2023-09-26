@@ -17,7 +17,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -1188,7 +1188,8 @@
           "blank": 0
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -1206,7 +1207,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -1436,7 +1437,8 @@
           "blank": 0
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -1457,7 +1459,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -3672,7 +3674,8 @@
           "blank": 0
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -3693,7 +3696,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -4862,7 +4865,8 @@
           "blank": 0
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -4885,7 +4889,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {
       "maxDeadCode": 2
@@ -5337,7 +5341,8 @@
           "blank": 0
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -5355,7 +5360,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -5781,7 +5786,8 @@
           "blank": 0
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -5805,7 +5811,7 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -7016,7 +7022,8 @@
       "templateImports": [
         "java.util.ArrayList",
         "java.util.List"
-      ]
+      ],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -7038,7 +7045,7 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -7314,7 +7321,319 @@
         "java.util.Arrays",
         "java.util.List",
         "java.util.ArrayList"
-      ]
+      ],
+      "questionerVersion": "2023.9.6"
+    },
+    "fauxStatic": false
+  },
+  "With Map Extras": {
+    "name": "With Map Extras",
+    "type": "METHOD",
+    "klass": "Question",
+    "metadata": {
+      "contentHash": "145f11c40f31ddfb42402057e469ddb8",
+      "packageName": "com.examples.testing.withmapextras",
+      "version": "2023.9.0",
+      "author": "challen@illinois.edu",
+      "javaDescription": "<p>Test whether Map automatic whitelisting works.\nNote that tests are in Questioner.</p>",
+      "usedFiles": [],
+      "templateImports": [
+        "java.util.Map",
+        "java.util.Set"
+      ],
+      "focused": false,
+      "publish": true,
+      "questionerVersion": "2023.9.6"
+    },
+    "annotatedControls": {},
+    "question": {
+      "klass": "Question",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.NotNull;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\n\nimport java.util.Map;\n\n/*\n * Test whether Map automatic whitelisting works.\n * Note that tests are in Questioner.\n */\n\n@Correct(name = \"With Map Extras\", author = \"challen@illinois.edu\", version = \"2023.9.0\")\n@Wrap\npublic class Question {\n  int mapSize(@NotNull Map<String, Integer> map) {\n    return map.size();\n  }\n}",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withmapextras/Question.java"
+    },
+    "correct": {
+      "klass": "Question",
+      "contents": "int mapSize(Map<String, Integer> map) {\n  return map.size();\n}",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withmapextras/Question.java",
+      "complexity": 1,
+      "features": {
+        "featureMap": {
+          "METHOD": 1,
+          "RETURN": 1,
+          "STRING": 1,
+          "BOXING_CLASSES": 1,
+          "TYPE_PARAMETERS": 1,
+          "DOT_NOTATION": 1,
+          "DOTTED_METHOD_CALL": 1
+        },
+        "featureList": [
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 1,
+              "column": 22
+            }
+          },
+          {
+            "feature": "METHOD",
+            "location": {
+              "line": 2,
+              "column": 0
+            }
+          },
+          {
+            "feature": "TYPE_PARAMETERS",
+            "location": {
+              "line": 2,
+              "column": 15
+            }
+          },
+          {
+            "feature": "STRING",
+            "location": {
+              "line": 2,
+              "column": 16
+            }
+          },
+          {
+            "feature": "BOXING_CLASSES",
+            "location": {
+              "line": 2,
+              "column": 24
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 2,
+              "column": 38
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 3,
+              "column": 2
+            }
+          },
+          {
+            "feature": "RETURN",
+            "location": {
+              "line": 3,
+              "column": 2
+            }
+          },
+          {
+            "feature": "DOT_NOTATION",
+            "location": {
+              "line": 3,
+              "column": 9
+            }
+          },
+          {
+            "feature": "DOTTED_METHOD_CALL",
+            "location": {
+              "line": 3,
+              "column": 9
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 3,
+              "column": 19
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 4,
+              "column": 0
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 5,
+              "column": 0
+            }
+          }
+        ],
+        "importList": [],
+        "typeList": [
+          "int",
+          "Map<String,Integer>",
+          "String",
+          "Integer"
+        ],
+        "identifierList": [],
+        "dottedMethodList": [
+          "size"
+        ]
+      },
+      "lineCount": {
+        "source": 3,
+        "comment": 0,
+        "blank": 0
+      },
+      "expectedDeadCount": 0
+    },
+    "alternativeSolutions": [],
+    "incorrect": [],
+    "common": [],
+    "javaTemplate": "import java.util.Map;\nimport java.util.Set;\n\npublic class Question {\n  {{{ contents }}}\n}",
+    "importWhitelist": [],
+    "importBlacklist": [],
+    "checkstyleSuppressions": [],
+    "slug": "with-map-extras",
+    "hasKotlin": false,
+    "published": {
+      "name": "With Map Extras",
+      "type": "METHOD",
+      "path": "with-map-extras",
+      "author": "challen@illinois.edu",
+      "version": "2023.9.0",
+      "packageName": "com.examples.testing.withmapextras",
+      "languages": [
+        "java"
+      ],
+      "descriptions": {
+        "java": "<p>Test whether Map automatic whitelisting works.\nNote that tests are in Questioner.</p>"
+      },
+      "complexity": {
+        "java": 1
+      },
+      "features": {
+        "java": {
+          "featureMap": {
+            "METHOD": 1,
+            "RETURN": 1,
+            "STRING": 1,
+            "BOXING_CLASSES": 1,
+            "TYPE_PARAMETERS": 1,
+            "DOT_NOTATION": 1,
+            "DOTTED_METHOD_CALL": 1
+          },
+          "featureList": [
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 1,
+                "column": 22
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 2,
+                "column": 0
+              }
+            },
+            {
+              "feature": "TYPE_PARAMETERS",
+              "location": {
+                "line": 2,
+                "column": 15
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 2,
+                "column": 16
+              }
+            },
+            {
+              "feature": "BOXING_CLASSES",
+              "location": {
+                "line": 2,
+                "column": 24
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 2,
+                "column": 38
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 3,
+                "column": 2
+              }
+            },
+            {
+              "feature": "RETURN",
+              "location": {
+                "line": 3,
+                "column": 2
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 3,
+                "column": 9
+              }
+            },
+            {
+              "feature": "DOTTED_METHOD_CALL",
+              "location": {
+                "line": 3,
+                "column": 9
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 3,
+                "column": 19
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 4,
+                "column": 0
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 5,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [
+            "int",
+            "Map<String,Integer>",
+            "String",
+            "Integer"
+          ],
+          "identifierList": [],
+          "dottedMethodList": [
+            "size"
+          ]
+        }
+      },
+      "lineCounts": {
+        "java": {
+          "source": 3,
+          "comment": 0,
+          "blank": 0
+        }
+      },
+      "templateImports": [
+        "java.util.Map",
+        "java.util.Set"
+      ],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -7332,7 +7651,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -7791,7 +8110,8 @@
           "blank": 3
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -7809,7 +8129,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -8760,7 +9080,8 @@
           "blank": 5
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -8781,7 +9102,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -9789,7 +10110,8 @@
           "blank": 1
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -9811,7 +10133,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -10520,7 +10842,8 @@
           "blank": 0
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -10540,7 +10863,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -11010,7 +11333,8 @@
           "blank": 2
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -11033,7 +11357,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -11582,7 +11906,8 @@
           "blank": 0
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -11600,7 +11925,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -11920,7 +12245,8 @@
           "blank": 0
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -11940,7 +12266,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -12891,7 +13217,8 @@
           "blank": 0
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -12918,7 +13245,7 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -15173,7 +15500,8 @@
         "java.util.Set",
         "java.util.Map",
         "java.util.HashMap"
-      ]
+      ],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -15193,7 +15521,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -15949,7 +16277,8 @@
           "blank": 2
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -15969,7 +16298,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -16940,7 +17269,8 @@
           "blank": 1
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -16961,7 +17291,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -17455,7 +17785,8 @@
           "blank": 0
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -17475,7 +17806,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -18440,7 +18771,8 @@
           "blank": 4
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -18458,7 +18790,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -18582,7 +18914,8 @@
           "blank": 0
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -18603,7 +18936,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -20184,7 +20517,8 @@
           "blank": 2
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -20205,7 +20539,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -20875,7 +21209,8 @@
           "blank": 2
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -20903,7 +21238,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {
       "maxLineCountMultiplier": 16
@@ -21522,7 +21857,8 @@
           "blank": 0
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   },
@@ -21544,7 +21880,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.9.4"
+      "questionerVersion": "2023.9.6"
     },
     "annotatedControls": {},
     "question": {
@@ -22317,7 +22653,8 @@
           "blank": 0
         }
       },
-      "templateImports": []
+      "templateImports": [],
+      "questionerVersion": "2023.9.6"
     },
     "fauxStatic": false
   }
