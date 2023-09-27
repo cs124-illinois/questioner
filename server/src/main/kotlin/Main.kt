@@ -355,6 +355,9 @@ fun Application.questioner() {
         get("/") {
             call.respond(Status())
         }
+        get("/version") {
+            call.respond(VERSION)
+        }
         post("/") {
             val submitted = Instant.now()
             val runCount = counter.incrementAndGet()
