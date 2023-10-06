@@ -8,7 +8,7 @@ plugins {
 }
 subprojects {
     group = "com.github.cs124-illinois.questioner"
-    version = "2023.9.6"
+    version = "2023.10.0"
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_17.toString()
@@ -32,25 +32,15 @@ subprojects {
     }
 }
 allprojects {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        maven("https://jitpack.io")
-        maven("https://maven.codeawakening.com")
-    }
     tasks.withType<Test> {
         enableAssertions = true
     }
 }
 tasks.dependencyUpdates {
     fun String.isNonStable() = !(
-        listOf("RELEASE", "FINAL", "GA", "JRE").any { uppercase().contains(it) }
+        listOf("RELEASE", "FINAL", "GA").any { uppercase().contains(it) }
             || "^[0-9,.v-]+(-r)?$".toRegex().matches(this)
         )
     rejectVersionIf { candidate.version.isNonStable() }
     gradleReleaseChannel = "current"
-}
-task("publishToMavenLocal") {
-    group = "publishing"
-    dependsOn(":lib:publishToMavenLocal", ":plugin:publishToMavenLocal")
 }
