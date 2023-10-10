@@ -227,6 +227,7 @@ data class Question(
             const val DEFAULT_MAX_COMPLEXITY_MULTIPLIER = 8
             const val DEFAULT_MAX_LINECOUNT_MULTIPLIER = 8
             const val DEFAULT_MIN_FAIL_FAST_COMPLEXITY = 16
+            const val DEFAULT_MIN_FAIL_FAST_CLASS_SIZE_MULTIPLIER = 16
             const val DEFAULT_MAX_EXECUTION_COUNT: Long = DEFAULT_MAX_TIMEOUT.toLong() * 1024 * 1024
 
             val DEFAULTS = TestingControl(
@@ -272,6 +273,7 @@ data class Question(
         val executionCountLimit: LanguagesResourceUsage,
         val allocationLimit: LanguagesResourceUsage? = null,
         var solutionCoverage: TestResults.CoverageComparison.LineCoverage? = null,
+        var solutionClassSize: LanguagesResourceUsage? = null,
         var solutionExecutionCount: LanguagesResourceUsage? = null,
         var solutionAllocation: LanguagesResourceUsage? = null,
         var solutionDeadCode: LanguagesResourceUsage? = null,
@@ -280,7 +282,7 @@ data class Question(
         val disableAllocationLimit: Boolean = false,
         var solutionRecursiveMethods: LanguagesRecursiveMethods? = null,
         val minTestCount: Int = -1,
-        val maxTestCount: Int = -1
+        val maxTestCount: Int = -1,
     )
 
     @JsonClass(generateAdapter = true)
@@ -304,7 +306,8 @@ data class Question(
         val executionCounts: LanguagesResourceUsage,
         val memoryAllocation: LanguagesResourceUsage,
         val solutionRecursiveMethods: LanguagesRecursiveMethods,
-        val solutionLoadedClasses: LanguagesSolutionLoadedClasses
+        val solutionLoadedClasses: LanguagesSolutionLoadedClasses,
+        val solutionMaxClassSize: LanguagesResourceUsage? = null
     )
 
     @JsonClass(generateAdapter = true)
@@ -320,6 +323,12 @@ data class Question(
     data class LanguagesSolutionLoadedClasses(
         val java: Set<String>,
         val kotlin: Set<String>? = null
+    )
+
+    @JsonClass(generateAdapter = true)
+    data class LanguagesSolutionClassSize(
+        val java: Int,
+        val kotlin: Int? = null
     )
 
     @JsonClass(generateAdapter = true)
@@ -352,7 +361,7 @@ data class Question(
     ) {
         @Suppress("SpellCheckingInspection")
         enum class Reason {
-            DESIGN, COMPILE, TEST, CHECKSTYLE, TIMEOUT, DEADCODE, LINECOUNT, TOOLONG, MEMORYLIMIT, RECURSION, COMPLEXITY, FEATURES, TOOMUCHOUTPUT, MEMOIZATION
+            DESIGN, COMPILE, TEST, CHECKSTYLE, TIMEOUT, DEADCODE, LINECOUNT, TOOLONG, MEMORYLIMIT, RECURSION, COMPLEXITY, FEATURES, TOOMUCHOUTPUT, MEMOIZATION, CLASSSIZE
         }
     }
 
@@ -661,6 +670,7 @@ fun String.toReason() = when (uppercase()) {
     "FEATURES" -> Question.IncorrectFile.Reason.FEATURES
     "TOOMUCHOUTPUT" -> Question.IncorrectFile.Reason.TOOMUCHOUTPUT
     "MEMOIZATION" -> Question.IncorrectFile.Reason.MEMOIZATION
+    "CLASSSIZE" -> Question.IncorrectFile.Reason.CLASSSIZE
     else -> error("Invalid incorrect reason: $this")
 }
 

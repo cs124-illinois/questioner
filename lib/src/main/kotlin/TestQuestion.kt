@@ -87,6 +87,16 @@ suspend fun Question.test(
     // checkCompiledSubmission
     val klassName = checkCompiledSubmission(compiledSubmission, results) ?: return results
 
+    // class size
+    try {
+        results.complete.classSize = computeClassSize(compiledSubmission, language, settings)
+        // results.completedSteps.add(TestResults.Step.complexity)
+    } catch (e: MaxClassSizeExceeded) {
+        results.failed.classSize = e.message
+        // results.failedSteps.add(TestResults.Step.complexity)
+        return results
+    }
+
     // complexity
     try {
         results.complete.complexity = computeComplexity(contents, language)

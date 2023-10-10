@@ -24,14 +24,16 @@ abstract class GenerateMetatests : DefaultTask() {
     abstract var maxMutationCount: Int
 
     @InputFiles
-    val inputFiles = project.extensions.getByType(JavaPluginExtension::class.java)
-        .sourceSets.getByName("main").allSource.filter { it.name == ".validation.json" }
-        .toMutableList() + project.layout.buildDirectory.dir("questioner/questions.json").get().asFile
+    val inputFiles =
+        project.extensions.getByType(JavaPluginExtension::class.java)
+            .sourceSets.getByName("main").allSource.filter { it.name == ".validation.json" }
+            .toMutableList() + project.layout.buildDirectory.dir("questioner/questions.json").get().asFile
 
     @OutputFiles
-    val outputs = listOf("TestAllQuestions", "TestUnvalidatedQuestions", "TestFocusedQuestions").map {
-        project.file("src/test/kotlin/$it.kt")
-    }
+    val outputs =
+        listOf("TestAllQuestions", "TestUnvalidatedQuestions", "TestFocusedQuestions").map {
+            project.file("src/test/kotlin/$it.kt")
+        }
 
     @TaskAction
     fun generate() {
@@ -94,26 +96,28 @@ abstract class GenerateMetatests : DefaultTask() {
     }
 }
 
-fun Collection<Question>.organizeTests() = map {
-    it.metadata.packageName.packageNames()
-}.flatten().distinct().sortedBy { it.split(".").size }.let { packageNames ->
-    val byPackage: MutableMap<String, List<Question>> = mutableMapOf()
-    packageNames.forEach { name ->
-        val depth = name.split(".").size
-        check(depth >= 1) { "Invalid depth when organizing questions" }
-        val previous = if (depth == 1) {
-            null
-        } else {
-            name.split(".").subList(0, depth - 1).joinToString(".")
+fun Collection<Question>.organizeTests() =
+    map {
+        it.metadata.packageName.packageNames()
+    }.flatten().distinct().sortedBy { it.split(".").size }.let { packageNames ->
+        val byPackage: MutableMap<String, List<Question>> = mutableMapOf()
+        packageNames.forEach { name ->
+            val depth = name.split(".").size
+            check(depth >= 1) { "Invalid depth when organizing questions" }
+            val previous =
+                if (depth == 1) {
+                    null
+                } else {
+                    name.split(".").subList(0, depth - 1).joinToString(".")
+                }
+            val packageQuestions = filter { it.metadata.packageName.startsWith(name) }
+            if (previous != null && byPackage[previous]?.size == packageQuestions.size) {
+                byPackage.remove(previous)
+            }
+            byPackage[name] = packageQuestions
         }
-        val packageQuestions = filter { it.metadata.packageName.startsWith(name) }
-        if (previous != null && byPackage[previous]?.size == packageQuestions.size) {
-            byPackage.remove(previous)
-        }
-        byPackage[name] = packageQuestions
-    }
-    byPackage
-}.entries.sortedBy { it.key.length }
+        byPackage
+    }.entries.sortedBy { it.key.length }
 
 fun List<Question>.generateTest(
     packageName: String,
@@ -125,42 +129,45 @@ fun List<Question>.generateTest(
     onlyFocused: Boolean = false,
 ): String {
     var isBlank = false
-    val testBlock = filter { it.metadata.packageName.startsWith(packageName) }
-        .filter {
-            when {
-                onlyNotValidated -> !it.validated
-                onlyFocused -> it.metadata.focused == true
-                else -> true
+    val testBlock =
+        filter { it.metadata.packageName.startsWith(packageName) }
+            .filter {
+                when {
+                    onlyNotValidated -> !it.validated
+                    onlyFocused -> it.metadata.focused == true
+                    else -> true
+                }
             }
-        }
-        .sortedBy { it.name }
-        .joinToString(separator = "\n") {
-            """|  "${it.name} (${it.metadata.packageName}) should validate" {
+            .sortedBy { it.name }
+            .joinToString(separator = "\n") {
+                """|  "${it.name} (${it.metadata.packageName}) should validate" {
                |    validator.validate("${it.name}", verbose = false, force = ${
-                if (onlyFocused) {
-                    "true"
-                } else {
-                    "false"
-                }
-            })
+                    if (onlyFocused) {
+                        "true"
+                    } else {
+                        "false"
+                    }
+                })
                |  }
-            """.trimMargin()
-        }.let {
-            it.ifBlank {
-                isBlank = true
-                val description = when {
-                    onlyNotValidated -> "unvalidated "
-                    onlyFocused -> "focused "
-                    else -> ""
+                """.trimMargin()
+            }.let {
+                it.ifBlank {
+                    isBlank = true
+                    val description =
+                        when {
+                            onlyNotValidated -> "unvalidated "
+                            onlyFocused -> "focused "
+                            else -> ""
+                        }
+                    """  "no ${description}questions found" { }"""
                 }
-                """  "no ${description}questions found" { }"""
             }
+    val packageNameBlock =
+        if (packageName.isNotEmpty()) {
+            "package $packageName\n\n"
+        } else {
+            ""
         }
-    val packageNameBlock = if (packageName.isNotEmpty()) {
-        "package $packageName\n\n"
-    } else {
-        ""
-    }
     return """$packageNameBlock@file:Suppress("SpellCheckingInspection", "UnusedImport", "ktlint:standard:max-line-length", "unused")
 
 ${
@@ -218,10 +225,11 @@ $testBlock
 // AUTOGENERATED"""
 }
 
-fun String.packageNames() = split(".").let {
-    mutableSetOf<String>().also { all ->
-        for (i in 0..it.size) {
-            all.add(it.subList(0, i).joinToString("."))
-        }
-    }.toSet()
-}
+fun String.packageNames() =
+    split(".").let {
+        mutableSetOf<String>().also { all ->
+            for (i in 0..it.size) {
+                all.add(it.subList(0, i).joinToString("."))
+            }
+        }.toSet()
+    }

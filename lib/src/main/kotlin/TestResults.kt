@@ -66,6 +66,7 @@ data class TestResults(
         var compileSubmission: CompiledSourceResult? = null,
         var checkstyle: CheckstyleResults? = null,
         var ktlint: KtLintResults? = null,
+        var classSize: ResourceUsageComparison? = null,
         // checkCompiledSubmission doesn't complete
         var complexity: ComplexityComparison? = null,
         var features: FeaturesComparison? = null,
@@ -102,6 +103,7 @@ data class TestResults(
         var checkstyle: CheckstyleFailed? = null,
         var ktlint: KtLintFailed? = null,
         var checkCompiledSubmission: String? = null,
+        var classSize: String? = null,
         var complexity: String? = null,
         var features: String? = null,
         var lineCount: String? = null,
@@ -156,7 +158,13 @@ data class TestResults(
         val limit: Long,
         val increase: Long = submission - solution,
         val failed: Boolean = submission >= limit
-    )
+    ) {
+        init {
+            require(solution > 0)
+            require(submission > 0)
+            require(limit > 0)
+        }
+    }
 
     @JsonClass(generateAdapter = true)
     data class FeaturesComparison(
@@ -248,6 +256,8 @@ data class TestResults(
             "Ktlint failed:${failed.ktlint?.let { ": $it" } ?: ""}"
         } else if (failed.complexity != null) {
             "Computing complexity failed: ${failed.complexity ?: "unknown error"}"
+        } else if (failed.classSize != null) {
+            "Computing class size failed: ${failed.classSize ?: "unknown error"}"
         } else if (failed.checkCompiledSubmission != null) {
             "Checking submission failed: ${failed.checkCompiledSubmission}"
         } else if (failed.checkExecutedSubmission != null) {

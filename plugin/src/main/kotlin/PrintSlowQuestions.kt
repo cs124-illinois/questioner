@@ -7,7 +7,6 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
 open class PrintSlowQuestions : DefaultTask() {
-
     init {
         group = "Verification"
         description = "Print slow questions."

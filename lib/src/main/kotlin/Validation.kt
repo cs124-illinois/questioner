@@ -72,7 +72,6 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
                             """.trimMargin()
 
                         }
-
                         else -> summary
                     }
                 }
@@ -300,6 +299,10 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         it.memoryAllocation
     }
 
+    val bootstrapClassSize = firstCorrectResults.setResourceUsage {
+        it.classSize
+    }
+
     val bootstrapLength = Instant.now().toEpochMilli() - bootStrapStart.toEpochMilli()
 
     val mutationStart = Instant.now()
@@ -338,7 +341,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         ),
         solutionAllocation = bootstrapSolutionAllocation,
         solutionRecursiveMethods = solutionRecursiveMethods,
-        solutionDeadCode = solutionDeadCode
+        solutionDeadCode = solutionDeadCode,
+        solutionClassSize = bootstrapClassSize
     )
     val incorrectResults = allIncorrect.map { wrong ->
         val specificIncorrectSettings = if (wrong.reason == Question.IncorrectFile.Reason.MEMORYLIMIT) {
@@ -509,7 +513,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             (solutionAllocation.kotlin?.toDouble()?.times(control.allocationLimitMultiplier!!))?.toLong()
         ),
         solutionRecursiveMethods = solutionRecursiveMethods,
-        solutionDeadCode = solutionDeadCode
+        solutionDeadCode = solutionDeadCode,
+        solutionClassSize = bootstrapClassSize
     )
 
     validationResults = Question.ValidationResults(
@@ -525,7 +530,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         executionCounts = solutionExecutionCounts,
         memoryAllocation = solutionAllocation,
         solutionRecursiveMethods = solutionRecursiveMethods,
-        solutionLoadedClasses = solutionLoadedClasses
+        solutionLoadedClasses = solutionLoadedClasses,
     )
     published.validationResults = validationResults
 
@@ -583,6 +588,10 @@ private fun TestResults.validate(reason: Question.IncorrectFile.Reason) {
 
         Question.IncorrectFile.Reason.FEATURES -> require(failed.features != null) {
             "Expected submission to fail feature check"
+        }
+
+        Question.IncorrectFile.Reason.CLASSSIZE -> require(failed.classSize != null) {
+            "Expected submission to fail class size check"
         }
 
         Question.IncorrectFile.Reason.MEMOIZATION -> require(failed.complexity != null && failed.complexity!!.contains("exceeds maximum")) {

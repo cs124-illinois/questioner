@@ -28,18 +28,19 @@ fun Project.javaSourceDir(): File =
 class QuestionerPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val config = project.extensions.create("questioner", QuestionerConfigExtension::class.java)
-        val configuration = project.file(".questioner.yaml").let {
-            if (it.exists()) {
-                try {
-                    ObjectMapper(YAMLFactory()).apply { registerKotlinModule() }.readValue(it)
-                } catch (e: Exception) {
-                    project.logger.warn("Invalid questioner.yaml file.")
+        val configuration =
+            project.file(".questioner.yaml").let {
+                if (it.exists()) {
+                    try {
+                        ObjectMapper(YAMLFactory()).apply { registerKotlinModule() }.readValue(it)
+                    } catch (e: Exception) {
+                        project.logger.warn("Invalid questioner.yaml file.")
+                        QuestionerConfig()
+                    }
+                } else {
                     QuestionerConfig()
                 }
-            } else {
-                QuestionerConfig()
             }
-        }
 
         val saveQuestions = project.tasks.register("saveQuestions", SaveQuestions::class.java).get()
         val generateMetatests = project.tasks.register("generateQuestionMetatests", GenerateMetatests::class.java).get()
@@ -51,9 +52,10 @@ class QuestionerPlugin : Plugin<Project> {
             generateMetatests.maxMutationCount = config.maxMutationCount
 
             project.configurations.getByName("runtimeClasspath") { conf ->
-                val agentJarPath = conf.resolvedConfiguration.resolvedArtifacts.find {
-                    it.moduleVersion.id.group == "com.beyondgrader.resource-agent"
-                }!!.file.absolutePath
+                val agentJarPath =
+                    conf.resolvedConfiguration.resolvedArtifacts.find {
+                        it.moduleVersion.id.group == "com.beyondgrader.resource-agent"
+                    }!!.file.absolutePath
                 project.tasks.withType(Test::class.java) {
                     it.jvmArgs("-javaagent:$agentJarPath")
                 }

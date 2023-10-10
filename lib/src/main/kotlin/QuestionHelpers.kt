@@ -20,10 +20,13 @@ import edu.illinois.cs.cs125.jeed.core.countLines
 import edu.illinois.cs.cs125.jeed.core.fromJavaSnippet
 import edu.illinois.cs.cs125.jeed.core.fromKotlinSnippet
 import edu.illinois.cs.cs125.jeed.core.fromTemplates
+import edu.illinois.cs.cs125.jeed.core.getEmptyJavaClassSize
+import edu.illinois.cs.cs125.jeed.core.getEmptyKotlinClassSize
 import edu.illinois.cs.cs125.jeed.core.kompile
 import edu.illinois.cs.cs125.jeed.core.ktLint
 import edu.illinois.cs.cs125.jeed.core.moshi.CompiledSourceResult
 import edu.illinois.cs.cs125.jeed.core.stripComments
+import edu.illinois.cs.cs125.jeed.core.systemCompilerVersion
 import edu.illinois.cs.cs125.jenisol.core.CaptureOutputControlInput
 import edu.illinois.cs.cs125.jenisol.core.CapturedResult
 import edu.illinois.cs.cs125.jenisol.core.unwrap
@@ -348,6 +351,43 @@ Please report a bug so that we can improve the mutation engine.
                 mutation = source
             )
         }
+
+
+class MaxClassSizeExceeded(message: String) : RuntimeException(message)
+
+private object EmptyClassSizes {
+    val EMPTY_JAVA_CLASS_SIZE by lazy {
+        getEmptyJavaClassSize()
+    }
+    val EMPTY_KOTLIN_CLASS_SIZE by lazy {
+        getEmptyKotlinClassSize()
+    }
+}
+fun Question.computeClassSize(
+    compiledSubmission: CompiledSource,
+    language: Question.Language,
+    settings: Question.TestingSettings
+): TestResults.ResourceUsageComparison {
+    val submissionClassSize = compiledSubmission.classLoader.sizeInBytes.toLong()
+    val solutionClassSize = when (language) {
+        Question.Language.java -> validationResults?.solutionMaxClassSize?.java ?: settings.solutionClassSize?.java
+        Question.Language.kotlin -> validationResults?.solutionMaxClassSize?.kotlin
+            ?: settings.solutionClassSize?.kotlin
+    } ?: (submissionClassSize - when (language) {
+        Question.Language.java -> EmptyClassSizes.EMPTY_JAVA_CLASS_SIZE
+        Question.Language.kotlin -> EmptyClassSizes.EMPTY_KOTLIN_CLASS_SIZE
+    })
+
+    val maxClassSize = solutionClassSize * Question.TestingControl.DEFAULT_MIN_FAIL_FAST_CLASS_SIZE_MULTIPLIER
+
+    if (submissionClassSize > maxClassSize) {
+        throw MaxClassSizeExceeded(
+            "Submission class size $submissionClassSize exceeds maximum of $maxClassSize.\n" +
+                "The solution has class size of $solutionClassSize."
+        )
+    }
+    return TestResults.ResourceUsageComparison(solutionClassSize, submissionClassSize, Int.MAX_VALUE.toLong())
+}
 
 class MaxComplexityExceeded(message: String) : RuntimeException(message)
 
