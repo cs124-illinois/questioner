@@ -211,6 +211,15 @@ export const TestingResult = Record({
 })
 export type TestingResult = Static<typeof TestingResult>
 
+export const ClassSizeComparison = Record({
+  solution: Number,
+  submission: Number,
+  limit: Number,
+  increase: Number,
+  failed: Boolean,
+})
+export type ClassSizeComparison = Static<typeof ClassSizeComparison>
+
 export const MemoryAllocationComparison = Record({
   solution: Number,
   submission: Number,
@@ -303,6 +312,7 @@ export const CompletedTasks = Partial({
   checkstyle: CheckstyleResults,
   ktlint: KtlintResults,
   // checkCompiledSubmission doesn't complete
+  classSize: ClassSizeComparison,
   complexity: ComplexityComparison,
   features: FeaturesComparison,
   lineCount: LineCountComparison,
@@ -323,6 +333,7 @@ export const FailedTasks = Partial({
   checkstyle: CheckstyleFailed,
   ktlint: KtlintFailed,
   checkCompiledSubmission: String,
+  classSize: String,
   complexity: String,
   features: String,
   lineCount: String,
@@ -342,6 +353,7 @@ export const Step = Union(
   Literal("checkstyle"),
   Literal("ktlint"),
   Literal("checkCompiledSubmission"),
+  Literal("classSize"),
   Literal("complexity"),
   Literal("features"),
   Literal("lineCount"),
@@ -362,6 +374,7 @@ export const TestingOrder: Array<Step> = [
   "checkstyle",
   "ktlint",
   "checkCompiledSubmission",
+  "classSize",
   "complexity",
   "features",
   "lineCount",
