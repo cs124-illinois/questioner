@@ -13,6 +13,7 @@ export const DEFAULT_WARNING_ORDER: Array<Step> = [
   "executioncount",
   "memoryAllocation",
   "coverage",
+  "classSize",
 ]
 
 export const simplifyTestResult = (result: TestingResult): TestResult[] => {
@@ -124,9 +125,17 @@ export const terminalOutput = (
       return `${output}\n${errorCount} error${errorCount > 1 ? "s" : ""}`
     } else if (failed.checkInitialSubmission) {
       return `Your submission had errors:\n${indentString(failed.checkInitialSubmission, indentation)}`
-    } else if (failed.checkCompiledSubmission || failed.checkExecutedSubmission || failed.features) {
+    } else if (
+      failed.checkCompiledSubmission ||
+      failed.checkExecutedSubmission ||
+      failed.features ||
+      failed.classSize
+    ) {
       return `Your submission had errors:\n${indentString(
-        (failed.checkCompiledSubmission || failed.checkExecutedSubmission || failed.features) as string,
+        (failed.checkCompiledSubmission ||
+          failed.checkExecutedSubmission ||
+          failed.features ||
+          failed.classSize) as string,
         indentation,
       )}`
     } else if (failed.complexity) {
@@ -173,6 +182,13 @@ export const terminalOutput = (
     const { solution, submission } = complete.complexity
     warnings["complexity"] = `Your submission is a bit too complicated:\n${indentString(
       `The solution has ${solution} code ${pluralize("path", solution)}.\nYour submission has ${submission}.`,
+      indentation,
+    )}`
+  }
+  if (complete.classSize?.failed === true) {
+    const { solution, submission } = complete.classSize
+    warnings["classSize"] = `Your submission class is too large:\n${indentString(
+      `The solution is ${pluralize("byte", solution)} bytes.\nYour submission is ${submission}.`,
       indentation,
     )}`
   }
