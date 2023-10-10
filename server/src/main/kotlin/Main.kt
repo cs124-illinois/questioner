@@ -13,7 +13,6 @@ import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import com.sun.management.HotSpotDiagnosticMXBean
 import edu.illinois.cs.cs125.jeed.core.warm
-import edu.illinois.cs.cs125.questioner.lib.CachePoisonedException
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring
 import edu.illinois.cs.cs125.questioner.lib.TestResults
