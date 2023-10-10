@@ -21,7 +21,7 @@ dependencies {
     implementation("org.mongodb:mongodb-driver:3.12.14")
 
     api("com.beyondgrader.resource-agent:agent:2023.9.0")
-    api("com.github.cs124-illinois.jeed:core:2023.10.3")
+    api("com.github.cs124-illinois.jeed:core:2023.10.4")
     api("com.github.cs124-illinois:jenisol:2023.10.1")
     api("com.github.cs124-illinois:libcs1:2023.10.0")
 

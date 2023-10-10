@@ -24,11 +24,11 @@ import org.objectweb.asm.Type
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 
-class CachePoisonedException(message: String) : RuntimeException(message)
+class CachePoisonedException(message: String) : Error(message)
 
 private const val MAX_INDIVIDUAL_ALLOCATION_BYTES: Long = 1024 * 1024
 private const val MIN_ALLOCATION_FAILURE_BYTES: Long = 2 * 1024 // Account for nondeterminism due to JIT
-private const val MIN_ALLOCATION_LIMIT_BYTES: Long = 2 * 1024 * 1024 // Leave room for string concat in println debugging
+private const val MIN_ALLOCATION_LIMIT_BYTES: Long = 2 * 1024 * 1024 // Leave room for concat in println debugging
 
 @Suppress("ReturnCount", "LongMethod", "ComplexMethod", "LongParameterList")
 suspend fun Question.test(
@@ -254,13 +254,14 @@ suspend fun Question.test(
                 } else {
                     validationResults?.executionCounts?.kotlin ?: settings.solutionExecutionCount?.kotlin
                 }
-                results.failed.checkExecutedSubmission = "Executed too many lines: Already executed $lineCountLimit ${"line".pluralize(lineCountLimit!!.toInt())}${
-                    if (solutionLineUsage != null) {
-                        ", solution needed only $solutionLineUsage total"
-                    } else {
-                        ""
-                    }
-                }"
+                results.failed.checkExecutedSubmission =
+                    "Executed too many lines: Already executed $lineCountLimit ${"line".pluralize(lineCountLimit!!.toInt())}${
+                        if (solutionLineUsage != null) {
+                            ", solution needed only $solutionLineUsage total"
+                        } else {
+                            ""
+                        }
+                    }"
             }
 
             else -> {
@@ -397,8 +398,10 @@ suspend fun Question.test(
         Question.Language.kotlin -> Source.FileType.KOTLIN
         Question.Language.java -> Source.FileType.JAVA
     }
-    val coverageResult = source.processCoverage(taskResults.pluginResult(Jacoco))
-        .adjustWithFeatures(submissionFeatureResults, filetype).byFile[filename(language)]!!
+    val coverageResult = source
+        .processCoverage(taskResults.pluginResult(Jacoco))
+        .adjustWithFeatures(submissionFeatureResults, filetype)
+        .byFile[filename(language)]!!
     val covered = coverageResult.count { it.value == LineCoverage.COVERED || it.value == LineCoverage.IGNORED }
     val total = coverageResult.count { it.value != LineCoverage.EMPTY }
     check(total - covered >= 0)
@@ -418,14 +421,14 @@ suspend fun Question.test(
     results.complete.partial!!.passedSteps.quality =
         results.complete.partial!!.passedSteps.fullyCorrect && results.complete.let {
             it.checkstyle?.errors?.isNotEmpty() == true ||
-                    it.ktlint?.errors?.isNotEmpty() == true ||
-                    it.complexity?.failed == true ||
-                    it.features?.failed == true ||
-                    it.lineCount?.failed == true ||
-                    it.executionCount?.failed == true ||
-                    it.memoryAllocation?.failed == true ||
-                    it.coverage?.failed == true ||
-                    it.classSize?.failed == true
+                it.ktlint?.errors?.isNotEmpty() == true ||
+                it.complexity?.failed == true ||
+                it.features?.failed == true ||
+                it.lineCount?.failed == true ||
+                it.executionCount?.failed == true ||
+                it.memoryAllocation?.failed == true ||
+                it.coverage?.failed == true ||
+                it.classSize?.failed == true
         } == false
 
     return results
