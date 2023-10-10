@@ -362,20 +362,22 @@ private object EmptyClassSizes {
         getEmptyKotlinClassSize()
     }
 }
+
 fun Question.computeClassSize(
     compiledSubmission: CompiledSource,
     language: Question.Language,
     settings: Question.TestingSettings
 ): TestResults.ResourceUsageComparison {
-    val submissionClassSize = compiledSubmission.classLoader.sizeInBytes.toLong()
+    val emptyClassSize = when (language) {
+        Question.Language.java -> EmptyClassSizes.EMPTY_JAVA_CLASS_SIZE
+        Question.Language.kotlin -> EmptyClassSizes.EMPTY_KOTLIN_CLASS_SIZE
+    }
+    val submissionClassSize = compiledSubmission.classLoader.sizeInBytes.toLong() - emptyClassSize
     val solutionClassSize = when (language) {
         Question.Language.java -> validationResults?.solutionMaxClassSize?.java ?: settings.solutionClassSize?.java
         Question.Language.kotlin -> validationResults?.solutionMaxClassSize?.kotlin
             ?: settings.solutionClassSize?.kotlin
-    } ?: (submissionClassSize - when (language) {
-        Question.Language.java -> EmptyClassSizes.EMPTY_JAVA_CLASS_SIZE
-        Question.Language.kotlin -> EmptyClassSizes.EMPTY_KOTLIN_CLASS_SIZE
-    })
+    } ?: submissionClassSize
 
     val maxClassSize = solutionClassSize * Question.TestingControl.DEFAULT_MIN_FAIL_FAST_CLASS_SIZE_MULTIPLIER
 
@@ -385,7 +387,11 @@ fun Question.computeClassSize(
                 "The solution has class size of $solutionClassSize."
         )
     }
-    return TestResults.ResourceUsageComparison(solutionClassSize, submissionClassSize, Int.MAX_VALUE.toLong())
+    return TestResults.ResourceUsageComparison(
+        solutionClassSize,
+        submissionClassSize,
+        solutionClassSize * control.maxClassSizeMultiplier!!
+    )
 }
 
 class MaxComplexityExceeded(message: String) : RuntimeException(message)

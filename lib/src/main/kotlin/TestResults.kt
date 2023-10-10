@@ -93,6 +93,7 @@ data class TestResults(
         check(complete.executionCount?.failed == false)
         check(complete.memoryAllocation?.failed == false)
         check(complete.coverage?.failed == false)
+        check(complete.classSize?.failed == false)
     }
 
     @JsonClass(generateAdapter = true)

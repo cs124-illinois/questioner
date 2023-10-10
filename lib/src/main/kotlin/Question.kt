@@ -203,7 +203,8 @@ data class Question(
         val sourceLinesMultiplier: Double?,
         val seed: Int?,
         val maxComplexityMultiplier: Int?,
-        val maxLineCountMultiplier: Int?
+        val maxLineCountMultiplier: Int?,
+        val maxClassSizeMultiplier: Int?
     ) {
         companion object {
             const val DEFAULT_SOLUTION_THROWS = false
@@ -226,6 +227,7 @@ data class Question(
             const val DEFAULT_SEED = -1
             const val DEFAULT_MAX_COMPLEXITY_MULTIPLIER = 8
             const val DEFAULT_MAX_LINECOUNT_MULTIPLIER = 8
+            const val DEFAULT_MAX_CLASSSIZE_MULTIPLIER = 8
             const val DEFAULT_MIN_FAIL_FAST_COMPLEXITY = 16
             const val DEFAULT_MIN_FAIL_FAST_CLASS_SIZE_MULTIPLIER = 16
             const val DEFAULT_MAX_EXECUTION_COUNT: Long = DEFAULT_MAX_TIMEOUT.toLong() * 1024 * 1024
@@ -251,7 +253,8 @@ data class Question(
                 DEFAULT_SOURCE_LINES_MULTIPLIER,
                 DEFAULT_SEED,
                 DEFAULT_MAX_COMPLEXITY_MULTIPLIER,
-                DEFAULT_MAX_LINECOUNT_MULTIPLIER
+                DEFAULT_MAX_LINECOUNT_MULTIPLIER,
+                DEFAULT_MAX_CLASSSIZE_MULTIPLIER
             )
         }
     }

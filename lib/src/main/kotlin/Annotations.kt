@@ -37,7 +37,8 @@ annotation class Correct(
     val sourceLinesMultiplier: Double = Question.TestingControl.DEFAULT_SOURCE_LINES_MULTIPLIER,
     val seed: Int = Question.TestingControl.DEFAULT_SEED,
     val maxComplexityMultiplier: Int = Question.TestingControl.DEFAULT_MAX_COMPLEXITY_MULTIPLIER,
-    val maxLineCountMultiplier: Int = Question.TestingControl.DEFAULT_MAX_LINECOUNT_MULTIPLIER
+    val maxLineCountMultiplier: Int = Question.TestingControl.DEFAULT_MAX_LINECOUNT_MULTIPLIER,
+    val maxClassSizeMultiplier: Int = Question.TestingControl.DEFAULT_MAX_CLASSSIZE_MULTIPLIER,
 )
 
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FILE)

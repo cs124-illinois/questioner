@@ -209,6 +209,7 @@ data class ParsedJavaFile(val path: String, val contents: String) {
                 val seed = parameters["seed"]?.toInt()
                 val maxComplexityMultiplier = parameters["maxComplexityMultiplier"]?.toInt()
                 val maxLineCountMultiplier = parameters["maxLineCountMultiplier"]?.toInt()
+                val maxClassSizeMultiplier = parameters["maxClassSizeMultiplier"]?.toInt()
 
                 Question.CorrectData(
                     path,
@@ -240,6 +241,7 @@ data class ParsedJavaFile(val path: String, val contents: String) {
                         seed,
                         maxComplexityMultiplier,
                         maxLineCountMultiplier,
+                        maxClassSizeMultiplier,
                     ),
                 )
             }

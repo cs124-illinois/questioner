@@ -440,7 +440,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             testCount * control.maxExecutionCountMultiplier!! * 1024
         ),
         solutionRecursiveMethods = solutionRecursiveMethods,
-        solutionDeadCode = solutionDeadCode
+        solutionDeadCode = solutionDeadCode,
+        solutionClassSize = bootstrapClassSize
     )
     val calibrationResults = (setOf(correct) + alternativeSolutions).map { right ->
         test(
