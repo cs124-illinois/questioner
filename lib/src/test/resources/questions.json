@@ -2088,7 +2088,9 @@
             "DOT_NOTATION": 2,
             "DOTTED_VARIABLE_ACCESS": 2,
             "REQUIRE_OR_CHECK": 2,
-            "WHEN_STATEMENT": 1
+            "WHEN_STATEMENT": 1,
+            "WHEN_ENTRY": 2,
+            "LAST_WHEN_ENTRY": 1
           },
           "featureList": [
             {
@@ -2274,6 +2276,13 @@
               }
             },
             {
+              "feature": "WHEN_ENTRY",
+              "location": {
+                "line": 10,
+                "column": 6
+              }
+            },
+            {
               "feature": "STATEMENT_START",
               "location": {
                 "line": 10,
@@ -2289,6 +2298,20 @@
             },
             {
               "feature": "ELSE_STATEMENTS",
+              "location": {
+                "line": 11,
+                "column": 6
+              }
+            },
+            {
+              "feature": "WHEN_ENTRY",
+              "location": {
+                "line": 11,
+                "column": 6
+              }
+            },
+            {
+              "feature": "LAST_WHEN_ENTRY",
               "location": {
                 "line": 11,
                 "column": 6
@@ -2427,7 +2450,9 @@
           "DOT_NOTATION": 2,
           "DOTTED_VARIABLE_ACCESS": 2,
           "REQUIRE_OR_CHECK": 2,
-          "WHEN_STATEMENT": 1
+          "WHEN_STATEMENT": 1,
+          "WHEN_ENTRY": 2,
+          "LAST_WHEN_ENTRY": 1
         },
         "featureList": [
           {
@@ -2613,6 +2638,13 @@
             }
           },
           {
+            "feature": "WHEN_ENTRY",
+            "location": {
+              "line": 10,
+              "column": 6
+            }
+          },
+          {
             "feature": "STATEMENT_START",
             "location": {
               "line": 10,
@@ -2628,6 +2660,20 @@
           },
           {
             "feature": "ELSE_STATEMENTS",
+            "location": {
+              "line": 11,
+              "column": 6
+            }
+          },
+          {
+            "feature": "WHEN_ENTRY",
+            "location": {
+              "line": 11,
+              "column": 6
+            }
+          },
+          {
+            "feature": "LAST_WHEN_ENTRY",
             "location": {
               "line": 11,
               "column": 6
@@ -3358,7 +3404,9 @@
             "DOT_NOTATION": 2,
             "DOTTED_VARIABLE_ACCESS": 2,
             "REQUIRE_OR_CHECK": 2,
-            "WHEN_STATEMENT": 1
+            "WHEN_STATEMENT": 1,
+            "WHEN_ENTRY": 2,
+            "LAST_WHEN_ENTRY": 1
           },
           "featureList": [
             {
@@ -3544,6 +3592,13 @@
               }
             },
             {
+              "feature": "WHEN_ENTRY",
+              "location": {
+                "line": 10,
+                "column": 6
+              }
+            },
+            {
               "feature": "STATEMENT_START",
               "location": {
                 "line": 10,
@@ -3559,6 +3614,20 @@
             },
             {
               "feature": "ELSE_STATEMENTS",
+              "location": {
+                "line": 11,
+                "column": 6
+              }
+            },
+            {
+              "feature": "WHEN_ENTRY",
+              "location": {
+                "line": 11,
+                "column": 6
+              }
+            },
+            {
+              "feature": "LAST_WHEN_ENTRY",
               "location": {
                 "line": 11,
                 "column": 6
