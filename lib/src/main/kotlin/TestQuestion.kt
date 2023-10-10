@@ -90,10 +90,10 @@ suspend fun Question.test(
     // class size
     try {
         results.complete.classSize = computeClassSize(compiledSubmission, language, settings)
-        // results.completedSteps.add(TestResults.Step.complexity)
+        results.completedSteps.add(TestResults.Step.classSize)
     } catch (e: MaxClassSizeExceeded) {
         results.failed.classSize = e.message
-        // results.failedSteps.add(TestResults.Step.complexity)
+        results.failedSteps.add(TestResults.Step.classSize)
         return results
     }
 
@@ -424,7 +424,8 @@ suspend fun Question.test(
                     it.lineCount?.failed == true ||
                     it.executionCount?.failed == true ||
                     it.memoryAllocation?.failed == true ||
-                    it.coverage?.failed == true
+                    it.coverage?.failed == true ||
+                    it.classSize?.failed == true
         } == false
 
     return results

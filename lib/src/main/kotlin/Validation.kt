@@ -80,9 +80,9 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         }
         if (failedLinting!!) {
             val errors = if (language == Question.Language.java) {
-                complete.checkstyle!!.errors.joinToString("\n") { it.message }
+                complete.checkstyle!!.errors.joinToString("\n") { "Line ${it.location.line}: ${it.message}" }
             } else {
-                complete.ktlint!!.errors.joinToString("\n") { it.message }
+                complete.ktlint!!.errors.joinToString("\n") { "Line ${it.location.line}: ${it.message}" }
             }
             throw SolutionFailedLinting(file, errors)
         }

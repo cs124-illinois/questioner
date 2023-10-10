@@ -305,7 +305,7 @@ declaration
     ;
 
 expression
-    : disjunction (assignmentOperator disjunction)*
+    : disjunction (assignmentOperator NL* disjunction)*
     ;
 
 disjunction

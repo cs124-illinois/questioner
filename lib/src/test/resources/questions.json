@@ -4,11 +4,11 @@
     "type": "KLASS",
     "klass": "Question",
     "metadata": {
-      "contentHash": "fcad45960dac5ebd8f0fc7dd4fd168a0",
+      "contentHash": "01f9e960cdd8ad7595fad9c264bcf022",
       "packageName": "com.examples.recursivefactorial",
       "version": "2022.7.0",
       "author": "challen@illinois.edu",
-      "javaDescription": "<p>Write a class method that provides a recursive implementation of factorial, accepting and returning <code>long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.</p>",
+      "javaDescription": "<p>Write a class method that provides a recursive implementation of factorial,\naccepting and returning <code>long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.</p>",
       "kotlinDescription": "<p>Write a method that provides a recursive implementation of factorial, accepting and returning <code>Long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.</p>",
       "usedFiles": [
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/recursivefactorial/incorrect/java/iterative/Question.java",
@@ -17,12 +17,12 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Write a class method that provides a recursive implementation of factorial, accepting and returning `long` arguments.\n * Throw an `IllegalArgumentException` on invalid inputs.\n */\n\n@Correct(name = \"Recursive Factorial\", version = \"2022.7.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  public static long factorial(long input) {\n    if (input <= 0) { // mutate-disable-conditional-boundary\n      throw new IllegalArgumentException();\n    }\n    if (input == 1) {\n      return 1;\n    }\n    return input * factorial(input - 1);\n  }\n\n  @FixedParameters private static final List<Long> FIXED = Arrays.asList(-10L, -1L, 0L, 1L, 2L);\n\n  @RandomParameters\n  private static long randomParameters(Random random) {\n    return random.nextInt(32);\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Write a class method that provides a recursive implementation of factorial,\n * accepting and returning `long` arguments.\n * Throw an `IllegalArgumentException` on invalid inputs.\n */\n\n@Correct(name = \"Recursive Factorial\", version = \"2022.7.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  public static long factorial(long input) {\n    if (input <= 0) { // mutate-disable-conditional-boundary\n      throw new IllegalArgumentException();\n    }\n    if (input == 1) {\n      return 1;\n    }\n    return input * factorial(input - 1);\n  }\n\n  @FixedParameters private static final List<Long> FIXED = Arrays.asList(-10L, -1L, 0L, 1L, 2L);\n\n  @RandomParameters\n  private static long randomParameters(Random random) {\n    return random.nextInt(32);\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/recursivefactorial/Question.java"
     },
@@ -714,7 +714,7 @@
         "kotlin"
       ],
       "descriptions": {
-        "java": "<p>Write a class method that provides a recursive implementation of factorial, accepting and returning <code>long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.</p>",
+        "java": "<p>Write a class method that provides a recursive implementation of factorial,\naccepting and returning <code>long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.</p>",
         "kotlin": "<p>Write a method that provides a recursive implementation of factorial, accepting and returning <code>Long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.</p>"
       },
       "complexity": {
@@ -1189,7 +1189,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -1198,21 +1198,21 @@
     "type": "METHOD",
     "klass": "Question",
     "metadata": {
-      "contentHash": "55b5f11ac1ba1ce7231dc090b270c8f7",
+      "contentHash": "39fa9c7f5f90e7bbd9dc13abf7d31676",
       "packageName": "com.examples.equals88",
       "version": "2021.6.0",
       "author": "challen@illinois.edu",
-      "javaDescription": "<p>Write a method named <code>equals88</code> that returns <code>true</code> if its <code>int</code> argument is equal to 88, our magic number.</p>",
+      "javaDescription": "<p>Write a method named <code>equals88</code> that returns <code>true</code> if its <code>int</code> argument is equal to 88,\nour magic number.</p>",
       "usedFiles": [],
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Write a method named `equals88` that returns `true` if its `int` argument is equal to 88, our magic number.\n */\n\n@Correct(name = \"Equals 88\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\n@Wrap\npublic class Question {\n  boolean equals88(int value) {\n    return value == 88;\n  }\n\n  @FixedParameters private static final List<Integer> FIXED = Arrays.asList(88, 188, 888, 8);\n\n  @RandomParameters\n  private static int randomInts(Random random) {\n    if (random.nextBoolean()) {\n      return 88;\n    } else {\n      return random.nextInt();\n    }\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Write a method named `equals88` that returns `true` if its `int` argument is equal to 88,\n * our magic number.\n */\n\n@Correct(name = \"Equals 88\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\n@Wrap\npublic class Question {\n  boolean equals88(int value) {\n    return value == 88;\n  }\n\n  @FixedParameters private static final List<Integer> FIXED = Arrays.asList(88, 188, 888, 8);\n\n  @RandomParameters\n  private static int randomInts(Random random) {\n    if (random.nextBoolean()) {\n      return 88;\n    } else {\n      return random.nextInt();\n    }\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/equals88/Question.java"
     },
@@ -1336,7 +1336,7 @@
         "java"
       ],
       "descriptions": {
-        "java": "<p>Write a method named <code>equals88</code> that returns <code>true</code> if its <code>int</code> argument is equal to 88, our magic number.</p>"
+        "java": "<p>Write a method named <code>equals88</code> that returns <code>true</code> if its <code>int</code> argument is equal to 88,\nour magic number.</p>"
       },
       "complexity": {
         "java": 1
@@ -1438,7 +1438,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -1447,11 +1447,11 @@
     "type": "KLASS",
     "klass": "Squirrel",
     "metadata": {
-      "contentHash": "9a7d16190750e376b4b70561a97f1c7a",
+      "contentHash": "0a9e197f9520fd05719661462797c2c7",
       "packageName": "com.examples.tripleequals",
       "version": "2022.7.0",
       "author": "challen@illinois.edu",
-      "javaDescription": "<p>Define a public class named <code>Squirrel</code>.\nThe <code>Squirrel</code> constructor should accept a <code>String</code> name, <code>String</code> tree, and <code>int</code> acorns, in that order.\nReject <code>null</code> names and trees using <code>assert</code>, and also <code>assert</code> that acorns is greater than 0 and less than or\nequal to 24.\n(Squirrels don't get too greedy and never acquire more acorns than that!)\nOverride equals and consider two <code>Squirrel</code> instances to be equal if they have the same name and tree.\nDo not provide getters or setters for your variables or expose them publicly.</p>",
+      "javaDescription": "<p>Define a public class named <code>Squirrel</code>.\nThe <code>Squirrel</code> constructor should accept a <code>String</code> name, <code>String</code> tree, and <code>int</code> acorns,\nin that order.\nReject <code>null</code> names and trees using <code>assert</code>, and also <code>assert</code> that acorns is greater than 0\nand less than or equal to 24.\n(Squirrels don't get too greedy and never acquire more acorns than that!)\nOverride equals and consider two <code>Squirrel</code> instances to be equal if they have the same name\nand tree.\nDo not provide getters or setters for your variables or expose them publicly.</p>",
       "kotlinDescription": "<p>Kotlin version to test double init.</p>",
       "usedFiles": [
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/tripleequals/correct/kotlin/Squirrel.kt"
@@ -1459,12 +1459,12 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Squirrel",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.jenisol.core.Three;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Generators;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Define a public class named `Squirrel`.\n * The `Squirrel` constructor should accept a `String` name, `String` tree, and `int` acorns, in that order.\n * Reject `null` names and trees using `assert`, and also `assert` that acorns is greater than 0 and less than or\n * equal to 24.\n * (Squirrels don't get too greedy and never acquire more acorns than that!)\n * Override equals and consider two `Squirrel` instances to be equal if they have the same name and tree.\n * Do not provide getters or setters for your variables or expose them publicly.\n */\n\n@SuppressWarnings(\"FieldCanBeLocal\")\n@Correct(name = \"Squirrel Equality\", version = \"2022.7.0\", author = \"challen@illinois.edu\")\npublic class Squirrel {\n  private final String name;\n  private final String tree;\n  private final int acorns;\n\n  public Squirrel(String setName, String setTree, int setAcorns) {\n    assert setName != null;\n    assert setTree != null;\n    assert setAcorns > 0 && setAcorns <= 9;\n    name = setName;\n    tree = setTree;\n    acorns = setAcorns;\n  }\n\n  @Override\n  public boolean equals(Object o) {\n    if (!(o instanceof Squirrel other)) {\n      return false;\n    }\n    return name.equals(other.name) && tree.equals(other.tree);\n  }\n\n  @FixedParameters\n  private static final List<Three<String, String, Integer>> FIXED =\n      Arrays.asList(\n          new Three<>(\"Patch\", \"Elm\", 8),\n          new Three<>(null, \"Elm\", 8),\n          new Three<>(\"Patch\", null, 8),\n          new Three<>(\"Patch\", \"Elm\", 0),\n          new Three<>(\"Patch\", \"Elm\", 10),\n          new Three<>(\"Patch\", \"Elm\", 9),\n          new Three<>(\"Marty\", \"Elm\", 8),\n          new Three<>(\"Patch\", \"Oak\", 1),\n          new Three<>(\"Patch\", \"Elm\", 8));\n\n  @RandomParameters\n  private static Three<String, String, Integer> randomParameters(Random random) {\n    String name = Generators.randomAlphanumericString(random, 16);\n    String breed = Generators.randomAlphanumericString(random, 32);\n    int lives = random.nextInt(26);\n    return new Three<>(name, breed, lives);\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.jenisol.core.Three;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Generators;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Define a public class named `Squirrel`.\n * The `Squirrel` constructor should accept a `String` name, `String` tree, and `int` acorns,\n * in that order.\n * Reject `null` names and trees using `assert`, and also `assert` that acorns is greater than 0\n * and less than or equal to 24.\n * (Squirrels don't get too greedy and never acquire more acorns than that!)\n * Override equals and consider two `Squirrel` instances to be equal if they have the same name\n * and tree.\n * Do not provide getters or setters for your variables or expose them publicly.\n */\n\n@SuppressWarnings(\"FieldCanBeLocal\")\n@Correct(name = \"Squirrel Equality\", version = \"2022.7.0\", author = \"challen@illinois.edu\")\npublic class Squirrel {\n  private final String name;\n  private final String tree;\n  private final int acorns;\n\n  public Squirrel(String setName, String setTree, int setAcorns) {\n    assert setName != null;\n    assert setTree != null;\n    assert setAcorns > 0 && setAcorns <= 9;\n    name = setName;\n    tree = setTree;\n    acorns = setAcorns;\n  }\n\n  @Override\n  public boolean equals(Object o) {\n    if (!(o instanceof Squirrel other)) {\n      return false;\n    }\n    return name.equals(other.name) && tree.equals(other.tree);\n  }\n\n  @FixedParameters\n  private static final List<Three<String, String, Integer>> FIXED =\n      Arrays.asList(\n          new Three<>(\"Patch\", \"Elm\", 8),\n          new Three<>(null, \"Elm\", 8),\n          new Three<>(\"Patch\", null, 8),\n          new Three<>(\"Patch\", \"Elm\", 0),\n          new Three<>(\"Patch\", \"Elm\", 10),\n          new Three<>(\"Patch\", \"Elm\", 9),\n          new Three<>(\"Marty\", \"Elm\", 8),\n          new Three<>(\"Patch\", \"Oak\", 1),\n          new Three<>(\"Patch\", \"Elm\", 8));\n\n  @RandomParameters\n  private static Three<String, String, Integer> randomParameters(Random random) {\n    String name = Generators.randomAlphanumericString(random, 16);\n    String breed = Generators.randomAlphanumericString(random, 32);\n    int lives = random.nextInt(26);\n    return new Three<>(name, breed, lives);\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/tripleequals/Squirrel.java"
     },
@@ -2750,7 +2750,7 @@
         "kotlin"
       ],
       "descriptions": {
-        "java": "<p>Define a public class named <code>Squirrel</code>.\nThe <code>Squirrel</code> constructor should accept a <code>String</code> name, <code>String</code> tree, and <code>int</code> acorns, in that order.\nReject <code>null</code> names and trees using <code>assert</code>, and also <code>assert</code> that acorns is greater than 0 and less than or\nequal to 24.\n(Squirrels don't get too greedy and never acquire more acorns than that!)\nOverride equals and consider two <code>Squirrel</code> instances to be equal if they have the same name and tree.\nDo not provide getters or setters for your variables or expose them publicly.</p>",
+        "java": "<p>Define a public class named <code>Squirrel</code>.\nThe <code>Squirrel</code> constructor should accept a <code>String</code> name, <code>String</code> tree, and <code>int</code> acorns,\nin that order.\nReject <code>null</code> names and trees using <code>assert</code>, and also <code>assert</code> that acorns is greater than 0\nand less than or equal to 24.\n(Squirrels don't get too greedy and never acquire more acorns than that!)\nOverride equals and consider two <code>Squirrel</code> instances to be equal if they have the same name\nand tree.\nDo not provide getters or setters for your variables or expose them publicly.</p>",
         "kotlin": "<p>Kotlin version to test double init.</p>"
       },
       "complexity": {
@@ -3675,7 +3675,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -3684,11 +3684,11 @@
     "type": "KLASS",
     "klass": "Counter",
     "metadata": {
-      "contentHash": "5312a2ea51ecb88e10e87262480b68ea",
+      "contentHash": "2b550c1a86816fcd78e3f6d1979d5aec",
       "packageName": "com.examples.counterobject",
       "version": "2021.6.0",
       "author": "challen@illinois.edu",
-      "javaDescription": "<p>Define and implement a <code>public</code> class <code>Counter</code>.\n<code>Counter</code> should provide a single public constructor that accepts an <code>int</code> parameter.\nIt should also provide <code>increment</code> and <code>decrement</code> methods, both taking no parameters and returning <code>void</code>.\n<code>increment</code> should increase the stored count, while <code>decrement</code> should decrease it.\nFinally, provide a <code>getValue</code> method that returns the stored value.</p>",
+      "javaDescription": "<p>Define and implement a <code>public</code> class <code>Counter</code>.\n<code>Counter</code> should provide a single public constructor that accepts an <code>int</code> parameter.\nIt should also provide <code>increment</code> and <code>decrement</code> methods, both taking no parameters and\nreturning <code>void</code>.\n<code>increment</code> should increase the stored count, while <code>decrement</code> should decrease it.\nFinally, provide a <code>getValue</code> method that returns the stored value.</p>",
       "kotlinDescription": "<p>Define and implement a class <code>Counter</code>.\n<code>Counter</code> should provide primary constructor that accepts an <code>Int</code> parameter.\nIt should also provide <code>increment</code> and <code>decrement</code> methods, both taking no parameters and returning <code>Unit</code>.\n<code>increment</code> should increase the stored count, while <code>decrement</code> should decrease it.\nFinally, provide a <code>getValue</code> method that returns the stored value.</p>",
       "usedFiles": [
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/counterobject/correct/kotlin/Counter.kt"
@@ -3696,12 +3696,12 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Counter",
-      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Define and implement a `public` class `Counter`.\n * `Counter` should provide a single public constructor that accepts an `int` parameter.\n * It should also provide `increment` and `decrement` methods, both taking no parameters and returning `void`.\n * `increment` should increase the stored count, while `decrement` should decrease it.\n * Finally, provide a `getValue` method that returns the stored value.\n */\n\n@Correct(name = \"Counter\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\npublic class Counter {\n  private int value;\n\n  public Counter(int setValue) {\n    value = setValue;\n  }\n\n  public void increment() {\n    value++;\n  }\n\n  public void decrement() {\n    value--;\n  }\n\n  public int getValue() {\n    return value;\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Define and implement a `public` class `Counter`.\n * `Counter` should provide a single public constructor that accepts an `int` parameter.\n * It should also provide `increment` and `decrement` methods, both taking no parameters and\n * returning `void`.\n * `increment` should increase the stored count, while `decrement` should decrease it.\n * Finally, provide a `getValue` method that returns the stored value.\n */\n\n@Correct(name = \"Counter\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\npublic class Counter {\n  private int value;\n\n  public Counter(int setValue) {\n    value = setValue;\n  }\n\n  public void increment() {\n    value++;\n  }\n\n  public void decrement() {\n    value--;\n  }\n\n  public int getValue() {\n    return value;\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/counterobject/Counter.java"
     },
@@ -4391,7 +4391,7 @@
         "kotlin"
       ],
       "descriptions": {
-        "java": "<p>Define and implement a <code>public</code> class <code>Counter</code>.\n<code>Counter</code> should provide a single public constructor that accepts an <code>int</code> parameter.\nIt should also provide <code>increment</code> and <code>decrement</code> methods, both taking no parameters and returning <code>void</code>.\n<code>increment</code> should increase the stored count, while <code>decrement</code> should decrease it.\nFinally, provide a <code>getValue</code> method that returns the stored value.</p>",
+        "java": "<p>Define and implement a <code>public</code> class <code>Counter</code>.\n<code>Counter</code> should provide a single public constructor that accepts an <code>int</code> parameter.\nIt should also provide <code>increment</code> and <code>decrement</code> methods, both taking no parameters and\nreturning <code>void</code>.\n<code>increment</code> should increase the stored count, while <code>decrement</code> should decrease it.\nFinally, provide a <code>getValue</code> method that returns the stored value.</p>",
         "kotlin": "<p>Define and implement a class <code>Counter</code>.\n<code>Counter</code> should provide primary constructor that accepts an <code>Int</code> parameter.\nIt should also provide <code>increment</code> and <code>decrement</code> methods, both taking no parameters and returning <code>Unit</code>.\n<code>increment</code> should increase the stored count, while <code>decrement</code> should decrease it.\nFinally, provide a <code>getValue</code> method that returns the stored value.</p>"
       },
       "complexity": {
@@ -4866,7 +4866,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -4875,11 +4875,11 @@
     "type": "SNIPPET",
     "klass": "Question",
     "metadata": {
-      "contentHash": "b9e43a09ae1ef6ece62ae6945b75da68",
+      "contentHash": "d3070be539c060ac0a0b5fdcb997ef62",
       "packageName": "com.examples.printsum",
       "version": "2021.6.0",
       "author": "challen@illinois.edu",
-      "javaDescription": "<p>Given two <code>int</code> variables <code>first</code> and <code>second</code> that are already declared and initialized, print their sum.</p>",
+      "javaDescription": "<p>Given two <code>int</code> variables <code>first</code> and <code>second</code> that are already declared and initialized,\nprint their sum.</p>",
       "kotlinDescription": "<p>Given two <code>int</code> variables <code>first</code> and <code>second</code> that are already declared and initialized, print their sum.</p>",
       "usedFiles": [
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/printsum/incorrect/java/toomuchoutput/Question.java",
@@ -4889,14 +4889,14 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {
       "maxDeadCode": 2
     },
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Given two `int` variables `first` and `second` that are already declared and initialized, print their sum.\n */\n\n@Correct(name = \"Print Sum\", author = \"challen@illinois.edu\", version = \"2021.6.0\", maxDeadCode = 2)\npublic class Question {\n  public static void printSum(int first, int second) {\n    // TEMPLATE_START\n    System.out.println(first + second);\n    // TEMPLATE_END\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Given two `int` variables `first` and `second` that are already declared and initialized,\n * print their sum.\n */\n\n@Correct(name = \"Print Sum\", author = \"challen@illinois.edu\", version = \"2021.6.0\", maxDeadCode = 2)\npublic class Question {\n  public static void printSum(int first, int second) {\n    // TEMPLATE_START\n    System.out.println(first + second);\n    // TEMPLATE_END\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/printsum/Question.java"
     },
@@ -5238,7 +5238,7 @@
         "kotlin"
       ],
       "descriptions": {
-        "java": "<p>Given two <code>int</code> variables <code>first</code> and <code>second</code> that are already declared and initialized, print their sum.</p>",
+        "java": "<p>Given two <code>int</code> variables <code>first</code> and <code>second</code> that are already declared and initialized,\nprint their sum.</p>",
         "kotlin": "<p>Given two <code>int</code> variables <code>first</code> and <code>second</code> that are already declared and initialized, print their sum.</p>"
       },
       "complexity": {
@@ -5342,7 +5342,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -5360,7 +5360,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
@@ -5787,7 +5787,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -5811,7 +5811,7 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
@@ -7023,7 +7023,7 @@
         "java.util.ArrayList",
         "java.util.List"
       ],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -7045,7 +7045,7 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
@@ -7322,7 +7322,7 @@
         "java.util.List",
         "java.util.ArrayList"
       ],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -7331,7 +7331,7 @@
     "type": "METHOD",
     "klass": "Question",
     "metadata": {
-      "contentHash": "145f11c40f31ddfb42402057e469ddb8",
+      "contentHash": "dc445487d591b6e243cb87ce0398f3cd",
       "packageName": "com.examples.testing.withmapextras",
       "version": "2023.9.0",
       "author": "challen@illinois.edu",
@@ -7343,12 +7343,12 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.NotNull;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\n\nimport java.util.Map;\n\n/*\n * Test whether Map automatic whitelisting works.\n * Note that tests are in Questioner.\n */\n\n@Correct(name = \"With Map Extras\", author = \"challen@illinois.edu\", version = \"2023.9.0\")\n@Wrap\npublic class Question {\n  int mapSize(@NotNull Map<String, Integer> map) {\n    return map.size();\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.NotNull;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Map;\n\n/*\n * Test whether Map automatic whitelisting works.\n * Note that tests are in Questioner.\n */\n\n@Correct(name = \"With Map Extras\", author = \"challen@illinois.edu\", version = \"2023.9.0\")\n@Wrap\npublic class Question {\n  int mapSize(@NotNull Map<String, Integer> map) {\n    return map.size();\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withmapextras/Question.java"
     },
@@ -7633,7 +7633,7 @@
         "java.util.Map",
         "java.util.Set"
       ],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -7651,7 +7651,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
@@ -8111,7 +8111,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -8129,7 +8129,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
@@ -9081,7 +9081,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -9102,7 +9102,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
@@ -10111,7 +10111,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -10133,7 +10133,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
@@ -10843,7 +10843,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -10863,7 +10863,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
@@ -11334,7 +11334,235 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
+    },
+    "fauxStatic": false
+  },
+  "Test Memoization Defense": {
+    "name": "Test Memoization Defense",
+    "type": "METHOD",
+    "klass": "Question",
+    "metadata": {
+      "contentHash": "af0f5edd45fd08979f53fbdca2e328be",
+      "packageName": "com.examples.testing.testmemoizationdefense",
+      "version": "2023.10.0",
+      "author": "challen@illinois.edu",
+      "javaDescription": "<p>Testing class size based memoization defense.</p>",
+      "usedFiles": [
+        "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/testmemoizationdefense/incorrect/java/memoized/Question.java"
+      ],
+      "templateImports": [],
+      "focused": false,
+      "publish": true,
+      "questionerVersion": "2023.10.1"
+    },
+    "annotatedControls": {},
+    "question": {
+      "klass": "Question",
+      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\n\n/*\n * Testing class size based memoization defense.\n */\n\n@Correct(name = \"Test Memoization Defense\", version = \"2023.10.0\", author = \"challen@illinois.edu\")\n@Wrap\npublic class Question {\n  int returnValue(int value) {\n    return value;\n  }\n}",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/testmemoizationdefense/Question.java"
+    },
+    "correct": {
+      "klass": "Question",
+      "contents": "int returnValue(int value) {\n  return value;\n}",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/testmemoizationdefense/Question.java",
+      "complexity": 1,
+      "features": {
+        "featureMap": {
+          "METHOD": 1,
+          "RETURN": 1
+        },
+        "featureList": [
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 1,
+              "column": 22
+            }
+          },
+          {
+            "feature": "METHOD",
+            "location": {
+              "line": 2,
+              "column": 0
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 2,
+              "column": 27
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 3,
+              "column": 2
+            }
+          },
+          {
+            "feature": "RETURN",
+            "location": {
+              "line": 3,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 3,
+              "column": 14
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 4,
+              "column": 0
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 5,
+              "column": 0
+            }
+          }
+        ],
+        "importList": [],
+        "typeList": [
+          "int"
+        ],
+        "identifierList": [],
+        "dottedMethodList": []
+      },
+      "lineCount": {
+        "source": 3,
+        "comment": 0,
+        "blank": 0
+      },
+      "expectedDeadCount": 0
+    },
+    "alternativeSolutions": [],
+    "incorrect": [
+      {
+        "klass": "Question",
+        "contents": "int returnValue(int value) {\n  int[] values = {\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n  };\n  return value;\n}",
+        "reason": "CLASSSIZE",
+        "language": "java",
+        "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/testmemoizationdefense/incorrect/java/memoized/Question.java",
+        "starter": false,
+        "needed": true,
+        "testCount": -1
+      }
+    ],
+    "common": [],
+    "javaTemplate": "public class Question {\n  {{{ contents }}}\n}",
+    "importWhitelist": [],
+    "importBlacklist": [],
+    "checkstyleSuppressions": [],
+    "slug": "test-memoization-defense",
+    "hasKotlin": false,
+    "published": {
+      "name": "Test Memoization Defense",
+      "type": "METHOD",
+      "path": "test-memoization-defense",
+      "author": "challen@illinois.edu",
+      "version": "2023.10.0",
+      "packageName": "com.examples.testing.testmemoizationdefense",
+      "languages": [
+        "java"
+      ],
+      "descriptions": {
+        "java": "<p>Testing class size based memoization defense.</p>"
+      },
+      "complexity": {
+        "java": 1
+      },
+      "features": {
+        "java": {
+          "featureMap": {
+            "METHOD": 1,
+            "RETURN": 1
+          },
+          "featureList": [
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 1,
+                "column": 22
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 2,
+                "column": 0
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 2,
+                "column": 27
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 3,
+                "column": 2
+              }
+            },
+            {
+              "feature": "RETURN",
+              "location": {
+                "line": 3,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 3,
+                "column": 14
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 4,
+                "column": 0
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 5,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [
+            "int"
+          ],
+          "identifierList": [],
+          "dottedMethodList": []
+        }
+      },
+      "lineCounts": {
+        "java": {
+          "source": 3,
+          "comment": 0,
+          "blank": 0
+        }
+      },
+      "templateImports": [],
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -11357,7 +11585,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
@@ -11907,7 +12135,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -11916,21 +12144,21 @@
     "type": "METHOD",
     "klass": "Question",
     "metadata": {
-      "contentHash": "20cdf15b91970109fdef324f27e1cacf",
+      "contentHash": "8225a02f6674bd0ad1f084a164c9908c",
       "packageName": "com.examples.combineminustwo",
       "version": "2021.6.0",
       "author": "challen@illinois.edu",
-      "javaDescription": "<p>Write a function <code>combine</code> that, given two <code>String</code> arguments, returns the second appended to the first.\nExcept you should omit the first two characters of each <code>String</code>.\nFor example, given <code>Java</code> and <code>Kotlin</code>, you would return <code>vatlin</code>.\nYou can assume that each <code>String</code> is of length at least two.</p>",
+      "javaDescription": "<p>Write a function <code>combine</code> that, given two <code>String</code> arguments, returns the second appended to\nthe first.\nExcept you should omit the first two characters of each <code>String</code>.\nFor example, given <code>Java</code> and <code>Kotlin</code>, you would return <code>vatlin</code>.\nYou can assume that each <code>String</code> is of length at least two.</p>",
       "usedFiles": [],
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.jenisol.core.Two;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Generators;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Write a function `combine` that, given two `String` arguments, returns the second appended to the first.\n * Except you should omit the first two characters of each `String`.\n * For example, given `Java` and `Kotlin`, you would return `vatlin`.\n * You can assume that each `String` is of length at least two.\n */\n\n@Correct(name = \"Combine Minus Two\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\n@Wrap\npublic class Question {\n  String combine(String first, String second) {\n    return first.substring(2) + second.substring(2);\n  }\n\n  @FixedParameters\n  private static final List<Two<String, String>> FIXED =\n      Arrays.asList(new Two<>(\"Java\", \"Kotlin\"), new Two<>(\"CS125\", \"CS124\"));\n\n  @RandomParameters\n  private static Two<String, String> randomStrings(Random random) {\n    String first = Generators.randomAlphanumericStringWithLength(random, random.nextInt(32) + 2);\n    String second = Generators.randomAlphanumericStringWithLength(random, random.nextInt(32) + 2);\n    return new Two<>(first, second);\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.jenisol.core.Two;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Generators;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Write a function `combine` that, given two `String` arguments, returns the second appended to\n * the first.\n * Except you should omit the first two characters of each `String`.\n * For example, given `Java` and `Kotlin`, you would return `vatlin`.\n * You can assume that each `String` is of length at least two.\n */\n\n@Correct(name = \"Combine Minus Two\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\n@Wrap\npublic class Question {\n  String combine(String first, String second) {\n    return first.substring(2) + second.substring(2);\n  }\n\n  @FixedParameters\n  private static final List<Two<String, String>> FIXED =\n      Arrays.asList(new Two<>(\"Java\", \"Kotlin\"), new Two<>(\"CS125\", \"CS124\"));\n\n  @RandomParameters\n  private static Two<String, String> randomStrings(Random random) {\n    String first = Generators.randomAlphanumericStringWithLength(random, random.nextInt(32) + 2);\n    String second = Generators.randomAlphanumericStringWithLength(random, random.nextInt(32) + 2);\n    return new Two<>(first, second);\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/combineminustwo/Question.java"
     },
@@ -12099,7 +12327,7 @@
         "java"
       ],
       "descriptions": {
-        "java": "<p>Write a function <code>combine</code> that, given two <code>String</code> arguments, returns the second appended to the first.\nExcept you should omit the first two characters of each <code>String</code>.\nFor example, given <code>Java</code> and <code>Kotlin</code>, you would return <code>vatlin</code>.\nYou can assume that each <code>String</code> is of length at least two.</p>"
+        "java": "<p>Write a function <code>combine</code> that, given two <code>String</code> arguments, returns the second appended to\nthe first.\nExcept you should omit the first two characters of each <code>String</code>.\nFor example, given <code>Java</code> and <code>Kotlin</code>, you would return <code>vatlin</code>.\nYou can assume that each <code>String</code> is of length at least two.</p>"
       },
       "complexity": {
         "java": 1
@@ -12246,7 +12474,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -12255,23 +12483,23 @@
     "type": "METHOD",
     "klass": "Question",
     "metadata": {
-      "contentHash": "238a3487d82ef1431fab06a22392a361",
+      "contentHash": "46aa91ad979441e05407b79237732240",
       "packageName": "com.examples.fancystringcompare",
       "version": "2021.6.0",
       "author": "challen@illinois.edu",
-      "javaDescription": "<p>Write a method <code>fancyCompare</code> that takes two <code>String</code> arguments. If the two <code>String</code>s are equal, return -1.\nOtherwise, return the length of the longer <code>String</code>.\nYou should <code>assert</code> that both inputs are not <code>null</code>.</p>",
+      "javaDescription": "<p>Write a method <code>fancyCompare</code> that takes two <code>String</code> arguments. If the two <code>String</code>s are equal,\nreturn -1.\nOtherwise, return the length of the longer <code>String</code>.\nYou should <code>assert</code> that both inputs are not <code>null</code>.</p>",
       "usedFiles": [
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/fancystringcompare/incorrect/badequals/Question.java"
       ],
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\n\n/*\n * Write a method `fancyCompare` that takes two `String` arguments. If the two `String`s are equal, return -1.\n * Otherwise, return the length of the longer `String`.\n * You should `assert` that both inputs are not `null`.\n */\n\n@SuppressWarnings(\"ManualMinMaxCalculation\")\n@Correct(name = \"Fancy String Compare\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\n@Wrap\npublic class Question {\n  int fancyEquals(String first, String second) {\n    assert first != null;\n    assert second != null;\n    if (first.equals(second)) {\n      return -1;\n      // mutate-disable-conditional-boundary\n      // mutate-disable-modify-length-and-size\n    } else if (first.length() > second.length()) {\n      return first.length();\n    } else {\n      return second.length();\n    }\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\n\n/*\n * Write a method `fancyCompare` that takes two `String` arguments. If the two `String`s are equal,\n * return -1.\n * Otherwise, return the length of the longer `String`.\n * You should `assert` that both inputs are not `null`.\n */\n\n@SuppressWarnings(\"ManualMinMaxCalculation\")\n@Correct(name = \"Fancy String Compare\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\n@Wrap\npublic class Question {\n  int fancyEquals(String first, String second) {\n    assert first != null;\n    assert second != null;\n    if (first.equals(second)) {\n      return -1;\n      // mutate-disable-conditional-boundary\n      // mutate-disable-modify-length-and-size\n    } else if (first.length() > second.length()) {\n      return first.length();\n    } else {\n      return second.length();\n    }\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/fancystringcompare/Question.java"
     },
@@ -12761,7 +12989,7 @@
         "java"
       ],
       "descriptions": {
-        "java": "<p>Write a method <code>fancyCompare</code> that takes two <code>String</code> arguments. If the two <code>String</code>s are equal, return -1.\nOtherwise, return the length of the longer <code>String</code>.\nYou should <code>assert</code> that both inputs are not <code>null</code>.</p>"
+        "java": "<p>Write a method <code>fancyCompare</code> that takes two <code>String</code> arguments. If the two <code>String</code>s are equal,\nreturn -1.\nOtherwise, return the length of the longer <code>String</code>.\nYou should <code>assert</code> that both inputs are not <code>null</code>.</p>"
       },
       "complexity": {
         "java": 3
@@ -13218,7 +13446,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -13245,7 +13473,7 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
@@ -15501,7 +15729,7 @@
         "java.util.Map",
         "java.util.HashMap"
       ],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -15521,7 +15749,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
@@ -16278,7 +16506,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -16287,23 +16515,23 @@
     "type": "KLASS",
     "klass": "Question",
     "metadata": {
-      "contentHash": "996c3cdb90539d435a2d1a2e2527cdc6",
+      "contentHash": "04e50e93b9a55a01abbf856bd19fb9c8",
       "packageName": "com.examples.mayberecursivefactorial",
       "version": "2022.7.0",
       "author": "challen@illinois.edu",
-      "javaDescription": "<p>Write a class method that provides an implementation of factorial, accepting and returning <code>long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.\nYour implementation can be recursive or not.</p>",
+      "javaDescription": "<p>Write a class method that provides an implementation of factorial, accepting and returning\n<code>long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.\nYour implementation can be recursive or not.</p>",
       "usedFiles": [
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/mayberecursivefactorial/correct/java/iterative/Question.java"
       ],
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Write a class method that provides an implementation of factorial, accepting and returning `long` arguments.\n * Throw an `IllegalArgumentException` on invalid inputs.\n * Your implementation can be recursive or not.\n */\n\n@Correct(name = \"Maybe Recursive Factorial\", version = \"2022.7.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  public static long factorial(long input) {\n    if (input <= 0) { // mutate-disable-conditional-boundary\n      throw new IllegalArgumentException();\n    }\n    if (input == 1) {\n      return 1;\n    }\n    return input * factorial(input - 1);\n  }\n\n  @FixedParameters private static final List<Long> FIXED = Arrays.asList(-10L, -1L, 0L, 1L, 2L);\n\n  @RandomParameters\n  private static long randomParameters(Random random) {\n    return random.nextInt(32);\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Write a class method that provides an implementation of factorial, accepting and returning\n * `long` arguments.\n * Throw an `IllegalArgumentException` on invalid inputs.\n * Your implementation can be recursive or not.\n */\n\n@Correct(name = \"Maybe Recursive Factorial\", version = \"2022.7.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  public static long factorial(long input) {\n    if (input <= 0) { // mutate-disable-conditional-boundary\n      throw new IllegalArgumentException();\n    }\n    if (input == 1) {\n      return 1;\n    }\n    return input * factorial(input - 1);\n  }\n\n  @FixedParameters private static final List<Long> FIXED = Arrays.asList(-10L, -1L, 0L, 1L, 2L);\n\n  @RandomParameters\n  private static long randomParameters(Random random) {\n    return random.nextInt(32);\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/mayberecursivefactorial/Question.java"
     },
@@ -16966,7 +17194,7 @@
         "java"
       ],
       "descriptions": {
-        "java": "<p>Write a class method that provides an implementation of factorial, accepting and returning <code>long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.\nYour implementation can be recursive or not.</p>"
+        "java": "<p>Write a class method that provides an implementation of factorial, accepting and returning\n<code>long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.\nYour implementation can be recursive or not.</p>"
       },
       "complexity": {
         "java": 4
@@ -17270,7 +17498,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -17279,11 +17507,11 @@
     "type": "KLASS",
     "klass": "Question",
     "metadata": {
-      "contentHash": "144cc102fd3530a84a5e30737e94336c",
+      "contentHash": "c20a5a482dc66e0efbdead17cdc59133",
       "packageName": "com.examples.addoneclass",
       "version": "2021.6.0",
       "author": "challen@illinois.edu",
-      "javaDescription": "<p>Write a class named <code>Question</code> with a single <code>static</code> method <code>addOne</code> that returns its <code>int</code> argument plus one.</p>",
+      "javaDescription": "<p>Write a class named <code>Question</code> with a single <code>static</code> method <code>addOne</code> that returns its <code>int</code>\nargument plus one.</p>",
       "kotlinDescription": "<p>Write a function <code>addOne</code> that returns its <code>Int</code> argument plus one.</p>",
       "usedFiles": [
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/addoneclass/correct/kotlin/Question.kt"
@@ -17291,12 +17519,12 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Write a class named `Question` with a single `static` method `addOne` that returns its `int` argument plus one.\n */\n\n@Correct(name = \"Add One Class\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\npublic class Question {\n  public static int addOne(int value) {\n    return value + 1;\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Write a class named `Question` with a single `static` method `addOne` that returns its `int`\n * argument plus one.\n */\n\n@Correct(name = \"Add One Class\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\npublic class Question {\n  public static int addOne(int value) {\n    return value + 1;\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addoneclass/Question.java"
     },
@@ -17593,7 +17821,7 @@
         "kotlin"
       ],
       "descriptions": {
-        "java": "<p>Write a class named <code>Question</code> with a single <code>static</code> method <code>addOne</code> that returns its <code>int</code> argument plus one.</p>",
+        "java": "<p>Write a class named <code>Question</code> with a single <code>static</code> method <code>addOne</code> that returns its <code>int</code>\nargument plus one.</p>",
         "kotlin": "<p>Write a function <code>addOne</code> that returns its <code>Int</code> argument plus one.</p>"
       },
       "complexity": {
@@ -17786,7 +18014,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -17795,23 +18023,23 @@
     "type": "KLASS",
     "klass": "Cougar",
     "metadata": {
-      "contentHash": "858c7009ae6211d3f4f7f0bcff4d091c",
+      "contentHash": "01968346e74f3a7c06d892d352c93d14",
       "packageName": "com.examples.cougarfeliform",
       "version": "2021.7.0",
       "author": "challen@illinois.edu",
-      "javaDescription": "<p>Create and complete the implementation of the <code>Cougar</code> class.\nYour class should be public, not final and not abstract, inherit from the <code>Feliform</code> class,\nand provide the following methods:</p><ol><li>Constructor that takes a <code>int</code> parameter <code>speed</code> and a second <code>weight</code>.\nCreates a new <code>Cougar</code> with the passed speed and weight.\nYou should call the <code>Feliform</code> constructor and pass it the <code>String</code> &quot;cougar&quot; to identify the type of this\nfeliform.</li><li>Public instance method <code>dangerousness</code> that takes no arguments and returns an <code>int</code>.\nReturn the dangerousness of this cougar which equals its speed times its weight.</li><li>Override <code>public boolean equals(Object other)</code>.\nReturn <code>true</code> if <code>other</code> is a <code>Cougar</code> with the same speed and weight, and <code>false</code> otherwise.\nNote that <code>other</code> may be <code>null</code> or not a <code>Housecat</code>.</li></ol><p>Finally, note that your class should not expose any of its internal state publicly.</p>",
+      "javaDescription": "<p>Create and complete the implementation of the <code>Cougar</code> class.\nYour class should be public, not final and not abstract, inherit from the <code>Feliform</code> class,\nand provide the following methods:</p><ol><li>Constructor that takes a <code>int</code> parameter <code>speed</code> and a second <code>weight</code>.\nCreates a new <code>Cougar</code> with the passed speed and weight.\nYou should call the <code>Feliform</code> constructor and pass it the <code>String</code> &quot;cougar&quot; to identify the type\nof this feliform.</li><li>Public instance method <code>dangerousness</code> that takes no arguments and returns an <code>int</code>.\nReturn the dangerousness of this cougar which equals its speed times its weight.</li><li>Override <code>public boolean equals(Object other)</code>.\nReturn <code>true</code> if <code>other</code> is a <code>Cougar</code> with the same speed and weight, and <code>false</code> otherwise.\nNote that <code>other</code> may be <code>null</code> or not a <code>Housecat</code>.</li></ol><p>Finally, note that your class should not expose any of its internal state publicly.</p>",
       "usedFiles": [
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/cougarfeliform/Feliform.java"
       ],
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Cougar",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.Both;\nimport edu.illinois.cs.cs125.jenisol.core.Limit;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Create and complete the implementation of the `Cougar` class.\n * Your class should be public, not final and not abstract, inherit from the `Feliform` class,\n * and provide the following methods:\n *\n * 1. Constructor that takes a `int` parameter `speed` and a second `weight`.\n * Creates a new `Cougar` with the passed speed and weight.\n * You should call the `Feliform` constructor and pass it the `String` \"cougar\" to identify the type of this\n * feliform.\n * 1. Public instance method `dangerousness` that takes no arguments and returns an `int`.\n * Return the dangerousness of this cougar which equals its speed times its weight.\n * 1. Override `public boolean equals(Object other)`.\n * Return `true` if `other` is a `Cougar` with the same speed and weight, and `false` otherwise.\n * Note that `other` may be `null` or not a `Housecat`.\n *\n * Finally, note that your class should not expose any of its internal state publicly.\n */\n@Correct(name = \"Cougar Feliform\", version = \"2021.7.0\", author = \"challen@illinois.edu\")\npublic class Cougar extends Feliform {\n  private final int speed;\n  private final int weight;\n\n  public Cougar(int setSpeed, int setWeight) {\n    super(\"cougar\");\n    speed = setSpeed;\n    weight = setWeight;\n  }\n\n  @Override\n  public int dangerousness() {\n    return speed * weight;\n  }\n\n  @Override\n  public boolean equals(Object o) {\n    if (!(o instanceof Cougar housecat)) {\n      return false;\n    }\n    return speed == housecat.speed && weight == housecat.weight;\n  }\n\n  @Both\n  @Limit(1)\n  public static String getType(Feliform feliform) {\n    return feliform.getType();\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.Both;\nimport edu.illinois.cs.cs125.jenisol.core.Limit;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Create and complete the implementation of the `Cougar` class.\n * Your class should be public, not final and not abstract, inherit from the `Feliform` class,\n * and provide the following methods:\n *\n * 1. Constructor that takes a `int` parameter `speed` and a second `weight`.\n * Creates a new `Cougar` with the passed speed and weight.\n * You should call the `Feliform` constructor and pass it the `String` \"cougar\" to identify the type\n * of this feliform.\n * 1. Public instance method `dangerousness` that takes no arguments and returns an `int`.\n * Return the dangerousness of this cougar which equals its speed times its weight.\n * 1. Override `public boolean equals(Object other)`.\n * Return `true` if `other` is a `Cougar` with the same speed and weight, and `false` otherwise.\n * Note that `other` may be `null` or not a `Housecat`.\n *\n * Finally, note that your class should not expose any of its internal state publicly.\n */\n@Correct(name = \"Cougar Feliform\", version = \"2021.7.0\", author = \"challen@illinois.edu\")\npublic class Cougar extends Feliform {\n  private final int speed;\n  private final int weight;\n\n  public Cougar(int setSpeed, int setWeight) {\n    super(\"cougar\");\n    speed = setSpeed;\n    weight = setWeight;\n  }\n\n  @Override\n  public int dangerousness() {\n    return speed * weight;\n  }\n\n  @Override\n  public boolean equals(Object o) {\n    if (!(o instanceof Cougar housecat)) {\n      return false;\n    }\n    return speed == housecat.speed && weight == housecat.weight;\n  }\n\n  @Both\n  @Limit(1)\n  public static String getType(Feliform feliform) {\n    return feliform.getType();\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/cougarfeliform/Cougar.java"
     },
@@ -18303,7 +18531,7 @@
         "java"
       ],
       "descriptions": {
-        "java": "<p>Create and complete the implementation of the <code>Cougar</code> class.\nYour class should be public, not final and not abstract, inherit from the <code>Feliform</code> class,\nand provide the following methods:</p><ol><li>Constructor that takes a <code>int</code> parameter <code>speed</code> and a second <code>weight</code>.\nCreates a new <code>Cougar</code> with the passed speed and weight.\nYou should call the <code>Feliform</code> constructor and pass it the <code>String</code> &quot;cougar&quot; to identify the type of this\nfeliform.</li><li>Public instance method <code>dangerousness</code> that takes no arguments and returns an <code>int</code>.\nReturn the dangerousness of this cougar which equals its speed times its weight.</li><li>Override <code>public boolean equals(Object other)</code>.\nReturn <code>true</code> if <code>other</code> is a <code>Cougar</code> with the same speed and weight, and <code>false</code> otherwise.\nNote that <code>other</code> may be <code>null</code> or not a <code>Housecat</code>.</li></ol><p>Finally, note that your class should not expose any of its internal state publicly.</p>"
+        "java": "<p>Create and complete the implementation of the <code>Cougar</code> class.\nYour class should be public, not final and not abstract, inherit from the <code>Feliform</code> class,\nand provide the following methods:</p><ol><li>Constructor that takes a <code>int</code> parameter <code>speed</code> and a second <code>weight</code>.\nCreates a new <code>Cougar</code> with the passed speed and weight.\nYou should call the <code>Feliform</code> constructor and pass it the <code>String</code> &quot;cougar&quot; to identify the type\nof this feliform.</li><li>Public instance method <code>dangerousness</code> that takes no arguments and returns an <code>int</code>.\nReturn the dangerousness of this cougar which equals its speed times its weight.</li><li>Override <code>public boolean equals(Object other)</code>.\nReturn <code>true</code> if <code>other</code> is a <code>Cougar</code> with the same speed and weight, and <code>false</code> otherwise.\nNote that <code>other</code> may be <code>null</code> or not a <code>Housecat</code>.</li></ol><p>Finally, note that your class should not expose any of its internal state publicly.</p>"
       },
       "complexity": {
         "java": 5
@@ -18772,7 +19000,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -18790,7 +19018,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
@@ -18915,7 +19143,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -18936,7 +19164,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
@@ -20518,7 +20746,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -20539,7 +20767,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
@@ -21210,7 +21438,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -21238,7 +21466,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {
       "maxLineCountMultiplier": 16
@@ -21858,7 +22086,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   },
@@ -21880,7 +22108,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "annotatedControls": {},
     "question": {
@@ -22654,7 +22882,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.0"
+      "questionerVersion": "2023.10.1"
     },
     "fauxStatic": false
   }

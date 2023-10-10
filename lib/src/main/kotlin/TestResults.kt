@@ -47,11 +47,11 @@ data class TestResults(
         checkstyle,
         ktlint,
         checkCompiledSubmission,
+        classSize,
         complexity,
         features,
         lineCount,
         partial,
-
         // execution
         checkExecutedSubmission,
         executioncount,
@@ -160,9 +160,9 @@ data class TestResults(
         val failed: Boolean = submission >= limit
     ) {
         init {
-            require(solution > 0)
-            require(submission > 0)
-            require(limit > 0)
+            require(solution >= 0) { "Invalid solution resource usage: $solution"}
+            require(submission >= 0) { "Invalid submission resource usage: $submission"}
+            require(limit >= 0) { "Invalid resource limit: $limit"}
         }
     }
 
@@ -264,6 +264,8 @@ data class TestResults(
             "Checking submission failed: ${failed.checkExecutedSubmission}"
         } else if (failed.features != null) {
             "Checking submission features failed: ${failed.features}"
+        } else if (failed.lineCount != null) {
+            "Submission executed too many lines: ${failed.lineCount}"
         } else if (timeout) {
             "Testing timed out"
         } else if (complete.testing?.passed == false) {
