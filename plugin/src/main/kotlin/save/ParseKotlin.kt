@@ -13,6 +13,7 @@ import edu.illinois.cs.cs125.questioner.antlr.KotlinParser
 import edu.illinois.cs.cs125.questioner.antlr.KotlinParser.ImportHeaderContext
 import edu.illinois.cs.cs125.questioner.lib.AlsoCorrect
 import edu.illinois.cs.cs125.questioner.lib.Incorrect
+import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.Starter
 import edu.illinois.cs.cs125.questioner.lib.toReason
@@ -74,9 +75,15 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
             is KotlinParser.AnnotationContext -> ruleContext.valueArguments()
             is KotlinParser.UnescapedAnnotationContext -> ruleContext.valueArguments()
             else -> error("Bad annotation chain")
-        }?.valueArgument()?.find {
-            it.simpleIdentifier().text == "reason"
-        }?.expression()?.text?.removeSurrounding("\"") ?: "test"
+        }?.valueArgument()?.let {
+            check(it.size == 1) { "Invalid @Incorrect annotation" }
+            it.first()
+        }?.let { content ->
+            content.simpleIdentifier()?.text?.let {
+                check(it == "reason") { "Invalid @Incorrect annotation" }
+            }
+            content.expression()?.text?.removeSurrounding("\"")
+        } ?: "test"
     }
 
     val isQuestioner = alternateSolution != null || starter != null || incorrect != null
@@ -87,7 +94,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
             className,
             clean(cleanSpec).trimStart(),
             incorrect.toReason(),
-            Question.Language.kotlin,
+            Language.kotlin,
             path,
             starter != null,
         )
@@ -142,7 +149,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
         return@runBlocking Question.FlatFile(
             className,
             solutionContent,
-            Question.Language.kotlin,
+            Language.kotlin,
             path,
             complexity,
             features,
@@ -157,7 +164,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
             className,
             clean(cleanSpec).trimStart(),
             incorrect?.toReason() ?: "test".toReason(),
-            Question.Language.kotlin,
+            Language.kotlin,
             path,
             true,
         )
@@ -385,7 +392,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
                     className,
                     it,
                     Question.IncorrectFile.Reason.TEST,
-                    Question.Language.kotlin,
+                    Language.kotlin,
                     null,
                     true,
                 )

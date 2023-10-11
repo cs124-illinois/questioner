@@ -12,7 +12,7 @@ import edu.illinois.cs.cs125.jeed.core.moshi.CompiledSourceResult
 
 @JsonClass(generateAdapter = true)
 data class TestTestResults(
-    var language: Question.Language,
+    var language: Language,
     val completedSteps: MutableSet<Step> = mutableSetOf(),
     val complete: CompletedTasks = CompletedTasks(),
     val failedSteps: MutableSet<Step> = mutableSetOf(),

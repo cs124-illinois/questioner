@@ -42,7 +42,7 @@ annotation class Correct(
 )
 
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FILE)
-annotation class Incorrect(val reason: String = "test")
+annotation class Incorrect(val value: String = "test", val reason: String = "test")
 
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FILE)
 annotation class Starter
@@ -78,8 +78,15 @@ annotation class CheckFeatures {
         val name: String = CheckFeatures::class.java.simpleName
         fun validate(method: Method) {
             check(Modifier.isStatic(method.modifiers)) { "@$name methods must be static" }
-            check(method.parameterTypes.size == 2 && method.parameterTypes[0] == Features::class.java && method.parameterTypes[0] == Features::class.java) {
-                "@$name methods must accept parameters (Features solution, Features submission)"
+            check(method.parameterTypes.size == 2 || method.parameterTypes.size == 3)
+            if (method.parameterTypes.size == 2) {
+                check(method.parameterTypes[0] == Features::class.java && method.parameterTypes[0] == Features::class.java) {
+                    "@$name methods must accept parameters (Features solution, Features submission)"
+                }
+            } else {
+                check(method.parameterTypes[0] == Language::class.java && method.parameterTypes[1] == Features::class.java && method.parameterTypes[2] == Features::class.java) {
+                    "@$name methods must accept parameters (Language language, Features solution, Features submission)"
+                }
             }
             check(method.genericReturnType is ParameterizedType) {
                 "@$name methods must return List<String>!"

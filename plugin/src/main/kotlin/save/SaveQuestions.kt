@@ -27,6 +27,7 @@ import edu.illinois.cs.cs125.questioner.lib.Cite
 import edu.illinois.cs.cs125.questioner.lib.Correct
 import edu.illinois.cs.cs125.questioner.lib.Ignore
 import edu.illinois.cs.cs125.questioner.lib.Incorrect
+import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.Starter
 import edu.illinois.cs.cs125.questioner.lib.TemplateImports
@@ -497,7 +498,7 @@ fun List<ParsedJavaFile>.findQuestions(
                 Question.FlatFile(
                     solution.className,
                     solution.removeImports(importNames + wildcardImportNames).stripPackage(),
-                    Question.Language.java,
+                    Language.java,
                     solution.path,
                 ),
                 cleanSolution,

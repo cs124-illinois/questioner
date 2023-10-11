@@ -11,6 +11,7 @@ import edu.illinois.cs.cs125.jeed.core.hasBadWords
 import edu.illinois.cs.cs125.jeed.core.ktFormat
 import edu.illinois.cs.cs125.jeed.core.stripAssertionMessages
 import edu.illinois.cs.cs125.jeed.core.stripComments
+import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.deTemplate
 import edu.illinois.cs.cs125.questioner.lib.templateSubmission
@@ -22,7 +23,7 @@ data class Candidate(
     val contents: String,
     val originalID: String,
     val question: Question,
-    val language: Question.Language
+    val language: Language
 ) {
     val contentsHash = contents.md5()
 
@@ -42,8 +43,8 @@ suspend fun Candidate.clean(): Solution {
     val template = question.getTemplate(language)
 
     val fileType = when (language) {
-        Question.Language.kotlin -> Source.FileType.KOTLIN
-        Question.Language.java -> Source.FileType.JAVA
+        Language.kotlin -> Source.FileType.KOTLIN
+        Language.java -> Source.FileType.JAVA
     }
 
     val cleanedSource = contents.stripComments(fileType).let {

@@ -79,7 +79,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             }
         }
         if (failedLinting!!) {
-            val errors = if (language == Question.Language.java) {
+            val errors = if (language == Language.java) {
                 complete.checkstyle!!.errors.joinToString("\n") { "Line ${it.location.line}: ${it.message}" }
             } else {
                 complete.ktlint!!.errors.joinToString("\n") { "Line ${it.location.line}: ${it.message}" }
@@ -145,15 +145,15 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         }
         check(failedSteps.isEmpty()) { "Failed steps: $failedSteps" }
         val classWhiteList = when (file.language) {
-            Question.Language.java -> javaClassWhitelist
-            Question.Language.kotlin -> kotlinClassWhitelist
+            Language.java -> javaClassWhitelist
+            Language.kotlin -> kotlinClassWhitelist
         }
         val newClasses = taskResults!!.sandboxedClassLoader!!.loadedClasses.filter { klass ->
             !klass.startsWith("edu.illinois.cs.cs125.jeed.core") &&
                 !klass.startsWith("java.lang.invoke.MethodHandles")
         }.toMutableSet()
         // HACK HACK: Allow java.util.Set methods when java.util.Map is used
-        if (file.language == Question.Language.java && newClasses.contains("java.util.Map")) {
+        if (file.language == Language.java && newClasses.contains("java.util.Map")) {
             newClasses += "java.util.Set"
         }
         classWhiteList.addAll(newClasses)
@@ -161,7 +161,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
 
     fun TestResults.checkIncorrect(file: Question.IncorrectFile, mutated: Boolean) {
         if (!mutated && failedLinting == true) {
-            val errors = if (language == Question.Language.java) {
+            val errors = if (language == Language.java) {
                 complete.checkstyle!!.errors.joinToString("\n") { it.message }
             } else {
                 complete.ktlint!!.errors.joinToString("\n") { it.message }
@@ -215,10 +215,10 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
 
     val solutionDeadCode = Question.LanguagesResourceUsage(
         (setOf(correct) + alternativeSolutions).filter {
-            it.language === Question.Language.java
+            it.language === Language.java
         }.maxOf { it.expectedDeadCount ?: 0 }.toLong(),
         (setOf(correct) + alternativeSolutions).filter {
-            it.language === Question.Language.kotlin
+            it.language === Language.kotlin
         }.maxOfOrNull { it.expectedDeadCount ?: 0 }?.toLong()
     )
 
@@ -248,7 +248,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         }
     }
 
-    fun List<TestResults>.getRecursiveMethods(language: Question.Language) =
+    fun List<TestResults>.getRecursiveMethods(language: Language) =
         filter { testResults -> testResults.language == language }
             .let {
                 if (it.isEmpty()) {
@@ -261,9 +261,9 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
                 }
             }?.toSet()
 
-    val solutionJavaRecursiveMethods = firstCorrectResults.getRecursiveMethods(Question.Language.java)
+    val solutionJavaRecursiveMethods = firstCorrectResults.getRecursiveMethods(Language.java)
     check(solutionJavaRecursiveMethods != null)
-    val solutionKotlinRecursiveMethods = firstCorrectResults.getRecursiveMethods(Question.Language.kotlin)
+    val solutionKotlinRecursiveMethods = firstCorrectResults.getRecursiveMethods(Language.kotlin)
 
     val solutionRecursiveMethods =
         Question.LanguagesRecursiveMethods(solutionJavaRecursiveMethods, solutionKotlinRecursiveMethods)
@@ -278,12 +278,12 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         multiplier: Double = 1.0,
         aspect: (TestResults.CompletedTasks) -> TestResults.ResourceUsageComparison?
     ): Question.LanguagesResourceUsage {
-        val javaSolutionExecutionCount = filter { it.language == Question.Language.java }
+        val javaSolutionExecutionCount = filter { it.language == Language.java }
             .mapNotNull { aspect(it.complete) }
             .maxByOrNull {
                 it.solution
             }!!.solution.times(multiplier).toLong()
-        val kotlinSolutionExecutionCount = filter { it.language == Question.Language.kotlin }
+        val kotlinSolutionExecutionCount = filter { it.language == Language.kotlin }
             .mapNotNull { aspect(it.complete) }
             .maxByOrNull {
                 it.solution
@@ -367,12 +367,12 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             return@mapIndexed null
         }
         val correct = when (result.incorrect.language) {
-            Question.Language.java -> correctByLanguage[Question.Language.java]
-            Question.Language.kotlin -> correctByLanguage[Question.Language.kotlin]
+            Language.java -> correctByLanguage[Language.java]
+            Language.kotlin -> correctByLanguage[Language.kotlin]
         }!!.lines()
         val extension = when (result.incorrect.language) {
-            Question.Language.java -> ".java"
-            Question.Language.kotlin -> ".kt"
+            Language.java -> ".java"
+            Language.kotlin -> ".kt"
         }
         val diffs = DiffUtils.diff(correct, result.incorrect.contents.lines())
         val unifiedDiffs =
@@ -465,13 +465,13 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
 
     val solutionLoadedClassesJava = calibrationResults
         .asSequence()
-        .filter { it.results.language == Question.Language.java }
+        .filter { it.results.language == Language.java }
         .map { it.results.taskResults!!.sandboxedClassLoader!!.loadedClasses }.flatten()
         .filter { it.filterLoadedClass() }.toSet()
-    val solutionLoadedClassesKotlin = if (calibrationResults.any { it.results.language == Question.Language.kotlin }) {
+    val solutionLoadedClassesKotlin = if (calibrationResults.any { it.results.language == Language.kotlin }) {
         calibrationResults
             .asSequence()
-            .filter { it.results.language == Question.Language.kotlin }
+            .filter { it.results.language == Language.kotlin }
             .map { it.results.taskResults!!.sandboxedClassLoader!!.loadedClasses }.flatten()
             .filter { it.filterLoadedClass() }.toSet()
     } else {
@@ -651,7 +651,7 @@ class SolutionReceiverGeneration(val solution: Question.FlatFile) : ValidationFa
 class SolutionFailedLinting(val solution: Question.FlatFile, val errors: String) : ValidationFailed() {
     override val message = """
         |Solution failed linting with ${
-        if (solution.language == Question.Language.kotlin) {
+        if (solution.language == Language.kotlin) {
             "ktlint\n$errors"
         } else {
             "checkstyle\n$errors"
@@ -736,7 +736,7 @@ class TooMuchOutput(
     val path: String?,
     val size: Int,
     val maxSize: Int,
-    val language: Question.Language
+    val language: Language
 ) : ValidationFailed() {
     override val message = """
         |Submission generated too much output($size > $maxSize):
@@ -753,7 +753,7 @@ class IncorrectFailedLinting(
             val contents = incorrect.mutation?.marked()?.contents ?: incorrect.contents
             return """
         |Incorrect code failed linting with ${
-                if (incorrect.language == Question.Language.kotlin) {
+                if (incorrect.language == Language.kotlin) {
                     "ktlint\n$errors"
                 } else {
                     "checkstyle\n$errors"

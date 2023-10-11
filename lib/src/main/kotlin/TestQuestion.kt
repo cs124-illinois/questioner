@@ -33,7 +33,7 @@ private const val MIN_ALLOCATION_LIMIT_BYTES: Long = 2 * 1024 * 1024 // Leave ro
 @Suppress("ReturnCount", "LongMethod", "ComplexMethod", "LongParameterList")
 suspend fun Question.test(
     contents: String,
-    language: Question.Language,
+    language: Language,
     settings: Question.TestingSettings? = testingSettings,
     isSolution: Boolean = false
 ): TestResults {
@@ -58,14 +58,14 @@ suspend fun Question.test(
     @Suppress("SwallowedException")
     val compiledSubmission = try {
         when (language) {
-            Question.Language.java ->
+            Language.java ->
                 compileSubmission(
                     source,
                     InvertingClassLoader(setOf(klass)),
                     results
                 )
 
-            Question.Language.kotlin ->
+            Language.kotlin ->
                 kompileSubmission(
                     source,
                     InvertingClassLoader(setOf(klass, "${klass}Kt")),
@@ -161,8 +161,8 @@ suspend fun Question.test(
 
     // execution
     val classLoaderConfiguration = when (language) {
-        Question.Language.java -> settings.javaWhitelist
-        Question.Language.kotlin -> settings.kotlinWhitelist
+        Language.java -> settings.javaWhitelist
+        Language.kotlin -> settings.kotlinWhitelist
     }?.let { whitelistedClasses ->
         Sandbox.ClassLoaderConfiguration(isWhiteList = true, whitelistedClasses = whitelistedClasses)
     } ?: Sandbox.ClassLoaderConfiguration()
@@ -185,12 +185,12 @@ suspend fun Question.test(
         systemInStream = systemInStream
     )
     val lineCountLimit = when (language) {
-        Question.Language.java -> settings.executionCountLimit.java
-        Question.Language.kotlin -> settings.executionCountLimit.kotlin!!
+        Language.java -> settings.executionCountLimit.java
+        Language.kotlin -> settings.executionCountLimit.kotlin!!
     }.takeIf { !settings.disableLineCountLimit }
     val allocationLimit = when (language) {
-        Question.Language.java -> settings.allocationLimit?.java
-        Question.Language.kotlin -> settings.allocationLimit?.kotlin
+        Language.java -> settings.allocationLimit?.java
+        Language.kotlin -> settings.allocationLimit?.kotlin
     }?.takeIf { !settings.disableAllocationLimit }?.coerceAtLeast(MIN_ALLOCATION_LIMIT_BYTES)
     val plugins = listOf(
         ConfiguredSandboxPlugin(Jacoco, Unit),
@@ -249,7 +249,7 @@ suspend fun Question.test(
                 "Allocated too much memory: ${threw.message}, already used ${resourceUsage.allocatedMemory} bytes.\nIf you are printing for debug purposes, consider less verbose output."
 
             is LineLimitExceeded -> {
-                val solutionLineUsage = if (language == Question.Language.java) {
+                val solutionLineUsage = if (language == Language.java) {
                     validationResults?.executionCounts?.java ?: settings.solutionExecutionCount?.java
                 } else {
                     validationResults?.executionCounts?.kotlin ?: settings.solutionExecutionCount?.kotlin
@@ -330,7 +330,7 @@ suspend fun Question.test(
     val expectedRecursiveMethods = if (isSolution) {
         testingResults.recursiveMethods()
     } else {
-        if (language == Question.Language.java) {
+        if (language == Language.java) {
             validationResults?.solutionRecursiveMethods?.java
                 ?: settings.solutionRecursiveMethods?.java
         } else {
@@ -357,7 +357,7 @@ suspend fun Question.test(
 
     // executioncount
     val submissionExecutionCount = resourceUsage.submissionLines
-    val solutionExecutionCount = if (language == Question.Language.java) {
+    val solutionExecutionCount = if (language == Language.java) {
         validationResults?.executionCounts?.java ?: settings.solutionExecutionCount?.java
     } else {
         validationResults?.executionCounts?.kotlin ?: settings.solutionExecutionCount?.kotlin
@@ -372,7 +372,7 @@ suspend fun Question.test(
 
     // memoryAllocation
     val submissionAllocation = resourceUsage.allocatedMemory
-    val solutionAllocation = if (language == Question.Language.java) {
+    val solutionAllocation = if (language == Language.java) {
         validationResults?.memoryAllocation?.java ?: settings.solutionAllocation?.java
     } else {
         validationResults?.memoryAllocation?.kotlin ?: settings.solutionAllocation?.kotlin
@@ -388,15 +388,15 @@ suspend fun Question.test(
 
     // coverage
     check(settings.solutionDeadCode != null) { "Must set solutionDeadCode" }
-    val solutionDeadCode = if (language == Question.Language.java) {
+    val solutionDeadCode = if (language == Language.java) {
         settings.solutionDeadCode!!.java
     } else {
         settings.solutionDeadCode!!.kotlin
     }!!
 
     val filetype = when (language) {
-        Question.Language.kotlin -> Source.FileType.KOTLIN
-        Question.Language.java -> Source.FileType.JAVA
+        Language.kotlin -> Source.FileType.KOTLIN
+        Language.java -> Source.FileType.JAVA
     }
     val coverageResult = source
         .processCoverage(taskResults.pluginResult(Jacoco))

@@ -12,6 +12,7 @@ import edu.illinois.cs.cs125.jeed.core.googleFormat
 import edu.illinois.cs.cs125.jenisol.core.NotNull
 import edu.illinois.cs.cs125.questioner.antlr.JavaLexer
 import edu.illinois.cs.cs125.questioner.antlr.JavaParser
+import edu.illinois.cs.cs125.questioner.antlr.JavaParser.ElementValueContext
 import edu.illinois.cs.cs125.questioner.antlr.JavaParser.ImportDeclarationContext
 import edu.illinois.cs.cs125.questioner.lib.AlsoCorrect
 import edu.illinois.cs.cs125.questioner.lib.Blacklist
@@ -19,6 +20,7 @@ import edu.illinois.cs.cs125.questioner.lib.CheckstyleSuppress
 import edu.illinois.cs.cs125.questioner.lib.Cite
 import edu.illinois.cs.cs125.questioner.lib.Correct
 import edu.illinois.cs.cs125.questioner.lib.Incorrect
+import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.Starter
 import edu.illinois.cs.cs125.questioner.lib.TemplateImports
@@ -257,7 +259,7 @@ data class ParsedJavaFile(val path: String, val contents: String) {
         @Suppress("TooGenericExceptionCaught")
         try {
             annotation.parameterMap().let { parameters ->
-                parameters["reason"] ?: "test"
+                parameters["reason"] ?: parameters["value"] ?: "test"
             }
         } catch (e: Exception) {
             error("Couldn't parse @Incorrect metadata for $path: $e")
@@ -360,7 +362,7 @@ $cleanContent
             Question.FlatFile(
                 className,
                 cleanContent,
-                Question.Language.java,
+                Language.java,
                 path,
                 complexity,
                 features,
@@ -424,7 +426,7 @@ $cleanContent
                 className,
                 it,
                 Question.IncorrectFile.Reason.TEST,
-                Question.Language.java,
+                Language.java,
                 null,
                 true,
             )
@@ -437,7 +439,7 @@ $cleanContent
             className,
             clean(cleanSpec).trimStart(),
             incorrect.toReason(),
-            Question.Language.java,
+            Language.java,
             path,
             starter != null,
         )
@@ -491,7 +493,7 @@ $cleanContent
         return Question.FlatFile(
             className,
             clean(cleanSpec).trimStart(),
-            Question.Language.java,
+            Language.java,
             path,
             complexity,
             features,
@@ -506,7 +508,7 @@ $cleanContent
             className,
             clean(cleanSpec).trimStart(),
             incorrect?.toReason() ?: "test".toReason(),
-            Question.Language.java,
+            Language.java,
             path,
             true,
         )
@@ -740,14 +742,18 @@ fun JavaParser.TypeDeclarationContext.getAnnotations(annotation: Class<*>): List
         it.annotation()?.qualifiedName()?.asString() == annotation.simpleName
     }.map { it.annotation() }
 
+fun ElementValueContext.getValue() = expression().primary().literal().let { literal ->
+    literal.STRING_LITERAL()
+        ?: literal.integerLiteral()?.DECIMAL_LITERAL()
+        ?: literal.BOOL_LITERAL()
+        ?: literal.floatLiteral()?.FLOAT_LITERAL()
+}.toString().removeSurrounding("\"")
+
 fun JavaParser.AnnotationContext.parameterMap(): Map<String, String> =
     elementValuePairs()?.elementValuePair()?.associate {
-        it.identifier().text to it.elementValue().expression().primary().literal().let { literal ->
-            literal.STRING_LITERAL()
-                ?: literal.integerLiteral()?.DECIMAL_LITERAL()
-                ?: literal.BOOL_LITERAL()
-                ?: literal.floatLiteral()?.FLOAT_LITERAL()
-        }.toString().removeSurrounding("\"")
+        it.identifier().text to it.elementValue().getValue()
+    } ?: elementValue()?.let {
+        mapOf("value" to it.getValue())
     } ?: mapOf()
 
 fun JavaParser.AnnotationContext.comment(): String {

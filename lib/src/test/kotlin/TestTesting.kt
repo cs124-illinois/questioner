@@ -27,7 +27,7 @@ class TestTesting : StringSpec({
 int addOne(int value) {
   return value + 2;
 }""".trim()
-        question.test(incorrect, Question.Language.java).also { results ->
+        question.test(incorrect, Language.java).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testing!!.passed shouldBe false
         }
@@ -47,7 +47,7 @@ int addOne(int value) {
   }
   return value + 2;
 }""".trim().also { incorrect ->
-            question.test(incorrect, Question.Language.java).also { results ->
+            question.test(incorrect, Language.java).also { results ->
                 results.failedSteps.size shouldBe 0
                 results.complete.testing!!.passed shouldBe false
 
@@ -66,7 +66,7 @@ int addOne(int value) {
 int addOn(int value) {
   return value+1
 }""".trim().also { incorrect ->
-            question.test(incorrect, Question.Language.java).also { results ->
+            question.test(incorrect, Language.java).also { results ->
                 results.complete.partial!!.passedSteps.also {
                     it.compiled shouldBe false
                     it.design shouldBe false
@@ -80,7 +80,7 @@ int addOn(int value) {
 int addOn(int value) {
   return value+2;
 }""".trim().also { incorrect ->
-            question.test(incorrect, Question.Language.java).also { results ->
+            question.test(incorrect, Language.java).also { results ->
                 results.complete.partial!!.passedSteps.also {
                     it.compiled shouldBe true
                     it.design shouldBe false
@@ -94,7 +94,7 @@ int addOn(int value) {
 int addOne(int value) {
   return value+2;
 }""".trim().also { incorrect ->
-            question.test(incorrect, Question.Language.java).also { results ->
+            question.test(incorrect, Language.java).also { results ->
                 results.complete.partial!!.passedSteps.also {
                     it.compiled shouldBe true
                     it.design shouldBe true
@@ -111,7 +111,7 @@ int addOne(int value) {
   }
   return value+2;
 }""".trim().also { incorrect ->
-            question.test(incorrect, Question.Language.java).also { results ->
+            question.test(incorrect, Language.java).also { results ->
                 results.complete.partial!!.passedSteps.also {
                     it.compiled shouldBe true
                     it.design shouldBe true
@@ -125,7 +125,7 @@ int addOne(int value) {
 int addOne(int value) {
   return value+1;
 }""".trim().also { incorrect ->
-            question.test(incorrect, Question.Language.java).also { results ->
+            question.test(incorrect, Language.java).also { results ->
                 results.complete.partial!!.passedSteps.also {
                     it.compiled shouldBe true
                     it.design shouldBe true
@@ -139,7 +139,7 @@ int addOne(int value) {
 int addOne(int value) {
   return value + 1;
 }""".trim().also { incorrect ->
-            question.test(incorrect, Question.Language.java).also { results ->
+            question.test(incorrect, Language.java).also { results ->
                 results.complete.partial!!.passedSteps.also {
                     it.compiled shouldBe true
                     it.design shouldBe true
@@ -163,7 +163,7 @@ int addOne(int value) {
 }
 System.out.println("Hello, world!");
 """.trim().also { incorrect ->
-            question.test(incorrect, Question.Language.java).also {
+            question.test(incorrect, Language.java).also {
                 it.failedSteps.size shouldBe 1
                 it.failedSteps shouldContain TestResults.Step.checkInitialSubmission
                 it.failed.checkInitialSubmission shouldContain "no code outside"
@@ -175,7 +175,7 @@ int addOne(int value) {
 }
 class Testing { }
 """.trim().also { incorrect ->
-            question.test(incorrect, Question.Language.java).also {
+            question.test(incorrect, Language.java).also {
                 it.failedSteps.size shouldBe 1
                 it.failedSteps shouldContain TestResults.Step.checkInitialSubmission
                 it.failed.checkInitialSubmission shouldContain "Class declarations are not allowed"
@@ -194,7 +194,7 @@ int mapSize(Map<String, Integer> map) {
   return map.size();
 }
 """.trim().also { incorrect ->
-            question.test(incorrect, Question.Language.java).also { results ->
+            question.test(incorrect, Language.java).also { results ->
                 results.complete.partial!!.passedSteps.quality shouldBe true
             }
         }
@@ -203,7 +203,7 @@ int mapSize(Map<String, Integer> map) {
   return map.keySet().size();
 }
 """.trim().also { incorrect ->
-            question.test(incorrect, Question.Language.java).also { results ->
+            question.test(incorrect, Language.java).also { results ->
                 results.complete.partial!!.passedSteps.fullyCorrect shouldBe true
             }
         }
@@ -213,7 +213,7 @@ int mapSize(Map<String, Integer> map) {
   return keys.size();
 }
 """.trim().also { incorrect ->
-            question.test(incorrect, Question.Language.java).also { results ->
+            question.test(incorrect, Language.java).also { results ->
                 results.complete.partial!!.passedSteps.fullyCorrect shouldBe true
             }
         }

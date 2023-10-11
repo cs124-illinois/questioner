@@ -11,7 +11,7 @@ import kotlin.random.Random
 
 suspend fun Question.testTests(
     contents: String,
-    language: Question.Language,
+    language: Language,
     settings: Question.TestTestingSettings = Question.TestTestingSettings(false, Int.MAX_VALUE)
 ): TestTestResults {
 
@@ -19,18 +19,18 @@ suspend fun Question.testTests(
     val results = TestTestResults(language)
 
     val compilationClassLoader = when (language) {
-        Question.Language.java -> InvertingClassLoader(
+        Language.java -> InvertingClassLoader(
             setOf(testKlass), compiledSolutionForTesting.classloader
         )
 
-        Question.Language.kotlin -> InvertingClassLoader(
+        Language.kotlin -> InvertingClassLoader(
             setOf(testKlass, "${testKlass}Kt"), compiledSolutionForTesting.classloader
         )
     }
     val compiledSubmission = try {
         when (language) {
-            Question.Language.java -> compileTestSuites(contents, compilationClassLoader, results)
-            Question.Language.kotlin -> kompileTestSuites(contents, compilationClassLoader, results)
+            Language.java -> compileTestSuites(contents, compilationClassLoader, results)
+            Language.kotlin -> kompileTestSuites(contents, compilationClassLoader, results)
         }
     } catch (e: TemplatingFailed) {
         return results
@@ -118,20 +118,20 @@ suspend fun Question.testTests(
 
 fun Question.templateTestSuites(
     contents: String,
-    language: Question.Language
+    language: Language
 ): Pair<Source, String?> {
     val template = when (type) {
         Question.Type.KLASS -> null
         Question.Type.METHOD -> {
             when (language) {
-                Question.Language.java -> {
+                Language.java -> {
                     """public class Test${klass} extends $klass {
   {{{ contents }}}
 }
 """
                 }
 
-                Question.Language.kotlin -> {
+                Language.kotlin -> {
                     """class Test${klass} : ${klass}() {
   {{{ contents }}}
 }"""
@@ -162,7 +162,7 @@ suspend fun Question.compileTestSuites(
     testResults: TestTestResults
 ): CompiledSource {
     return try {
-        val (source, template) = templateTestSuites(contents, Question.Language.java)
+        val (source, template) = templateTestSuites(contents, Language.java)
         if (template != null) {
             testResults.completedSteps.add(TestTestResults.Step.templateSubmission)
         }
@@ -200,7 +200,7 @@ suspend fun Question.kompileTestSuites(
     testResults: TestTestResults
 ): CompiledSource {
     return try {
-        val (source, template) = templateTestSuites(contents, Question.Language.kotlin)
+        val (source, template) = templateTestSuites(contents, Language.kotlin)
         if (template != null) {
             testResults.completedSteps.add(TestTestResults.Step.templateSubmission)
         }

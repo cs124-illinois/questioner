@@ -18,7 +18,7 @@ import edu.illinois.cs.cs125.jenisol.core.TestResult as JenisolTestResult
 
 @JsonClass(generateAdapter = true)
 data class TestResults(
-    var language: Question.Language,
+    var language: Language,
     val completedSteps: MutableSet<Step> = mutableSetOf(),
     val complete: CompletedTasks = CompletedTasks(),
     val failedSteps: MutableSet<Step> = mutableSetOf(),

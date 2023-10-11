@@ -35,7 +35,7 @@ class TestTestTesting : StringSpec({
             question.validated shouldBe true
             report shouldNotBe null
         }
-        question.testTests(JAVA_EMPTY_SUITE_CLASS, Question.Language.java).also { results ->
+        question.testTests(JAVA_EMPTY_SUITE_CLASS, Language.java).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
                 it.total shouldBe 7
@@ -43,7 +43,7 @@ class TestTestTesting : StringSpec({
                 it.succeeded shouldBe false
             }
         }
-        question.testTests(JAVA_EMPTY_SUITE_CLASS, Question.Language.java, Question.TestTestingSettings(true)).also { results ->
+        question.testTests(JAVA_EMPTY_SUITE_CLASS, Language.java, Question.TestTestingSettings(true)).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
                 it.total shouldBe 7
@@ -51,7 +51,7 @@ class TestTestTesting : StringSpec({
                 it.succeeded shouldBe false
             }
         }
-        question.testTests(KOTLIN_EMPTY_SUITE, Question.Language.kotlin).also { results ->
+        question.testTests(KOTLIN_EMPTY_SUITE, Language.kotlin).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
                 it.total shouldBe 7
@@ -66,7 +66,7 @@ public class TestQuestion {
     assert(Question.addOne(0) == 1);
     assert(Question.addOne(1) == 2);
   }
-}""", Question.Language.java
+}""", Language.java
         ).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.succeeded shouldBe true
@@ -76,7 +76,7 @@ public class TestQuestion {
 fun test() {
   check(Question.addOne(0) == 1)
 }
-""", Question.Language.kotlin
+""", Language.kotlin
         ).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.succeeded shouldBe false
@@ -88,7 +88,7 @@ fun test() {
   check(Question.addOne(0) == 1)
   check(Question.addOne(1) == 2)
 }
-""", Question.Language.kotlin
+""", Language.kotlin
         ).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.succeeded shouldBe true
@@ -99,7 +99,7 @@ fun test() {
             question.validated shouldBe true
             report shouldNotBe null
         }
-        question.testTests(JAVA_EMPTY_SUITE_METHOD, Question.Language.java).also { results ->
+        question.testTests(JAVA_EMPTY_SUITE_METHOD, Language.java).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
                 it.total shouldBe 8
@@ -107,7 +107,7 @@ fun test() {
                 it.succeeded shouldBe false
             }
         }
-        question.testTests(KOTLIN_EMPTY_SUITE, Question.Language.kotlin).also { results ->
+        question.testTests(KOTLIN_EMPTY_SUITE, Language.kotlin).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
                 it.total shouldBe 8
@@ -118,14 +118,14 @@ fun test() {
         question.testTests(
             """void test() {
   assert(addOne(0) == 0);
-}""", Question.Language.java
+}""", Language.java
         ).also { results ->
             results.failedSteps.size shouldBe 0
         }
         question.testTests(
             """fun test() {
   require(addOne(0) == 0)
-}""", Question.Language.kotlin
+}""", Language.kotlin
         ).also { results ->
             results.failedSteps.size shouldBe 0
         }
@@ -149,7 +149,7 @@ fun test() {
         question.testTestingIncorrect shouldNotBe null
         question.testTestingIncorrect!!.size shouldBeGreaterThan 0
         question.testTestingIncorrect!!.forEach { incorrect ->
-            incorrect.language shouldBe Question.Language.java
+            incorrect.language shouldBe Language.java
             incorrect.compiled(question).also {
                 (it.classloader as CopyableClassLoader).bytecodeForClasses.keys shouldContain question.klass
             }

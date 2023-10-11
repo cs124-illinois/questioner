@@ -37,7 +37,7 @@ internal fun String.pluralize(count: Int, plural: String? = null) = if (count ==
     this
 } else plural ?: "${this}s"
 
-fun Question.templateSubmission(contents: String, language: Question.Language): Source {
+fun Question.templateSubmission(contents: String, language: Language): Source {
     val template = getTemplate(language)
     return if (template == null) {
         Source(mapOf(filename(language) to contents))
@@ -49,7 +49,7 @@ fun Question.templateSubmission(contents: String, language: Question.Language): 
     }
 }
 
-fun Question.contentsToSource(contents: String, language: Question.Language, testResults: TestResults): Source {
+fun Question.contentsToSource(contents: String, language: Language, testResults: TestResults): Source {
     val cleanedContents = contents.lines().joinToString("\n") {
         it.ifBlank { "" }
     }
@@ -60,11 +60,11 @@ fun Question.contentsToSource(contents: String, language: Question.Language, tes
     }
 }
 
-fun Question.checkInitialSubmission(contents: String, language: Question.Language, testResults: TestResults): Boolean {
+fun Question.checkInitialSubmission(contents: String, language: Language, testResults: TestResults): Boolean {
     val snippetProperties = try {
         when (language) {
-            Question.Language.java -> Source.fromJavaSnippet(contents)
-            Question.Language.kotlin -> Source.fromKotlinSnippet(contents)
+            Language.java -> Source.fromJavaSnippet(contents)
+            Language.kotlin -> Source.fromKotlinSnippet(contents)
         }.snippetProperties
     } catch (e: Exception) {
         testResults.completedSteps.add(TestResults.Step.checkInitialSubmission)
@@ -94,12 +94,12 @@ fun Question.checkInitialSubmission(contents: String, language: Question.Languag
         }
 
         Question.Type.KLASS -> {
-            if (language == Question.Language.java) {
+            if (language == Language.java) {
                 if (snippetProperties.methodCount > 0) {
                     testResults.failed.checkInitialSubmission =
                         "Top-level method declarations are not allowed for this problem"
                 }
-            } else if (language == Question.Language.kotlin) {
+            } else if (language == Language.kotlin) {
                 if (snippetProperties.classCount > 0 && snippetProperties.methodCount > 0) {
                     testResults.failed.checkInitialSubmission =
                         "Can't mix top-level classes and methods for this problem"
@@ -244,7 +244,7 @@ fun Question.checkCompiledSubmission(
 fun Question.checkExecutedSubmission(
     taskResults: Sandbox.TaskResults<*>,
     testResults: TestResults,
-    language: Question.Language
+    language: Language
 ): Boolean {
     var message: String? = null
     taskResults.sandboxedClassLoader!!.definedClasses.topLevelClasses().let {
@@ -254,7 +254,7 @@ fun Question.checkExecutedSubmission(
         }
         val klass = it.first()
         if (!(
-                language == Question.Language.kotlin &&
+                language == Language.kotlin &&
                     solution.skipReceiver &&
                     klass == "${compilationDefinedClass}Kt"
                 )
@@ -291,11 +291,11 @@ fun Question.checkExecutedSubmission(
 
 suspend fun Question.mutations(seed: Int, count: Int) =
     templateSubmission(
-        if (getTemplate(Question.Language.java) != null) {
+        if (getTemplate(Language.java) != null) {
             "// TEMPLATE_START\n" + correct.contents + "\n// TEMPLATE_END \n"
         } else {
             correct.contents
-        }, Question.Language.java
+        }, Language.java
     ).allFixedMutations(random = Random(seed)).mapNotNull {
         try {
             it.formatted()
@@ -324,7 +324,7 @@ Please report a bug so that we can improve the mutation engine.
             // Mutations will sometimes break the entire template
             Pair(
                 try {
-                    it.contents.deTemplate(getTemplate(Question.Language.java))
+                    it.contents.deTemplate(getTemplate(Language.java))
                 } catch (e: Exception) {
                     correct.contents
                 }, it
@@ -344,7 +344,7 @@ Please report a bug so that we can improve the mutation engine.
                 klass,
                 contents,
                 Question.IncorrectFile.Reason.TEST,
-                Question.Language.java,
+                Language.java,
                 null,
                 false,
                 mutation = source
@@ -365,17 +365,17 @@ private object EmptyClassSizes {
 
 fun Question.computeClassSize(
     compiledSubmission: CompiledSource,
-    language: Question.Language,
+    language: Language,
     settings: Question.TestingSettings
 ): TestResults.ResourceUsageComparison {
     val emptyClassSize = when (language) {
-        Question.Language.java -> EmptyClassSizes.EMPTY_JAVA_CLASS_SIZE
-        Question.Language.kotlin -> EmptyClassSizes.EMPTY_KOTLIN_CLASS_SIZE
+        Language.java -> EmptyClassSizes.EMPTY_JAVA_CLASS_SIZE
+        Language.kotlin -> EmptyClassSizes.EMPTY_KOTLIN_CLASS_SIZE
     }
     val submissionClassSize = compiledSubmission.classLoader.sizeInBytes.toLong() - emptyClassSize
     val solutionClassSize = when (language) {
-        Question.Language.java -> validationResults?.solutionMaxClassSize?.java ?: settings.solutionClassSize?.java
-        Question.Language.kotlin -> validationResults?.solutionMaxClassSize?.kotlin
+        Language.java -> validationResults?.solutionMaxClassSize?.java ?: settings.solutionClassSize?.java
+        Language.kotlin -> validationResults?.solutionMaxClassSize?.kotlin
             ?: settings.solutionClassSize?.kotlin
     } ?: submissionClassSize
 
@@ -396,7 +396,7 @@ fun Question.computeClassSize(
 
 class MaxComplexityExceeded(message: String) : RuntimeException(message)
 
-fun Question.computeComplexity(contents: String, language: Question.Language): TestResults.ComplexityComparison {
+fun Question.computeComplexity(contents: String, language: Language): TestResults.ComplexityComparison {
     val solutionComplexity = published.complexity[language]
     check(solutionComplexity != null) { "Solution complexity not available" }
 
@@ -405,7 +405,7 @@ fun Question.computeComplexity(contents: String, language: Question.Language): T
 
     val submissionComplexity = when {
         type == Question.Type.SNIPPET && contents.isBlank() -> 0
-        language == Question.Language.java -> {
+        language == Language.java -> {
             val source = when (type) {
                 Question.Type.KLASS -> Source(mapOf("$klass.java" to contents))
                 Question.Type.METHOD -> Source(
@@ -428,7 +428,7 @@ $contents
             }
         }
 
-        language == Question.Language.kotlin -> {
+        language == Language.kotlin -> {
             val source = when (type) {
                 Question.Type.SNIPPET -> Source.fromKotlinSnippet(contents, trim = false)
                 else -> Source(mapOf("$klass.kt" to contents))
@@ -454,14 +454,18 @@ $contents
 
 fun Question.checkFeatures(
     submissionFeatures: Features,
-    language: Question.Language
+    language: Language
 ): TestResults.FeaturesComparison {
     val solutionFeatures = published.features[language]
     check(solutionFeatures != null) { "Solution features not available" }
 
     val errors = if (featureChecker != null) {
         @Suppress("UNCHECKED_CAST")
-        unwrap { featureChecker!!.invoke(null, solutionFeatures, submissionFeatures) } as List<String>
+        if (featureChecker!!.parameters.size == 2) {
+            unwrap { featureChecker!!.invoke(null, solutionFeatures, submissionFeatures) } as List<String>
+        } else {
+            unwrap { featureChecker!!.invoke(null, language, solutionFeatures, submissionFeatures) } as List<String>
+        }
     } else {
         listOf()
     }
@@ -471,15 +475,15 @@ fun Question.checkFeatures(
 
 class MaxLineCountExceeded(message: String) : RuntimeException(message)
 
-fun Question.computeLineCounts(contents: String, language: Question.Language): TestResults.LineCountComparison {
+fun Question.computeLineCounts(contents: String, language: Language): TestResults.LineCountComparison {
     val solutionLineCount = published.lineCounts[language]
     check(solutionLineCount != null) { "Solution line count not available" }
 
     val maxLineCount = (control.maxLineCountMultiplier!! * solutionLineCount.source)
 
     val type = when (language) {
-        Question.Language.java -> Source.FileType.JAVA
-        Question.Language.kotlin -> Source.FileType.KOTLIN
+        Language.java -> Source.FileType.JAVA
+        Language.kotlin -> Source.FileType.KOTLIN
     }
     val submissionLineCount = contents.countLines(type)
     if (submissionLineCount.source > maxLineCount) {

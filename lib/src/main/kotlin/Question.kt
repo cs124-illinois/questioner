@@ -36,6 +36,9 @@ private val sharedClassWhitelist = setOf(
     "java.util.Collection"
 )
 
+@Suppress("EnumNaming", "EnumEntryName")
+enum class Language { java, kotlin }
+
 @Suppress("MemberVisibilityCanBePrivate", "LargeClass", "TooManyFunctions")
 @JsonClass(generateAdapter = true)
 data class Question(
@@ -118,9 +121,6 @@ data class Question(
             put(Language.kotlin, alternativeSolutions.find { it.language == Language.kotlin }!!.contents)
         }
     }
-
-    @Suppress("EnumNaming", "EnumEntryName")
-    enum class Language { java, kotlin }
 
     enum class Type { KLASS, METHOD, SNIPPET }
 

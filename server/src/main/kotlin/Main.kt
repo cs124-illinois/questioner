@@ -13,6 +13,7 @@ import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import com.sun.management.HotSpotDiagnosticMXBean
 import edu.illinois.cs.cs125.jeed.core.warm
+import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring
 import edu.illinois.cs.cs125.questioner.lib.TestResults
@@ -233,7 +234,7 @@ object Questions {
 data class Submission(
     val path: String,
     val contents: String,
-    val language: Question.Language,
+    val language: Language,
     val disableLineCountLimit: Boolean = false,
     val disableAllocationLimit: Boolean = false,
     val version: String?,
@@ -246,7 +247,7 @@ data class Submission(
 data class TestSubmission(
     val path: String,
     val contents: String,
-    val language: Question.Language,
+    val language: Language,
     val version: String?,
     val author: String?,
 )

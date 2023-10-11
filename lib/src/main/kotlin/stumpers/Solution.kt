@@ -7,7 +7,7 @@ import com.mongodb.client.model.Filters
 import com.mongodb.client.model.IndexOptions
 import com.mongodb.client.model.UpdateOptions
 import com.squareup.moshi.JsonClass
-import edu.illinois.cs.cs125.questioner.lib.Question
+import edu.illinois.cs.cs125.questioner.lib.Language
 import org.bson.BsonDateTime
 import org.bson.BsonDocument
 import org.bson.Document
@@ -24,7 +24,7 @@ private val jsonWriterSettings = JsonWriterSettings
 
 @JsonClass(generateAdapter = true)
 data class Coordinates(
-    val language: Question.Language,
+    val language: Language,
     val path: String,
     val author: String,
 )

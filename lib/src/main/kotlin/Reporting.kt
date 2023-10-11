@@ -77,7 +77,7 @@ html {
         <figcaption class="blockquote-footer">Kotlin description</figcaption>
         </figure>
         <h4>Solution</h4>
-        <pre><code class="kotlin">${StringEscapeUtils.escapeHtml4(question.alternativeSolutions.find { it.language == Question.Language.kotlin }!!.contents)}</code></pre>""" +
+        <pre><code class="kotlin">${StringEscapeUtils.escapeHtml4(question.alternativeSolutions.find { it.language == Language.kotlin }!!.contents)}</code></pre>""" +
             (question.detemplatedKotlinStarter?.let {
                 """<h4>Starter Code</h4><pre><code class="java">${
                     StringEscapeUtils.escapeHtml4(
@@ -106,7 +106,7 @@ html {
 
 fun IncorrectResults.html(index: Int, question: Question): String {
     val contents = if (incorrect.mutation != null) {
-        incorrect.mutation.marked().contents.deTemplate(question.getTemplate(Question.Language.java))
+        incorrect.mutation.marked().contents.deTemplate(question.getTemplate(Language.java))
     } else {
         incorrect.contents
     }
@@ -178,7 +178,7 @@ fun IncorrectResults.html(index: Int, question: Question): String {
         }
     }
         <pre><code class="${
-        if (incorrect.language == Question.Language.java) {
+        if (incorrect.language == Language.java) {
             "java"
         } else {
             "kotlin"
@@ -208,7 +208,7 @@ fun ValidationFailed.report(question: Question): String {
     |<h2>Solution Failed Testing</h2>
     |<p>The following solution failed testing:</p>
     |<pre><code class="${
-                if (solution.language == Question.Language.java) {
+                if (solution.language == Language.java) {
                     "java"
                 } else {
                     "kotlin"
@@ -223,7 +223,7 @@ fun ValidationFailed.report(question: Question): String {
     |<h2>Solution Failed Testing</h2>
     |<p>The following solution failed testing:</p>
     |<pre><code class="${
-                if (solution.language == Question.Language.java) {
+                if (solution.language == Language.java) {
                     "java"
                 } else {
                     "kotlin"
@@ -239,7 +239,7 @@ fun ValidationFailed.report(question: Question): String {
     |<h2>Solution Not Expected to Throw</h2>
     |<p>The olution was not expected to throw, but threw <code>$threw</code> on parameters <code>$parameters</code>.</p>
     |<pre><code class="${
-                if (solution.language == Question.Language.java) {
+                if (solution.language == Language.java) {
                     "java"
                 } else {
                     "kotlin"
@@ -256,7 +256,7 @@ fun ValidationFailed.report(question: Question): String {
     |<h2>Solution Results Lack Entropy</h2>
     |<p>Random inputs to the solution only generated $amount distinct return values.</p>
     |<pre><code class="${
-                if (solution.language == Question.Language.java) {
+                if (solution.language == Language.java) {
                     "java"
                 } else {
                     "kotlin"
@@ -286,7 +286,7 @@ fun ValidationFailed.report(question: Question): String {
                 |<h2>Too Much Output</h2>
                 |<p>The following submission generated too much output ($size > $maxSize)</p>
                 |<pre><code class="${
-                if (language == Question.Language.java) {
+                if (language == Language.java) {
                     "java"
                 } else {
                     "kotlin"
@@ -302,7 +302,7 @@ fun ValidationFailed.report(question: Question): String {
                 |<h2>Incorrect Code Passed the Test Suite</h2>
                 |<p>The following incorrect code passed the test suites:</p>
                 |<pre><code class=${
-                if (incorrect.language == Question.Language.java) {
+                if (incorrect.language == Language.java) {
                     "java"
                 } else {
                     "kotlin"
@@ -330,7 +330,7 @@ fun ValidationFailed.report(question: Question): String {
                 |${failingInput?.let { "We found failing inputs $failingInput" } ?: "We were unable to find a failing input"}
                 |</p>
                 |<pre><code class=${
-                if (incorrect.language == Question.Language.java) {
+                if (incorrect.language == Language.java) {
                     "java"
                 } else {
                     "kotlin"
@@ -354,7 +354,7 @@ fun ValidationFailed.report(question: Question): String {
                 |<p>Incorrect code failed but not for the reason we expected: Expected: $expected, but found: $explanation.</p>
                 |</p>
                 |<pre><code class=${
-                if (incorrect.language == Question.Language.java) {
+                if (incorrect.language == Language.java) {
                     "java"
                 } else {
                     "kotlin"
@@ -368,7 +368,7 @@ fun ValidationFailed.report(question: Question): String {
                 |<p>Code expected to fail passed the test suite: Expected: $expected.</p>
                 |</p>
                 |<pre><code class=${
-                if (incorrect.language == Question.Language.java) {
+                if (incorrect.language == Language.java) {
                     "java"
                 } else {
                     "kotlin"
