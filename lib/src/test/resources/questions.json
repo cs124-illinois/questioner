@@ -17,7 +17,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -1189,7 +1189,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -1207,7 +1207,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -1438,7 +1438,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -1459,7 +1459,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -2083,6 +2083,7 @@
             "INSTANCEOF": 1,
             "CLASS": 1,
             "OVERRIDE": 1,
+            "CLASS_FIELD": 3,
             "EQUALITY": 2,
             "VISIBILITY_MODIFIERS": 3,
             "DOT_NOTATION": 2,
@@ -2108,7 +2109,7 @@
               }
             },
             {
-              "feature": "VISIBILITY_MODIFIERS",
+              "feature": "CLASS_FIELD",
               "location": {
                 "line": 1,
                 "column": 15
@@ -2118,7 +2119,28 @@
               "feature": "VISIBILITY_MODIFIERS",
               "location": {
                 "line": 1,
+                "column": 15
+              }
+            },
+            {
+              "feature": "CLASS_FIELD",
+              "location": {
+                "line": 1,
                 "column": 41
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 1,
+                "column": 41
+              }
+            },
+            {
+              "feature": "CLASS_FIELD",
+              "location": {
+                "line": 1,
+                "column": 67
               }
             },
             {
@@ -2445,6 +2467,7 @@
           "INSTANCEOF": 1,
           "CLASS": 1,
           "OVERRIDE": 1,
+          "CLASS_FIELD": 3,
           "EQUALITY": 2,
           "VISIBILITY_MODIFIERS": 3,
           "DOT_NOTATION": 2,
@@ -2470,7 +2493,7 @@
             }
           },
           {
-            "feature": "VISIBILITY_MODIFIERS",
+            "feature": "CLASS_FIELD",
             "location": {
               "line": 1,
               "column": 15
@@ -2480,7 +2503,28 @@
             "feature": "VISIBILITY_MODIFIERS",
             "location": {
               "line": 1,
+              "column": 15
+            }
+          },
+          {
+            "feature": "CLASS_FIELD",
+            "location": {
+              "line": 1,
               "column": 41
+            }
+          },
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 1,
+              "column": 41
+            }
+          },
+          {
+            "feature": "CLASS_FIELD",
+            "location": {
+              "line": 1,
+              "column": 67
             }
           },
           {
@@ -3399,6 +3443,7 @@
             "INSTANCEOF": 1,
             "CLASS": 1,
             "OVERRIDE": 1,
+            "CLASS_FIELD": 3,
             "EQUALITY": 2,
             "VISIBILITY_MODIFIERS": 3,
             "DOT_NOTATION": 2,
@@ -3424,7 +3469,7 @@
               }
             },
             {
-              "feature": "VISIBILITY_MODIFIERS",
+              "feature": "CLASS_FIELD",
               "location": {
                 "line": 1,
                 "column": 15
@@ -3434,7 +3479,28 @@
               "feature": "VISIBILITY_MODIFIERS",
               "location": {
                 "line": 1,
+                "column": 15
+              }
+            },
+            {
+              "feature": "CLASS_FIELD",
+              "location": {
+                "line": 1,
                 "column": 41
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 1,
+                "column": 41
+              }
+            },
+            {
+              "feature": "CLASS_FIELD",
+              "location": {
+                "line": 1,
+                "column": 67
               }
             },
             {
@@ -3744,7 +3810,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -3765,7 +3831,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -4935,7 +5001,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -4958,7 +5024,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {
       "maxDeadCode": 2
@@ -5411,7 +5477,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -5429,7 +5495,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -5856,7 +5922,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -5880,7 +5946,7 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -7092,7 +7158,7 @@
         "java.util.ArrayList",
         "java.util.List"
       ],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -7114,7 +7180,7 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -7391,7 +7457,750 @@
         "java.util.List",
         "java.util.ArrayList"
       ],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
+    },
+    "fauxStatic": false
+  },
+  "Test Bad Kotlin Getter Setter": {
+    "name": "Test Bad Kotlin Getter Setter",
+    "type": "KLASS",
+    "klass": "Example",
+    "metadata": {
+      "contentHash": "2b7bac7c814c33b7dc96b5f01edd4e58",
+      "packageName": "com.examples.testing.badkotlingettersetter",
+      "version": "2023.10.0",
+      "author": "challen@illinois.edu",
+      "javaDescription": "<p>Test to ensure that we can detect unnecessary Kotlin setter or getter overrides.</p>",
+      "kotlinDescription": "<p>Test to ensure that we can detect unnecessary Kotlin setter or getter overrides.</p>",
+      "usedFiles": [
+        "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badkotlingettersetter/incorrect/kotlin/badsetter/Example.kt",
+        "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badkotlingettersetter/incorrect/kotlin/badgetter/Example.kt",
+        "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badkotlingettersetter/correct/kotlin/Example.kt"
+      ],
+      "templateImports": [],
+      "focused": false,
+      "publish": true,
+      "questionerVersion": "2023.10.2"
+    },
+    "annotatedControls": {},
+    "question": {
+      "klass": "Example",
+      "contents": "import edu.illinois.cs.cs125.jeed.core.FeatureName;\nimport edu.illinois.cs.cs125.jeed.core.Features;\nimport edu.illinois.cs.cs125.questioner.lib.CheckFeatures;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.FeatureCheckException;\nimport edu.illinois.cs.cs125.questioner.lib.Language;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\n/*\n * Test to ensure that we can detect unnecessary Kotlin setter or getter overrides.\n */\n\n@Correct(name = \"Test Bad Kotlin Getter Setter\", version = \"2023.10.0\", author = \"challen@illinois.edu\")\npublic class Example {\n  private String name;\n  public Example(String setName) {\n    name = setName;\n  }\n\n  public String getName() {\n    return name;\n  }\n\n  public void setName(String setName) {\n    name = setName;\n  }\n\n  @CheckFeatures\n  private static List<String> checkFeatures(Language language, Features solution, Features submission) {\n    if (language == Language.kotlin) {\n      if (submission.getFeatureMap().containsKey(FeatureName.GETTER)) {\n        throw new FeatureCheckException(\"Solution overrides a getter unnecessarily\");\n      }\n      if (submission.getFeatureMap().containsKey(FeatureName.SETTER)) {\n        throw new FeatureCheckException(\"Solution overrides a setter unnecessarily\");\n      }\n    }\n    return new ArrayList<>();\n  }\n}",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badkotlingettersetter/Example.java"
+    },
+    "correct": {
+      "klass": "Example",
+      "contents": "public class Example {\n  private String name;\n\n  public Example(String setName) {\n    name = setName;\n  }\n\n  public String getName() {\n    return name;\n  }\n\n  public void setName(String setName) {\n    name = setName;\n  }\n}\n",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badkotlingettersetter/Example.java",
+      "complexity": 3,
+      "features": {
+        "featureMap": {
+          "VARIABLE_REASSIGNMENTS": 2,
+          "METHOD": 2,
+          "RETURN": 1,
+          "CONSTRUCTOR": 1,
+          "GETTER": 1,
+          "SETTER": 1,
+          "STRING": 4,
+          "CLASS": 1,
+          "CLASS_FIELD": 1,
+          "VISIBILITY_MODIFIERS": 5
+        },
+        "featureList": [
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 1,
+              "column": 0
+            }
+          },
+          {
+            "feature": "CLASS",
+            "location": {
+              "line": 1,
+              "column": 7
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 1,
+              "column": 21
+            }
+          },
+          {
+            "feature": "CLASS_FIELD",
+            "location": {
+              "line": 2,
+              "column": 2
+            }
+          },
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 2,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STRING",
+            "location": {
+              "line": 2,
+              "column": 10
+            }
+          },
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 4,
+              "column": 2
+            }
+          },
+          {
+            "feature": "CONSTRUCTOR",
+            "location": {
+              "line": 4,
+              "column": 9
+            }
+          },
+          {
+            "feature": "STRING",
+            "location": {
+              "line": 4,
+              "column": 17
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 4,
+              "column": 33
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          {
+            "feature": "VARIABLE_REASSIGNMENTS",
+            "location": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 5,
+              "column": 18
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 6,
+              "column": 2
+            }
+          },
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 8,
+              "column": 2
+            }
+          },
+          {
+            "feature": "METHOD",
+            "location": {
+              "line": 8,
+              "column": 9
+            }
+          },
+          {
+            "feature": "GETTER",
+            "location": {
+              "line": 8,
+              "column": 9
+            }
+          },
+          {
+            "feature": "STRING",
+            "location": {
+              "line": 8,
+              "column": 9
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 8,
+              "column": 26
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 9,
+              "column": 4
+            }
+          },
+          {
+            "feature": "RETURN",
+            "location": {
+              "line": 9,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 9,
+              "column": 15
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 10,
+              "column": 2
+            }
+          },
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 12,
+              "column": 2
+            }
+          },
+          {
+            "feature": "METHOD",
+            "location": {
+              "line": 12,
+              "column": 9
+            }
+          },
+          {
+            "feature": "SETTER",
+            "location": {
+              "line": 12,
+              "column": 9
+            }
+          },
+          {
+            "feature": "STRING",
+            "location": {
+              "line": 12,
+              "column": 22
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 12,
+              "column": 38
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 13,
+              "column": 4
+            }
+          },
+          {
+            "feature": "VARIABLE_REASSIGNMENTS",
+            "location": {
+              "line": 13,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 13,
+              "column": 18
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 14,
+              "column": 2
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 15,
+              "column": 0
+            }
+          }
+        ],
+        "importList": [],
+        "typeList": [
+          "String"
+        ],
+        "identifierList": [],
+        "dottedMethodList": []
+      },
+      "lineCount": {
+        "source": 12,
+        "comment": 0,
+        "blank": 4
+      },
+      "expectedDeadCount": 0
+    },
+    "alternativeSolutions": [
+      {
+        "klass": "Example",
+        "contents": "class Example(var name: String?)",
+        "language": "kotlin",
+        "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badkotlingettersetter/correct/kotlin/Example.kt",
+        "complexity": 1,
+        "features": {
+          "featureMap": {
+            "CONSTRUCTOR": 1,
+            "CLASS": 1,
+            "CLASS_FIELD": 1
+          },
+          "featureList": [
+            {
+              "feature": "CLASS",
+              "location": {
+                "line": 1,
+                "column": 0
+              }
+            },
+            {
+              "feature": "CONSTRUCTOR",
+              "location": {
+                "line": 1,
+                "column": 13
+              }
+            },
+            {
+              "feature": "CLASS_FIELD",
+              "location": {
+                "line": 1,
+                "column": 14
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [],
+          "identifierList": [],
+          "dottedMethodList": []
+        },
+        "lineCount": {
+          "source": 1,
+          "comment": 0,
+          "blank": 0
+        },
+        "expectedDeadCount": 0
+      }
+    ],
+    "incorrect": [
+      {
+        "klass": "Example",
+        "contents": "class Example(name: String?) {\n  var name = name\n    set(value) {\n      field = value\n    }\n}",
+        "reason": "FEATURES",
+        "language": "kotlin",
+        "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badkotlingettersetter/incorrect/kotlin/badsetter/Example.kt",
+        "starter": false,
+        "needed": true,
+        "testCount": -1
+      },
+      {
+        "klass": "Example",
+        "contents": "class Example(name: String?) {\n  var name = name\n    get() {\n      return field\n    }\n}",
+        "reason": "FEATURES",
+        "language": "kotlin",
+        "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badkotlingettersetter/incorrect/kotlin/badgetter/Example.kt",
+        "starter": false,
+        "needed": true,
+        "testCount": -1
+      }
+    ],
+    "common": [],
+    "importWhitelist": [],
+    "importBlacklist": [],
+    "checkstyleSuppressions": [],
+    "slug": "test-bad-kotlin-getter-setter",
+    "kotlinSolution": {
+      "klass": "Example",
+      "contents": "class Example(var name: String?)",
+      "language": "kotlin",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badkotlingettersetter/correct/kotlin/Example.kt",
+      "complexity": 1,
+      "features": {
+        "featureMap": {
+          "CONSTRUCTOR": 1,
+          "CLASS": 1,
+          "CLASS_FIELD": 1
+        },
+        "featureList": [
+          {
+            "feature": "CLASS",
+            "location": {
+              "line": 1,
+              "column": 0
+            }
+          },
+          {
+            "feature": "CONSTRUCTOR",
+            "location": {
+              "line": 1,
+              "column": 13
+            }
+          },
+          {
+            "feature": "CLASS_FIELD",
+            "location": {
+              "line": 1,
+              "column": 14
+            }
+          }
+        ],
+        "importList": [],
+        "typeList": [],
+        "identifierList": [],
+        "dottedMethodList": []
+      },
+      "lineCount": {
+        "source": 1,
+        "comment": 0,
+        "blank": 0
+      },
+      "expectedDeadCount": 0
+    },
+    "hasKotlin": true,
+    "published": {
+      "name": "Test Bad Kotlin Getter Setter",
+      "type": "KLASS",
+      "path": "test-bad-kotlin-getter-setter",
+      "author": "challen@illinois.edu",
+      "version": "2023.10.0",
+      "packageName": "com.examples.testing.badkotlingettersetter",
+      "languages": [
+        "java",
+        "kotlin"
+      ],
+      "descriptions": {
+        "java": "<p>Test to ensure that we can detect unnecessary Kotlin setter or getter overrides.</p>",
+        "kotlin": "<p>Test to ensure that we can detect unnecessary Kotlin setter or getter overrides.</p>"
+      },
+      "complexity": {
+        "java": 3,
+        "kotlin": 1
+      },
+      "features": {
+        "java": {
+          "featureMap": {
+            "VARIABLE_REASSIGNMENTS": 2,
+            "METHOD": 2,
+            "RETURN": 1,
+            "CONSTRUCTOR": 1,
+            "GETTER": 1,
+            "SETTER": 1,
+            "STRING": 4,
+            "CLASS": 1,
+            "CLASS_FIELD": 1,
+            "VISIBILITY_MODIFIERS": 5
+          },
+          "featureList": [
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 1,
+                "column": 0
+              }
+            },
+            {
+              "feature": "CLASS",
+              "location": {
+                "line": 1,
+                "column": 7
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 1,
+                "column": 21
+              }
+            },
+            {
+              "feature": "CLASS_FIELD",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 2,
+                "column": 10
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 4,
+                "column": 2
+              }
+            },
+            {
+              "feature": "CONSTRUCTOR",
+              "location": {
+                "line": 4,
+                "column": 9
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 4,
+                "column": 17
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 4,
+                "column": 33
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "VARIABLE_REASSIGNMENTS",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 5,
+                "column": 18
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 6,
+                "column": 2
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 8,
+                "column": 2
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 8,
+                "column": 9
+              }
+            },
+            {
+              "feature": "GETTER",
+              "location": {
+                "line": 8,
+                "column": 9
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 8,
+                "column": 9
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 8,
+                "column": 26
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 9,
+                "column": 4
+              }
+            },
+            {
+              "feature": "RETURN",
+              "location": {
+                "line": 9,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 9,
+                "column": 15
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 10,
+                "column": 2
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 12,
+                "column": 2
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 12,
+                "column": 9
+              }
+            },
+            {
+              "feature": "SETTER",
+              "location": {
+                "line": 12,
+                "column": 9
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 12,
+                "column": 22
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 12,
+                "column": 38
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 13,
+                "column": 4
+              }
+            },
+            {
+              "feature": "VARIABLE_REASSIGNMENTS",
+              "location": {
+                "line": 13,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 13,
+                "column": 18
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 14,
+                "column": 2
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 15,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [
+            "String"
+          ],
+          "identifierList": [],
+          "dottedMethodList": []
+        },
+        "kotlin": {
+          "featureMap": {
+            "CONSTRUCTOR": 1,
+            "CLASS": 1,
+            "CLASS_FIELD": 1
+          },
+          "featureList": [
+            {
+              "feature": "CLASS",
+              "location": {
+                "line": 1,
+                "column": 0
+              }
+            },
+            {
+              "feature": "CONSTRUCTOR",
+              "location": {
+                "line": 1,
+                "column": 13
+              }
+            },
+            {
+              "feature": "CLASS_FIELD",
+              "location": {
+                "line": 1,
+                "column": 14
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [],
+          "identifierList": [],
+          "dottedMethodList": []
+        }
+      },
+      "lineCounts": {
+        "java": {
+          "source": 12,
+          "comment": 0,
+          "blank": 4
+        },
+        "kotlin": {
+          "source": 1,
+          "comment": 0,
+          "blank": 0
+        }
+      },
+      "templateImports": [],
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -7412,7 +8221,7 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -7702,7 +8511,7 @@
         "java.util.Map",
         "java.util.Set"
       ],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -7720,7 +8529,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -8180,7 +8989,893 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
+    },
+    "fauxStatic": false
+  },
+  "Bad Extra Private Variable": {
+    "name": "Bad Extra Private Variable",
+    "type": "KLASS",
+    "klass": "Child",
+    "metadata": {
+      "contentHash": "b72352bed3c5f13338e779c5c488dea5",
+      "packageName": "com.examples.testing.badextraprivatevariable",
+      "version": "2023.10.0",
+      "author": "challen@illinois.edu",
+      "javaDescription": "<p>Test bad use of superclass method.</p>",
+      "kotlinDescription": "<p>Test bad use of superclass method.</p>",
+      "usedFiles": [
+        "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badextraprivatevariable/incorrect/java/extraprivatefield/Child.java",
+        "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badextraprivatevariable/incorrect/kotlin/extraprivatefield/Child.kt",
+        "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badextraprivatevariable/correct/kotlin/Child.kt",
+        "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badextraprivatevariable/Parent.java"
+      ],
+      "templateImports": [],
+      "focused": false,
+      "publish": true,
+      "questionerVersion": "2023.10.2"
+    },
+    "annotatedControls": {},
+    "question": {
+      "klass": "Child",
+      "contents": "import edu.illinois.cs.cs125.jeed.core.FeatureName;\nimport edu.illinois.cs.cs125.jeed.core.Features;\nimport edu.illinois.cs.cs125.jenisol.core.Both;\nimport edu.illinois.cs.cs125.questioner.lib.CheckFeatures;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.FeatureCheckException;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\n/*\n * Test bad use of superclass method.\n */\n\n@Correct(name = \"Bad Extra Private Variable\", version = \"2023.10.0\", author = \"challen@illinois.edu\")\npublic class Child extends Parent {\n  private final String firstName;\n\n  public Child(String setFirstName, String setLastName) {\n    super(setLastName);\n    firstName = setFirstName;\n  }\n\n  @Override\n  public String toString() {\n    return firstName + \" \" + getLastName();\n  }\n\n  @CheckFeatures\n  private static List<String> checkFeatures(Features solution, Features submission) {\n    int solutionVariableCount = solution.getFeatureMap().getOrDefault(FeatureName.CLASS_FIELD, 0);\n    int submissionVariableCount = submission.getFeatureMap().getOrDefault(FeatureName.CLASS_FIELD, 0);\n    if (submissionVariableCount > solutionVariableCount) {\n      throw new FeatureCheckException(\"Submission declares too many fields\");\n    }\n    return new ArrayList<>();\n  }\n\n  @Both\n  private static String checkName(Parent parent) {\n    return parent.getLastName();\n  }\n}",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badextraprivatevariable/Child.java"
+    },
+    "correct": {
+      "klass": "Child",
+      "contents": "public class Child extends Parent {\n  private final String firstName;\n\n  public Child(String setFirstName, String setLastName) {\n    super(setLastName);\n    firstName = setFirstName;\n  }\n\n  public String toString() {\n    return firstName + \" \" + getLastName();\n  }\n}\n",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badextraprivatevariable/Child.java",
+      "complexity": 2,
+      "features": {
+        "featureMap": {
+          "VARIABLE_REASSIGNMENTS": 1,
+          "ARITHMETIC_OPERATORS": 2,
+          "METHOD": 1,
+          "RETURN": 1,
+          "CONSTRUCTOR": 1,
+          "STRING": 4,
+          "CLASS": 1,
+          "EXTENDS": 1,
+          "SUPER": 1,
+          "CLASS_FIELD": 1,
+          "VISIBILITY_MODIFIERS": 4,
+          "FINAL_FIELD": 1
+        },
+        "featureList": [
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 1,
+              "column": 0
+            }
+          },
+          {
+            "feature": "CLASS",
+            "location": {
+              "line": 1,
+              "column": 7
+            }
+          },
+          {
+            "feature": "EXTENDS",
+            "location": {
+              "line": 1,
+              "column": 7
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 1,
+              "column": 34
+            }
+          },
+          {
+            "feature": "CLASS_FIELD",
+            "location": {
+              "line": 2,
+              "column": 2
+            }
+          },
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 2,
+              "column": 2
+            }
+          },
+          {
+            "feature": "FINAL_FIELD",
+            "location": {
+              "line": 2,
+              "column": 10
+            }
+          },
+          {
+            "feature": "STRING",
+            "location": {
+              "line": 2,
+              "column": 16
+            }
+          },
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 4,
+              "column": 2
+            }
+          },
+          {
+            "feature": "CONSTRUCTOR",
+            "location": {
+              "line": 4,
+              "column": 9
+            }
+          },
+          {
+            "feature": "STRING",
+            "location": {
+              "line": 4,
+              "column": 15
+            }
+          },
+          {
+            "feature": "STRING",
+            "location": {
+              "line": 4,
+              "column": 36
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 4,
+              "column": 56
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          {
+            "feature": "SUPER",
+            "location": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 5,
+              "column": 22
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 6,
+              "column": 4
+            }
+          },
+          {
+            "feature": "VARIABLE_REASSIGNMENTS",
+            "location": {
+              "line": 6,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 6,
+              "column": 28
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 7,
+              "column": 2
+            }
+          },
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 9,
+              "column": 2
+            }
+          },
+          {
+            "feature": "METHOD",
+            "location": {
+              "line": 9,
+              "column": 9
+            }
+          },
+          {
+            "feature": "STRING",
+            "location": {
+              "line": 9,
+              "column": 9
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 9,
+              "column": 27
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 10,
+              "column": 4
+            }
+          },
+          {
+            "feature": "RETURN",
+            "location": {
+              "line": 10,
+              "column": 4
+            }
+          },
+          {
+            "feature": "ARITHMETIC_OPERATORS",
+            "location": {
+              "line": 10,
+              "column": 11
+            }
+          },
+          {
+            "feature": "ARITHMETIC_OPERATORS",
+            "location": {
+              "line": 10,
+              "column": 11
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 10,
+              "column": 42
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 11,
+              "column": 2
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 12,
+              "column": 0
+            }
+          }
+        ],
+        "importList": [],
+        "typeList": [
+          "Parent",
+          "String"
+        ],
+        "identifierList": [],
+        "dottedMethodList": []
+      },
+      "lineCount": {
+        "source": 10,
+        "comment": 0,
+        "blank": 3
+      },
+      "expectedDeadCount": 0
+    },
+    "alternativeSolutions": [
+      {
+        "klass": "Child",
+        "contents": "class Child(private val firstName: String?, lastName: String?) : Parent(lastName) {\n  override fun toString() = \"$firstName $lastName\"\n}",
+        "language": "kotlin",
+        "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badextraprivatevariable/correct/kotlin/Child.kt",
+        "complexity": 2,
+        "features": {
+          "featureMap": {
+            "METHOD": 1,
+            "CONSTRUCTOR": 1,
+            "STRING": 1,
+            "CLASS": 1,
+            "EXTENDS": 1,
+            "OVERRIDE": 1,
+            "CLASS_FIELD": 1,
+            "VISIBILITY_MODIFIERS": 1
+          },
+          "featureList": [
+            {
+              "feature": "CLASS",
+              "location": {
+                "line": 1,
+                "column": 0
+              }
+            },
+            {
+              "feature": "CONSTRUCTOR",
+              "location": {
+                "line": 1,
+                "column": 11
+              }
+            },
+            {
+              "feature": "CLASS_FIELD",
+              "location": {
+                "line": 1,
+                "column": 12
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 1,
+                "column": 12
+              }
+            },
+            {
+              "feature": "EXTENDS",
+              "location": {
+                "line": 1,
+                "column": 65
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 1,
+                "column": 82
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "OVERRIDE",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 2,
+                "column": 28
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 3,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [],
+          "identifierList": [],
+          "dottedMethodList": []
+        },
+        "lineCount": {
+          "source": 3,
+          "comment": 0,
+          "blank": 0
+        },
+        "expectedDeadCount": 0
+      }
+    ],
+    "incorrect": [
+      {
+        "klass": "Child",
+        "contents": "public class Child extends Parent {\n  private final String firstName;\n  private final String lastName;\n\n  public Child(String setFirstName, String setLastName) {\n    super(setLastName);\n    lastName = setLastName;\n    firstName = setFirstName;\n  }\n\n  public String toString() {\n    return firstName + \" \" + lastName;\n  }\n}\n",
+        "reason": "FEATURES",
+        "language": "java",
+        "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badextraprivatevariable/incorrect/java/extraprivatefield/Child.java",
+        "starter": false,
+        "needed": true,
+        "testCount": -1
+      },
+      {
+        "klass": "Child",
+        "contents": "class Child(private val firstName: String?, private val lastName: String?) : Parent(lastName) {\n  override fun toString() = \"$firstName $lastName\"\n}",
+        "reason": "FEATURES",
+        "language": "kotlin",
+        "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badextraprivatevariable/incorrect/kotlin/extraprivatefield/Child.kt",
+        "starter": false,
+        "needed": true,
+        "testCount": -1
+      }
+    ],
+    "common": [
+      "public class Parent {\n  private final String lastName;\n  public Parent(String setLastName) {\n    lastName = setLastName;\n  }\n\n  public String getLastName() {\n    return lastName;\n  }\n}\n"
+    ],
+    "importWhitelist": [],
+    "importBlacklist": [],
+    "checkstyleSuppressions": [],
+    "slug": "bad-extra-private-variable",
+    "kotlinSolution": {
+      "klass": "Child",
+      "contents": "class Child(private val firstName: String?, lastName: String?) : Parent(lastName) {\n  override fun toString() = \"$firstName $lastName\"\n}",
+      "language": "kotlin",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badextraprivatevariable/correct/kotlin/Child.kt",
+      "complexity": 2,
+      "features": {
+        "featureMap": {
+          "METHOD": 1,
+          "CONSTRUCTOR": 1,
+          "STRING": 1,
+          "CLASS": 1,
+          "EXTENDS": 1,
+          "OVERRIDE": 1,
+          "CLASS_FIELD": 1,
+          "VISIBILITY_MODIFIERS": 1
+        },
+        "featureList": [
+          {
+            "feature": "CLASS",
+            "location": {
+              "line": 1,
+              "column": 0
+            }
+          },
+          {
+            "feature": "CONSTRUCTOR",
+            "location": {
+              "line": 1,
+              "column": 11
+            }
+          },
+          {
+            "feature": "CLASS_FIELD",
+            "location": {
+              "line": 1,
+              "column": 12
+            }
+          },
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 1,
+              "column": 12
+            }
+          },
+          {
+            "feature": "EXTENDS",
+            "location": {
+              "line": 1,
+              "column": 65
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 1,
+              "column": 82
+            }
+          },
+          {
+            "feature": "METHOD",
+            "location": {
+              "line": 2,
+              "column": 2
+            }
+          },
+          {
+            "feature": "OVERRIDE",
+            "location": {
+              "line": 2,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STRING",
+            "location": {
+              "line": 2,
+              "column": 28
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 3,
+              "column": 0
+            }
+          }
+        ],
+        "importList": [],
+        "typeList": [],
+        "identifierList": [],
+        "dottedMethodList": []
+      },
+      "lineCount": {
+        "source": 3,
+        "comment": 0,
+        "blank": 0
+      },
+      "expectedDeadCount": 0
+    },
+    "hasKotlin": true,
+    "published": {
+      "name": "Bad Extra Private Variable",
+      "type": "KLASS",
+      "path": "bad-extra-private-variable",
+      "author": "challen@illinois.edu",
+      "version": "2023.10.0",
+      "packageName": "com.examples.testing.badextraprivatevariable",
+      "languages": [
+        "java",
+        "kotlin"
+      ],
+      "descriptions": {
+        "java": "<p>Test bad use of superclass method.</p>",
+        "kotlin": "<p>Test bad use of superclass method.</p>"
+      },
+      "complexity": {
+        "java": 2,
+        "kotlin": 2
+      },
+      "features": {
+        "java": {
+          "featureMap": {
+            "VARIABLE_REASSIGNMENTS": 1,
+            "ARITHMETIC_OPERATORS": 2,
+            "METHOD": 1,
+            "RETURN": 1,
+            "CONSTRUCTOR": 1,
+            "STRING": 4,
+            "CLASS": 1,
+            "EXTENDS": 1,
+            "SUPER": 1,
+            "CLASS_FIELD": 1,
+            "VISIBILITY_MODIFIERS": 4,
+            "FINAL_FIELD": 1
+          },
+          "featureList": [
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 1,
+                "column": 0
+              }
+            },
+            {
+              "feature": "CLASS",
+              "location": {
+                "line": 1,
+                "column": 7
+              }
+            },
+            {
+              "feature": "EXTENDS",
+              "location": {
+                "line": 1,
+                "column": 7
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 1,
+                "column": 34
+              }
+            },
+            {
+              "feature": "CLASS_FIELD",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "FINAL_FIELD",
+              "location": {
+                "line": 2,
+                "column": 10
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 2,
+                "column": 16
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 4,
+                "column": 2
+              }
+            },
+            {
+              "feature": "CONSTRUCTOR",
+              "location": {
+                "line": 4,
+                "column": 9
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 4,
+                "column": 15
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 4,
+                "column": 36
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 4,
+                "column": 56
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "SUPER",
+              "location": {
+                "line": 5,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 5,
+                "column": 22
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 6,
+                "column": 4
+              }
+            },
+            {
+              "feature": "VARIABLE_REASSIGNMENTS",
+              "location": {
+                "line": 6,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 6,
+                "column": 28
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 7,
+                "column": 2
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 9,
+                "column": 2
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 9,
+                "column": 9
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 9,
+                "column": 9
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 9,
+                "column": 27
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 10,
+                "column": 4
+              }
+            },
+            {
+              "feature": "RETURN",
+              "location": {
+                "line": 10,
+                "column": 4
+              }
+            },
+            {
+              "feature": "ARITHMETIC_OPERATORS",
+              "location": {
+                "line": 10,
+                "column": 11
+              }
+            },
+            {
+              "feature": "ARITHMETIC_OPERATORS",
+              "location": {
+                "line": 10,
+                "column": 11
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 10,
+                "column": 42
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 11,
+                "column": 2
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 12,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [
+            "Parent",
+            "String"
+          ],
+          "identifierList": [],
+          "dottedMethodList": []
+        },
+        "kotlin": {
+          "featureMap": {
+            "METHOD": 1,
+            "CONSTRUCTOR": 1,
+            "STRING": 1,
+            "CLASS": 1,
+            "EXTENDS": 1,
+            "OVERRIDE": 1,
+            "CLASS_FIELD": 1,
+            "VISIBILITY_MODIFIERS": 1
+          },
+          "featureList": [
+            {
+              "feature": "CLASS",
+              "location": {
+                "line": 1,
+                "column": 0
+              }
+            },
+            {
+              "feature": "CONSTRUCTOR",
+              "location": {
+                "line": 1,
+                "column": 11
+              }
+            },
+            {
+              "feature": "CLASS_FIELD",
+              "location": {
+                "line": 1,
+                "column": 12
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 1,
+                "column": 12
+              }
+            },
+            {
+              "feature": "EXTENDS",
+              "location": {
+                "line": 1,
+                "column": 65
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 1,
+                "column": 82
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "OVERRIDE",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 2,
+                "column": 28
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 3,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [],
+          "identifierList": [],
+          "dottedMethodList": []
+        }
+      },
+      "lineCounts": {
+        "java": {
+          "source": 10,
+          "comment": 0,
+          "blank": 3
+        },
+        "kotlin": {
+          "source": 3,
+          "comment": 0,
+          "blank": 0
+        }
+      },
+      "templateImports": [],
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -8198,7 +9893,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -9150,7 +10845,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -9171,7 +10866,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -10180,7 +11875,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -10202,7 +11897,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -10912,7 +12607,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -10932,7 +12627,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -11403,7 +13098,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -11412,7 +13107,7 @@
     "type": "METHOD",
     "klass": "Question",
     "metadata": {
-      "contentHash": "af0f5edd45fd08979f53fbdca2e328be",
+      "contentHash": "b86792d1dc033e07e27ab415ff9486e1",
       "packageName": "com.examples.testing.testmemoizationdefense",
       "version": "2023.10.0",
       "author": "challen@illinois.edu",
@@ -11423,7 +13118,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -11631,7 +13326,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -11654,7 +13349,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -12204,7 +13899,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -12222,7 +13917,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -12543,7 +14238,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -12563,7 +14258,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -13515,7 +15210,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -13542,7 +15237,7 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -15798,7 +17493,7 @@
         "java.util.Map",
         "java.util.HashMap"
       ],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -15818,7 +17513,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -16575,7 +18270,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -16595,7 +18290,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -17567,7 +19262,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -17588,7 +19283,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -18083,7 +19778,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -18103,7 +19798,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -19069,7 +20764,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -19087,7 +20782,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -19212,7 +20907,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -19233,7 +20928,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -20815,7 +22510,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -20836,7 +22531,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -21507,7 +23202,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -21535,7 +23230,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {
       "maxLineCountMultiplier": 16
@@ -22155,7 +23850,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   },
@@ -22177,7 +23872,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "annotatedControls": {},
     "question": {
@@ -22951,7 +24646,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.10.1"
+      "questionerVersion": "2023.10.2"
     },
     "fauxStatic": false
   }
