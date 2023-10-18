@@ -12,7 +12,6 @@ import com.ryanharter.ktor.moshi.moshi
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import com.sun.management.HotSpotDiagnosticMXBean
-import edu.illinois.cs.cs125.jeed.core.warm
 import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring
@@ -45,6 +44,7 @@ import io.ktor.util.AttributeKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import org.bson.BsonDocument
 import org.slf4j.LoggerFactory
@@ -64,6 +64,7 @@ import kotlin.collections.forEach
 import kotlin.math.floor
 import kotlin.system.exitProcess
 import edu.illinois.cs.cs125.jeed.core.moshi.Adapters as JeedAdapters
+import edu.illinois.cs.cs125.jeed.core.warm as warmJeed
 
 private val moshi = Moshi.Builder().apply {
     JeedAdapters.forEach { add(it) }
@@ -122,7 +123,7 @@ data class QuestionPath(val path: String, val version: String, val author: Strin
 }
 
 object Questions {
-    private fun getQuestion(path: String) = questionerCollection.find(
+    fun getQuestion(path: String) = questionerCollection.find(
         Filters.and(Filters.eq("published.path", path), Filters.eq("latest", true)),
     ).sort(Sorts.descending("updated")).let {
         @Suppress("ReplaceSizeZeroCheckWithIsEmpty")
@@ -241,7 +242,20 @@ data class Submission(
     val author: String?,
     val email: String?,
     val originalID: String?,
-)
+) {
+    constructor(contents: String, language: Language, question: Question) :
+        this(
+            question.published.path,
+            contents,
+            language,
+            false,
+            false,
+            question.published.version,
+            question.published.author,
+            null,
+            null,
+        )
+}
 
 @JsonClass(generateAdapter = true)
 data class TestSubmission(
@@ -458,7 +472,22 @@ fun Application.questioner() {
     }
 }
 
-fun main() {
+suspend fun warm() {
+    val question = Questions.getQuestion("hello-world")
+    check(question != null) { "Warm question should exist" }
+    check(question.published.languages.contains(Language.java)) {
+        "Warm question should support Java"
+    }
+    check(question.published.languages.contains(Language.kotlin)) {
+        "Warm question should support Kotlin"
+    }
+    val java = Submission("""System.out.println("Hello, world!);""", Language.java, question)
+    Questions.test(java, question)
+    val kotlin = Submission("""println("Hello, world!)""", Language.kotlin, question)
+    Questions.test(kotlin, question)
+}
+
+fun main(): Unit = runBlocking {
     ResourceMonitoring.ensureAgentActivated()
 
     if (System.getenv("LOG_LEVEL_DEBUG") != null) {
@@ -466,10 +495,11 @@ fun main() {
         logger.debug { "Enabling debug logging" }
     }
 
+    val memoryLimitThreshold = System.getenv("MEMORY_LIMIT_THRESHOLD")?.toDoubleOrNull() ?: 0.8
     ManagementFactory.getMemoryPoolMXBeans().find {
         it.type == MemoryType.HEAP && it.isUsageThresholdSupported
     }?.also {
-        val threshold = floor(it.usage.max * 0.8).toLong()
+        val threshold = floor(it.usage.max * memoryLimitThreshold).toLong()
         logger.debug { "Setting memory collection threshold to $threshold" }
         it.collectionUsageThreshold = threshold
         val listener = NotificationListener { notification, _ ->
@@ -482,9 +512,17 @@ fun main() {
     } ?: logger.warn { "Memory management interface not found" }
 
     logger.debug { Status() }
+
     CoroutineScope(Dispatchers.IO).launch {
-        warm(2, failLint = false)
         stumperSolutionCollection.createInsertionIndices()
     }
+
+    logger.info { "Warming Jeed" }
+    warmJeed(2, failLint = false)
+
+    logger.info { "Warming Questioner" }
+    warm()
+
+    logger.info { "Staring server" }
     embeddedServer(Netty, port = 8888, module = Application::questioner).start(wait = true)
 }

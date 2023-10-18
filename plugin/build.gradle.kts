@@ -18,9 +18,9 @@ dependencies {
     }
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("com.google.googlejavaformat:google-java-format:1.18.1")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2")
-    implementation("com.github.slugify:slugify:3.0.5")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.3")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.3")
+    implementation("com.github.slugify:slugify:3.0.6")
     implementation("org.apache.httpcomponents.client5:httpclient5-fluent:5.2.1")
 
     testImplementation("io.kotest:kotest-runner-junit5:5.7.2")

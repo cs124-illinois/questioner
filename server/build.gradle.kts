@@ -21,7 +21,6 @@ dependencies {
     implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
     implementation("com.github.cs124-illinois:ktor-moshi:2023.10.1")
     implementation("org.mongodb:mongodb-driver:3.12.14")
-
     implementation("org.slf4j:slf4j-api:2.0.9")
     implementation("ch.qos.logback:logback-classic:1.4.11")
     implementation("io.github.microutils:kotlin-logging:3.0.5")
