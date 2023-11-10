@@ -1,4 +1,6 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import org.jmailen.gradle.kotlinter.tasks.FormatTask
+import org.jmailen.gradle.kotlinter.tasks.LintTask
 import java.io.File
 import java.io.StringWriter
 import java.util.Properties
@@ -15,9 +17,9 @@ dependencies {
 
     implementation(project(":lib"))
 
-    implementation("io.ktor:ktor-server-netty:2.3.5")
-    implementation("io.ktor:ktor-server-content-negotiation:2.3.5")
-    implementation("io.ktor:ktor-server-call-logging:2.3.5")
+    implementation("io.ktor:ktor-server-netty:2.3.6")
+    implementation("io.ktor:ktor-server-content-negotiation:2.3.6")
+    implementation("io.ktor:ktor-server-call-logging:2.3.6")
     implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
     implementation("com.github.cs124-illinois:ktor-moshi:2023.10.1")
     implementation("org.mongodb:mongodb-driver:3.12.14")
@@ -67,16 +69,15 @@ tasks.register<Exec>("dockerPush") {
             "--tag ${dockerName}:${project.version} --push").split(" ")
     )
 }
-afterEvaluate {
-    tasks.named("formatKotlinGeneratedByKspKotlin") {
-        enabled = false
-    }
-    tasks.named("lintKotlinGeneratedByKspKotlin") {
-        enabled = false
-    }
-}
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
+tasks.withType<FormatTask> {
+    this.source = this.source.minus(fileTree("build")).asFileTree
+}
+tasks.withType<LintTask> {
+    this.source = this.source.minus(fileTree("build")).asFileTree
+}
+

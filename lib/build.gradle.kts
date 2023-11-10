@@ -6,7 +6,7 @@ plugins {
     kotlin("jvm")
     `maven-publish`
     id("com.google.devtools.ksp")
-    id("com.ryandens.javaagent-test") version "0.5.0"
+    id("com.ryandens.javaagent-test") version "0.5.1"
 }
 dependencies {
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
@@ -14,18 +14,18 @@ dependencies {
     testJavaagent("com.beyondgrader.resource-agent:agent:2023.9.0")
 
     implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
-    implementation("org.apache.commons:commons-text:1.10.0")
+    implementation("org.apache.commons:commons-text:1.11.0")
     implementation("io.github.java-diff-utils:java-diff-utils:4.12")
     implementation("org.ow2.asm:asm:9.6")
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
     implementation("org.mongodb:mongodb-driver:3.12.14")
 
     api("com.beyondgrader.resource-agent:agent:2023.9.0")
-    api("com.github.cs124-illinois.jeed:core:2023.10.5")
-    api("com.github.cs124-illinois:jenisol:2023.10.1")
-    api("com.github.cs124-illinois:libcs1:2023.10.0")
+    api("com.github.cs124-illinois.jeed:core:2023.11.0")
+    api("com.github.cs124-illinois:jenisol:2023.11.0")
+    api("com.github.cs124-illinois:libcs1:2023.11.0")
 
-    api("io.kotest:kotest-runner-junit5:5.7.2")
+    api("io.kotest:kotest-runner-junit5:5.8.0")
     api("com.google.truth:truth:1.1.5")
 }
 tasks {
