@@ -5,6 +5,7 @@ import java.util.Properties
 plugins {
     kotlin("jvm")
     `maven-publish`
+    signing
     id("com.google.devtools.ksp")
     id("com.ryandens.javaagent-test") version "0.5.1"
 }
@@ -21,9 +22,9 @@ dependencies {
     implementation("org.mongodb:mongodb-driver:3.12.14")
 
     api("com.beyondgrader.resource-agent:agent:2023.9.0")
-    api("com.github.cs124-illinois.jeed:core:2023.11.0")
-    api("com.github.cs124-illinois:jenisol:2023.11.0")
-    api("com.github.cs124-illinois:libcs1:2023.11.0")
+    api("org.cs124.jeed:core:2023.11.0")
+    api("org.cs124:jenisol:2023.11.1")
+    api("org.cs124:libcs1:2023.11.1")
 
     api("io.kotest:kotest-runner-junit5:5.8.0")
     api("com.google.truth:truth:1.1.5")
@@ -51,13 +52,6 @@ tasks.withType(Test::class.java) {
         "--add-exports", "java.management/sun.management=ALL-UNNAMED"
     )
 }
-publishing {
-    publications {
-        create<MavenPublication>("lib") {
-            from(components["java"])
-        }
-    }
-}
 kotlin {
     kotlinDaemonJvmArgs = listOf("-Dfile.encoding=UTF-8")
 }
@@ -80,7 +74,43 @@ task("createProperties") {
     }
 }
 java {
+    withJavadocJar()
+    withSourcesJar()
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
+}
+publishing {
+    publications {
+        create<MavenPublication>("questioner") {
+            artifactId = "questioner"
+            from(components["java"])
+            pom {
+                name = "questioner"
+                description = "Question authoring library for CS 124."
+                url = "https://cs124.org"
+                licenses {
+                    license {
+                        name = "MIT License"
+                        url = "https://opensource.org/license/mit/"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "gchallen"
+                        name = "Geoffrey Challen"
+                        email = "challen@illinois.edu"
+                    }
+                }
+                scm {
+                    connection = "scm:git:https://github.com/cs124-illinois/questioner.git"
+                    developerConnection = "scm:git:https://github.com/cs124-illinois/questioner.git"
+                    url = "https://github.com/cs124-illinois/questioner"
+                }
+            }
+        }
+    }
+}
+signing {
+    sign(publishing.publications["questioner"])
 }

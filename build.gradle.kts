@@ -2,13 +2,16 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.9.20" apply false
-    id("org.jmailen.kotlinter") version "4.0.0" apply false
+    id("org.jmailen.kotlinter") version "4.1.0" apply false
     id("com.github.ben-manes.versions") version "0.49.0"
     id("com.google.devtools.ksp").version("1.9.20-1.0.14") apply false
+    id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
+}
+allprojects {
+    group = "org.cs124"
+    version = "2023.11.2"
 }
 subprojects {
-    group = "com.github.cs124-illinois.questioner"
-    version = "2023.11.1"
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_17.toString()
@@ -43,4 +46,12 @@ tasks.dependencyUpdates {
         )
     rejectVersionIf { candidate.version.isNonStable() }
     gradleReleaseChannel = "current"
+}
+nexusPublishing {
+    repositories {
+        sonatype {
+            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+        }
+    }
 }

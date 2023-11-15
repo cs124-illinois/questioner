@@ -4,6 +4,7 @@ plugins {
     java
     `java-gradle-plugin`
     `maven-publish`
+    signing
     id("org.jmailen.kotlinter")
     id("com.google.devtools.ksp")
 }
@@ -66,13 +67,49 @@ tasks {
 gradlePlugin {
     plugins {
         create("plugin") {
-            id = "com.github.cs124-illinois.questioner"
+            id = "org.cs124.questioner"
             implementationClass = "edu.illinois.cs.cs125.questioner.plugin.QuestionerPlugin"
         }
     }
 }
 java {
+    withJavadocJar()
+    withSourcesJar()
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+publishing {
+    publications {
+        afterEvaluate {
+            withType<MavenPublication> {
+                pom {
+                    name = "questioner"
+                    description = "Questioner Gradle plugin for CS 124."
+                    url = "https://cs124.org"
+                    licenses {
+                        license {
+                            name = "MIT License"
+                            url = "https://opensource.org/license/mit/"
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = "gchallen"
+                            name = "Geoffrey Challen"
+                            email = "challen@illinois.edu"
+                        }
+                    }
+                    scm {
+                        connection = "scm:git:https://github.com/cs124-illinois/questioner.git"
+                        developerConnection = "scm:git:https://github.com/cs124-illinois/questioner.git"
+                        url = "https://github.com/cs124-illinois/questioner"
+                    }
+                    signing {
+                        sign(this@publications)
+                    }
+                }
+            }
+        }
     }
 }
