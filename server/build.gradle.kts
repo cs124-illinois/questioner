@@ -13,7 +13,7 @@ dependencies {
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
 
     implementation(project(":lib"))
-    
+
     implementation("io.ktor:ktor-server-netty:2.3.6")
     implementation("io.ktor:ktor-server-content-negotiation:2.3.6")
     implementation("io.ktor:ktor-server-call-logging:2.3.6")

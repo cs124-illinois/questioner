@@ -235,6 +235,13 @@ suspend fun Question.test(
     val resourceUsage = taskResults.pluginResult(ResourceMonitoring)
     results.resourceMonitoringResults = resourceUsage
 
+    val submissionExecutionCount = resourceUsage.submissionLines
+    val solutionExecutionCount = if (language == Language.java) {
+        validationResults?.executionCounts?.java ?: settings.solutionExecutionCount?.java
+    } else {
+        validationResults?.executionCounts?.kotlin ?: settings.solutionExecutionCount?.kotlin
+    } ?: submissionExecutionCount
+
     // checkExecutedSubmission
     if (!timeout && threw != null) {
         results.failedSteps.add(TestResults.Step.checkExecutedSubmission)
@@ -252,19 +259,10 @@ suspend fun Question.test(
                 "Allocated too much memory: ${threw.message}, already used ${resourceUsage.allocatedMemory} bytes.\nIf you are printing for debug purposes, consider less verbose output."
 
             is LineLimitExceeded -> {
-                val solutionLineUsage = if (language == Language.java) {
-                    validationResults?.executionCounts?.java ?: settings.solutionExecutionCount?.java
-                } else {
-                    validationResults?.executionCounts?.kotlin ?: settings.solutionExecutionCount?.kotlin
-                }
+                check(lineCountLimit != null) { "lineCountLimit should not be null" }
                 results.failed.checkExecutedSubmission =
-                    "Executed too many lines: Already executed $lineCountLimit ${"line".pluralize(lineCountLimit!!.toInt())}${
-                        if (solutionLineUsage != null) {
-                            ", solution needed only $solutionLineUsage total"
-                        } else {
-                            ""
-                        }
-                    }"
+                    "Executed too many lines: Already executed $lineCountLimit ${"line".pluralize(lineCountLimit.toInt())}, " +
+                        "solution needed only $solutionExecutionCount total"
             }
 
             else -> {
@@ -276,6 +274,15 @@ suspend fun Question.test(
                     "Testing generated an unexpected error: $actualException\n${actualException.stackTraceToString()}"
             }
         }
+        return results
+    }
+
+    // HACK: lineCountLimit doesn't always seem to work properly
+    if (lineCountLimit != null && submissionExecutionCount > lineCountLimit) {
+        results.failedSteps.add(TestResults.Step.checkExecutedSubmission)
+        results.failed.checkExecutedSubmission =
+            "Executed too many lines: Already executed $lineCountLimit ${"line".pluralize(lineCountLimit.toInt())}, " +
+                "solution needed only $solutionExecutionCount total"
         return results
     }
 
@@ -358,14 +365,7 @@ suspend fun Question.test(
 
     results.completedSteps.add(TestResults.Step.checkExecutedSubmission)
 
-    // executioncount
-    val submissionExecutionCount = resourceUsage.submissionLines
-    val solutionExecutionCount = if (language == Language.java) {
-        validationResults?.executionCounts?.java ?: settings.solutionExecutionCount?.java
-    } else {
-        validationResults?.executionCounts?.kotlin ?: settings.solutionExecutionCount?.kotlin
-    } ?: submissionExecutionCount
-
+    // executioncount soft failure
     results.complete.executionCount = TestResults.ResourceUsageComparison(
         solutionExecutionCount,
         submissionExecutionCount,
