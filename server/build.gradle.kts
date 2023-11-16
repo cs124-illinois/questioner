@@ -1,9 +1,6 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jmailen.gradle.kotlinter.tasks.FormatTask
 import org.jmailen.gradle.kotlinter.tasks.LintTask
-import java.io.File
-import java.io.StringWriter
-import java.util.Properties
 
 plugins {
     kotlin("jvm")
@@ -16,7 +13,7 @@ dependencies {
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
 
     implementation(project(":lib"))
-
+    
     implementation("io.ktor:ktor-server-netty:2.3.6")
     implementation("io.ktor:ktor-server-content-negotiation:2.3.6")
     implementation("io.ktor:ktor-server-call-logging:2.3.6")

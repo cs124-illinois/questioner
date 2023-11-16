@@ -1198,7 +1198,7 @@
     "type": "KLASS",
     "klass": "Question",
     "metadata": {
-      "contentHash": "a02e205e0c5a5ef8e6d2a91e2c82a474",
+      "contentHash": "ff437a6bdad8d576f0090e47709a49c0",
       "packageName": "com.examples.readhelloworld",
       "version": "2023.11.0",
       "author": "challen@illinois.edu",
@@ -1212,13 +1212,13 @@
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.EdgeType;\nimport edu.illinois.cs.cs125.jenisol.core.ProvideFileSystem;\nimport edu.illinois.cs.cs125.jenisol.core.RandomType;\nimport edu.illinois.cs.cs125.jenisol.core.SimpleType;\nimport edu.illinois.cs.cs125.jenisol.core.generators.JenisolFileSystem;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\n\nimport java.io.IOException;\nimport java.nio.charset.StandardCharsets;\nimport java.util.Map;\nimport java.util.Random;\nimport java.util.Scanner;\n\n/*\n * Question to test filesystem generation.\n */\n\n@Correct(name = \"Read Hello World!\", version = \"2023.11.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  @ProvideFileSystem\n  public static void test() throws IOException {\n    // mutate-disable-string-literal-trim mutate-disable-string-literal\n    String greeter =\n      new Scanner(\"/testing.txt\").useDelimiter(\"\\\\A\").next();\n    System.out.println(greeter);\n  }\n\n  @SimpleType\n  private static final JenisolFileSystem[] SIMPLE =\n    new JenisolFileSystem[] {\n      new JenisolFileSystem(\n        Map.of(\"/testing.txt\", \"Hello, world!\".getBytes(StandardCharsets.UTF_8)))\n    };\n\n  @EdgeType\n  private static final JenisolFileSystem[] EDGE = new JenisolFileSystem[] {};\n\n  @RandomType\n  private static JenisolFileSystem randomInput(Random random) {\n    return new JenisolFileSystem(\n      Map.of(\"/testing.txt\", (\"\" + random.nextInt()).getBytes(StandardCharsets.UTF_8)));\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.EdgeType;\nimport edu.illinois.cs.cs125.jenisol.core.ProvideFileSystem;\nimport edu.illinois.cs.cs125.jenisol.core.RandomType;\nimport edu.illinois.cs.cs125.jenisol.core.SimpleType;\nimport edu.illinois.cs.cs125.jenisol.core.generators.JenisolFileSystem;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.io.IOException;\nimport java.nio.charset.StandardCharsets;\nimport java.util.Map;\nimport java.util.Random;\nimport java.util.Scanner;\n\n/*\n * Question to test filesystem generation.\n */\n\n@Correct(name = \"Read Hello World!\", version = \"2023.11.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  @ProvideFileSystem\n  public static void test() throws IOException {\n    // mutate-disable-string-literal-trim mutate-disable-string-literal\n    String greeter = new Scanner(\"testing.txt\").useDelimiter(\"\\\\A\").next();\n    System.out.println(greeter);\n  }\n\n  @SimpleType\n  private static final JenisolFileSystem[] SIMPLE =\n      new JenisolFileSystem[] {\n        new JenisolFileSystem(\n            Map.of(\"testing.txt\", \"Hello, world!\".getBytes(StandardCharsets.UTF_8)))\n      };\n\n  @EdgeType private static final JenisolFileSystem[] EDGE = new JenisolFileSystem[] {};\n\n  @RandomType\n  private static JenisolFileSystem randomInput(Random random) {\n    return new JenisolFileSystem(\n        Map.of(\"testing.txt\", (\"\" + random.nextInt()).getBytes(StandardCharsets.UTF_8)));\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/readhelloworld/Question.java"
     },
     "correct": {
       "klass": "Question",
-      "contents": "import java.io.IOException;\nimport java.util.Scanner;\n\npublic class Question {\n  public static void test() throws IOException {\n    // mutate-disable-string-literal-trim mutate-disable-string-literal\n    String greeter = new Scanner(\"/testing.txt\").useDelimiter(\"\\\\A\").next();\n    System.out.println(greeter);\n  }\n}\n",
+      "contents": "import java.io.IOException;\nimport java.util.Scanner;\n\npublic class Question {\n  public static void test() throws IOException {\n    // mutate-disable-string-literal-trim mutate-disable-string-literal\n    String greeter = new Scanner(\"testing.txt\").useDelimiter(\"\\\\A\").next();\n    System.out.println(greeter);\n  }\n}\n",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/readhelloworld/Question.java",
       "complexity": 2,
@@ -7930,7 +7930,7 @@
     "type": "KLASS",
     "klass": "Example",
     "metadata": {
-      "contentHash": "2b7bac7c814c33b7dc96b5f01edd4e58",
+      "contentHash": "08e6f605cf243ecd4129de80b5ac4162",
       "packageName": "com.examples.testing.badkotlingettersetter",
       "version": "2023.10.0",
       "author": "challen@illinois.edu",
@@ -7949,7 +7949,7 @@
     "annotatedControls": {},
     "question": {
       "klass": "Example",
-      "contents": "import edu.illinois.cs.cs125.jeed.core.FeatureName;\nimport edu.illinois.cs.cs125.jeed.core.Features;\nimport edu.illinois.cs.cs125.questioner.lib.CheckFeatures;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.FeatureCheckException;\nimport edu.illinois.cs.cs125.questioner.lib.Language;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\n/*\n * Test to ensure that we can detect unnecessary Kotlin setter or getter overrides.\n */\n\n@Correct(name = \"Test Bad Kotlin Getter Setter\", version = \"2023.10.0\", author = \"challen@illinois.edu\")\npublic class Example {\n  private String name;\n  public Example(String setName) {\n    name = setName;\n  }\n\n  public String getName() {\n    return name;\n  }\n\n  public void setName(String setName) {\n    name = setName;\n  }\n\n  @CheckFeatures\n  private static List<String> checkFeatures(Language language, Features solution, Features submission) {\n    if (language == Language.kotlin) {\n      if (submission.getFeatureMap().containsKey(FeatureName.GETTER)) {\n        throw new FeatureCheckException(\"Solution overrides a getter unnecessarily\");\n      }\n      if (submission.getFeatureMap().containsKey(FeatureName.SETTER)) {\n        throw new FeatureCheckException(\"Solution overrides a setter unnecessarily\");\n      }\n    }\n    return new ArrayList<>();\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jeed.core.FeatureName;\nimport edu.illinois.cs.cs125.jeed.core.Features;\nimport edu.illinois.cs.cs125.questioner.lib.CheckFeatures;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.FeatureCheckException;\nimport edu.illinois.cs.cs125.questioner.lib.Language;\nimport java.util.ArrayList;\nimport java.util.List;\n\n/*\n * Test to ensure that we can detect unnecessary Kotlin setter or getter overrides.\n */\n\n@Correct(\n    name = \"Test Bad Kotlin Getter Setter\",\n    version = \"2023.10.0\",\n    author = \"challen@illinois.edu\")\npublic class Example {\n  private String name;\n\n  public Example(String setName) {\n    name = setName;\n  }\n\n  public String getName() {\n    return name;\n  }\n\n  public void setName(String setName) {\n    name = setName;\n  }\n\n  @CheckFeatures\n  private static List<String> checkFeatures(\n      Language language, Features solution, Features submission) {\n    if (language == Language.kotlin) {\n      if (submission.getFeatureMap().containsKey(FeatureName.GETTER)) {\n        throw new FeatureCheckException(\"Solution overrides a getter unnecessarily\");\n      }\n      if (submission.getFeatureMap().containsKey(FeatureName.SETTER)) {\n        throw new FeatureCheckException(\"Solution overrides a setter unnecessarily\");\n      }\n    }\n    return new ArrayList<>();\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badkotlingettersetter/Example.java"
     },
@@ -9462,7 +9462,7 @@
     "type": "KLASS",
     "klass": "Child",
     "metadata": {
-      "contentHash": "b72352bed3c5f13338e779c5c488dea5",
+      "contentHash": "180e980fc698050231b8fc6a8719e3bb",
       "packageName": "com.examples.testing.badextraprivatevariable",
       "version": "2023.10.0",
       "author": "challen@illinois.edu",
@@ -9482,7 +9482,7 @@
     "annotatedControls": {},
     "question": {
       "klass": "Child",
-      "contents": "import edu.illinois.cs.cs125.jeed.core.FeatureName;\nimport edu.illinois.cs.cs125.jeed.core.Features;\nimport edu.illinois.cs.cs125.jenisol.core.Both;\nimport edu.illinois.cs.cs125.questioner.lib.CheckFeatures;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.FeatureCheckException;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\n/*\n * Test bad use of superclass method.\n */\n\n@Correct(name = \"Bad Extra Private Variable\", version = \"2023.10.0\", author = \"challen@illinois.edu\")\npublic class Child extends Parent {\n  private final String firstName;\n\n  public Child(String setFirstName, String setLastName) {\n    super(setLastName);\n    firstName = setFirstName;\n  }\n\n  @Override\n  public String toString() {\n    return firstName + \" \" + getLastName();\n  }\n\n  @CheckFeatures\n  private static List<String> checkFeatures(Features solution, Features submission) {\n    int solutionVariableCount = solution.getFeatureMap().getOrDefault(FeatureName.CLASS_FIELD, 0);\n    int submissionVariableCount = submission.getFeatureMap().getOrDefault(FeatureName.CLASS_FIELD, 0);\n    if (submissionVariableCount > solutionVariableCount) {\n      throw new FeatureCheckException(\"Submission declares too many fields\");\n    }\n    return new ArrayList<>();\n  }\n\n  @Both\n  private static String checkName(Parent parent) {\n    return parent.getLastName();\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jeed.core.FeatureName;\nimport edu.illinois.cs.cs125.jeed.core.Features;\nimport edu.illinois.cs.cs125.jenisol.core.Both;\nimport edu.illinois.cs.cs125.questioner.lib.CheckFeatures;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.FeatureCheckException;\nimport java.util.ArrayList;\nimport java.util.List;\n\n/*\n * Test bad use of superclass method.\n */\n\n@Correct(\n    name = \"Bad Extra Private Variable\",\n    version = \"2023.10.0\",\n    author = \"challen@illinois.edu\")\npublic class Child extends Parent {\n  private final String firstName;\n\n  public Child(String setFirstName, String setLastName) {\n    super(setLastName);\n    firstName = setFirstName;\n  }\n\n  @Override\n  public String toString() {\n    return firstName + \" \" + getLastName();\n  }\n\n  @CheckFeatures\n  private static List<String> checkFeatures(Features solution, Features submission) {\n    int solutionVariableCount = solution.getFeatureMap().getOrDefault(FeatureName.CLASS_FIELD, 0);\n    int submissionVariableCount =\n        submission.getFeatureMap().getOrDefault(FeatureName.CLASS_FIELD, 0);\n    if (submissionVariableCount > solutionVariableCount) {\n      throw new FeatureCheckException(\"Submission declares too many fields\");\n    }\n    return new ArrayList<>();\n  }\n\n  @Both\n  private static String checkName(Parent parent) {\n    return parent.getLastName();\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badextraprivatevariable/Child.java"
     },
@@ -9867,7 +9867,7 @@
       }
     ],
     "common": [
-      "public class Parent {\n  private final String lastName;\n  public Parent(String setLastName) {\n    lastName = setLastName;\n  }\n\n  public String getLastName() {\n    return lastName;\n  }\n}\n"
+      "public class Parent {\n  private final String lastName;\n\n  public Parent(String setLastName) {\n    lastName = setLastName;\n  }\n\n  public String getLastName() {\n    return lastName;\n  }\n}\n"
     ],
     "importWhitelist": [],
     "importBlacklist": [],

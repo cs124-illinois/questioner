@@ -473,28 +473,42 @@ fun List<ParsedJavaFile>.findQuestions(
 
             if (questionType == Question.Type.METHOD) {
                 check(!cleanSolution.contents.methodIsMarkedPublicOrStatic()) {
-                    "Do not use public modifiers on method-only problems, and use static only on private helpers"
+                    "Do not use public modifiers on method-only problems, and use static only on private helpers: ${solution.path}"
                 }
+            }
+
+            val metadata = Question.Metadata(
+                allContentHash,
+                solution.packageName,
+                solution.correct.version,
+                solution.correct.author,
+                solution.correct.description,
+                kotlinSolution?.description,
+                solution.citation,
+                myUsedFiles,
+                javaImports,
+                solution.correct.focused,
+                solution.correct.publish,
+                VERSION,
+            )
+
+            if (metadata.kotlinDescription != null && kotlinSolution != null) {
+                val hasJavaStarter = incorrectExamples.any { it.language == Language.java && it.starter }
+                val hasKotlinStarter = incorrectExamples.any { it.language == Language.kotlin && it.starter }
+                if (hasJavaStarter) {
+                    check(hasKotlinStarter) { "Kotlin starter code is missing for ${solution.path}" }
+                }
+            }
+
+            if (solution.correct.control.maxLineCountMultiplier != null && solution.correct.control.maxLineCountExtraPercentage != null) {
+                error("Can't set both maxLineCountMultiplier and maxLineCountExtraPercentage: ${solution.path}")
             }
 
             Question(
                 solution.correct.name,
                 questionType,
                 solution.className,
-                Question.Metadata(
-                    allContentHash,
-                    solution.packageName,
-                    solution.correct.version,
-                    solution.correct.author,
-                    solution.correct.description,
-                    kotlinSolution?.description,
-                    solution.citation,
-                    myUsedFiles,
-                    javaImports,
-                    solution.correct.focused,
-                    solution.correct.publish,
-                    VERSION,
-                ),
+                metadata,
                 solution.correct.control,
                 Question.FlatFile(
                     solution.className,

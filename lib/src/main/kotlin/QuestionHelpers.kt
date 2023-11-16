@@ -401,7 +401,7 @@ class MaxComplexityExceeded(message: String) : RuntimeException(message)
 
 fun Question.computeComplexity(contents: String, language: Language): TestResults.ComplexityComparison {
     val solutionComplexity = published.complexity[language]
-    check(solutionComplexity != null) { "Solution complexity not available" }
+    check(solutionComplexity != null) { "Solution complexity not available for $language" }
 
     val maxComplexity =
         (control.maxComplexityMultiplier!! * solutionComplexity).coerceAtLeast(Question.TestingControl.DEFAULT_MIN_FAIL_FAST_COMPLEXITY)
@@ -482,7 +482,11 @@ fun Question.computeLineCounts(contents: String, language: Language): TestResult
     val solutionLineCount = published.lineCounts[language]
     check(solutionLineCount != null) { "Solution line count not available" }
 
-    val maxLineCount = (control.maxLineCountMultiplier!! * solutionLineCount.source)
+    val maxLineCount = if (control.maxLineCountExtraPercentage!! != -1) {
+        solutionLineCount.source + (solutionLineCount.source / 100 * control.maxLineCountExtraPercentage!!)
+    } else {
+        control.maxLineCountMultiplier!! * solutionLineCount.source
+    }
 
     val type = when (language) {
         Language.java -> Source.FileType.JAVA

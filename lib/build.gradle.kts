@@ -23,9 +23,10 @@ dependencies {
 
     api("com.beyondgrader.resource-agent:agent:2023.9.0")
     api("com.beyondgrader.resource-agent:virtualfsplugin:2023.9.0")
-    api("org.cs124.jeed:core:2023.11.0")
+    api("org.cs124.jeed:core:2023.11.1")
     api("org.cs124:jenisol:2023.11.2")
     api("org.cs124:libcs1:2023.11.1")
+    api("com.fasterxml.jackson.core:jackson-databind:2.16.0")
 
     api("io.kotest:kotest-runner-junit5:5.8.0")
     api("com.google.truth:truth:1.1.5")

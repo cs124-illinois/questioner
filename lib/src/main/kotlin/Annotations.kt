@@ -38,6 +38,7 @@ annotation class Correct(
     val seed: Int = Question.TestingControl.DEFAULT_SEED,
     val maxComplexityMultiplier: Int = Question.TestingControl.DEFAULT_MAX_COMPLEXITY_MULTIPLIER,
     val maxLineCountMultiplier: Int = Question.TestingControl.DEFAULT_MAX_LINECOUNT_MULTIPLIER,
+    val maxLineCountExtraPercentage: Int = Question.TestingControl.DEFAULT_MAX_LINECOUNT_EXTRA_PERCENTAGE,
     val maxClassSizeMultiplier: Int = Question.TestingControl.DEFAULT_MAX_CLASSSIZE_MULTIPLIER,
 )
 
