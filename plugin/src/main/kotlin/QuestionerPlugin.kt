@@ -54,7 +54,8 @@ class QuestionerPlugin : Plugin<Project> {
             project.configurations.getByName("runtimeClasspath") { conf ->
                 val agentJarPath =
                     conf.resolvedConfiguration.resolvedArtifacts.find {
-                        it.moduleVersion.id.group == "com.beyondgrader.resource-agent"
+                        it.moduleVersion.id.group == "com.beyondgrader.resource-agent" &&
+                            it.moduleVersion.id.name == "agent"
                     }!!.file.absolutePath
                 project.tasks.withType(Test::class.java) {
                     it.jvmArgs("-javaagent:$agentJarPath")

@@ -1,6 +1,8 @@
 package edu.illinois.cs.cs125.questioner.lib
 
 import com.beyondgrader.resourceagent.StaticFailureDetection
+import com.beyondgrader.resourceagent.jeed.VirtualFilesystem
+import com.beyondgrader.resourceagent.jeed.VirtualFilesystemArguments
 import edu.illinois.cs.cs125.jeed.core.CheckstyleFailed
 import edu.illinois.cs.cs125.jeed.core.CompilationFailed
 import edu.illinois.cs.cs125.jeed.core.ComplexityFailed
@@ -201,7 +203,8 @@ suspend fun Question.test(
                 allocatedMemoryLimit = allocationLimit,
                 individualAllocationLimit = MAX_INDIVIDUAL_ALLOCATION_BYTES
             )
-        )
+        ),
+        ConfiguredSandboxPlugin(VirtualFilesystem, VirtualFilesystemArguments())
     )
 
     val captureOutputControlInput = bindJeedCaptureOutputControlInput(systemInStream, settings.perTestOutputLimit)

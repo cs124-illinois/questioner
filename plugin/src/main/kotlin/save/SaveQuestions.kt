@@ -14,6 +14,7 @@ import edu.illinois.cs.cs125.jenisol.core.InstanceValidator
 import edu.illinois.cs.cs125.jenisol.core.KotlinMirrorOK
 import edu.illinois.cs.cs125.jenisol.core.Limit
 import edu.illinois.cs.cs125.jenisol.core.NotNull
+import edu.illinois.cs.cs125.jenisol.core.ProvideFileSystem
 import edu.illinois.cs.cs125.jenisol.core.ProvideSystemIn
 import edu.illinois.cs.cs125.jenisol.core.RandomParameters
 import edu.illinois.cs.cs125.jenisol.core.RandomType
@@ -541,6 +542,7 @@ val annotationsToRemove =
         Cite::class.java.simpleName,
         Limit::class.java.simpleName,
         ProvideSystemIn::class.java.simpleName,
+        ProvideFileSystem::class.java.simpleName,
         CheckstyleSuppress::class.java.simpleName,
         KotlinMirrorOK::class.java.simpleName,
     )

@@ -17,7 +17,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -1189,7 +1189,471 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
+    },
+    "fauxStatic": false
+  },
+  "Read Hello World!": {
+    "name": "Read Hello World!",
+    "type": "KLASS",
+    "klass": "Question",
+    "metadata": {
+      "contentHash": "a02e205e0c5a5ef8e6d2a91e2c82a474",
+      "packageName": "com.examples.readhelloworld",
+      "version": "2023.11.0",
+      "author": "challen@illinois.edu",
+      "javaDescription": "<p>Question to test filesystem generation.</p>",
+      "usedFiles": [],
+      "templateImports": [],
+      "focused": false,
+      "publish": true,
+      "questionerVersion": "2023.11.3"
+    },
+    "annotatedControls": {},
+    "question": {
+      "klass": "Question",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.EdgeType;\nimport edu.illinois.cs.cs125.jenisol.core.ProvideFileSystem;\nimport edu.illinois.cs.cs125.jenisol.core.RandomType;\nimport edu.illinois.cs.cs125.jenisol.core.SimpleType;\nimport edu.illinois.cs.cs125.jenisol.core.generators.JenisolFileSystem;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\n\nimport java.io.IOException;\nimport java.nio.charset.StandardCharsets;\nimport java.util.Map;\nimport java.util.Random;\nimport java.util.Scanner;\n\n/*\n * Question to test filesystem generation.\n */\n\n@Correct(name = \"Read Hello World!\", version = \"2023.11.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  @ProvideFileSystem\n  public static void test() throws IOException {\n    // mutate-disable-string-literal-trim mutate-disable-string-literal\n    String greeter =\n      new Scanner(\"/testing.txt\").useDelimiter(\"\\\\A\").next();\n    System.out.println(greeter);\n  }\n\n  @SimpleType\n  private static final JenisolFileSystem[] SIMPLE =\n    new JenisolFileSystem[] {\n      new JenisolFileSystem(\n        Map.of(\"/testing.txt\", \"Hello, world!\".getBytes(StandardCharsets.UTF_8)))\n    };\n\n  @EdgeType\n  private static final JenisolFileSystem[] EDGE = new JenisolFileSystem[] {};\n\n  @RandomType\n  private static JenisolFileSystem randomInput(Random random) {\n    return new JenisolFileSystem(\n      Map.of(\"/testing.txt\", (\"\" + random.nextInt()).getBytes(StandardCharsets.UTF_8)));\n  }\n}",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/readhelloworld/Question.java"
+    },
+    "correct": {
+      "klass": "Question",
+      "contents": "import java.io.IOException;\nimport java.util.Scanner;\n\npublic class Question {\n  public static void test() throws IOException {\n    // mutate-disable-string-literal-trim mutate-disable-string-literal\n    String greeter = new Scanner(\"/testing.txt\").useDelimiter(\"\\\\A\").next();\n    System.out.println(greeter);\n  }\n}\n",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/readhelloworld/Question.java",
+      "complexity": 2,
+      "features": {
+        "featureMap": {
+          "LOCAL_VARIABLE_DECLARATIONS": 1,
+          "VARIABLE_ASSIGNMENTS": 1,
+          "METHOD": 1,
+          "STRING": 1,
+          "CLASS": 1,
+          "THROWS": 1,
+          "NEW_KEYWORD": 1,
+          "VISIBILITY_MODIFIERS": 2,
+          "STATIC_METHOD": 1,
+          "IMPORT": 2,
+          "PRINT_STATEMENTS": 1,
+          "DOT_NOTATION": 2,
+          "DOTTED_METHOD_CALL": 2
+        },
+        "featureList": [
+          {
+            "feature": "IMPORT",
+            "location": {
+              "line": 1,
+              "column": 0
+            }
+          },
+          {
+            "feature": "IMPORT",
+            "location": {
+              "line": 2,
+              "column": 0
+            }
+          },
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 4,
+              "column": 0
+            }
+          },
+          {
+            "feature": "CLASS",
+            "location": {
+              "line": 4,
+              "column": 7
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 4,
+              "column": 22
+            }
+          },
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 5,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATIC_METHOD",
+            "location": {
+              "line": 5,
+              "column": 9
+            }
+          },
+          {
+            "feature": "METHOD",
+            "location": {
+              "line": 5,
+              "column": 16
+            }
+          },
+          {
+            "feature": "THROWS",
+            "location": {
+              "line": 5,
+              "column": 16
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 5,
+              "column": 47
+            }
+          },
+          {
+            "feature": "STRING",
+            "location": {
+              "line": 7,
+              "column": 4
+            }
+          },
+          {
+            "feature": "LOCAL_VARIABLE_DECLARATIONS",
+            "location": {
+              "line": 7,
+              "column": 11
+            }
+          },
+          {
+            "feature": "VARIABLE_ASSIGNMENTS",
+            "location": {
+              "line": 7,
+              "column": 11
+            }
+          },
+          {
+            "feature": "NEW_KEYWORD",
+            "location": {
+              "line": 7,
+              "column": 21
+            }
+          },
+          {
+            "feature": "DOT_NOTATION",
+            "location": {
+              "line": 7,
+              "column": 21
+            }
+          },
+          {
+            "feature": "DOT_NOTATION",
+            "location": {
+              "line": 7,
+              "column": 21
+            }
+          },
+          {
+            "feature": "DOTTED_METHOD_CALL",
+            "location": {
+              "line": 7,
+              "column": 21
+            }
+          },
+          {
+            "feature": "DOTTED_METHOD_CALL",
+            "location": {
+              "line": 7,
+              "column": 21
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 8,
+              "column": 4
+            }
+          },
+          {
+            "feature": "PRINT_STATEMENTS",
+            "location": {
+              "line": 8,
+              "column": 4
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 8,
+              "column": 31
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 9,
+              "column": 2
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 10,
+              "column": 0
+            }
+          }
+        ],
+        "importList": [
+          "java.io.IOException",
+          "java.util.Scanner"
+        ],
+        "typeList": [
+          "String"
+        ],
+        "identifierList": [
+          "greeter"
+        ],
+        "dottedMethodList": [
+          "next",
+          "useDelimiter",
+          "println"
+        ]
+      },
+      "lineCount": {
+        "source": 8,
+        "comment": 1,
+        "blank": 2
+      },
+      "expectedDeadCount": 0
+    },
+    "alternativeSolutions": [],
+    "incorrect": [],
+    "common": [],
+    "importWhitelist": [],
+    "importBlacklist": [],
+    "checkstyleSuppressions": [],
+    "slug": "read-hello-world",
+    "hasKotlin": false,
+    "published": {
+      "name": "Read Hello World!",
+      "type": "KLASS",
+      "path": "read-hello-world",
+      "author": "challen@illinois.edu",
+      "version": "2023.11.0",
+      "packageName": "com.examples.readhelloworld",
+      "languages": [
+        "java"
+      ],
+      "descriptions": {
+        "java": "<p>Question to test filesystem generation.</p>"
+      },
+      "complexity": {
+        "java": 2
+      },
+      "features": {
+        "java": {
+          "featureMap": {
+            "LOCAL_VARIABLE_DECLARATIONS": 1,
+            "VARIABLE_ASSIGNMENTS": 1,
+            "METHOD": 1,
+            "STRING": 1,
+            "CLASS": 1,
+            "THROWS": 1,
+            "NEW_KEYWORD": 1,
+            "VISIBILITY_MODIFIERS": 2,
+            "STATIC_METHOD": 1,
+            "IMPORT": 2,
+            "PRINT_STATEMENTS": 1,
+            "DOT_NOTATION": 2,
+            "DOTTED_METHOD_CALL": 2
+          },
+          "featureList": [
+            {
+              "feature": "IMPORT",
+              "location": {
+                "line": 1,
+                "column": 0
+              }
+            },
+            {
+              "feature": "IMPORT",
+              "location": {
+                "line": 2,
+                "column": 0
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 4,
+                "column": 0
+              }
+            },
+            {
+              "feature": "CLASS",
+              "location": {
+                "line": 4,
+                "column": 7
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 4,
+                "column": 22
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 5,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATIC_METHOD",
+              "location": {
+                "line": 5,
+                "column": 9
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 5,
+                "column": 16
+              }
+            },
+            {
+              "feature": "THROWS",
+              "location": {
+                "line": 5,
+                "column": 16
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 5,
+                "column": 47
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 7,
+                "column": 4
+              }
+            },
+            {
+              "feature": "LOCAL_VARIABLE_DECLARATIONS",
+              "location": {
+                "line": 7,
+                "column": 11
+              }
+            },
+            {
+              "feature": "VARIABLE_ASSIGNMENTS",
+              "location": {
+                "line": 7,
+                "column": 11
+              }
+            },
+            {
+              "feature": "NEW_KEYWORD",
+              "location": {
+                "line": 7,
+                "column": 21
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 7,
+                "column": 21
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 7,
+                "column": 21
+              }
+            },
+            {
+              "feature": "DOTTED_METHOD_CALL",
+              "location": {
+                "line": 7,
+                "column": 21
+              }
+            },
+            {
+              "feature": "DOTTED_METHOD_CALL",
+              "location": {
+                "line": 7,
+                "column": 21
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 8,
+                "column": 4
+              }
+            },
+            {
+              "feature": "PRINT_STATEMENTS",
+              "location": {
+                "line": 8,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 8,
+                "column": 31
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 9,
+                "column": 2
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 10,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [
+            "java.io.IOException",
+            "java.util.Scanner"
+          ],
+          "typeList": [
+            "String"
+          ],
+          "identifierList": [
+            "greeter"
+          ],
+          "dottedMethodList": [
+            "next",
+            "useDelimiter",
+            "println"
+          ]
+        }
+      },
+      "lineCounts": {
+        "java": {
+          "source": 8,
+          "comment": 1,
+          "blank": 2
+        }
+      },
+      "templateImports": [],
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -1207,7 +1671,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -1438,7 +1902,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -1459,7 +1923,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -3810,7 +4274,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -3831,7 +4295,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -5001,7 +5465,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -5024,7 +5488,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {
       "maxDeadCode": 2
@@ -5477,7 +5941,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -5495,7 +5959,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -5922,7 +6386,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -5946,7 +6410,7 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -7158,7 +7622,7 @@
         "java.util.ArrayList",
         "java.util.List"
       ],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -7180,7 +7644,7 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -7457,7 +7921,7 @@
         "java.util.List",
         "java.util.ArrayList"
       ],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -7480,7 +7944,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -8200,7 +8664,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -8221,7 +8685,7 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -8511,7 +8975,7 @@
         "java.util.Map",
         "java.util.Set"
       ],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -8529,7 +8993,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -8989,7 +9453,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -9013,7 +9477,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -9875,7 +10339,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -9893,7 +10357,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -10845,7 +11309,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -10866,7 +11330,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -11875,7 +12339,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -11897,7 +12361,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -12607,7 +13071,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -12627,7 +13091,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -13098,7 +13562,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -13118,7 +13582,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -13326,7 +13790,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -13349,7 +13813,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -13899,7 +14363,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -13917,7 +14381,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -14238,7 +14702,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -14258,7 +14722,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -15210,7 +15674,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -15237,7 +15701,7 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -17493,7 +17957,7 @@
         "java.util.Map",
         "java.util.HashMap"
       ],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -17513,7 +17977,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -18270,7 +18734,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -18290,7 +18754,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -19262,7 +19726,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -19283,7 +19747,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -19778,7 +20242,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -19798,7 +20262,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -20764,7 +21228,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -20782,7 +21246,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -20907,7 +21371,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -20928,7 +21392,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -22510,7 +22974,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -22531,7 +22995,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -23202,7 +23666,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -23230,7 +23694,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {
       "maxLineCountMultiplier": 16
@@ -23850,7 +24314,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   },
@@ -23872,7 +24336,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "annotatedControls": {},
     "question": {
@@ -24646,7 +25110,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.2"
+      "questionerVersion": "2023.11.3"
     },
     "fauxStatic": false
   }

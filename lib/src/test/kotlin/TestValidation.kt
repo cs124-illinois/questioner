@@ -57,6 +57,14 @@ class TestValidation : StringSpec({
                 report!!.requiredTestCount shouldBeGreaterThan 0
             }
     }
+    "filesystem access should work" {
+        validator.validate("Read Hello World!", force = true, testing = true)
+            .also { (question, report) ->
+                question.validated shouldBe true
+                report shouldNotBe null
+                report!!.requiredTestCount shouldBeGreaterThan 0
+            }
+    }
     "constructor @NotNull should work" {
         validator.validate("Test Constructor NotNull", force = true, testing = true)
             .also { (question, report) ->

@@ -1,5 +1,8 @@
 package edu.illinois.cs.cs125.questioner.lib
 
+import com.beyondgrader.resourceagent.jeed.IsolatedFileSystemProvider
+import com.beyondgrader.resourceagent.jeed.VirtualFilesystem
+import com.beyondgrader.resourceagent.jeed.populate
 import edu.illinois.cs.cs125.jeed.core.CheckstyleArguments
 import edu.illinois.cs.cs125.jeed.core.CheckstyleFailed
 import edu.illinois.cs.cs125.jeed.core.CompilationArguments
@@ -554,7 +557,7 @@ fun bindJeedCaptureOutputControlInput(
     stdinStream: BumpingInputStream,
     perTestOutputLimit: Int
 ): CaptureOutputControlInput {
-    return fun(stdin: List<String>, run: () -> Any?): CapturedResult {
+    return fun(stdin: List<String>, jeedFileSystem: Map<String, ByteArray?>, run: () -> Any?): CapturedResult {
         stdinStream.setInputs(stdin.map { "$it\n".toByteArray() })
 
         val outputListener = object : Sandbox.OutputListener {
@@ -564,6 +567,11 @@ fun bindJeedCaptureOutputControlInput(
 
             override fun stderr(int: Int) {}
         }
+
+        VirtualFilesystem.currentFilesystem = IsolatedFileSystemProvider().apply {
+            fileSystem.populate(jeedFileSystem)
+        }
+
         var resourceUsage: ResourceMonitoringCheckpoint? = null
         val jeedOutput = Sandbox.redirectOutput(outputListener, perTestOutputLimit, squashNormalOutput = true) {
             ResourceMonitoring.beginSubmissionCall()
