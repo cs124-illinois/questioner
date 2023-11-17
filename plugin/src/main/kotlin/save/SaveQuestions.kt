@@ -500,10 +500,6 @@ fun List<ParsedJavaFile>.findQuestions(
                 }
             }
 
-            if (solution.correct.control.maxLineCountMultiplier != null && solution.correct.control.maxLineCountExtraPercentage != null) {
-                error("Can't set both maxLineCountMultiplier and maxLineCountExtraPercentage: ${solution.path}")
-            }
-
             Question(
                 solution.correct.name,
                 questionType,

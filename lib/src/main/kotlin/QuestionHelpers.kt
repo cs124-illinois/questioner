@@ -393,7 +393,7 @@ fun Question.computeClassSize(
     return TestResults.ResourceUsageComparison(
         solutionClassSize,
         submissionClassSize,
-        solutionClassSize * control.maxClassSizeMultiplier!!
+        (solutionClassSize.toDouble() * control.maxClassSizeMultiplier!!).toLong()
     )
 }
 
@@ -404,7 +404,9 @@ fun Question.computeComplexity(contents: String, language: Language): TestResult
     check(solutionComplexity != null) { "Solution complexity not available for $language" }
 
     val maxComplexity =
-        (control.maxComplexityMultiplier!! * solutionComplexity).coerceAtLeast(Question.TestingControl.DEFAULT_MIN_FAIL_FAST_COMPLEXITY)
+        (control.maxComplexityMultiplier!! * solutionComplexity)
+            .toInt()
+            .coerceAtLeast(Question.TestingControl.DEFAULT_MIN_FAIL_FAST_COMPLEXITY)
 
     val submissionComplexity = when {
         type == Question.Type.SNIPPET && contents.isBlank() -> 0
@@ -482,11 +484,7 @@ fun Question.computeLineCounts(contents: String, language: Language): TestResult
     val solutionLineCount = published.lineCounts[language]
     check(solutionLineCount != null) { "Solution line count not available" }
 
-    val maxLineCount = if (control.maxLineCountExtraPercentage!! != -1) {
-        solutionLineCount.source + (solutionLineCount.source / 100 * control.maxLineCountExtraPercentage!!)
-    } else {
-        control.maxLineCountMultiplier!! * solutionLineCount.source
-    }
+    val maxLineCount = (control.maxLineCountMultiplier!! * solutionLineCount.source).toInt()
 
     val type = when (language) {
         Language.java -> Source.FileType.JAVA

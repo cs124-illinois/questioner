@@ -195,24 +195,23 @@ data class ParsedJavaFile(val path: String, val contents: String) {
                 val maxTestCount = parameters["maxTestCount"]?.toInt()
                 val minTimeout = parameters["minTimeout"]?.toInt()
                 val maxTimeout = parameters["maxTimeout"]?.toInt()
-                val timeoutMultiplier = parameters["timeoutMultiplier"]?.toInt()
+                val timeoutMultiplier = parameters["timeoutMultiplier"]?.toDouble()
                 val minMutationCount = parameters["minMutationCount"]?.toInt()
                 val maxMutationCount = parameters["maxMutationCount"]?.toInt()
-                val outputMultiplier = parameters["outputMultiplier"]?.toInt()
+                val outputMultiplier = parameters["outputMultiplier"]?.toDouble()
                 val maxExtraComplexity = parameters["maxExtraComplexity"]?.toInt()
                 val maxDeadCode = parameters["maxDeadCode"]?.toInt()
-                val maxExecutionCountMultiplier = parameters["maxExecutionCountMultiplier"]?.toLong()
-                val executionCountFailureMultiplier = parameters["executionCountFailureMultiplier"]?.toInt()
-                val executionCountTimeoutMultiplier = parameters["executionCountTimeoutMultiplier"]?.toInt()
+                val maxExecutionCountMultiplier = parameters["maxExecutionCountMultiplier"]?.toDouble()
+                val executionCountFailureMultiplier = parameters["executionCountFailureMultiplier"]?.toDouble()
+                val executionCountTimeoutMultiplier = parameters["executionCountTimeoutMultiplier"]?.toDouble()
                 val allocationFailureMultiplier = parameters["allocationFailureMultiplier"]?.toDouble()
                 val allocationLimitMultiplier = parameters["allocationLimitMultiplier"]?.toDouble()
                 val minExtraSourceLines = parameters["minExtraSourceLines"]?.toInt()
                 val sourceLinesMultiplier = parameters["sourceLinesMultiplier"]?.toDouble()
                 val seed = parameters["seed"]?.toInt()
-                val maxComplexityMultiplier = parameters["maxComplexityMultiplier"]?.toInt()
-                val maxLineCountMultiplier = parameters["maxLineCountMultiplier"]?.toInt()
-                val maxLineCountExtraPercentage = parameters["maxLineCountExtraPercentage"]?.toInt()
-                val maxClassSizeMultiplier = parameters["maxClassSizeMultiplier"]?.toInt()
+                val maxComplexityMultiplier = parameters["maxComplexityMultiplier"]?.toDouble()
+                val maxLineCountMultiplier = parameters["maxLineCountMultiplier"]?.toDouble()
+                val maxClassSizeMultiplier = parameters["maxClassSizeMultiplier"]?.toDouble()
 
                 Question.CorrectData(
                     path,
@@ -244,7 +243,6 @@ data class ParsedJavaFile(val path: String, val contents: String) {
                         seed,
                         maxComplexityMultiplier,
                         maxLineCountMultiplier,
-                        maxLineCountExtraPercentage,
                         maxClassSizeMultiplier,
                     ),
                 )

@@ -336,8 +336,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         solutionCoverage = bootstrapSolutionCoverage,
         solutionExecutionCount = bootstrapSolutionExecutionCount,
         executionCountLimit = Question.LanguagesResourceUsage(
-            control.maxTestCount!! * control.maxExecutionCountMultiplier!! * 1024,
-            control.maxTestCount!! * control.maxExecutionCountMultiplier!! * 1024
+            (control.maxTestCount!! * control.maxExecutionCountMultiplier!!).toLong() * 1024,
+            (control.maxTestCount!! * control.maxExecutionCountMultiplier!!).toLong() * 1024
         ),
         solutionAllocation = bootstrapSolutionAllocation,
         solutionRecursiveMethods = solutionRecursiveMethods,
@@ -436,8 +436,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         kotlinWhitelist = kotlinClassWhitelist,
         shrink = false,
         executionCountLimit = Question.LanguagesResourceUsage(
-            testCount * control.maxExecutionCountMultiplier!! * 1024,
-            testCount * control.maxExecutionCountMultiplier!! * 1024
+            (testCount * control.maxExecutionCountMultiplier!!).toLong() * 1024,
+            (testCount * control.maxExecutionCountMultiplier!!).toLong() * 1024
         ),
         solutionRecursiveMethods = solutionRecursiveMethods,
         solutionDeadCode = solutionDeadCode,
@@ -499,15 +499,15 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     testingSettings = Question.TestingSettings(
         seed = seed,
         testCount = testCount,
-        timeout = (solutionMaxRuntime * control.timeoutMultiplier!!).coerceAtLeast(control.minTimeout!!),
+        timeout = (solutionMaxRuntime * control.timeoutMultiplier!!).toInt().coerceAtLeast(control.minTimeout!!),
         outputLimit = 0, // solutionMaxOutputLines.coerceAtLeast(testCount * control.outputMultiplier!!),
-        perTestOutputLimit = (solutionMaxPerTestOutputLines * control.outputMultiplier!!).coerceAtLeast(Question.MIN_PER_TEST_LINES),
+        perTestOutputLimit = (solutionMaxPerTestOutputLines * control.outputMultiplier!!).toInt().coerceAtLeast(Question.MIN_PER_TEST_LINES),
         javaWhitelist = javaClassWhitelist,
         kotlinWhitelist = kotlinClassWhitelist,
         shrink = false,
         executionCountLimit = Question.LanguagesResourceUsage(
-            solutionExecutionCounts.java * control.executionTimeoutMultiplier!!,
-            solutionExecutionCounts.kotlin?.times(control.executionTimeoutMultiplier!!)
+            (solutionExecutionCounts.java * control.executionTimeoutMultiplier!!).toLong(),
+            (solutionExecutionCounts.kotlin?.times(control.executionTimeoutMultiplier!!)?.toLong())
         ),
         allocationLimit = Question.LanguagesResourceUsage(
             (solutionAllocation.java.toDouble() * control.allocationLimitMultiplier!!).toLong(),

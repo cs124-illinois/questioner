@@ -188,24 +188,23 @@ data class Question(
         val maxTestCount: Int?,
         val minTimeout: Int?,
         val maxTimeout: Int?,
-        val timeoutMultiplier: Int?,
+        val timeoutMultiplier: Double?,
         val minMutationCount: Int?,
         val maxMutationCount: Int?,
-        val outputMultiplier: Int?,
+        val outputMultiplier: Double?,
         val maxExtraComplexity: Int?,
         val maxDeadCode: Int?,
-        val maxExecutionCountMultiplier: Long?,
-        val executionFailureMultiplier: Int?,
-        val executionTimeoutMultiplier: Int?,
+        val maxExecutionCountMultiplier: Double?,
+        val executionFailureMultiplier: Double?,
+        val executionTimeoutMultiplier: Double?,
         val allocationFailureMultiplier: Double?,
         val allocationLimitMultiplier: Double?,
         val minExtraSourceLines: Int?,
         val sourceLinesMultiplier: Double?,
         val seed: Int?,
-        val maxComplexityMultiplier: Int?,
-        val maxLineCountMultiplier: Int?,
-        val maxLineCountExtraPercentage: Int?,
-        val maxClassSizeMultiplier: Int?
+        val maxComplexityMultiplier: Double?,
+        val maxLineCountMultiplier: Double?,
+        val maxClassSizeMultiplier: Double?
     ) {
         companion object {
             const val DEFAULT_SOLUTION_THROWS = false
@@ -213,23 +212,22 @@ data class Question(
             const val DEFAULT_MAX_TEST_COUNT = 1024
             const val DEFAULT_MIN_TIMEOUT = 128
             const val DEFAULT_MAX_TIMEOUT = 2048
-            const val DEFAULT_TIMEOUT_MULTIPLIER = 32
+            const val DEFAULT_TIMEOUT_MULTIPLIER = 32.0
             const val DEFAULT_MIN_MUTATION_COUNT = 0
-            const val DEFAULT_OUTPUT_MULTIPLIER = 8
+            const val DEFAULT_OUTPUT_MULTIPLIER = 8.0
             const val DEFAULT_MAX_EXTRA_COMPLEXITY = 2
             const val DEFAULT_MAX_DEAD_CODE = 0
-            const val DEFAULT_MAX_EXECUTION_COUNT_MULTIPLIER = 256L
-            const val DEFAULT_EXECUTION_COUNT_FAILURE_MULTIPLIER = 4
-            const val DEFAULT_EXECUTION_COUNT_TIMEOUT_MULTIPLIER = 16
+            const val DEFAULT_MAX_EXECUTION_COUNT_MULTIPLIER = 256.0
+            const val DEFAULT_EXECUTION_COUNT_FAILURE_MULTIPLIER = 4.0
+            const val DEFAULT_EXECUTION_COUNT_TIMEOUT_MULTIPLIER = 16.0
             const val DEFAULT_ALLOCATION_FAILURE_MULTIPLIER = 4.0
             const val DEFAULT_ALLOCATION_LIMIT_MULTIPLIER = 16.0
             const val DEFAULT_MIN_EXTRA_SOURCE_LINES = 2
             const val DEFAULT_SOURCE_LINES_MULTIPLIER = 1.5
             const val DEFAULT_SEED = -1
-            const val DEFAULT_MAX_COMPLEXITY_MULTIPLIER = 8
-            const val DEFAULT_MAX_LINECOUNT_MULTIPLIER = 8
-            const val DEFAULT_MAX_LINECOUNT_EXTRA_PERCENTAGE = -1
-            const val DEFAULT_MAX_CLASSSIZE_MULTIPLIER = 8
+            const val DEFAULT_MAX_COMPLEXITY_MULTIPLIER = 8.0
+            const val DEFAULT_MAX_LINECOUNT_MULTIPLIER = 8.0
+            const val DEFAULT_MAX_CLASSSIZE_MULTIPLIER = 8.0
             const val DEFAULT_MIN_FAIL_FAST_COMPLEXITY = 16
             const val DEFAULT_MIN_FAIL_FAST_CLASS_SIZE_MULTIPLIER = 16
             const val DEFAULT_MAX_EXECUTION_COUNT: Long = DEFAULT_MAX_TIMEOUT.toLong() * 1024 * 1024
@@ -256,7 +254,6 @@ data class Question(
                 DEFAULT_SEED,
                 DEFAULT_MAX_COMPLEXITY_MULTIPLIER,
                 DEFAULT_MAX_LINECOUNT_MULTIPLIER,
-                DEFAULT_MAX_LINECOUNT_EXTRA_PERCENTAGE,
                 DEFAULT_MAX_CLASSSIZE_MULTIPLIER
             )
         }

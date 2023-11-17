@@ -369,7 +369,7 @@ suspend fun Question.test(
     results.complete.executionCount = TestResults.ResourceUsageComparison(
         solutionExecutionCount,
         submissionExecutionCount,
-        solutionExecutionCount * control.executionFailureMultiplier!!
+        (solutionExecutionCount * control.executionFailureMultiplier!!).toLong()
     )
     results.completedSteps.add(TestResults.Step.executioncount)
 
