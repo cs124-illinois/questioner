@@ -404,3 +404,10 @@ export const TestResults = Record({
   }),
 )
 export type TestResults = Static<typeof TestResults>
+
+export const TerminalOutput = Record({
+  error: Boolean,
+  retry: Boolean,
+  output: String,
+})
+export type TerminalOutput = Static<typeof TerminalOutput>

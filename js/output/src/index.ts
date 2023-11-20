@@ -1,5 +1,5 @@
 import { SourceLocation } from "@cs124/jeed-types"
-import { Step, TestingResult, TestResult, TestResults } from "@cs124/questioner-types"
+import { Step, TestingResult, TestResult, TestResults, TerminalOutput } from "@cs124/questioner-types"
 import capitalize from "capitalize"
 import indentString from "indent-string"
 import phrases from "./phrases"
@@ -61,7 +61,7 @@ export const terminalOutput = (
   results: TestResults,
   contents: string,
   options: OutputOptions = DEFAULT_OPTIONS,
-): string => {
+): TerminalOutput => {
   const outputOptions = { ...DEFAULT_OPTIONS, ...options }
 
   const indentation = outputOptions.defaultIndentation
@@ -72,12 +72,16 @@ export const terminalOutput = (
     const { failed } = results
 
     if (results.timeout) {
-      return `Testing your submission timed out.\n${indentString(
-        `Check for unterminated loops.\nOr your algorithm may be too slow.`,
-        indentation,
-      )}`
+      return {
+        error: true,
+        retry: true,
+        output: `Testing your submission timed out.\n${indentString(
+          `Check for unterminated loops.\nOr your algorithm may be too slow.`,
+          indentation,
+        )}`,
+      }
     } else if (failed.templateSubmission) {
-      return `Templating failed. Please report a bug.`
+      return { error: true, retry: true, output: `Templating failed. Please report a bug.` }
     } else if (failed.checkstyle) {
       const output =
         failed.checkstyle?.errors
@@ -86,7 +90,7 @@ export const terminalOutput = (
           })
           .join("\n") || ""
       const errorCount = Object.keys(failed.checkstyle?.errors || {}).length
-      return `${output}\n${errorCount} error${errorCount > 1 ? "s" : ""}`
+      return { error: true, retry: false, output: `${output}\n${errorCount} error${errorCount > 1 ? "s" : ""}` }
     } else if (failed.ktlint) {
       const output =
         failed.ktlint?.errors
@@ -95,7 +99,7 @@ export const terminalOutput = (
           })
           .join("\n") || ""
       const errorCount = Object.keys(failed.ktlint?.errors || {}).length
-      return `${output}\n${errorCount} error${errorCount > 1 ? "s" : ""}`
+      return { error: true, retry: false, output: `${output}\n${errorCount} error${errorCount > 1 ? "s" : ""}` }
     } else if (failed.compileSubmission) {
       const output =
         failed.compileSubmission.errors
@@ -122,33 +126,57 @@ export const terminalOutput = (
           })
           .join("\n") || ""
       const errorCount = Object.keys(failed.compileSubmission.errors).length
-      return `${output}\n${errorCount} error${errorCount > 1 ? "s" : ""}`
+      return { error: true, retry: false, output: `${output}\n${errorCount} error${errorCount > 1 ? "s" : ""}` }
     } else if (failed.checkInitialSubmission) {
-      return `Your submission had errors:\n${indentString(failed.checkInitialSubmission, indentation)}`
+      return {
+        error: true,
+        retry: false,
+        output: `Your submission had errors:\n${indentString(failed.checkInitialSubmission, indentation)}`,
+      }
     } else if (
       failed.checkCompiledSubmission ||
       failed.checkExecutedSubmission ||
       failed.features ||
       failed.classSize
     ) {
-      return `Your submission had errors:\n${indentString(
-        (failed.checkCompiledSubmission ||
-          failed.checkExecutedSubmission ||
-          failed.features ||
-          failed.classSize) as string,
-        indentation,
-      )}`
+      return {
+        error: true,
+        retry: false,
+        output: `Your submission had errors:\n${indentString(
+          (failed.checkCompiledSubmission ||
+            failed.checkExecutedSubmission ||
+            failed.features ||
+            failed.classSize) as string,
+          indentation,
+        )}`,
+      }
     } else if (failed.complexity) {
-      return `Your submission was too complex to test:\n${indentString(failed.complexity, indentation)}`
+      return {
+        error: true,
+        retry: false,
+        output: `Your submission was too complex to test:\n${indentString(failed.complexity, indentation)}`,
+      }
     } else if (failed.lineCount) {
-      return `Your submission was too long to test:\n${indentString(failed.lineCount, indentation)}`
+      return {
+        error: true,
+        retry: false,
+        output: `Your submission was too long to test:\n${indentString(failed.lineCount, indentation)}`,
+      }
     } else if (!testingCompleted) {
-      return `Invalid testing result. If this happens repeatedly, please report a bug.`
+      return {
+        error: true,
+        retry: true,
+        output: `Invalid testing result. If this happens repeatedly, please report a bug.`,
+      }
     }
   }
 
   if (!results.complete.testing) {
-    return `Didn't return a testing result. If this happens repeatedly, please report a bug.`
+    return {
+      error: true,
+      retry: true,
+      output: `Didn't return a testing result. If this happens repeatedly, please report a bug.`,
+    }
   }
 
   const { complete, completedSteps, failedLinting } = results
@@ -232,7 +260,11 @@ export const terminalOutput = (
   }
   if (results.succeeded !== true) {
     if (results.failureCount === undefined) {
-      return "Error printing testing output. If this happens repeatedly, please report a bug."
+      return {
+        error: true,
+        retry: true,
+        output: "Error printing testing output. If this happens repeatedly, please report a bug.",
+      }
     }
     const { testing } = results.complete
     const failures = simplifyTestResult(testing)
@@ -284,26 +316,38 @@ export const terminalOutput = (
 
   const wellDone = capitalize(phrases[Math.floor(Math.random() * phrases.length)])
   if (Object.keys(warnings).length === 0) {
-    return `${outputOptions.successMessage} ${wellDone}!`
+    return { error: false, retry: false, output: `${outputOptions.successMessage} ${wellDone}!` }
   } else if (warnings["testing"]) {
-    return warnings["testing"]
+    return { error: false, retry: false, output: warnings["testing"] }
   } else {
     for (const which of DEFAULT_WARNING_ORDER) {
       if (warnings[which]) {
         if (treatAsErrors && treatAsErrors.includes(which)) {
-          return `Your code the tests, but was considered incorrect because of this error:\n${indentString(
-            warnings[which] as string,
-            indentation,
-          )}`
+          return {
+            error: false,
+            retry: false,
+            output: `Your code the tests, but was considered incorrect because of this error:\n${indentString(
+              warnings[which] as string,
+              indentation,
+            )}`,
+          }
         } else {
-          return `Your code passed all the tests! ${wellDone}!\n\nBut we noticed something you could improve:\n${indentString(
-            warnings[which] as string,
-            indentation,
-          )}`
+          return {
+            error: false,
+            retry: false,
+            output: `Your code passed all the tests! ${wellDone}!\n\nBut we noticed something you could improve:\n${indentString(
+              warnings[which] as string,
+              indentation,
+            )}`,
+          }
         }
       }
     }
   }
 
-  return "Error printing testing output. If this happens repeatedly, please report a bug."
+  return {
+    error: true,
+    retry: true,
+    output: "Error printing testing output. If this happens repeatedly, please report a bug.",
+  }
 }
