@@ -395,13 +395,13 @@ export const TestResults = Record({
   failed: FailedTasks,
   skippedSteps: RuntypeArray(Step),
   timeout: Boolean,
-  lineCountTimeout: Boolean,
   completed: Boolean,
   succeeded: Boolean,
 }).And(
   Partial({
     failedLinting: Boolean,
     failureCount: Number,
+    lineCountTimeout: Boolean,
   }),
 )
 export type TestResults = Static<typeof TestResults>
