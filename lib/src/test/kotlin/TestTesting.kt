@@ -27,10 +27,23 @@ class TestTesting : StringSpec({
 int addOne(int value) {
   return value + 2;
 }""".trim()
+
+        val initialHitCount = solutionCompilationCache.stats().hitCount()
+        val initialLoadCount = solutionCompilationCache.stats().loadCount()
+        solutionCompilationCache.invalidateAll()
         question.test(incorrect, Language.java).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testing!!.passed shouldBe false
         }
+        solutionCompilationCache.stats().loadCount() shouldBe initialLoadCount + 1
+        solutionCompilationCache.stats().hitCount() shouldBe initialHitCount
+
+        question.test(incorrect, Language.java).also { results ->
+            results.failedSteps.size shouldBe 0
+            results.complete.testing!!.passed shouldBe false
+        }
+        solutionCompilationCache.stats().loadCount() shouldBe initialLoadCount + 1
+        solutionCompilationCache.stats().hitCount() shouldBe initialHitCount + 1
     }
     "it should test a question with partial credit" {
         val (question) = validator.validate("Add One", force = true, testing = true).also { (question, report) ->

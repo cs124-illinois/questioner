@@ -18,6 +18,7 @@ import edu.illinois.cs.cs125.jenisol.core.Solution
 import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
 import java.io.File
 import java.lang.reflect.ReflectPermission
+import java.util.Objects
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.primaryConstructor
 import edu.illinois.cs.cs125.jeed.core.moshi.Adapters as JeedAdapters
@@ -694,13 +695,7 @@ private inline infix fun <reified T : Any> T.merge(other: T): T {
 }
 
 val mutationCompilationCache: Cache<String, Question.TestTestingSource> =
-    Caffeine.newBuilder()
-        .softValues()
-        .recordStats()
-        .build()
+    Caffeine.newBuilder().softValues().recordStats().build()
 
 val solutionCompilationCache: Cache<String, Solution> =
-    Caffeine.newBuilder()
-        .softValues()
-        .recordStats()
-        .build()
+    Caffeine.newBuilder().softValues().recordStats().build()

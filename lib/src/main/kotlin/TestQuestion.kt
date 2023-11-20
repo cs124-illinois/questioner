@@ -207,6 +207,9 @@ suspend fun Question.test(
         ConfiguredSandboxPlugin(VirtualFilesystem, VirtualFilesystemArguments())
     )
 
+    // Pull of solution to prevent cache misses in sandbox
+    val hardSolution = solution
+
     val captureOutputControlInput = bindJeedCaptureOutputControlInput(systemInStream, settings.perTestOutputLimit)
     val taskResults = Sandbox.execute(
         compiledSubmission.classLoader,
@@ -214,7 +217,7 @@ suspend fun Question.test(
         configuredPlugins = plugins
     ) { (classLoader, _) ->
         try {
-            solution.submission(classLoader.loadClass(klassName)).test(jenisolSettings, captureOutputControlInput)
+            hardSolution.submission(classLoader.loadClass(klassName)).test(jenisolSettings, captureOutputControlInput)
         } catch (e: InvocationTargetException) {
             throw e.cause ?: e
         }
