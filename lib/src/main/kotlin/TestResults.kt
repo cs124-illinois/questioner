@@ -25,6 +25,7 @@ data class TestResults(
     val failed: FailedTasks = FailedTasks(),
     val skippedSteps: MutableSet<Step> = mutableSetOf(),
     var timeout: Boolean = false,
+    var lineCountTimeout: Boolean = false,
     @Transient
     var taskResults: Sandbox.TaskResults<*>? = null,
     @Transient

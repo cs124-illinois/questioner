@@ -25,6 +25,7 @@ import edu.illinois.cs.cs125.questioner.lib.stumpers.createInsertionIndices
 import edu.illinois.cs.cs125.questioner.lib.stumpers.validated
 import edu.illinois.cs.cs125.questioner.lib.test
 import edu.illinois.cs.cs125.questioner.lib.testTests
+import edu.illinois.cs.cs125.questioner.lib.useJeedCache
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCallPipeline
@@ -287,10 +288,11 @@ val VERSION: String = Properties().also {
 data class Status(
     val started: Instant = serverStarted,
     val version: String = VERSION,
+    val usingJeedCache: Boolean = useJeedCache
 )
 
 @JsonClass(generateAdapter = true)
-data class ServerResponse(val results: TestResults)
+data class ServerResponse(val results: TestResults, val canCache: Boolean)
 
 @JsonClass(generateAdapter = true)
 data class ServerTestResponse(val results: TestTestResults)
@@ -387,7 +389,7 @@ fun Application.questioner() {
             try {
                 val startMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
                 val testResults = Questions.test(submission, question)
-                call.respond(ServerResponse(testResults))
+                call.respond(ServerResponse(testResults, !(testResults.timeout && !testResults.lineCountTimeout)))
                 val endMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
                 logger.debug {
                     "$runCount: ${submission.path}: $startMemory -> $endMemory (${

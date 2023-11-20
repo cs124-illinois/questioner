@@ -241,6 +241,7 @@ suspend fun Question.test(
     } else {
         validationResults?.executionCounts?.kotlin ?: settings.solutionExecutionCount?.kotlin
     } ?: submissionExecutionCount
+    results.lineCountTimeout = lineCountLimit != null && submissionExecutionCount > lineCountLimit
 
     // checkExecutedSubmission
     if (!timeout && threw != null) {

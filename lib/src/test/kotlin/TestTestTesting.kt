@@ -1,5 +1,6 @@
 package edu.illinois.cs.cs125.questioner.lib
 
+import edu.illinois.cs.cs125.jeed.core.compilationCache
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.ints.shouldBeGreaterThan
@@ -131,13 +132,12 @@ fun test() {
         }
     }
     "original incorrect examples should recover and fail" {
-        mutationCompilationCache.invalidateAll()
-
         val (question) = validator.validate("Add One Class", force = true, testing = true).also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
 
+        compilationCache.invalidateAll()
         val compileTime = measureTimeMillis {
             question.compileAllTestTestingIncorrect()
         }

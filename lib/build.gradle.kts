@@ -18,7 +18,6 @@ dependencies {
     implementation("org.apache.commons:commons-text:1.11.0")
     implementation("io.github.java-diff-utils:java-diff-utils:4.12")
     implementation("org.ow2.asm:asm:9.6")
-    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
     implementation("org.mongodb:mongodb-driver:3.12.14")
 
     api("com.beyondgrader.resource-agent:agent:2023.9.0")
@@ -41,6 +40,8 @@ tasks {
     }
 }
 tasks.withType(Test::class.java) {
+    environment["USE_JEED_CACHE"] = "true"
+
     jvmArgs(
         "-ea", "--enable-preview", "-Dfile.encoding=UTF-8",
         "-Xms512m", "-Xmx1G", "-Xss256k", "-XX:+UseZGC", "-XX:ZCollectionInterval=8",

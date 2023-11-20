@@ -1,7 +1,5 @@
 package edu.illinois.cs.cs125.questioner.lib
 
-import com.github.benmanes.caffeine.cache.Cache
-import com.github.benmanes.caffeine.cache.Caffeine
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
 import com.squareup.moshi.JsonClass
@@ -9,11 +7,13 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import edu.illinois.cs.cs125.jeed.core.CompilationArguments
 import edu.illinois.cs.cs125.jeed.core.Features
+import edu.illinois.cs.cs125.jeed.core.JEED_DEFAULT_USE_CACHE
 import edu.illinois.cs.cs125.jeed.core.LineCounts
 import edu.illinois.cs.cs125.jeed.core.MutatedSource
 import edu.illinois.cs.cs125.jeed.core.Mutation
 import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.compile
+import edu.illinois.cs.cs125.jeed.core.logger
 import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
 import java.io.File
 import java.lang.reflect.ReflectPermission
@@ -26,6 +26,13 @@ val moshi: Moshi = Moshi.Builder().apply {
     Adapters.forEach { add(it) }
     JeedAdapters.forEach { add(it) }
 }.build()
+
+val useJeedCache = try {
+    System.getenv("USE_JEED_CACHE")?.toBoolean() ?: false
+} catch (e: Exception) {
+    System.err.println("Bad value for USE_JEED_CACHE")
+    false
+}
 
 private val sharedClassWhitelist = setOf(
     "java.lang.",
@@ -397,12 +404,6 @@ data class Question(
         suspend fun compiled(question: Question): TestTestingSource {
             val results = TestResults(language)
             val source = question.contentsToSource(contents(question), language, results)
-            val md5 = source.md5
-
-            val cachedResult = mutationCompilationCache.getIfPresent(md5)
-            if (cachedResult != null) {
-                return cachedResult
-            }
 
             return when (language) {
                 Language.java ->
@@ -420,8 +421,6 @@ data class Question(
                     )
             }.let {
                 TestTestingSource(contents(question), question.fixTestingMethods(it.classLoader))
-            }.also {
-                mutationCompilationCache.put(md5, it)
             }
         }
     }
@@ -430,7 +429,14 @@ data class Question(
     val compiledCommon by lazy {
         if (common?.isNotEmpty() == true) {
             val commonSources = common.mapIndexed { index, contents -> "Common$index.java" to contents }.toMap()
-            Source(commonSources).compile(CompilationArguments(isolatedClassLoader = true, parameters = true))
+            Source(commonSources).compile(
+                CompilationArguments(
+                    isolatedClassLoader = true,
+                    parameters = true,
+                    useCache = useJeedCache,
+                    waitForCache = useJeedCache
+                )
+            )
         } else {
             null
         }
@@ -441,13 +447,22 @@ data class Question(
         Source(mapOf("${question.klass}.java" to question.contents)).let { questionSource ->
             try {
                 if (compiledCommon == null) {
-                    questionSource.compile(CompilationArguments(isolatedClassLoader = true, parameters = true))
+                    questionSource.compile(
+                        CompilationArguments(
+                            isolatedClassLoader = true,
+                            parameters = true,
+                            useCache = useJeedCache,
+                            waitForCache = useJeedCache
+                        )
+                    )
                 } else {
                     questionSource.compile(
                         CompilationArguments(
                             parentClassLoader = compiledCommon!!.classLoader,
                             parentFileManager = compiledCommon!!.fileManager,
-                            parameters = true
+                            parameters = true,
+                            useCache = useJeedCache,
+                            waitForCache = useJeedCache
                         )
                     )
                 }
@@ -471,13 +486,22 @@ ${question.contents}
         try {
             Source(mapOf("${question.klass}.java" to question.contents)).let { questionSource ->
                 if (compiledCommon == null) {
-                    questionSource.compile(CompilationArguments(isolatedClassLoader = true, parameters = true))
+                    questionSource.compile(
+                        CompilationArguments(
+                            isolatedClassLoader = true,
+                            parameters = true,
+                            useCache = useJeedCache,
+                            waitForCache = useJeedCache
+                        )
+                    )
                 } else {
                     questionSource.compile(
                         CompilationArguments(
                             parentClassLoader = compiledCommon!!.classLoader,
                             parentFileManager = compiledCommon!!.fileManager,
-                            parameters = true
+                            parameters = true,
+                            useCache = useJeedCache,
+                            waitForCache = useJeedCache
                         )
                     )
                 }
@@ -690,6 +714,3 @@ private inline infix fun <reified T : Any> T.merge(other: T): T {
     }
     return primaryConstructor.callBy(args)
 }
-
-val mutationCompilationCache: Cache<String, Question.TestTestingSource> =
-    Caffeine.newBuilder().softValues().recordStats().build()
