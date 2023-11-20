@@ -14,11 +14,9 @@ import edu.illinois.cs.cs125.jeed.core.MutatedSource
 import edu.illinois.cs.cs125.jeed.core.Mutation
 import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.compile
-import edu.illinois.cs.cs125.jenisol.core.Solution
 import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
 import java.io.File
 import java.lang.reflect.ReflectPermission
-import java.util.Objects
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.primaryConstructor
 import edu.illinois.cs.cs125.jeed.core.moshi.Adapters as JeedAdapters
@@ -510,10 +508,9 @@ ${question.contents}
         }
     }
 
-    val solution: Solution
-        get() = solutionCompilationCache.get("${slug}___solution") {
-            jenisol(compiledSolution.classLoader.loadClass(klass))
-        }
+    val solution by lazy {
+        jenisol(compiledSolution.classLoader.loadClass(klass))
+    }
 
     @delegate:Transient
     val featureChecker by lazy {
@@ -695,7 +692,4 @@ private inline infix fun <reified T : Any> T.merge(other: T): T {
 }
 
 val mutationCompilationCache: Cache<String, Question.TestTestingSource> =
-    Caffeine.newBuilder().softValues().recordStats().build()
-
-val solutionCompilationCache: Cache<String, Solution> =
     Caffeine.newBuilder().softValues().recordStats().build()
