@@ -12,7 +12,7 @@ import kotlin.random.Random
 suspend fun Question.testTests(
     contents: String,
     language: Language,
-    settings: Question.TestTestingSettings = Question.TestTestingSettings(false, Int.MAX_VALUE)
+    settings: Question.TestTestingSettings = Question.TestTestingSettings()
 ): TestTestResults {
 
     val testKlass = "Test$klass"
@@ -44,14 +44,18 @@ suspend fun Question.testTests(
 
     // checkCompiledSubmission
     val klassName = checkCompiledTestSuite(compiledSubmission, results) ?: return results
+    val testingIncorrect = testTestingIncorrect
+    check(!testingIncorrect.isNullOrEmpty()) {
+        "Value should not be null or empty"
+    }
+    val testingMutations = when (settings.selectionStrategy) {
+        Question.TestTestingSettings.SelectionStrategy.EASIEST -> testingIncorrect.take(settings.limit)
+        Question.TestTestingSettings.SelectionStrategy.HARDEST -> testingIncorrect.takeLast(settings.limit)
+        Question.TestTestingSettings.SelectionStrategy.EVENLY_SPACED ->
+            linspace(0, testingIncorrect.size - 1, settings.limit).map { testingIncorrect[it] }
+    }
 
-    val testingLoaders = testTestingIncorrect!!.sortedBy {
-        it.testCount * if (settings.hardestFirst) {
-            -1
-        } else {
-            1
-        }
-    }.map { it.compiled(this) }.take(settings.limit).toMutableList()
+    val testingLoaders = testingMutations.map { it.compiled(this) }.toMutableList()
     testingLoaders.add(Random.nextInt(testingLoaders.size + 1), compiledSolutionForTesting)
 
     val executionArguments = Sandbox.ExecutionArguments(
@@ -319,3 +323,5 @@ fun Question.fixTestingMethods(classLoader: JeedClassLoader): ClassLoader {
     classReader.accept(openingVisitor, 0)
     return CopyableClassLoader(mapOf(klass to classWriter.toByteArray()), classLoader.parent)
 }
+
+fun linspace(start: Int, stop: Int, num: Int) = (start..stop step ((stop - start) / (num - 1)).coerceAtLeast(1)).toList()

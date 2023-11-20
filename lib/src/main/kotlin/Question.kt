@@ -14,6 +14,7 @@ import edu.illinois.cs.cs125.jeed.core.MutatedSource
 import edu.illinois.cs.cs125.jeed.core.Mutation
 import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.compile
+import edu.illinois.cs.cs125.jenisol.core.Solution
 import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
 import java.io.File
 import java.lang.reflect.ReflectPermission
@@ -292,8 +293,12 @@ data class Question(
     data class TestTestingSettings(
         val shortCircuit: Boolean = false,
         val limit: Int = Int.MAX_VALUE,
-        val hardestFirst: Boolean = true
-    )
+        val selectionStrategy: SelectionStrategy = SelectionStrategy.EVENLY_SPACED
+    ) {
+        enum class SelectionStrategy {
+            HARDEST, EASIEST, EVENLY_SPACED
+        }
+    }
 
     @JsonClass(generateAdapter = true)
     data class ValidationResults(
@@ -395,7 +400,7 @@ data class Question(
             val source = question.contentsToSource(contents(question), language, results)
             val md5 = source.md5
 
-            val cachedResult = compilationCache.getIfPresent(md5)
+            val cachedResult = mutationCompilationCache.getIfPresent(md5)
             if (cachedResult != null) {
                 return cachedResult
             }
@@ -417,7 +422,7 @@ data class Question(
             }.let {
                 TestTestingSource(contents(question), question.fixTestingMethods(it.classLoader))
             }.also {
-                compilationCache.put(md5, it)
+                mutationCompilationCache.put(md5, it)
             }
         }
     }
@@ -504,10 +509,10 @@ ${question.contents}
         }
     }
 
-    @delegate:Transient
-    val solution by lazy {
-        jenisol(compiledSolution.classLoader.loadClass(klass))
-    }
+    val solution: Solution
+        get() = solutionCompilationCache.get("${slug}___solution") {
+            jenisol(compiledSolution.classLoader.loadClass(klass))
+        }
 
     @delegate:Transient
     val featureChecker by lazy {
@@ -688,9 +693,14 @@ private inline infix fun <reified T : Any> T.merge(other: T): T {
     return primaryConstructor.callBy(args)
 }
 
-val compilationCache: Cache<String, Question.TestTestingSource> =
+val mutationCompilationCache: Cache<String, Question.TestTestingSource> =
     Caffeine.newBuilder()
         .softValues()
         .recordStats()
         .build()
 
+val solutionCompilationCache: Cache<String, Solution> =
+    Caffeine.newBuilder()
+        .softValues()
+        .recordStats()
+        .build()

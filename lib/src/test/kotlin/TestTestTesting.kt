@@ -131,7 +131,7 @@ fun test() {
         }
     }
     "original incorrect examples should recover and fail" {
-        compilationCache.invalidateAll()
+        mutationCompilationCache.invalidateAll()
 
         val (question) = validator.validate("Add One Class", force = true, testing = true).also { (question, report) ->
             question.validated shouldBe true
