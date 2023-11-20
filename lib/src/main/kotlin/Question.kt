@@ -27,13 +27,6 @@ val moshi: Moshi = Moshi.Builder().apply {
     JeedAdapters.forEach { add(it) }
 }.build()
 
-val useJeedCache = try {
-    System.getenv("USE_JEED_CACHE")?.toBoolean() ?: false
-} catch (e: Exception) {
-    System.err.println("Bad value for USE_JEED_CACHE")
-    false
-}
-
 private val sharedClassWhitelist = setOf(
     "java.lang.",
     "java.io.PrintStream",
@@ -430,12 +423,7 @@ data class Question(
         if (common?.isNotEmpty() == true) {
             val commonSources = common.mapIndexed { index, contents -> "Common$index.java" to contents }.toMap()
             Source(commonSources).compile(
-                CompilationArguments(
-                    isolatedClassLoader = true,
-                    parameters = true,
-                    useCache = useJeedCache,
-                    waitForCache = useJeedCache
-                )
+                CompilationArguments(isolatedClassLoader = true, parameters = true)
             )
         } else {
             null
@@ -448,12 +436,7 @@ data class Question(
             try {
                 if (compiledCommon == null) {
                     questionSource.compile(
-                        CompilationArguments(
-                            isolatedClassLoader = true,
-                            parameters = true,
-                            useCache = useJeedCache,
-                            waitForCache = useJeedCache
-                        )
+                        CompilationArguments(isolatedClassLoader = true, parameters = true)
                     )
                 } else {
                     questionSource.compile(
@@ -461,8 +444,6 @@ data class Question(
                             parentClassLoader = compiledCommon!!.classLoader,
                             parentFileManager = compiledCommon!!.fileManager,
                             parameters = true,
-                            useCache = useJeedCache,
-                            waitForCache = useJeedCache
                         )
                     )
                 }
@@ -487,12 +468,7 @@ ${question.contents}
             Source(mapOf("${question.klass}.java" to question.contents)).let { questionSource ->
                 if (compiledCommon == null) {
                     questionSource.compile(
-                        CompilationArguments(
-                            isolatedClassLoader = true,
-                            parameters = true,
-                            useCache = useJeedCache,
-                            waitForCache = useJeedCache
-                        )
+                        CompilationArguments(isolatedClassLoader = true, parameters = true)
                     )
                 } else {
                     questionSource.compile(
@@ -500,8 +476,6 @@ ${question.contents}
                             parentClassLoader = compiledCommon!!.classLoader,
                             parentFileManager = compiledCommon!!.fileManager,
                             parameters = true,
-                            useCache = useJeedCache,
-                            waitForCache = useJeedCache
                         )
                     )
                 }

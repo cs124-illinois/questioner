@@ -12,6 +12,7 @@ import com.ryanharter.ktor.moshi.moshi
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import com.sun.management.HotSpotDiagnosticMXBean
+import edu.illinois.cs.cs125.jeed.core.useCompilationCache
 import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring
@@ -25,7 +26,6 @@ import edu.illinois.cs.cs125.questioner.lib.stumpers.createInsertionIndices
 import edu.illinois.cs.cs125.questioner.lib.stumpers.validated
 import edu.illinois.cs.cs125.questioner.lib.test
 import edu.illinois.cs.cs125.questioner.lib.testTests
-import edu.illinois.cs.cs125.questioner.lib.useJeedCache
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCallPipeline
@@ -288,7 +288,7 @@ val VERSION: String = Properties().also {
 data class Status(
     val started: Instant = serverStarted,
     val version: String = VERSION,
-    val usingJeedCache: Boolean = useJeedCache
+    val useJeedCache: Boolean = useCompilationCache,
 )
 
 @JsonClass(generateAdapter = true)

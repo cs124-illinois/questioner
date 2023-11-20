@@ -137,8 +137,6 @@ suspend fun Question.compileSubmission(
                 parentClassLoader = actualParents.first,
                 parentFileManager = actualParents.second,
                 parameters = true,
-                useCache = useJeedCache,
-                waitForCache = useJeedCache
             )
         ).also {
             testResults.complete.compileSubmission = CompiledSourceResult(it)
@@ -181,8 +179,6 @@ suspend fun Question.kompileSubmission(
                 parentClassLoader = actualParents.first,
                 parentFileManager = actualParents.second,
                 parameters = true,
-                useCache = useJeedCache,
-                waitForCache = useJeedCache
             )
         ).also {
             testResults.complete.compileSubmission = CompiledSourceResult(it)

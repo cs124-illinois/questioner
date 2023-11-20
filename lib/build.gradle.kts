@@ -40,7 +40,7 @@ tasks {
     }
 }
 tasks.withType(Test::class.java) {
-    environment["USE_JEED_CACHE"] = "true"
+    environment["JEED_USE_CACHE"] = "true"
 
     jvmArgs(
         "-ea", "--enable-preview", "-Dfile.encoding=UTF-8",
@@ -115,5 +115,8 @@ publishing {
     }
 }
 signing {
+    setRequired {
+        gradle.taskGraph.allTasks.any { it is PublishToMavenRepository }
+    }
     sign(publishing.publications["questioner"])
 }

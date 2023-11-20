@@ -113,3 +113,8 @@ publishing {
         }
     }
 }
+signing {
+    setRequired {
+        gradle.taskGraph.allTasks.any { it is PublishToMavenRepository }
+    }
+}
