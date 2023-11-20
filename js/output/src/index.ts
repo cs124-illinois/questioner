@@ -1,5 +1,5 @@
 import { SourceLocation } from "@cs124/jeed-types"
-import { Step, TestingResult, TestResult, TestResults, TerminalOutput } from "@cs124/questioner-types"
+import { Step, TerminalOutput, TestResult, TestResults, TestingResult } from "@cs124/questioner-types"
 import capitalize from "capitalize"
 import indentString from "indent-string"
 import phrases from "./phrases"

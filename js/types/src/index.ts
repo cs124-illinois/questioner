@@ -411,3 +411,9 @@ export const TerminalOutput = Record({
   output: String,
 })
 export type TerminalOutput = Static<typeof TerminalOutput>
+
+export const ServerResponse = Record({
+  results: TestResults,
+  canCache: Boolean,
+})
+export type ServerResponse = Static<typeof ServerResponse>

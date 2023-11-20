@@ -1,6 +1,6 @@
 {
   "name": "@cs124/questioner-output",
-  "version": "2023.11.0",
+  "version": "2023.11.1",
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   "types": "dist/index.d.ts",
   "dependencies": {
     "@cs124/jeed-types": "2023.10.0",
-    "@cs124/questioner-types": "2023.11.0",
+    "@cs124/questioner-types": "2023.11.1",
     "capitalize": "2.0.4",
     "indent-string": "4.0.0"
   },
