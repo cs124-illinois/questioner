@@ -395,6 +395,7 @@ export const TestResults = Record({
   failed: FailedTasks,
   skippedSteps: RuntypeArray(Step),
   timeout: Boolean,
+  lineCountTimeout: Boolean,
   completed: Boolean,
   succeeded: Boolean,
 }).And(
