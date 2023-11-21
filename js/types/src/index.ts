@@ -416,5 +416,9 @@ export type TerminalOutput = Static<typeof TerminalOutput>
 export const ServerResponse = Record({
   results: TestResults,
   canCache: Boolean,
+  cacheStats: Record({
+    hits: Number,
+    misses: Number,
+  }),
 })
 export type ServerResponse = Static<typeof ServerResponse>
