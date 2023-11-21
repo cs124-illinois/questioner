@@ -552,6 +552,6 @@ fun main(): Unit = runBlocking {
     logger.info { "Warming Questioner" }
     warm()
 
-    logger.info { "Staring server" }
+    logger.info { "Starting server" }
     embeddedServer(Netty, port = 8888, module = Application::questioner).start(wait = true)
 }
