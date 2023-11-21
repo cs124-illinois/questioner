@@ -2,6 +2,8 @@ package edu.illinois.cs.cs125.questioner.server
 
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext
+import com.github.benmanes.caffeine.cache.Cache
+import com.github.benmanes.caffeine.cache.Caffeine
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientOptions
 import com.mongodb.MongoClientURI
@@ -64,6 +66,7 @@ import javax.net.ssl.X509TrustManager
 import kotlin.collections.forEach
 import kotlin.math.floor
 import kotlin.system.exitProcess
+import com.github.benmanes.caffeine.cache.stats.CacheStats as CaffeineCacheStats
 import edu.illinois.cs.cs125.jeed.core.moshi.Adapters as JeedAdapters
 import edu.illinois.cs.cs125.jeed.core.warm as warmJeed
 
@@ -113,6 +116,11 @@ private val stumperSolutionCollection: MongoCollection<BsonDocument> = run {
     MongoClient(mongoUri).getDatabase(database).getCollection("solutions", BsonDocument::class.java)
 }
 
+@JsonClass(generateAdapter = true)
+data class SkinnyQuestion(val published: Question.Published, val metadata: Question.Metadata) {
+    val path = "${published.author}/${published.path}/${published.version}/${metadata.contentHash}"
+}
+
 data class QuestionPath(val path: String, val version: String, val author: String) {
     companion object {
         fun fromSubmission(submission: Submission) =
@@ -123,7 +131,34 @@ data class QuestionPath(val path: String, val version: String, val author: Strin
     }
 }
 
+@JsonClass(generateAdapter = true)
+data class CacheStats(val hits: Long, val misses: Long) {
+    constructor(caffeineStats: CaffeineCacheStats) : this(caffeineStats.hitCount(), caffeineStats.missCount())
+}
+
+val questionCacheSize = System.getenv("QUESTIONER_QUESTION_CACHE_SIZE")?.toLong() ?: 16L
+val questionCache: Cache<String, Question> = Caffeine.newBuilder().maximumSize(questionCacheSize).recordStats().build()
+
 object Questions {
+    private fun questionFromDocument(document: BsonDocument, id: String): Question? {
+        val json = document.toJson()
+        return try {
+            moshi.adapter(SkinnyQuestion::class.java).fromJson(json)!!.let { skinnyQuestion ->
+                questionCache.get(skinnyQuestion.path) {
+                    logger.debug { "Question cache miss for ${skinnyQuestion.path}" }
+                    try {
+                        moshi.adapter(Question::class.java).fromJson(json)
+                    } catch (e: Exception) {
+                        null
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            logger.warn { "Couldn't load question $id, which might use an old schema: $e" }
+            null
+        }
+    }
+
     fun getQuestion(path: String) = questionerCollection.find(
         Filters.and(Filters.eq("published.path", path), Filters.eq("latest", true)),
     ).sort(Sorts.descending("updated")).let {
@@ -132,12 +167,7 @@ object Questions {
             return null
         }
         check(it.count() == 1) { "Found multiple path-only matches" }
-        try {
-            moshi.adapter(Question::class.java).fromJson(it.first()!!.toJson())
-        } catch (e: Exception) {
-            logger.warn { "Couldn't load question $path, which might use an old schema: $e" }
-            null
-        }
+        questionFromDocument(it.first()!!, path)
     }
 
     private fun getQuestionByAuthor(path: String, author: String) = questionerCollection.find(
@@ -152,12 +182,7 @@ object Questions {
             return null
         }
         check(it.count() == 1) { "Found multiple path and author matches" }
-        try {
-            moshi.adapter(Question::class.java).fromJson(it.first()!!.toJson())
-        } catch (e: Exception) {
-            logger.warn { "Couldn't load question $path, which might use an old schema: $e" }
-            null
-        }
+        questionFromDocument(it.first()!!, "$path/$author")
     }
 
     private fun getQuestionByPath(path: QuestionPath) = questionerCollection.find(
@@ -173,12 +198,7 @@ object Questions {
             return null
         }
         check(it.count() == 1) { "Found multiple full-path matches" }
-        try {
-            moshi.adapter(Question::class.java).fromJson(it.first()!!.toJson())
-        } catch (e: Exception) {
-            logger.warn { "Couldn't load question $path, which might use an old schema: $e" }
-            null
-        }
+        questionFromDocument(it.first()!!, "$path")
     }
 
     fun load(submission: Submission): Question? {
@@ -292,7 +312,7 @@ data class Status(
 )
 
 @JsonClass(generateAdapter = true)
-data class ServerResponse(val results: TestResults, val canCache: Boolean)
+data class ServerResponse(val results: TestResults, val canCache: Boolean, val cacheStats: CacheStats)
 
 @JsonClass(generateAdapter = true)
 data class ServerTestResponse(val results: TestTestResults)
@@ -389,13 +409,20 @@ fun Application.questioner() {
             try {
                 val startMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
                 val testResults = Questions.test(submission, question)
-                call.respond(ServerResponse(testResults, !(testResults.timeout && !testResults.lineCountTimeout)))
+                call.respond(
+                    ServerResponse(
+                        testResults,
+                        !(testResults.timeout && !testResults.lineCountTimeout),
+                        CacheStats(questionCache.stats()),
+                    ),
+                )
                 val endMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
                 logger.debug {
                     "$runCount: ${submission.path}: $startMemory -> $endMemory (${
                         Instant.now().toEpochMilli() - submitted.toEpochMilli()
                     })"
                 }
+                logger.debug { "Cache hit rate: ${questionCache.stats().hitRate()} (Size $questionCacheSize)" }
                 try {
                     addStumperSolution(submitted, submission, testResults, question)
                 } catch (e: Exception) {
