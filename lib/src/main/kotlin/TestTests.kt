@@ -12,7 +12,8 @@ import kotlin.random.Random
 suspend fun Question.testTests(
     contents: String,
     language: Language,
-    settings: Question.TestTestingSettings = Question.TestTestingSettings()
+    settings: Question.TestTestingSettings = Question.TestTestingSettings(),
+    limits: Question.TestTestingLimits = testTestingLimits!!
 ): TestTestResults {
 
     val testKlass = "Test$klass"
@@ -59,10 +60,30 @@ suspend fun Question.testTests(
     testingLoaders.add(Random.nextInt(testingLoaders.size + 1), compiledSolutionForTesting)
 
     val executionArguments = Sandbox.ExecutionArguments(
-        timeout = testingSettings!!.timeout.toLong(),
-        maxOutputLines = testingSettings!!.outputLimit,
+        timeout = limits.timeout.toLong(),
+        maxOutputLines = limits.outputLimit,
         permissions = Question.SAFE_PERMISSIONS,
         returnTimeout = Question.DEFAULT_RETURN_TIMEOUT
+    )
+
+    val lineCountLimit = when (language) {
+        Language.java -> limits.executionCountLimit.java
+        Language.kotlin -> limits.executionCountLimit.kotlin!!
+    }
+    val allocationLimit = when (language) {
+        Language.java -> limits.allocationLimit.java
+        Language.kotlin -> limits.allocationLimit.kotlin!!
+    }.coerceAtLeast(MIN_ALLOCATION_LIMIT_BYTES)
+
+    val plugins = listOf(
+        ConfiguredSandboxPlugin(
+            ResourceMonitoring,
+            ResourceMonitoringArguments(
+                submissionLineLimit = lineCountLimit,
+                allocatedMemoryLimit = allocationLimit,
+                individualAllocationLimit = MAX_INDIVIDUAL_ALLOCATION_BYTES
+            )
+        ),
     )
 
     val testingClass = compiledSubmission.classLoader.loadClass(klassName)
@@ -82,7 +103,8 @@ suspend fun Question.testTests(
         val testingSuiteLoader = CopyableClassLoader.copy(compiledSubmission.classLoader, testingLoader.classloader)
         val taskResults = Sandbox.execute(
             testingSuiteLoader,
-            executionArguments
+            executionArguments,
+            configuredPlugins = plugins
         ) { (classLoader, _) ->
             return@execute try {
                 classLoader.loadClass(klassName).getTestingMethod()!!.also { method ->
@@ -324,4 +346,5 @@ fun Question.fixTestingMethods(classLoader: JeedClassLoader): ClassLoader {
     return CopyableClassLoader(mapOf(klass to classWriter.toByteArray()), classLoader.parent)
 }
 
-fun linspace(start: Int, stop: Int, num: Int) = (start..stop step ((stop - start) / (num - 1)).coerceAtLeast(1)).toList()
+fun linspace(start: Int, stop: Int, num: Int) =
+    (start..stop step ((stop - start) / (num - 1)).coerceAtLeast(1)).toList()

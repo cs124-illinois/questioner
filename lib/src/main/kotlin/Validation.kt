@@ -72,6 +72,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
                             """.trimMargin()
 
                         }
+
                         else -> summary
                     }
                 }
@@ -274,23 +275,6 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             it.solution.covered / it.solution.total
         }!!.solution
 
-    fun List<TestResults>.setResourceUsage(
-        multiplier: Double = 1.0,
-        aspect: (TestResults.CompletedTasks) -> TestResults.ResourceUsageComparison?
-    ): Question.LanguagesResourceUsage {
-        val javaSolutionExecutionCount = filter { it.language == Language.java }
-            .mapNotNull { aspect(it.complete) }
-            .maxByOrNull {
-                it.solution
-            }!!.solution.times(multiplier).toLong()
-        val kotlinSolutionExecutionCount = filter { it.language == Language.kotlin }
-            .mapNotNull { aspect(it.complete) }
-            .maxByOrNull {
-                it.solution
-            }?.solution?.times(multiplier)?.toLong()
-        return Question.LanguagesResourceUsage(javaSolutionExecutionCount, kotlinSolutionExecutionCount)
-    }
-
     val bootstrapSolutionExecutionCount = firstCorrectResults.setResourceUsage {
         it.executionCount
     }
@@ -362,10 +346,14 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     }
     val incorrectLength = Instant.now().toEpochMilli() - incorrectStart.toEpochMilli()
 
-    testTestingIncorrect = incorrectResults.mapIndexed { i, result ->
-        if ((result.results.failureCount ?: 0) == 0) {
-            return@mapIndexed null
+    val useTestingIncorrect = incorrectResults.mapIndexed { i, result ->
+        when {
+            result.results.timeout || (result.results.failureCount ?: 0) == 0 -> null
+            else -> result
         }
+    }.filterNotNull()
+
+    testTestingIncorrect = useTestingIncorrect.mapIndexed { i, result ->
         val correct = when (result.incorrect.language) {
             Language.java -> correctByLanguage[Language.java]
             Language.kotlin -> correctByLanguage[Language.kotlin]
@@ -401,18 +389,19 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
                 failureIndex
             ), result.incorrect.contents
         )
-    }.filterNotNull()
-        .sortedWith(
-            compareBy(
-                { (validationMutation, _) -> validationMutation.testCount },
-                { (_, content) -> content.hashCode() })
-        )
-        .map { (validationMutation, _) -> validationMutation }
+    }.sortedWith(
+        compareBy(
+            { (validationMutation, _) -> validationMutation.testCount },
+            { (_, content) -> content.hashCode() })
+    ).map { (validationMutation, _) -> validationMutation }
 
     var requiredTestCount = incorrectResults
         .filter { !it.results.timeout && !it.results.succeeded }
         .mapNotNull { it.results.tests()?.size }
         .maxOrNull() ?: error("No incorrect results")
+
+    val incorrectMaxRuntime = useTestingIncorrect.mapNotNull { it.results.taskResults?.interval?.length?.toInt() }.max()
+    val incorrectAllocation = useTestingIncorrect.map { it.results }.setResourceUsage(bothJava = true) { it.memoryAllocation }
 
     val bootstrapRandomStartCount = firstCorrectResults.maxOfOrNull { results ->
         val maxComplexity = results.tests()!!.maxOf { it.complexity!! }
@@ -501,7 +490,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         testCount = testCount,
         timeout = (solutionMaxRuntime * control.timeoutMultiplier!!).toInt().coerceAtLeast(control.minTimeout!!),
         outputLimit = 0, // solutionMaxOutputLines.coerceAtLeast(testCount * control.outputMultiplier!!),
-        perTestOutputLimit = (solutionMaxPerTestOutputLines * control.outputMultiplier!!).toInt().coerceAtLeast(Question.MIN_PER_TEST_LINES),
+        perTestOutputLimit = (solutionMaxPerTestOutputLines * control.outputMultiplier!!).toInt()
+            .coerceAtLeast(Question.MIN_PER_TEST_LINES),
         javaWhitelist = javaClassWhitelist,
         kotlinWhitelist = kotlinClassWhitelist,
         shrink = false,
@@ -516,6 +506,19 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         solutionRecursiveMethods = solutionRecursiveMethods,
         solutionDeadCode = solutionDeadCode,
         solutionClassSize = bootstrapClassSize
+    )
+
+    testTestingLimits = Question.TestTestingLimits(
+        timeout = (incorrectMaxRuntime * control.timeoutMultiplier!!).toInt().coerceAtLeast(control.minTimeout!!),
+        outputLimit = (testCount * control.outputMultiplier!!).toInt(),
+        executionCountLimit = Question.LanguagesResourceUsage(
+            (testCount * control.executionTimeoutMultiplier!!).toLong(),
+            (testCount * control.executionTimeoutMultiplier!!).toLong()
+        ),
+        allocationLimit = Question.LanguagesResourceUsage(
+            (incorrectAllocation.java.toDouble() * control.allocationLimitMultiplier!!).toLong(),
+            (incorrectAllocation.kotlin?.toDouble()?.times(control.allocationLimitMultiplier!!))?.toLong()
+        ),
     )
 
     validationResults = Question.ValidationResults(
@@ -834,4 +837,26 @@ class WrongReasonPassed(val incorrect: Question.IncorrectFile, val expected: Str
         |Maybe check the argument to @Incorrect(reason = "reason")
         """.trimMargin()
         }
+}
+
+fun List<TestResults>.setResourceUsage(
+    multiplier: Double = 1.0,
+    bothJava: Boolean = false,
+    aspect: (TestResults.CompletedTasks) -> TestResults.ResourceUsageComparison?
+): Question.LanguagesResourceUsage {
+    val javaValue = filter { it.language == Language.java }
+        .mapNotNull { aspect(it.complete) }
+        .maxByOrNull {
+            it.solution
+        }!!.solution.times(multiplier).toLong()
+    val kotlinValue = if (bothJava) {
+        javaValue
+    } else {
+        filter { it.language == Language.kotlin }
+            .mapNotNull { aspect(it.complete) }
+            .maxByOrNull {
+                it.solution
+            }?.solution?.times(multiplier)?.toLong()
+    }
+    return Question.LanguagesResourceUsage(javaValue, kotlinValue)
 }

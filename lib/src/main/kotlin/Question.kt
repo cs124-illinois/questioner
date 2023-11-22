@@ -7,13 +7,11 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import edu.illinois.cs.cs125.jeed.core.CompilationArguments
 import edu.illinois.cs.cs125.jeed.core.Features
-import edu.illinois.cs.cs125.jeed.core.JEED_DEFAULT_USE_CACHE
 import edu.illinois.cs.cs125.jeed.core.LineCounts
 import edu.illinois.cs.cs125.jeed.core.MutatedSource
 import edu.illinois.cs.cs125.jeed.core.Mutation
 import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.compile
-import edu.illinois.cs.cs125.jeed.core.logger
 import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
 import java.io.File
 import java.lang.reflect.ReflectPermission
@@ -300,6 +298,14 @@ data class Question(
     }
 
     @JsonClass(generateAdapter = true)
+    data class TestTestingLimits(
+        val timeout: Int,
+        val outputLimit: Int,
+        val executionCountLimit: LanguagesResourceUsage,
+        val allocationLimit: LanguagesResourceUsage,
+    )
+
+    @JsonClass(generateAdapter = true)
     data class ValidationResults(
         val seed: Int,
         val requiredTestCount: Int,
@@ -544,10 +550,14 @@ ${question.contents}
     }.toSet()
 
     var testingSettings: TestingSettings? = null
+    var testTestingLimits: TestTestingLimits? = null
     var validationResults: ValidationResults? = null
 
     val validated: Boolean
         get() = testingSettings != null
+
+    val testTestingValidated: Boolean
+        get() = testTestingLimits != null
 
     var fauxStatic: Boolean = false
 

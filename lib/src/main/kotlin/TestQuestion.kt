@@ -28,19 +28,17 @@ import java.lang.reflect.Method
 
 class CachePoisonedException(message: String) : Error(message)
 
-private const val MAX_INDIVIDUAL_ALLOCATION_BYTES: Long = 1024 * 1024
+const val MAX_INDIVIDUAL_ALLOCATION_BYTES: Long = 1024 * 1024
 private const val MIN_ALLOCATION_FAILURE_BYTES: Long = 2 * 1024 // Account for nondeterminism due to JIT
-private const val MIN_ALLOCATION_LIMIT_BYTES: Long = 2 * 1024 * 1024 // Leave room for concat in println debugging
+const val MIN_ALLOCATION_LIMIT_BYTES: Long = 2 * 1024 * 1024 // Leave room for concat in println debugging
 
 @Suppress("ReturnCount", "LongMethod", "ComplexMethod", "LongParameterList")
 suspend fun Question.test(
     contents: String,
     language: Language,
-    settings: Question.TestingSettings? = testingSettings,
+    settings: Question.TestingSettings = testingSettings!!,
     isSolution: Boolean = false
 ): TestResults {
-    check(settings != null) { "No test settings provided" }
-
     val results = TestResults(language)
 
     // initialize partial credit information
