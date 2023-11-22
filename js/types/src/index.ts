@@ -109,10 +109,13 @@ export type LineCounts = Static<typeof LineCounts>
 export const Citation = Record({ source: String }).And(Partial({ link: String }))
 export type Citation = Static<typeof Citation>
 
+export const QuestionType = Union(Literal("SNIPPET"), Literal("METHOD"), Literal("KLASS"))
+export type QuestionType = Static<typeof QuestionType>
+
 export const Question = QuestionPath.And(
   Record({
     name: String,
-    type: Union(Literal("SNIPPET"), Literal("METHOD"), Literal("KLASS")),
+    type: QuestionType,
     packageName: String,
     languages: RuntypeArray(Languages),
     descriptions: Dictionary(String, Languages),
@@ -163,6 +166,17 @@ export const Submission = Record({
 )
 export type Submission = Static<typeof Submission>
 
+export const TestTestingSubmission = Record({
+  path: String,
+  language: Languages,
+  contents: String,
+}).And(
+  Partial({
+    limit: Number,
+  }),
+)
+export type TestTestingSubmission = Static<typeof TestTestingSubmission>
+
 export const TestResult = Record({
   name: String,
   passed: Boolean,
@@ -210,6 +224,20 @@ export const TestingResult = Record({
   passed: Boolean,
 })
 export type TestingResult = Static<typeof TestingResult>
+
+export const TestTestingResult = Record({
+  correct: Number,
+  incorrect: Number,
+  total: Number,
+  duration: Number,
+  succeeded: Boolean,
+  shortCircuited: Boolean,
+}).And(
+  Partial({
+    identifiedSolution: Boolean,
+  }),
+)
+export type TestTestingResult = Static<typeof TestTestingResult>
 
 export const ClassSizeComparison = Record({
   solution: Number,
@@ -326,6 +354,16 @@ export const CompletedTasks = Partial({
 })
 export type CompletedTasks = Static<typeof CompletedTasks>
 
+export const TestTestingCompletedTasks = Partial({
+  // templateSubmission doesn't complete
+  compileSubmission: CompiledSourceResult,
+  checkstyle: CheckstyleResults,
+  ktlint: KtlintResults,
+  // checkCompiledSubmission doesn't complete
+  testTesting: TestTestingResult,
+})
+export type TestTestingCompletedTasks = Static<typeof TestTestingCompletedTasks>
+
 export const FailedTasks = Partial({
   checkInitialSubmission: String,
   templateSubmission: TemplatingFailed,
@@ -345,6 +383,17 @@ export const FailedTasks = Partial({
   // coverage doesn't fail
 })
 export type FailedTasks = Static<typeof FailedTasks>
+
+export const TestTestingFailedTasks = Partial({
+  checkInitialSubmission: String,
+  templateSubmission: TemplatingFailed,
+  compileSubmission: CompilationFailed,
+  checkstyle: CheckstyleFailed,
+  ktlint: KtlintFailed,
+  checkCompiledSubmission: String,
+  checkExecutedSubmission: String,
+})
+export type TestTestingFailedTasks = Static<typeof TestTestingFailedTasks>
 
 export const Step = Union(
   Literal("checkInitialSubmission"),
@@ -366,6 +415,18 @@ export const Step = Union(
   Literal("coverage"),
 )
 export type Step = Static<typeof Step>
+
+export const TestTestingStep = Union(
+  Literal("checkInitialSubmission"),
+  Literal("templateSubmission"),
+  Literal("compileSubmission"),
+  Literal("checkstyle"),
+  Literal("ktlint"),
+  Literal("checkCompiledSubmission"),
+  Literal("checkExecutedSubmission"),
+  Literal("testTesting"),
+)
+export type TestTestingStep = Static<typeof TestTestingStep>
 
 export const TestingOrder: Array<Step> = [
   "checkInitialSubmission",
@@ -406,6 +467,24 @@ export const TestResults = Record({
 )
 export type TestResults = Static<typeof TestResults>
 
+export const TestTestResults = Record({
+  language: Languages,
+  completedSteps: RuntypeArray(TestTestingStep),
+  complete: TestTestingCompletedTasks,
+  failedSteps: RuntypeArray(TestTestingStep),
+  failed: TestTestingFailedTasks,
+  skippedSteps: RuntypeArray(TestTestingStep),
+  timeout: Boolean,
+  lineCountTimeout: Boolean,
+  completed: Boolean,
+  succeeded: Boolean,
+}).And(
+  Partial({
+    failedLinting: Boolean,
+  }),
+)
+export type TestTestResults = Static<typeof TestTestResults>
+
 export const TerminalOutput = Record({
   error: Boolean,
   retry: Boolean,
@@ -413,12 +492,22 @@ export const TerminalOutput = Record({
 })
 export type TerminalOutput = Static<typeof TerminalOutput>
 
+export const CacheStats = Record({
+  hits: Number,
+  misses: Number,
+})
+export type CacheStats = Static<typeof CacheStats>
+
 export const ServerResponse = Record({
   results: TestResults,
   canCache: Boolean,
-  cacheStats: Record({
-    hits: Number,
-    misses: Number,
-  }),
+  cacheStats: CacheStats,
 })
 export type ServerResponse = Static<typeof ServerResponse>
+
+export const ServerTestTestingResponse = Record({
+  results: TestTestResults,
+  canCache: Boolean,
+  cacheStats: CacheStats,
+})
+export type ServerTestTestingResponse = Static<typeof ServerTestTestingResponse>
