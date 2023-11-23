@@ -15,6 +15,7 @@ import edu.illinois.cs.cs125.jeed.core.compile
 import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
 import java.io.File
 import java.lang.reflect.ReflectPermission
+import java.util.PropertyPermission
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.primaryConstructor
 import edu.illinois.cs.cs125.jeed.core.moshi.Adapters as JeedAdapters
@@ -586,7 +587,8 @@ ${question.contents}
                 RuntimePermission("accessDeclaredMembers"),
                 ReflectPermission("suppressAccessChecks"),
                 RuntimePermission("getClassLoader"),
-                RuntimePermission("localeServiceProvider")
+                RuntimePermission("localeServiceProvider"),
+                PropertyPermission("org.graalvm.nativeimage.imagecode", "read")
             )
     }
 }

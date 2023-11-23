@@ -18,8 +18,6 @@ import edu.illinois.cs.cs125.jeed.core.TemplatingFailed
 import edu.illinois.cs.cs125.jeed.core.UnitFeatures
 import edu.illinois.cs.cs125.jeed.core.adjustWithFeatures
 import edu.illinois.cs.cs125.jeed.core.features
-import edu.illinois.cs.cs125.jeed.core.fromJavaSnippet
-import edu.illinois.cs.cs125.jeed.core.fromKotlinSnippet
 import edu.illinois.cs.cs125.jeed.core.processCoverage
 import edu.illinois.cs.cs125.jenisol.core.Settings
 import edu.illinois.cs.cs125.jenisol.core.SubmissionDesignError
@@ -221,7 +219,18 @@ suspend fun Question.test(
     }
     val failedClassInitializers = StaticFailureDetection.pollStaticInitializationFailures()
     if (failedClassInitializers.isNotEmpty()) {
-        throw CachePoisonedException(failedClassInitializers.joinToString(", ") { it.clazz.name })
+        val missingPermissions = taskResults.permissionRequests
+            .filter { !it.granted }
+            .map { it.permission }
+            .joinToString(", ")
+        val message = "Failed classes: ${failedClassInitializers.joinToString(", ") { it.clazz.name }}.${
+            if (missingPermissions.isNotEmpty()) {
+                " Missing permissions: $missingPermissions"
+            } else {
+                ""
+            }
+        }"
+        throw CachePoisonedException(message)
     }
 
     val threw = taskResults.returned?.threw ?: taskResults.threw
