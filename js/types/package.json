@@ -1,6 +1,6 @@
 {
   "name": "@cs124/questioner-types",
-  "version": "2023.11.5",
+  "version": "2023.11.6",
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
