@@ -38,6 +38,8 @@ import io.ktor.server.logging.toLogString
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.callloging.CallLogging
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.request.httpMethod
+import io.ktor.server.request.path
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.get
@@ -240,12 +242,13 @@ object Questions {
     }
 
     @Suppress("SpellCheckingInspection")
-    suspend fun testtest(submission: TestSubmission, question: Question): TestTestResults {
+    suspend fun testtest(submission: TestSubmission, question: Question, settings: Question.TestTestingSettings): TestTestResults {
         val start = Instant.now().toEpochMilli()
         logger.trace { "Test tests for ${question.name}" }
         return question.testTests(
             submission.contents,
             language = submission.language,
+            settings = settings,
         ).also {
             logger.trace { "Tests tested for ${question.name} in ${Instant.now().toEpochMilli() - start}" }
         }
@@ -285,6 +288,7 @@ data class TestSubmission(
     val language: Language,
     val version: String?,
     val author: String?,
+    val limit: Int = Int.MAX_VALUE,
 )
 
 @JsonClass(generateAdapter = true)
@@ -315,7 +319,7 @@ data class Status(
 data class ServerResponse(val results: TestResults, val canCache: Boolean, val cacheStats: CacheStats)
 
 @JsonClass(generateAdapter = true)
-data class ServerTestResponse(val results: TestTestResults)
+data class ServerTestResponse(val results: TestTestResults, val canCache: Boolean, val cacheStats: CacheStats)
 
 val runtime: Runtime = Runtime.getRuntime()
 val counter = AtomicInteger()
@@ -371,6 +375,9 @@ fun Application.questioner() {
         call.attributes.put(CALL_START_TIME, Instant.now().toEpochMilli())
     }
     install(CallLogging) {
+        filter { call ->
+            call.request.path() != "/version" && !(call.request.httpMethod.value == "GET" && call.request.path() == "/")
+        }
         format { call ->
             val startTime = call.attributes.getOrNull(CALL_START_TIME)
             "${call.response.status()}: ${call.request.toLogString()} ${
@@ -435,7 +442,8 @@ fun Application.questioner() {
                 e.printStackTrace()
                 logger.debug { submission }
                 logger.error { e.toString() }
-                exitProcess(-1)
+                // Firm shutdown
+                Runtime.getRuntime().halt(-1)
             } catch (e: Throwable) {
                 e.printStackTrace()
                 logger.warn { e.toString() }
@@ -459,14 +467,25 @@ fun Application.questioner() {
 
             val submission = call.receive<TestSubmission>()
             val question = Questions.loadTest(submission) ?: return@post call.respond(HttpStatusCode.NotFound)
-            if (!question.validated) {
+            if (!question.canTestTest) {
+                return@post call.respond(HttpStatusCode.NotFound)
+            }
+            if (!question.validated || !question.testTestingValidated) {
+                logger.warn { "Question not validated or not validated for test testing" }
                 return@post call.respond(HttpStatusCode.BadRequest)
             }
 
             @Suppress("TooGenericExceptionCaught")
             try {
                 val startMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
-                call.respond(ServerTestResponse(Questions.testtest(submission, question)))
+                val testSettings = Question.TestTestingSettings(limit = submission.limit)
+                call.respond(
+                    ServerTestResponse(
+                        Questions.testtest(submission, question, testSettings),
+                        false,
+                        CacheStats(questionCache.stats()),
+                    ),
+                )
                 val endMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
                 logger.debug {
                     "$runCount: test/${submission.path}: $startMemory -> $endMemory (${
@@ -480,7 +499,8 @@ fun Application.questioner() {
                 e.printStackTrace()
                 logger.debug { submission }
                 logger.error { e.toString() }
-                exitProcess(-1)
+                // Firm shutdown
+                Runtime.getRuntime().halt(-1)
             } catch (e: Throwable) {
                 e.printStackTrace()
                 logger.warn { e.toString() }

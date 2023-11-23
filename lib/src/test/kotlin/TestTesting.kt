@@ -107,8 +107,8 @@ int addOne(int value) {
         }
         """
 int addOne(int value) {
-  if (value == 1) {
-    return 2;
+  if (value == 0) {
+    return 1;
   }
   return value+2;
 }""".trim().also { incorrect ->

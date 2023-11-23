@@ -19,6 +19,7 @@ data class TestTestResults(
     val failed: FailedTasks = FailedTasks(),
     val skippedSteps: MutableSet<Step> = mutableSetOf(),
     var timeout: Boolean = false,
+    var lineCountTimeout: Boolean = false,
     @Transient
     var taskResults: Sandbox.TaskResults<*>? = null
 ) {
@@ -28,11 +29,13 @@ data class TestTestResults(
 
     @Suppress("EnumNaming", "EnumEntryName")
     enum class Step {
+        checkInitialSubmission,
         templateSubmission,
         compileSubmission,
         checkstyle,
         ktlint,
         checkCompiledSubmission,
+        checkExecutedSubmission,
         testTesting
     }
 
@@ -48,11 +51,13 @@ data class TestTestResults(
 
     @JsonClass(generateAdapter = true)
     data class FailedTasks(
+        var checkInitialSubmission: String? = null,
         var templateSubmission: TemplatingFailed? = null,
         var compileSubmission: CompilationFailed? = null,
         var checkstyle: CheckstyleFailed? = null,
         var ktlint: KtLintFailed? = null,
         var checkCompiledSubmission: String? = null,
+        var checkExecutedSubmission: String? = null
     )
 
     fun addCheckstyleResults(checkstyle: CheckstyleResults) {
@@ -70,14 +75,22 @@ data class TestTestResults(
     fun addTestTestingResults(testTesting: TestTestingResults) {
         completedSteps.add(Step.testTesting)
         complete.testTesting = testTesting
+        completed = true
+        succeeded = testTesting.succeeded
     }
 
     @Suppress("unused")
     fun toJson(): String = moshi.adapter(TestTestResults::class.java).toJson(this)
 
     @JsonClass(generateAdapter = true)
-    data class TestTestingResults(val correct: Int, val incorrect: Int, val total: Int) {
-        val succeeded = correct == total && incorrect == 0
-        val shortCircuited = correct + incorrect < total
-    }
+    data class TestTestingResults(
+        val correct: Int,
+        val incorrect: Int,
+        val identifiedSolution: Boolean?,
+        val total: Int,
+        val duration: Long,
+        val output: List<String>,
+        val succeeded: Boolean = correct == total && incorrect == 0,
+        val shortCircuited: Boolean = correct + incorrect < total
+    )
 }

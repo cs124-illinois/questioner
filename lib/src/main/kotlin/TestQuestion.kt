@@ -18,6 +18,8 @@ import edu.illinois.cs.cs125.jeed.core.TemplatingFailed
 import edu.illinois.cs.cs125.jeed.core.UnitFeatures
 import edu.illinois.cs.cs125.jeed.core.adjustWithFeatures
 import edu.illinois.cs.cs125.jeed.core.features
+import edu.illinois.cs.cs125.jeed.core.fromJavaSnippet
+import edu.illinois.cs.cs125.jeed.core.fromKotlinSnippet
 import edu.illinois.cs.cs125.jeed.core.processCoverage
 import edu.illinois.cs.cs125.jenisol.core.Settings
 import edu.illinois.cs.cs125.jenisol.core.SubmissionDesignError

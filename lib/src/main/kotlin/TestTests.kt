@@ -7,6 +7,8 @@ import edu.illinois.cs.cs125.jenisol.core.isPrivate
 import edu.illinois.cs.cs125.jenisol.core.isStatic
 import org.objectweb.asm.*
 import java.lang.reflect.InvocationTargetException
+import java.time.Instant
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 suspend fun Question.testTests(
@@ -15,9 +17,16 @@ suspend fun Question.testTests(
     settings: Question.TestTestingSettings = Question.TestTestingSettings(),
     limits: Question.TestTestingLimits = testTestingLimits!!
 ): TestTestResults {
+    check(type != Question.Type.SNIPPET) { "Test testing not supported for snippets" }
+    check(settings.limit >= 2) { "Limit must be at least 2" }
 
     val testKlass = "Test$klass"
     val results = TestTestResults(language)
+
+    // checkInitialTestTestingSubmission
+    if (!(checkInitialTestTestingSubmission(contents, language, results))) {
+        return results
+    }
 
     val compilationClassLoader = when (language) {
         Language.java -> InvertingClassLoader(
@@ -43,21 +52,29 @@ suspend fun Question.testTests(
         return results
     }
 
-    // checkCompiledSubmission
+    // checkCompiledTestSuite
     val klassName = checkCompiledTestSuite(compiledSubmission, results) ?: return results
     val testingIncorrect = testTestingIncorrect
     check(!testingIncorrect.isNullOrEmpty()) {
         "Value should not be null or empty"
     }
+
+    val incorrectLimit = (settings.limit - 1).coerceAtMost(testingIncorrect.size)
     val testingMutations = when (settings.selectionStrategy) {
-        Question.TestTestingSettings.SelectionStrategy.EASIEST -> testingIncorrect.take(settings.limit)
-        Question.TestTestingSettings.SelectionStrategy.HARDEST -> testingIncorrect.takeLast(settings.limit)
-        Question.TestTestingSettings.SelectionStrategy.EVENLY_SPACED ->
-            linspace(0, testingIncorrect.size - 1, settings.limit).map { testingIncorrect[it] }
+        Question.TestTestingSettings.SelectionStrategy.EASIEST -> testingIncorrect.take(incorrectLimit)
+        Question.TestTestingSettings.SelectionStrategy.HARDEST -> testingIncorrect.takeLast(incorrectLimit)
+        Question.TestTestingSettings.SelectionStrategy.EVENLY_SPACED -> {
+            linspace(testingIncorrect.size - 1, incorrectLimit).map { testingIncorrect[it] }
+        }
     }
 
     val testingLoaders = testingMutations.map { it.compiled(this) }.toMutableList()
-    testingLoaders.add(Random.nextInt(testingLoaders.size + 1), compiledSolutionForTesting)
+    val random = if (settings.seed != null) {
+        Random(settings.seed)
+    } else {
+        Random
+    }
+    testingLoaders.add(random.nextInt(testingLoaders.size + 1), compiledSolutionForTesting)
 
     val executionArguments = Sandbox.ExecutionArguments(
         timeout = limits.timeout.toLong(),
@@ -96,7 +113,10 @@ suspend fun Question.testTests(
 
     var correct = 0
     var incorrect = 0
+    var identifiedSolution: Boolean? = null
 
+    val testTestingStarted = Instant.now()
+    val output = mutableListOf<String>()
     for (testingLoader in testingLoaders) {
         val isSolution = testingLoader == compiledSolutionForTesting
 
@@ -122,22 +142,90 @@ suspend fun Question.testTests(
                 throw e.cause ?: e
             }
         }
+
+        val timeout = taskResults.timeout
+        val threw = taskResults.threw
+
+        if (!taskResults.timeout && threw is ThreadDeath) {
+            throw CachePoisonedException("ThreadDeath")
+        }
+        results.timeout = timeout
+
+        val resourceUsage = taskResults.pluginResult(ResourceMonitoring)
+        val submissionExecutionCount = resourceUsage.submissionLines
+        results.lineCountTimeout = submissionExecutionCount > lineCountLimit
+
+        if (results.timeout) {
+            return results
+        }
+
+        if (results.lineCountTimeout) {
+            results.failedSteps.add(TestTestResults.Step.checkExecutedSubmission)
+            results.failed.checkExecutedSubmission =
+                "Executed too many lines: Already executed $lineCountLimit ${"line".pluralize(lineCountLimit.toInt())}, " +
+                    "greater than the limit of $lineCountLimit"
+            return results
+        }
+
+        when (threw) {
+            is ClassNotFoundException -> results.failed.checkExecutedSubmission =
+                "Class design error:\n  Could not find class $klass"
+
+            is NoClassDefFoundError -> results.failed.checkExecutedSubmission =
+                "Class design error:\n  Attempted to use unavailable class ${threw.message}"
+
+            is OutOfMemoryError -> results.failed.checkExecutedSubmission =
+                "Allocated too much memory: ${threw.message}, already used ${resourceUsage.allocatedMemory} bytes.\nIf you are printing for debug purposes, consider less verbose output."
+
+            is LineLimitExceeded -> {
+                results.failed.checkExecutedSubmission =
+                    "Executed too many lines: Already executed $lineCountLimit ${"line".pluralize(lineCountLimit.toInt())}, " +
+                        "greater than the limit of $lineCountLimit"
+            }
+        }
+
+        if (results.failed.checkExecutedSubmission != null) {
+            results.failedSteps.add(TestTestResults.Step.checkExecutedSubmission)
+            return results
+        }
+
         val isCorrect = if (isSolution) {
             taskResults.threw == null
         } else {
             taskResults.threw != null
+        }
+        if (isSolution) {
+            identifiedSolution = isCorrect
         }
         if (isCorrect) {
             correct++
         } else {
             incorrect++
         }
+        output += taskResults.stdout.trim() + if (taskResults.truncatedLines > 0) {
+            "\n(${taskResults.truncatedLines} lines truncated)\n"
+        } else {
+            "\n"
+        }
         if (incorrect > 0 && settings.shortCircuit) {
             break
         }
     }
 
-    results.addTestTestingResults(TestTestResults.TestTestingResults(correct, incorrect, testingLoaders.size))
+    if (identifiedSolution != null) {
+        identifiedSolution = identifiedSolution == true && correct > 1
+    }
+
+    results.addTestTestingResults(
+        TestTestResults.TestTestingResults(
+            correct,
+            incorrect,
+            identifiedSolution,
+            testingLoaders.size,
+            Instant.now().toEpochMilli() - testTestingStarted.toEpochMilli(),
+            output
+        )
+    )
 
     return results
 }
@@ -268,14 +356,9 @@ fun Question.checkCompiledTestSuite(
     val testKlass = "Test$klass"
 
     when {
-        it.isEmpty() -> {
-            testResults.failed.checkCompiledSubmission = "Test suite defined no classes"
-            testResults.failedSteps.add(TestTestResults.Step.checkCompiledSubmission)
-            return null
-        }
-
-        it.size > 1 -> {
-            testResults.failed.checkCompiledSubmission = "Test suite defined multiple classes"
+        it.size != 1 -> {
+            testResults.failed.checkCompiledSubmission =
+                "Test suite should define a single public class $testKlass with an empty or omitted constructor"
             testResults.failedSteps.add(TestTestResults.Step.checkCompiledSubmission)
             return null
         }
@@ -297,7 +380,16 @@ fun Question.checkCompiledTestSuite(
     compiledTestSuite.classLoader.loadClass(klass).also { testingKlass ->
         testingKlass.getTestingMethod() ?: run {
             testResults.failed.checkCompiledSubmission =
-                "Test suite does not define a non-private static testing method named test accepting no arguments"
+                "Test suite does not define a non-private static void testing method named test accepting no arguments"
+            testResults.failedSteps.add(TestTestResults.Step.checkCompiledSubmission)
+            return null
+        }
+        val fields = testingKlass.declaredFields.toSet().filter { field ->
+            field.name != "${"$"}assertionsDisabled" && !(compiledTestSuite.source.type == Source.FileType.KOTLIN && field.name == "Companion")
+        }
+        if  (fields.isNotEmpty()) {
+            testResults.failed.checkCompiledSubmission =
+                "Testing class may not declare fields"
             testResults.failedSteps.add(TestTestResults.Step.checkCompiledSubmission)
             return null
         }
@@ -346,5 +438,69 @@ fun Question.fixTestingMethods(classLoader: JeedClassLoader): ClassLoader {
     return CopyableClassLoader(mapOf(klass to classWriter.toByteArray()), classLoader.parent)
 }
 
-fun linspace(start: Int, stop: Int, num: Int) =
-    (start..stop step ((stop - start) / (num - 1)).coerceAtLeast(1)).toList()
+fun linspace(stop: Int, num: Int): List<Int> {
+    check(num <= stop + 1) { "Bad num value" }
+    val step = stop.toDouble() / (num - 1)
+    return (0 until num).map { (it * step).roundToInt() }.distinct().also {
+        check(it.contains(stop)) { "$stop $num: $it does not contain $stop" }
+        check(it.size == num) { "$stop $num: $it does not have size $num" }
+    }
+}
+
+fun Question.checkInitialTestTestingSubmission(
+    contents: String,
+    language: Language,
+    testResults: TestTestResults
+): Boolean {
+    val snippetProperties = try {
+        when (language) {
+            Language.java -> Source.fromJavaSnippet(contents)
+            Language.kotlin -> Source.fromKotlinSnippet(contents)
+        }.snippetProperties
+    } catch (e: Exception) {
+        testResults.completedSteps.add(TestTestResults.Step.checkInitialSubmission)
+        // If the code doesn't parse as a snippet, fall back to compiler error messages which are usually more useful
+        return true
+    }
+    when (type) {
+        Question.Type.SNIPPET -> error("Snippets not supported for test testing")
+
+        Question.Type.METHOD -> {
+            if (snippetProperties.importCount > 0) {
+                testResults.failed.checkInitialSubmission = "import statements are not allowed for this problem"
+            } else if (snippetProperties.classCount > 0) {
+                testResults.failed.checkInitialSubmission = "Class declarations are not allowed for this problem"
+            } else if (snippetProperties.looseCount > 0) {
+                testResults.failed.checkInitialSubmission =
+                    "Submission should be a single testing method with no code outside"
+            }
+        }
+
+        Question.Type.KLASS -> {
+            if (language == Language.java) {
+                if (snippetProperties.methodCount > 0) {
+                    testResults.failed.checkInitialSubmission =
+                        "Top-level method declarations are not allowed for this problem"
+                }
+            } else if (language == Language.kotlin) {
+                if (snippetProperties.classCount > 0 && snippetProperties.methodCount > 0) {
+                    testResults.failed.checkInitialSubmission =
+                        "Can't mix top-level classes and methods for this problem"
+                }
+            }
+            if (snippetProperties.looseCount > 0) {
+                testResults.failed.checkInitialSubmission =
+                    "Submission should be a single testing class with no code outside"
+            } else if (snippetProperties.classCount > 1) {
+                testResults.failed.checkInitialSubmission = "Submission should define a single class"
+            }
+        }
+    }
+    return if (testResults.failed.checkInitialSubmission != null) {
+        testResults.failedSteps.add(TestTestResults.Step.checkInitialSubmission)
+        false
+    } else {
+        testResults.completedSteps.add(TestTestResults.Step.checkInitialSubmission)
+        true
+    }
+}

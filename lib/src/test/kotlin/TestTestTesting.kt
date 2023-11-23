@@ -3,6 +3,8 @@ package edu.illinois.cs.cs125.questioner.lib
 import edu.illinois.cs.cs125.jeed.core.compilationCache
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.longs.shouldBeLessThan
 import io.kotest.matchers.shouldBe
@@ -40,22 +42,29 @@ class TestTestTesting : StringSpec({
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
                 it.total shouldBe 7
+                it.correct shouldBe 1
+                it.identifiedSolution shouldBe false
                 it.shortCircuited shouldBe false
                 it.succeeded shouldBe false
             }
         }
-        question.testTests(JAVA_EMPTY_SUITE_CLASS, Language.java, Question.TestTestingSettings(true)).also { results ->
-            results.failedSteps.size shouldBe 0
-            results.complete.testTesting!!.also {
-                it.total shouldBe 7
-                it.shortCircuited shouldBe true
-                it.succeeded shouldBe false
+        question.testTests(JAVA_EMPTY_SUITE_CLASS, Language.java, Question.TestTestingSettings(true, seed = 124))
+            .also { results ->
+                results.failedSteps.size shouldBe 0
+                results.complete.testTesting!!.also {
+                    it.total shouldBe 7
+                    it.correct shouldBe 0
+                    it.identifiedSolution shouldBe null
+                    it.shortCircuited shouldBe true
+                    it.succeeded shouldBe false
+                }
             }
-        }
         question.testTests(KOTLIN_EMPTY_SUITE, Language.kotlin).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
                 it.total shouldBe 7
+                it.correct shouldBe 1
+                it.identifiedSolution shouldBe false
                 it.shortCircuited shouldBe false
                 it.succeeded shouldBe false
             }
@@ -93,6 +102,91 @@ fun test() {
         ).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.succeeded shouldBe true
+        }
+    }
+    "should timeout test test suites for classes" {
+        val (question) = validator.validate("Add One Class", force = true, testing = true).also { (question, report) ->
+            question.validated shouldBe true
+            report shouldNotBe null
+        }
+        val sleepTime = measureTimeMillis {
+            question.testTests(
+                """
+public class TestQuestion {
+  public static void test() throws InterruptedException {
+    Thread.sleep(1000);
+  }
+}""", Language.java
+            ).also { results ->
+                results.timeout shouldBe true
+                results.completedSteps shouldNotContain TestTestResults.Step.testTesting
+            }
+        }
+        sleepTime shouldBeLessThan question.testTestingLimits!!.timeout.toLong() * 2
+
+        val lineCountTime = measureTimeMillis {
+            question.testTests(
+                """
+public class TestQuestion {
+  public static void test() {
+    int j = 0;
+    for (int i = 0; i < 1024 * 1024; i++) {
+      j++;
+    }
+  }
+}""", Language.java
+            ).also { results ->
+                results.lineCountTimeout shouldBe true
+                results.completedSteps shouldNotContain TestTestResults.Step.checkExecutedSubmission
+                results.failed.checkExecutedSubmission shouldNotBe null
+                results.completedSteps shouldNotContain TestTestResults.Step.testTesting
+            }
+        }
+        lineCountTime shouldBeLessThan question.testTestingLimits!!.timeout.toLong()
+    }
+    "should fail fields" {
+        val (question) = validator.validate("Add One Class", force = true, testing = true).also { (question, report) ->
+            question.validated shouldBe true
+            report shouldNotBe null
+        }
+        question.testTests(
+            """
+public class TestQuestion {
+  private static final int value = 0;
+  public static void test() throws InterruptedException {
+    Thread.sleep(1000);
+  }
+}""", Language.java
+        ).also { results ->
+            results.failedSteps shouldContain TestTestResults.Step.checkCompiledSubmission
+        }
+    }
+    "should collect output" {
+        val (question) = validator.validate("Add One Class", force = true, testing = true).also { (question, report) ->
+            question.validated shouldBe true
+            report shouldNotBe null
+        }
+        question.testTests(JAVA_EMPTY_SUITE_CLASS, Language.java).also { results ->
+            results.failedSteps.size shouldBe 0
+            results.complete.testTesting!!.also {
+                it.total shouldBe 7
+                it.shortCircuited shouldBe false
+                it.succeeded shouldBe false
+            }
+        }
+        question.testTests(
+            """
+public class TestQuestion {
+  public static void test() throws InterruptedException {
+    System.out.println("Here");
+  }
+}""", Language.java
+        ).also { results ->
+            results.completedSteps shouldContain TestTestResults.Step.testTesting
+            results.complete.testTesting!!.also { testTestingResults ->
+                testTestingResults.output shouldHaveSize testTestingResults.total
+                testTestingResults.output.all { it.trim() == "Here" }
+            }
         }
     }
     "should test test suites for methods" {

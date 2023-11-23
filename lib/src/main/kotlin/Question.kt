@@ -290,7 +290,8 @@ data class Question(
     data class TestTestingSettings(
         val shortCircuit: Boolean = false,
         val limit: Int = Int.MAX_VALUE,
-        val selectionStrategy: SelectionStrategy = SelectionStrategy.EVENLY_SPACED
+        val selectionStrategy: SelectionStrategy = SelectionStrategy.EVENLY_SPACED,
+        val seed: Long? = null
     ) {
         enum class SelectionStrategy {
             HARDEST, EASIEST, EVENLY_SPACED
@@ -555,6 +556,9 @@ ${question.contents}
 
     val validated: Boolean
         get() = testingSettings != null
+
+    @Transient
+    val canTestTest = type == Type.KLASS || type == Type.METHOD
 
     val testTestingValidated: Boolean
         get() = testTestingLimits != null
