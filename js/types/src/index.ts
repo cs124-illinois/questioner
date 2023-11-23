@@ -9,6 +9,7 @@ import {
   TemplatingFailed,
 } from "@cs124/jeed-types"
 import {
+  Array,
   Boolean,
   Dictionary,
   Literal,
@@ -232,6 +233,7 @@ export const TestTestingResult = Record({
   duration: Number,
   succeeded: Boolean,
   shortCircuited: Boolean,
+  output: Array(String),
 }).And(
   Partial({
     identifiedSolution: Boolean,
@@ -428,7 +430,7 @@ export const TestTestingStep = Union(
 )
 export type TestTestingStep = Static<typeof TestTestingStep>
 
-export const TestingOrder: Array<Step> = [
+export const TestingOrder: Step[] = [
   "checkInitialSubmission",
   "templateSubmission",
   "compileSubmission",
