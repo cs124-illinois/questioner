@@ -184,6 +184,7 @@ suspend fun Question.test(
         returnTimeout = Question.DEFAULT_RETURN_TIMEOUT,
         systemInStream = systemInStream
     )
+
     val lineCountLimit = when (language) {
         Language.java -> settings.executionCountLimit.java
         Language.kotlin -> settings.executionCountLimit.kotlin!!

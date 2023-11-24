@@ -588,6 +588,7 @@ ${question.contents}
                 ReflectPermission("suppressAccessChecks"),
                 RuntimePermission("getClassLoader"),
                 RuntimePermission("localeServiceProvider"),
+                RuntimePermission("charsetProvider"),
                 PropertyPermission("org.graalvm.nativeimage.imagecode", "read")
             )
     }
