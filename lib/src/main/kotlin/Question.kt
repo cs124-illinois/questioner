@@ -14,8 +14,6 @@ import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.compile
 import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
 import java.io.File
-import java.lang.reflect.ReflectPermission
-import java.util.PropertyPermission
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.primaryConstructor
 import edu.illinois.cs.cs125.jeed.core.moshi.Adapters as JeedAdapters
@@ -580,17 +578,6 @@ ${question.contents}
         const val UNLIMITED_OUTPUT_LINES = 102400
         const val MIN_PER_TEST_LINES = 1024
         const val DEFAULT_MAX_OUTPUT_SIZE = 8 * 1024 * 1024
-
-        @Transient
-        val SAFE_PERMISSIONS =
-            setOf(
-                RuntimePermission("accessDeclaredMembers"),
-                ReflectPermission("suppressAccessChecks"),
-                RuntimePermission("getClassLoader"),
-                RuntimePermission("localeServiceProvider"),
-                RuntimePermission("charsetProvider"),
-                PropertyPermission("org.graalvm.nativeimage.imagecode", "read")
-            )
     }
 }
 

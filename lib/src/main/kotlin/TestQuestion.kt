@@ -14,6 +14,7 @@ import edu.illinois.cs.cs125.jeed.core.LineLimitExceeded
 import edu.illinois.cs.cs125.jeed.core.Sandbox
 import edu.illinois.cs.cs125.jeed.core.SnippetTransformationFailed
 import edu.illinois.cs.cs125.jeed.core.Source
+import edu.illinois.cs.cs125.jeed.core.SourceExecutionArguments
 import edu.illinois.cs.cs125.jeed.core.TemplatingFailed
 import edu.illinois.cs.cs125.jeed.core.UnitFeatures
 import edu.illinois.cs.cs125.jeed.core.adjustWithFeatures
@@ -180,7 +181,8 @@ suspend fun Question.test(
         timeout = settings.timeout.toLong(),
         classLoaderConfiguration = classLoaderConfiguration,
         maxOutputLines = settings.outputLimit,
-        permissions = Question.SAFE_PERMISSIONS,
+        permissions = SourceExecutionArguments.GENERALLY_UNSAFE_PERMISSIONS,
+        permissionBlacklist = true,
         returnTimeout = Question.DEFAULT_RETURN_TIMEOUT,
         systemInStream = systemInStream
     )

@@ -14,6 +14,7 @@ import com.ryanharter.ktor.moshi.moshi
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
 import com.sun.management.HotSpotDiagnosticMXBean
+import edu.illinois.cs.cs125.jeed.core.compilationCacheSizeMB
 import edu.illinois.cs.cs125.jeed.core.useCompilationCache
 import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
@@ -50,6 +51,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import mu.KotlinLogging
 import org.bson.BsonDocument
 import org.slf4j.LoggerFactory
@@ -140,6 +143,7 @@ data class CacheStats(val hits: Long, val misses: Long) {
 
 val questionCacheSize = System.getenv("QUESTIONER_QUESTION_CACHE_SIZE")?.toLong() ?: 16L
 val questionCache: Cache<String, Question> = Caffeine.newBuilder().maximumSize(questionCacheSize).recordStats().build()
+val questionerMaxConcurrency = System.getenv("QUESTIONER_MAX_CONCURRENCY")?.toInt() ?: 1024
 
 object Questions {
     private fun questionFromDocument(document: BsonDocument, id: String): Question? {
@@ -242,7 +246,11 @@ object Questions {
     }
 
     @Suppress("SpellCheckingInspection")
-    suspend fun testtest(submission: TestSubmission, question: Question, settings: Question.TestTestingSettings): TestTestResults {
+    suspend fun testtest(
+        submission: TestSubmission,
+        question: Question,
+        settings: Question.TestTestingSettings,
+    ): TestTestResults {
         val start = Instant.now().toEpochMilli()
         logger.trace { "Test tests for ${question.name}" }
         return question.testTests(
@@ -313,7 +321,26 @@ data class Status(
     val started: Instant = serverStarted,
     val version: String = VERSION,
     val useJeedCache: Boolean = useCompilationCache,
-)
+    val resources: Resources = Resources(),
+    val settings: Settings = Settings(),
+) {
+    @JsonClass(generateAdapter = true)
+    data class Settings(
+        val useJeedCache: Boolean = useCompilationCache,
+        val jeedCacheSize: Long = compilationCacheSizeMB,
+        val cacheSize: Long = questionCacheSize,
+        val maxConcurrency: Int = questionerMaxConcurrency,
+    )
+
+    @JsonClass(generateAdapter = true)
+    data class Resources(
+        val processors: Int = Runtime.getRuntime().availableProcessors(),
+        val totalMemory: Long = Runtime.getRuntime().totalMemory() / 1024 / 1024,
+        var freeMemory: Long = Runtime.getRuntime().freeMemory() / 1024 / 1024,
+    )
+
+    fun toJson(): String = moshi.adapter(Status::class.java).indent("  ").toJson(this)
+}
 
 @JsonClass(generateAdapter = true)
 data class ServerResponse(val results: TestResults, val canCache: Boolean, val cacheStats: CacheStats)
@@ -369,6 +396,8 @@ suspend fun addStumperSolution(
     }
 }
 
+private val limiter = Semaphore(System.getenv("QUESTIONER_MAX_CONCURRENCY")?.toInt() ?: 1024)
+
 @Suppress("LongMethod")
 fun Application.questioner() {
     intercept(ApplicationCallPipeline.Setup) {
@@ -415,7 +444,9 @@ fun Application.questioner() {
             @Suppress("TooGenericExceptionCaught")
             try {
                 val startMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
-                val testResults = Questions.test(submission, question)
+                val testResults = limiter.withPermit {
+                    Questions.test(submission, question)
+                }
                 call.respond(
                     ServerResponse(
                         testResults,
@@ -479,13 +510,8 @@ fun Application.questioner() {
             try {
                 val startMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
                 val testSettings = Question.TestTestingSettings(limit = submission.limit)
-                call.respond(
-                    ServerTestResponse(
-                        Questions.testtest(submission, question, testSettings),
-                        false,
-                        CacheStats(questionCache.stats()),
-                    ),
-                )
+                val results = limiter.withPermit { Questions.testtest(submission, question, testSettings) }
+                call.respond(ServerTestResponse(results, false, CacheStats(questionCache.stats())))
                 val endMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
                 logger.debug {
                     "$runCount: test/${submission.path}: $startMemory -> $endMemory (${
@@ -560,7 +586,7 @@ fun main(): Unit = runBlocking {
         (ManagementFactory.getMemoryMXBean() as NotificationEmitter).addNotificationListener(listener, null, null)
     } ?: logger.warn { "Memory management interface not found" }
 
-    logger.debug { Status() }
+    logger.debug { Status().toJson() }
 
     CoroutineScope(Dispatchers.IO).launch {
         stumperSolutionCollection.createInsertionIndices()

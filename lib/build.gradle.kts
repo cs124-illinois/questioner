@@ -1,4 +1,3 @@
-import java.io.File
 import java.io.StringWriter
 import java.util.Properties
 
@@ -19,11 +18,14 @@ dependencies {
     implementation("io.github.java-diff-utils:java-diff-utils:4.12")
     implementation("org.ow2.asm:asm:9.6")
     implementation("org.mongodb:mongodb-driver:3.12.14")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.20")
 
     api("com.beyondgrader.resource-agent:agent:2023.9.0")
-    api("com.beyondgrader.resource-agent:virtualfsplugin:2023.9.0")
-    api("org.cs124.jeed:core:2023.11.2")
-    api("org.cs124:jenisol:2023.11.2")
+    api("com.beyondgrader.resource-agent:virtualfsplugin:2023.9.0") {
+        exclude(group = "com.github.cs124-illinois.jeed", module = "core")
+    }
+    api("org.cs124.jeed:core:2023.11.4")
+    api("org.cs124:jenisol:2023.11.4")
     api("org.cs124:libcs1:2023.11.1")
     api("com.fasterxml.jackson.core:jackson-databind:2.16.0")
 

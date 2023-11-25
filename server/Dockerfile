@@ -9,7 +9,7 @@ ENTRYPOINT ["/tini", "--"]
 WORKDIR /
 COPY *.jar questioner.jar
 CMD java -ea --enable-preview -Dfile.encoding=UTF-8 \
-    -Xms1G -Xmx1G -Xss256k \
+    -Xss256k -XX:InitialRAMPercentage=50 -XX:MaxRAMPercentage=50 \
     -XX:+UseZGC -XX:ZCollectionInterval=8 -XX:-OmitStackTraceInFastThrow \
     --add-opens java.base/java.lang=ALL-UNNAMED \
     --add-opens java.base/java.util=ALL-UNNAMED \

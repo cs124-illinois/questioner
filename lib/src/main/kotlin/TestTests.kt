@@ -1,11 +1,36 @@
 package edu.illinois.cs.cs125.questioner.lib
 
-import edu.illinois.cs.cs125.jeed.core.*
+import edu.illinois.cs.cs125.jeed.core.CheckstyleArguments
+import edu.illinois.cs.cs125.jeed.core.CheckstyleFailed
+import edu.illinois.cs.cs125.jeed.core.CompilationArguments
+import edu.illinois.cs.cs125.jeed.core.CompilationFailed
+import edu.illinois.cs.cs125.jeed.core.CompiledSource
+import edu.illinois.cs.cs125.jeed.core.ConfiguredSandboxPlugin
+import edu.illinois.cs.cs125.jeed.core.JeedClassLoader
+import edu.illinois.cs.cs125.jeed.core.KompilationArguments
+import edu.illinois.cs.cs125.jeed.core.KtLintArguments
+import edu.illinois.cs.cs125.jeed.core.KtLintFailed
+import edu.illinois.cs.cs125.jeed.core.LineLimitExceeded
+import edu.illinois.cs.cs125.jeed.core.Sandbox
+import edu.illinois.cs.cs125.jeed.core.Source
+import edu.illinois.cs.cs125.jeed.core.SourceExecutionArguments
+import edu.illinois.cs.cs125.jeed.core.TemplatingFailed
+import edu.illinois.cs.cs125.jeed.core.checkstyle
+import edu.illinois.cs.cs125.jeed.core.compile
+import edu.illinois.cs.cs125.jeed.core.fromJavaSnippet
+import edu.illinois.cs.cs125.jeed.core.fromKotlinSnippet
+import edu.illinois.cs.cs125.jeed.core.fromTemplates
+import edu.illinois.cs.cs125.jeed.core.kompile
+import edu.illinois.cs.cs125.jeed.core.ktLint
 import edu.illinois.cs.cs125.jeed.core.moshi.CompiledSourceResult
 import edu.illinois.cs.cs125.jenisol.core.isPackagePrivate
 import edu.illinois.cs.cs125.jenisol.core.isPrivate
 import edu.illinois.cs.cs125.jenisol.core.isStatic
-import org.objectweb.asm.*
+import org.objectweb.asm.ClassReader
+import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.MethodVisitor
+import org.objectweb.asm.Opcodes
 import java.lang.reflect.InvocationTargetException
 import java.time.Instant
 import kotlin.math.roundToInt
@@ -79,7 +104,8 @@ suspend fun Question.testTests(
     val executionArguments = Sandbox.ExecutionArguments(
         timeout = limits.timeout.toLong(),
         maxOutputLines = limits.outputLimit,
-        permissions = Question.SAFE_PERMISSIONS,
+        permissions = SourceExecutionArguments.GENERALLY_UNSAFE_PERMISSIONS,
+        permissionBlacklist = true,
         returnTimeout = Question.DEFAULT_RETURN_TIMEOUT
     )
 
