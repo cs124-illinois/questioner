@@ -1,7 +1,7 @@
 package edu.illinois.cs.cs125.questioner.plugin
 
-import edu.illinois.cs.cs125.questioner.lib.Question
-import edu.illinois.cs.cs125.questioner.lib.loadFromPath
+import edu.illinois.cs.cs125.questioner.lib.QuestionCoordinates
+import edu.illinois.cs.cs125.questioner.lib.loadCoordinatesFromPath
 import org.gradle.api.DefaultTask
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.Input
@@ -40,7 +40,7 @@ abstract class GenerateMetatests : DefaultTask() {
         val input = project.layout.buildDirectory.dir("questioner/questions.json").get().asFile
 
         val sourceRoot = project.javaSourceDir()
-        val tests = loadFromPath(input, sourceRoot.path).values.organizeTests()
+        val tests = loadCoordinatesFromPath(input, sourceRoot.path).organizeTests()
         if (tests.isEmpty()) {
             logger.warn("No questions found.")
             return
@@ -96,11 +96,11 @@ abstract class GenerateMetatests : DefaultTask() {
     }
 }
 
-fun Collection<Question>.organizeTests() =
+fun Collection<QuestionCoordinates>.organizeTests() =
     map {
         it.metadata.packageName.packageNames()
     }.flatten().distinct().sortedBy { it.split(".").size }.let { packageNames ->
-        val byPackage: MutableMap<String, List<Question>> = mutableMapOf()
+        val byPackage: MutableMap<String, List<QuestionCoordinates>> = mutableMapOf()
         packageNames.forEach { name ->
             val depth = name.split(".").size
             check(depth >= 1) { "Invalid depth when organizing questions" }
@@ -119,7 +119,7 @@ fun Collection<Question>.organizeTests() =
         byPackage
     }.entries.sortedBy { it.key.length }
 
-fun List<Question>.generateTest(
+fun List<QuestionCoordinates>.generateTest(
     packageName: String,
     klass: String,
     sourceRoot: File,
@@ -138,10 +138,10 @@ fun List<Question>.generateTest(
                     else -> true
                 }
             }
-            .sortedBy { it.name }
+            .sortedBy { it.published.name }
             .joinToString(separator = "\n") {
-                """|  "${it.name} (${it.metadata.packageName}) should validate" {
-               |    validator.validate("${it.name}", verbose = false, force = ${
+                """|  "${it.published.name} (${it.metadata.packageName}) should validate" {
+               |    validator.validate("${it.published.name}", verbose = false, force = ${
                     if (onlyFocused) {
                         "true"
                     } else {

@@ -40,6 +40,8 @@ suspend fun Question.test(
     settings: Question.TestingSettings = testingSettings!!,
     isSolution: Boolean = false
 ): TestResults {
+    warm()
+
     val results = TestResults(language)
 
     // initialize partial credit information

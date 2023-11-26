@@ -18,6 +18,7 @@ import edu.illinois.cs.cs125.jeed.core.compilationCacheSizeMB
 import edu.illinois.cs.cs125.jeed.core.useCompilationCache
 import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
+import edu.illinois.cs.cs125.questioner.lib.QuestionCoordinates
 import edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring
 import edu.illinois.cs.cs125.questioner.lib.TestResults
 import edu.illinois.cs.cs125.questioner.lib.TestTestResults
@@ -121,11 +122,6 @@ private val stumperSolutionCollection: MongoCollection<BsonDocument> = run {
     MongoClient(mongoUri).getDatabase(database).getCollection("solutions", BsonDocument::class.java)
 }
 
-@JsonClass(generateAdapter = true)
-data class SkinnyQuestion(val published: Question.Published, val metadata: Question.Metadata) {
-    val path = "${published.author}/${published.path}/${published.version}/${metadata.contentHash}"
-}
-
 data class QuestionPath(val path: String, val version: String, val author: String) {
     companion object {
         fun fromSubmission(submission: Submission) =
@@ -149,9 +145,9 @@ object Questions {
     private fun questionFromDocument(document: BsonDocument, id: String): Question? {
         val json = document.toJson()
         return try {
-            moshi.adapter(SkinnyQuestion::class.java).fromJson(json)!!.let { skinnyQuestion ->
-                questionCache.get(skinnyQuestion.path) {
-                    logger.debug { "Question cache miss for ${skinnyQuestion.path}" }
+            moshi.adapter(QuestionCoordinates::class.java).fromJson(json)!!.let { questionCoordinates ->
+                questionCache.get(questionCoordinates.path) {
+                    logger.debug { "Question cache miss for ${questionCoordinates.path}" }
                     try {
                         moshi.adapter(Question::class.java).fromJson(json)
                     } catch (e: Exception) {
@@ -217,7 +213,8 @@ object Questions {
         }
     }
 
-    suspend fun test(submission: Submission, question: Question): TestResults {
+    suspend fun test(submission: Submission, question: Question): Pair<TestResults, Long> {
+        question.warm()
         val start = Instant.now().toEpochMilli()
         val timeout = question.testingSettings!!.timeout * (System.getenv("TIMEOUT_MULTIPLIER")?.toInt() ?: 1)
         val settings = question.testingSettings!!.copy(
@@ -230,8 +227,10 @@ object Questions {
             submission.contents,
             language = submission.language,
             settings = settings,
-        ).also {
+        ).let {
+            val duration = Instant.now().toEpochMilli() - start
             logger.trace { "Tested ${question.name} in ${Instant.now().toEpochMilli() - start}" }
+            Pair(it, duration)
         }
     }
 
@@ -250,15 +249,18 @@ object Questions {
         submission: TestSubmission,
         question: Question,
         settings: Question.TestTestingSettings,
-    ): TestTestResults {
+    ): Pair<TestTestResults, Long> {
+        question.warm()
         val start = Instant.now().toEpochMilli()
         logger.trace { "Test tests for ${question.name}" }
         return question.testTests(
             submission.contents,
             language = submission.language,
             settings = settings,
-        ).also {
+        ).let {
+            val duration = Instant.now().toEpochMilli() - start
             logger.trace { "Tests tested for ${question.name} in ${Instant.now().toEpochMilli() - start}" }
+            Pair(it, duration)
         }
     }
 }
@@ -444,7 +446,7 @@ fun Application.questioner() {
             @Suppress("TooGenericExceptionCaught")
             try {
                 val startMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
-                val testResults = limiter.withPermit {
+                val (testResults, duration) = limiter.withPermit {
                     Questions.test(submission, question)
                 }
                 call.respond(
@@ -458,7 +460,7 @@ fun Application.questioner() {
                 logger.debug {
                     "$runCount: ${submission.path}: $startMemory -> $endMemory (${
                         Instant.now().toEpochMilli() - submitted.toEpochMilli()
-                    })"
+                    }, ${duration})"
                 }
                 logger.debug { "Cache hit rate: ${questionCache.stats().hitRate()} (Size $questionCacheSize)" }
                 try {
@@ -510,13 +512,13 @@ fun Application.questioner() {
             try {
                 val startMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
                 val testSettings = Question.TestTestingSettings(limit = submission.limit)
-                val results = limiter.withPermit { Questions.testtest(submission, question, testSettings) }
+                val (results, duration) = limiter.withPermit { Questions.testtest(submission, question, testSettings) }
                 call.respond(ServerTestResponse(results, false, CacheStats(questionCache.stats())))
                 val endMemory = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
                 logger.debug {
                     "$runCount: test/${submission.path}: $startMemory -> $endMemory (${
                         Instant.now().toEpochMilli() - start
-                    })"
+                    }, $duration)"
                 }
             } catch (e: StackOverflowError) {
                 e.printStackTrace()

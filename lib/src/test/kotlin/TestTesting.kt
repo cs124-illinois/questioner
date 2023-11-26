@@ -17,6 +17,9 @@ private val validator = Validator(
 )
 
 class TestTesting : StringSpec({
+    "it should load questions" {
+        loadFromPath(Path.of(object {}::class.java.getResource("/questions.json")!!.toURI()).toFile(), "")
+    }
     "it should test a question" {
         val (question) = validator.validate("Add One", force = true, testing = true).also { (question, report) ->
             question.validated shouldBe true

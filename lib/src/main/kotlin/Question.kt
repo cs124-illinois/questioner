@@ -36,6 +36,17 @@ private val sharedClassWhitelist = setOf(
 @Suppress("EnumNaming", "EnumEntryName")
 enum class Language { java, kotlin }
 
+@JsonClass(generateAdapter = true)
+data class QuestionCoordinates(
+    val published: Question.Published,
+    val metadata: Question.Metadata,
+    val testingSettings: Question.TestingSettings?,
+    val validated: Boolean = testingSettings != null
+) {
+    val path = "${published.author}/${published.path}/${published.version}/${metadata.contentHash}"
+}
+
+
 @Suppress("MemberVisibilityCanBePrivate", "LargeClass", "TooManyFunctions")
 @JsonClass(generateAdapter = true)
 data class Question(
@@ -512,6 +523,7 @@ ${question.contents}
         }
     }
 
+    @delegate:Transient
     val solution by lazy {
         jenisol(compiledSolution.classLoader.loadClass(klass))
     }
@@ -579,6 +591,16 @@ ${question.contents}
         const val MIN_PER_TEST_LINES = 1024
         const val DEFAULT_MAX_OUTPUT_SIZE = 8 * 1024 * 1024
     }
+
+    fun warm() {
+        // warm
+        compiledCommon
+        compiledSolution
+        compiledSolutionForTesting
+        compilationDefinedClass
+        solution
+        featureChecker
+    }
 }
 
 fun String.deTemplate(template: String?): String {
@@ -595,7 +617,7 @@ fun String.deTemplate(template: String?): String {
     }
 }
 
-fun Question.validationFile(sourceDir: String) = File(
+fun QuestionCoordinates.validationFile(sourceDir: String) = File(
     sourceDir,
     "${metadata.packageName.replace(".", File.separator)}/.validation.json"
 )
@@ -605,38 +627,33 @@ fun Question.reportFile(sourceDir: String) = File(
     "${metadata.packageName.replace(".", File.separator)}/report.html"
 )
 
-fun loadFromPath(questionsFile: File, sourceDir: String, validated: Boolean = true): Map<String, Question> {
-    return moshi.adapter<Map<String, Question>>(
+fun loadQuestionFile(questionsFile: File, sourceDir: String): Map<QuestionCoordinates, String> =
+    moshi.adapter<Map<String, Any>>(
         Types.newParameterizedType(
             Map::class.java,
             String::class.java,
-            Question::class.java
+            Any::class.java
         )
-    ).fromJson(questionsFile.readText())!!.toMutableMap().mapValues { (_, question) ->
-        if (validated) {
-            val validationPath = question.validationFile(sourceDir)
-            if (!validationPath.exists()) {
-                return@mapValues question
-            }
-            val validatedQuestion = try {
-                moshi.adapter(Question::class.java).fromJson(validationPath.readText())!!
-            } catch (e: Exception) {
-                println("WARN: Validation file ${validationPath.path} does not match schema. Removing to be safe.")
-                validationPath.delete()
-                return@mapValues question
-            }
-            if (question.metadata.contentHash != validatedQuestion.metadata.contentHash) {
-                return@mapValues question
-            }
-            validatedQuestion
-        } else {
-            question
+    ).fromJson(questionsFile.readText())!!.mapValues { (_, value) ->
+        moshi.adapter(Any::class.java).toJson(value)
+    }.mapKeys { (_, value) ->
+        moshi.adapter(QuestionCoordinates::class.java).fromJson(value)!!
+    }.mapValues { (questionCoordinates, question) ->
+        val validationPath = questionCoordinates.validationFile(sourceDir)
+        when (validationPath.exists()) {
+            false -> question
+            true -> validationPath.readText()
         }
-    }.toMap()
-}
+    }
 
-fun Collection<Question>.toJSON(): String =
-    moshi.adapter<List<Question>>(Types.newParameterizedType(List::class.java, Question::class.java))
+
+fun loadCoordinatesFromPath(questionsFile: File, sourceDir: String) = loadQuestionFile(questionsFile, sourceDir).keys
+
+fun loadFromPath(questionsFile: File, sourceDir: String) =
+    loadQuestionFile(questionsFile, sourceDir).mapKeys { (questionCoordinates) -> questionCoordinates.published.name }
+
+fun Collection<String>.toJSON(): String =
+    moshi.adapter<List<String>>(Types.newParameterizedType(List::class.java, String::class.java))
         .toJson(this.toList())
 
 fun File.loadQuestions() = try {
@@ -644,7 +661,7 @@ fun File.loadQuestions() = try {
         Types.newParameterizedType(
             Map::class.java,
             String::class.java,
-            Question::class.java
+            QuestionCoordinates::class.java
         )
     ).fromJson(readText())!!
 } catch (e: Exception) {

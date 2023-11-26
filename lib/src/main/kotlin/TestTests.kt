@@ -45,6 +45,8 @@ suspend fun Question.testTests(
     check(type != Question.Type.SNIPPET) { "Test testing not supported for snippets" }
     check(settings.limit >= 2) { "Limit must be at least 2" }
 
+    warm()
+
     val testKlass = "Test$klass"
     val results = TestTestResults(language)
 

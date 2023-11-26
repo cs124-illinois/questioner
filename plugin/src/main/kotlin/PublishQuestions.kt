@@ -2,7 +2,7 @@
 
 package edu.illinois.cs.cs125.questioner.plugin
 
-import edu.illinois.cs.cs125.questioner.lib.loadFromPath
+import edu.illinois.cs.cs125.questioner.lib.loadQuestionFile
 import edu.illinois.cs.cs125.questioner.lib.toJSON
 import org.apache.hc.client5.http.fluent.Request
 import org.apache.hc.core5.http.ContentType
@@ -29,18 +29,19 @@ open class PublishQuestions : DefaultTask() {
         val uri = URI(destination)
         require(uri.scheme == "http" || uri.scheme == "https") { "Invalid destination scheme: ${uri.scheme}" }
         val questions =
-            loadFromPath(
+            loadQuestionFile(
                 project.layout.buildDirectory.dir("questioner/questions.json").get().asFile,
                 project.javaSourceDir().path,
-            ).values.filter {
+            ).filterKeys {
                 it.metadata.publish != false
             }
+
         require(questions.isNotEmpty()) { "No questions to publish" }
-        require(questions.all { it.validated }) { "Cannot publish until all questions are validated" }
+        require(questions.keys.all { it.validated }) { "Cannot publish until all questions are validated" }
         Request
             .post(uri)
             .addHeader("authorization", """Bearer $token""")
-            .bodyString(questions.toJSON(), ContentType.APPLICATION_JSON)
+            .bodyString(questions.values.toJSON(), ContentType.APPLICATION_JSON)
             .execute()
             .returnResponse().also {
                 check(it.code == HttpStatusCodes.STATUS_CODE_OK) { "Bad status for $destination: ${it.code}" }
