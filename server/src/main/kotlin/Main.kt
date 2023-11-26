@@ -460,7 +460,7 @@ fun Application.questioner() {
                 logger.debug {
                     "$runCount: ${submission.path}: $startMemory -> $endMemory (${
                         Instant.now().toEpochMilli() - submitted.toEpochMilli()
-                    }, ${duration})"
+                    }, $duration)"
                 }
                 logger.debug { "Cache hit rate: ${questionCache.stats().hitRate()} (Size $questionCacheSize)" }
                 try {

@@ -644,16 +644,27 @@ fun loadQuestionFile(questionsFile: File, sourceDir: String): Map<QuestionCoordi
             false -> question
             true -> validationPath.readText()
         }
+    }.mapKeys { (questionCoordinates) ->
+        val validationPath = questionCoordinates.validationFile(sourceDir)
+        when (validationPath.exists()) {
+            false -> questionCoordinates
+            true -> moshi.adapter(QuestionCoordinates::class.java).fromJson(validationPath.readText())!!
+        }
     }
 
+
+fun loadQuestionsFromPath(questionsFile: File, sourceDir: String) =
+    loadQuestionFile(questionsFile, sourceDir).mapValues { (_, json) ->
+        moshi.adapter(Question::class.java).fromJson(json)!!
+    }
 
 fun loadCoordinatesFromPath(questionsFile: File, sourceDir: String) = loadQuestionFile(questionsFile, sourceDir).keys
 
 fun loadFromPath(questionsFile: File, sourceDir: String) =
     loadQuestionFile(questionsFile, sourceDir).mapKeys { (questionCoordinates) -> questionCoordinates.published.name }
 
-fun Collection<String>.toJSON(): String =
-    moshi.adapter<List<String>>(Types.newParameterizedType(List::class.java, String::class.java))
+fun Collection<Question>.toJSON(): String =
+    moshi.adapter<List<Question>>(Types.newParameterizedType(List::class.java, Question::class.java))
         .toJson(this.toList())
 
 fun File.loadQuestions() = try {
@@ -661,7 +672,7 @@ fun File.loadQuestions() = try {
         Types.newParameterizedType(
             Map::class.java,
             String::class.java,
-            QuestionCoordinates::class.java
+            Question::class.java
         )
     ).fromJson(readText())!!
 } catch (e: Exception) {

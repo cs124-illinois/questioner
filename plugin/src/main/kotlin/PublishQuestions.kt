@@ -2,7 +2,7 @@
 
 package edu.illinois.cs.cs125.questioner.plugin
 
-import edu.illinois.cs.cs125.questioner.lib.loadQuestionFile
+import edu.illinois.cs.cs125.questioner.lib.loadQuestionsFromPath
 import edu.illinois.cs.cs125.questioner.lib.toJSON
 import org.apache.hc.client5.http.fluent.Request
 import org.apache.hc.core5.http.ContentType
@@ -29,7 +29,7 @@ open class PublishQuestions : DefaultTask() {
         val uri = URI(destination)
         require(uri.scheme == "http" || uri.scheme == "https") { "Invalid destination scheme: ${uri.scheme}" }
         val questions =
-            loadQuestionFile(
+            loadQuestionsFromPath(
                 project.layout.buildDirectory.dir("questioner/questions.json").get().asFile,
                 project.javaSourceDir().path,
             ).filterKeys {

@@ -9,7 +9,7 @@ plugins {
 }
 allprojects {
     group = "org.cs124"
-    version = "2023.11.13"
+    version = "2023.11.14"
 }
 subprojects {
     tasks.withType<KotlinCompile> {
