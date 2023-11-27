@@ -36,6 +36,8 @@ import edu.illinois.cs.cs125.questioner.lib.Whitelist
 import edu.illinois.cs.cs125.questioner.lib.Wrap
 import edu.illinois.cs.cs125.questioner.lib.loadQuestions
 import edu.illinois.cs.cs125.questioner.lib.saveQuestions
+import edu.illinois.cs.cs125.questioner.lib.toCoordinates
+import edu.illinois.cs.cs125.questioner.lib.validationFile
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
 import org.gradle.api.plugins.JavaPluginExtension
@@ -76,7 +78,7 @@ abstract class SaveQuestions : DefaultTask() {
     @TaskAction
     fun save() {
         val existingQuestions = outputFile.loadQuestions().values.associateBy { it.metadata.contentHash }
-        inputFiles.filter { it.name.endsWith(".java") }
+        val currentQuestions = inputFiles.filter { it.name.endsWith(".java") }
             .map {
                 try {
                     ParsedJavaFile(it)
@@ -86,9 +88,24 @@ abstract class SaveQuestions : DefaultTask() {
             }
             .findQuestions(inputFiles.map { it.path }, existingQuestions)
             .associateBy { it.name }
-            .also {
-                outputFile.saveQuestions(it)
+        outputFile.saveQuestions(currentQuestions)
+        val sourceDir = project.extensions.getByType(JavaPluginExtension::class.java)
+            .sourceSets.getByName("main").allJava.sourceDirectories.first().absolutePath
+        currentQuestions.values.forEach { question ->
+            val validationFile = question.validationFile(sourceDir)
+            if (!validationFile.exists()) {
+                return@forEach
             }
+            val questionCoordinates = try {
+                validationFile.readText().toCoordinates()!!
+            } catch (e: Exception) {
+                validationFile.delete()
+                return@forEach
+            }
+            if (questionCoordinates.metadata.contentHash != question.metadata.contentHash) {
+                validationFile.delete()
+            }
+        }
     }
 }
 

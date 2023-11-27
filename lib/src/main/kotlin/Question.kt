@@ -622,6 +622,11 @@ fun QuestionCoordinates.validationFile(sourceDir: String) = File(
     "${metadata.packageName.replace(".", File.separator)}/.validation.json"
 )
 
+fun Question.validationFile(sourceDir: String) = File(
+    sourceDir,
+    "${metadata.packageName.replace(".", File.separator)}/.validation.json"
+)
+
 fun Question.reportFile(sourceDir: String) = File(
     sourceDir,
     "${metadata.packageName.replace(".", File.separator)}/report.html"
@@ -648,7 +653,14 @@ fun loadQuestionFile(questionsFile: File, sourceDir: String): Map<QuestionCoordi
         val validationPath = questionCoordinates.validationFile(sourceDir)
         when (validationPath.exists()) {
             false -> questionCoordinates
-            true -> moshi.adapter(QuestionCoordinates::class.java).fromJson(validationPath.readText())!!
+            true -> {
+                val newCoordinates = moshi.adapter(QuestionCoordinates::class.java).fromJson(validationPath.readText())!!
+                if (newCoordinates.metadata.contentHash == questionCoordinates.metadata.contentHash) {
+                    newCoordinates
+                } else {
+                    questionCoordinates
+                }
+            }
         }
     }
 
@@ -709,6 +721,8 @@ fun String.toReason() = when (uppercase()) {
     "CLASSSIZE" -> Question.IncorrectFile.Reason.CLASSSIZE
     else -> error("Invalid incorrect reason: $this")
 }
+
+fun String.toCoordinates() = moshi.adapter(QuestionCoordinates::class.java).fromJson(this)
 
 private inline infix fun <reified T : Any> T.merge(other: T): T {
     val nameToProperty = T::class.declaredMemberProperties.associateBy { it.name }
