@@ -23,9 +23,7 @@ import edu.illinois.cs.cs125.jeed.core.processCoverage
 import edu.illinois.cs.cs125.jenisol.core.Settings
 import edu.illinois.cs.cs125.jenisol.core.SubmissionDesignError
 import edu.illinois.cs.cs125.jenisol.core.TestResult
-import org.objectweb.asm.Type
 import java.lang.reflect.InvocationTargetException
-import java.lang.reflect.Method
 
 class CachePoisonedException(message: String) : Error(message)
 
@@ -65,7 +63,8 @@ suspend fun Question.test(
                 compileSubmission(
                     source,
                     InvertingClassLoader(setOf(klass)),
-                    results
+                    results,
+                    settings.suppressions ?: setOf()
                 )
 
             Language.kotlin ->
@@ -304,6 +303,7 @@ suspend fun Question.test(
     if (!checkExecutedSubmission(taskResults, results, language)) {
         return results
     }
+    results.completedSteps.add(TestResults.Step.checkExecutedSubmission)
 
     results.complete.partial!!.passedSteps.design = true
 
@@ -344,6 +344,11 @@ suspend fun Question.test(
         )
     }
 
+
+    results.complete.recursion = checkRecursion(klassName, language, settings, isSolution, results)
+    results.completedSteps.add(TestResults.Step.recursion)
+
+    /*
     fun List<TestResults.TestingResult.TestResult>.recursiveMethods() = asSequence().filter {
         it.submissionResourceUsage!!.invokedRecursiveFunctions.isNotEmpty()
     }.map {
@@ -371,14 +376,14 @@ suspend fun Question.test(
     }
 
     val missingRecursiveMethods = expectedRecursiveMethods - testingResults.recursiveMethods()
-    if (missingRecursiveMethods.isNotEmpty()) {
+    if (missingRecursiveMethods.isNotEmpty() && passedTestCount > 0) {
         results.failed.checkExecutedSubmission =
             "Method ${missingRecursiveMethods.first().methodName} was not implemented recursively"
         results.failedSteps.add(TestResults.Step.checkExecutedSubmission)
         return results
     }
+    */
 
-    results.completedSteps.add(TestResults.Step.checkExecutedSubmission)
 
     // executioncount soft failure
     results.complete.executionCount = TestResults.ResourceUsageComparison(
@@ -446,7 +451,8 @@ suspend fun Question.test(
                 it.executionCount?.failed == true ||
                 it.memoryAllocation?.failed == true ||
                 it.coverage?.failed == true ||
-                it.classSize?.failed == true
+                it.classSize?.failed == true ||
+                it.recursion?.failed == true
         } == false
 
     return results

@@ -3,7 +3,6 @@
 package edu.illinois.cs.cs125.questioner.lib
 
 import edu.illinois.cs.cs125.jeed.core.Features
-import java.lang.RuntimeException
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 import java.lang.reflect.ParameterizedType

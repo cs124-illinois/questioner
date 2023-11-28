@@ -237,7 +237,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT,
             Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
         ),
-        solutionDeadCode = solutionDeadCode
+        solutionDeadCode = solutionDeadCode,
+        suppressions = correct.suppressions
         // No execution count limit
         // No allocation limit
         // No known recursive methods yet
@@ -326,7 +327,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         solutionAllocation = bootstrapSolutionAllocation,
         solutionRecursiveMethods = solutionRecursiveMethods,
         solutionDeadCode = solutionDeadCode,
-        solutionClassSize = bootstrapClassSize
+        solutionClassSize = bootstrapClassSize,
+        suppressions = correct.suppressions
     )
     val incorrectResults = allIncorrect.map { wrong ->
         val specificIncorrectSettings = if (wrong.reason == Question.IncorrectFile.Reason.MEMORYLIMIT) {
@@ -334,6 +336,11 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             incorrectSettings.copy(testCount = bootstrapSettings.testCount)
         } else {
             incorrectSettings
+        }.let {
+            when (wrong.mutation != null) {
+                true -> it
+                false -> it.copy(suppressions = wrong.suppressions)
+            }
         }
         test(
             wrong.contents,
@@ -346,7 +353,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     }
     val incorrectLength = Instant.now().toEpochMilli() - incorrectStart.toEpochMilli()
 
-    val useTestingIncorrect = incorrectResults.mapIndexed { i, result ->
+    val useTestingIncorrect = incorrectResults.mapIndexed { _, result ->
         when {
             result.results.timeout || (result.results.failureCount ?: 0) == 0 -> null
             else -> result
@@ -386,7 +393,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
                 result.incorrect.language,
                 incorrectIndex,
                 allIncorrect[i].mutation?.mutations?.first()?.mutation?.mutationType,
-                failureIndex
+                failureIndex,
+                result.incorrect.suppressions
             ), result.incorrect.contents
         )
     }.sortedWith(
@@ -430,7 +438,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         ),
         solutionRecursiveMethods = solutionRecursiveMethods,
         solutionDeadCode = solutionDeadCode,
-        solutionClassSize = bootstrapClassSize
+        solutionClassSize = bootstrapClassSize,
+        suppressions = correct.suppressions
     )
     val calibrationResults = (setOf(correct) + alternativeSolutions).map { right ->
         test(
@@ -505,7 +514,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         ),
         solutionRecursiveMethods = solutionRecursiveMethods,
         solutionDeadCode = solutionDeadCode,
-        solutionClassSize = bootstrapClassSize
+        solutionClassSize = bootstrapClassSize,
+        suppressions = correct.suppressions
     )
 
     testTestingLimits = Question.TestTestingLimits(
@@ -534,7 +544,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         executionCounts = solutionExecutionCounts,
         memoryAllocation = solutionAllocation,
         solutionRecursiveMethods = solutionRecursiveMethods,
-        solutionLoadedClasses = solutionLoadedClasses,
+        solutionLoadedClasses = solutionLoadedClasses
     )
     published.validationResults = validationResults
 
@@ -582,7 +592,7 @@ private fun TestResults.validate(reason: Question.IncorrectFile.Reason) {
             "Expected submission to allocate too much memory: ${complete.memoryAllocation}"
         }
 
-        Question.IncorrectFile.Reason.RECURSION -> require(failed.checkExecutedSubmission?.contains("was not implemented recursively") == true) {
+        Question.IncorrectFile.Reason.RECURSION -> require(complete.recursion?.failed == true) {
             "Expected submission to not correctly provide a recursive method"
         }
 

@@ -303,6 +303,12 @@ export const FeaturesComparison = Record({
 })
 export type FeaturesComparison = Static<typeof FeaturesComparison>
 
+export const RecursionComparison = Record({
+  missingMethods: RuntypeArray(String),
+  failed: Boolean,
+})
+export type RecursionComparison = Static<typeof RecursionComparison>
+
 export const PassedTestCount = Record({
   passed: Number,
   total: Number,
@@ -349,6 +355,7 @@ export const CompletedTasks = Partial({
   partial: PartialCredit,
   // execution
   // checkExecutedSubmission doesn't complete
+  recursion: RecursionComparison,
   executionCount: ExecutionCountComparison,
   memoryAllocation: MemoryAllocationComparison,
   testing: TestingResult,
@@ -411,6 +418,7 @@ export const Step = Union(
   Literal("partial"),
   // execution
   Literal("checkExecutedSubmission"),
+  Literal("recursion"),
   Literal("executioncount"),
   Literal("memoryAllocation"),
   Literal("testing"),
@@ -444,11 +452,20 @@ export const TestingOrder: Step[] = [
   "partial",
   // execution
   "checkExecutedSubmission",
+  "recursion",
   "executioncount",
   "memoryAllocation",
   "testing",
   "coverage",
 ]
+
+export const stepToKey = (step: Step): string => {
+  if (step === "executioncount") {
+    return "executionCount"
+  } else {
+    return step
+  }
+}
 
 export const TestResults = Record({
   language: Languages,

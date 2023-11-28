@@ -8,7 +8,6 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import java.lang.IllegalStateException
 
 class TestSaveQuestions : StringSpec(
     {
@@ -31,6 +30,7 @@ import edu.illinois.cs.cs125.jenisol.core.NotNull;
 )
 @Import(paths="examples.second, examples.first")
 @Wrap
+@SuppressWarnings("rawtypes")
 public class Second {
   public void correct(@NotNull String input) { }
   public void also(@NotNull String input) { }
@@ -51,6 +51,50 @@ public class Second {
                     it.author shouldBe "challen@illinois.edu"
                     it.description shouldBe "<p>Here is a <em>description</em>.</p>"
                 }
+                parsedFile.suppressions shouldBe listOf("rawtypes")
+            }
+        }
+        "should parse a question file with multiple suppressions" {
+            ParsedJavaFile(
+                "Second.java",
+                """
+package examples;
+
+import edu.illinois.cs.cs125.questioner.lib.Correct;
+import edu.illinois.cs.cs125.jenisol.core.NotNull;
+
+/*
+ * Here is a _description_.
+ */
+@Correct(
+  name="Test",
+  version="2020.6.0",
+  author="challen@illinois.edu"
+)
+@Import(paths="examples.second, examples.first")
+@Wrap
+@SuppressWarnings({ "rawtypes", "unchecked" })
+public class Second {
+  public void correct(@NotNull String input) { }
+  public void also(@NotNull String input) { }
+}
+""".trim(),
+            ).also { parsedFile ->
+                parsedFile.packageName shouldBe "examples"
+                parsedFile.className shouldBe "Second"
+                parsedFile.fullName shouldBe "examples.Second"
+
+                parsedFile.correct shouldNotBe null
+                parsedFile.type shouldBe "Correct"
+                parsedFile.wrapWith shouldBe "Second"
+
+                parsedFile.correct!!.also {
+                    it.name shouldBe "Test"
+                    it.version shouldBe "2020.6.0"
+                    it.author shouldBe "challen@illinois.edu"
+                    it.description shouldBe "<p>Here is a <em>description</em>.</p>"
+                }
+                parsedFile.suppressions shouldBe listOf("rawtypes", "unchecked")
             }
         }
         "should parse a Kotlin alternate static solution" {

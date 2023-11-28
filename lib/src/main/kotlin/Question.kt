@@ -212,7 +212,7 @@ data class Question(
         val seed: Int?,
         val maxComplexityMultiplier: Double?,
         val maxLineCountMultiplier: Double?,
-        val maxClassSizeMultiplier: Double?
+        val maxClassSizeMultiplier: Double?,
     ) {
         companion object {
             const val DEFAULT_SOLUTION_THROWS = false
@@ -262,7 +262,7 @@ data class Question(
                 DEFAULT_SEED,
                 DEFAULT_MAX_COMPLEXITY_MULTIPLIER,
                 DEFAULT_MAX_LINECOUNT_MULTIPLIER,
-                DEFAULT_MAX_CLASSSIZE_MULTIPLIER
+                DEFAULT_MAX_CLASSSIZE_MULTIPLIER,
             )
         }
     }
@@ -294,6 +294,7 @@ data class Question(
         var solutionRecursiveMethods: LanguagesRecursiveMethods? = null,
         val minTestCount: Int = -1,
         val maxTestCount: Int = -1,
+        val suppressions: Set<String>? = null
     )
 
     @JsonClass(generateAdapter = true)
@@ -367,7 +368,8 @@ data class Question(
         val complexity: Int? = null,
         val features: Features? = null,
         val lineCount: LineCounts? = null,
-        val expectedDeadCount: Int? = null
+        val expectedDeadCount: Int? = null,
+        val suppressions: Set<String> = setOf()
     )
 
     @JsonClass(generateAdapter = true)
@@ -380,6 +382,7 @@ data class Question(
         val starter: Boolean,
         var needed: Boolean = true,
         var testCount: Int = -1,
+        val suppressions: Set<String> = setOf(),
         @Transient
         val mutation: MutatedSource? = null
     ) {
@@ -395,7 +398,8 @@ data class Question(
         val language: Language,
         val incorrectIndex: Int?,
         val mutation: Mutation.Type?,
-        val testCount: Int
+        val testCount: Int,
+        val suppressions: Set<String> = setOf()
     ) {
 
         @Transient
@@ -420,7 +424,8 @@ data class Question(
                     question.compileSubmission(
                         source,
                         InvertingClassLoader(setOf(question.klass)),
-                        results
+                        results,
+                        suppressions
                     )
 
                 Language.kotlin ->
@@ -654,7 +659,8 @@ fun loadQuestionFile(questionsFile: File, sourceDir: String): Map<QuestionCoordi
         when (validationPath.exists()) {
             false -> questionCoordinates
             true -> {
-                val newCoordinates = moshi.adapter(QuestionCoordinates::class.java).fromJson(validationPath.readText())!!
+                val newCoordinates =
+                    moshi.adapter(QuestionCoordinates::class.java).fromJson(validationPath.readText())!!
                 if (newCoordinates.metadata.contentHash == questionCoordinates.metadata.contentHash) {
                     newCoordinates
                 } else {

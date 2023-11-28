@@ -1,15 +1,15 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.9.20" apply false
+    kotlin("jvm") version "1.9.21" apply false
     id("org.jmailen.kotlinter") version "4.1.0" apply false
     id("com.github.ben-manes.versions") version "0.50.0"
-    id("com.google.devtools.ksp").version("1.9.20-1.0.14") apply false
+    id("com.google.devtools.ksp").version("1.9.21-1.0.15") apply false
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
 }
 allprojects {
     group = "org.cs124"
-    version = "2023.11.15"
+    version = "2023.11.16"
 }
 subprojects {
     tasks.withType<KotlinCompile> {

@@ -7,6 +7,7 @@ import phrases from "./phrases"
 export const DEFAULT_WARNING_ORDER: Array<Step> = [
   "checkstyle",
   "ktlint",
+  "recursion",
   "complexity",
   "features",
   "lineCount",
@@ -37,9 +38,10 @@ export const simplifyTestResult = (result: TestingResult): TestResult[] => {
 }
 
 export type OutputOptions = {
-  successMessage: string
+  successMessage?: string
   showWarnings?: Step[]
   treatAsErrors?: Step[]
+  showWithTestResults?: Step[]
   defaultIndentation?: number
 }
 const DEFAULT_OPTIONS: OutputOptions = {
@@ -251,12 +253,18 @@ export const terminalOutput = (
   }
   if (complete.memoryAllocation?.failed === true) {
     const { solution, submission } = complete.memoryAllocation
-    warnings["executioncount"] = `Your submission uses too much memory:\n${indentString(
+    warnings["memoryAllocation"] = `Your submission uses too much memory:\n${indentString(
       `The solution allocated ${solution} bytes to complete the tests.\nYour submission needed ${submission} (${Math.round(
         (submission / solution) * 100,
       )}%).`,
       indentation,
     )}`
+  }
+  if (complete.recursion?.failed === true) {
+    warnings["recursion"] =
+      `Your submission did not implement required recursive methods recursively: ${complete.recursion.missingMethods.join(
+        ", ",
+      )}`
   }
   if (results.succeeded !== true) {
     if (results.failureCount === undefined) {
@@ -304,7 +312,7 @@ export const terminalOutput = (
     warnings["testing"] = message
   }
 
-  const { showWarnings, treatAsErrors } = outputOptions
+  const { showWarnings, treatAsErrors, showWithTestResults } = outputOptions
 
   if (showWarnings) {
     for (const warning of Object.keys(warnings) as Step[]) {
@@ -318,7 +326,20 @@ export const terminalOutput = (
   if (Object.keys(warnings).length === 0) {
     return { error: false, retry: false, output: `${outputOptions.successMessage} ${wellDone}!` }
   } else if (warnings["testing"]) {
-    return { error: false, retry: false, output: warnings["testing"] }
+    let header
+    for (const which of DEFAULT_WARNING_ORDER) {
+      if (warnings[which] && showWithTestResults && showWithTestResults.includes(which)) {
+        header = `Your submission will eventually be considered incorrect because of this error:\n${indentString(
+          warnings[which] as string,
+          indentation,
+        )}`
+      }
+    }
+    if (header) {
+      return { error: false, retry: false, output: `${header}\n---\n${warnings["testing"]}` }
+    } else {
+      return { error: false, retry: false, output: warnings["testing"] }
+    }
   } else {
     for (const which of DEFAULT_WARNING_ORDER) {
       if (warnings[which]) {
@@ -326,7 +347,7 @@ export const terminalOutput = (
           return {
             error: false,
             retry: false,
-            output: `Your code the tests, but was considered incorrect because of this error:\n${indentString(
+            output: `Your code passed the tests, but was considered incorrect because of this error:\n${indentString(
               warnings[which] as string,
               indentation,
             )}`,

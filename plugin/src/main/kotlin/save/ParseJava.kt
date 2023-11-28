@@ -54,6 +54,15 @@ data class ParsedJavaFile(val path: String, val contents: String) {
     val className = parseTree.className()
 
     val fullName = "$packageName.$className"
+    val suppressions = topLevelClass.getAnnotations(SuppressWarnings::class.java).asSequence().map { annotation ->
+        if (annotation.elementValue()?.expression() != null) {
+            listOf(annotation.elementValue()?.expression()?.text)
+        } else if (annotation.elementValue()?.elementValueArrayInitializer() != null) {
+            annotation.elementValue().elementValueArrayInitializer().elementValue().map { it.text }
+        } else {
+            error("Invalid @SuppressWarnings annotation")
+        }
+    }.flatten().filterNotNull().map { it.removeSurrounding("\"") }.toSet()
 
     private fun ImportDeclarationContext.toFullName() = qualifiedName().asString() + if (MUL() != null) {
         ".*"
@@ -368,6 +377,7 @@ $cleanContent
                 features,
                 lineCounts,
                 deadlineCount,
+                suppressions = suppressions,
             ),
             questionType,
         )
@@ -429,6 +439,7 @@ $cleanContent
                 Language.java,
                 null,
                 true,
+                suppressions = suppressions,
             )
         }
     }
@@ -442,6 +453,7 @@ $cleanContent
             Language.java,
             path,
             starter != null,
+            suppressions = suppressions,
         )
     }
 
@@ -499,6 +511,7 @@ $cleanContent
             features,
             lineCounts,
             deadlineCount,
+            suppressions = suppressions,
         )
     }
 
@@ -511,6 +524,7 @@ $cleanContent
             Language.java,
             path,
             true,
+            suppressions = suppressions,
         )
     }
 

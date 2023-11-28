@@ -222,4 +222,43 @@ int mapSize(Map<String, Integer> map) {
             }
         }
     }
+    "it should test recursive question correctly" {
+        val (question) = validator.validate("Recursive Factorial", force = true, testing = true)
+            .also { (question, report) ->
+                question.validated shouldBe true
+                report shouldNotBe null
+                report!!.requiredTestCount shouldBeGreaterThan 0
+            }
+        """
+public class Question {
+  public static long factorial(long input) {
+    return 0;
+  }
+}
+""".trim().also { incorrect ->
+            question.test(incorrect, Language.java).also { results ->
+                results.complete.testing!!.tests.count { it.passed } shouldBe 0
+                results.complete.recursion!!.failed shouldBe true
+            }
+        }
+        """
+public class Question {
+  public static long factorial(long input) {
+    if (input <= 0) {
+      throw new IllegalArgumentException();
+    }
+    long result = 1;
+    for (long multiplier = 2; multiplier <= input; multiplier++) {
+      result *= multiplier;
+    }
+    return result;
+  }
+}
+""".trim().also { incorrect ->
+            question.test(incorrect, Language.java).also { results ->
+                results.failed.checkExecutedSubmission shouldBe null
+                results.complete.recursion!!.failed shouldBe true
+            }
+        }
+    }
 })

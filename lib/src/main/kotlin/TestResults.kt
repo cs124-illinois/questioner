@@ -55,6 +55,7 @@ data class TestResults(
         partial,
         // execution
         checkExecutedSubmission,
+        recursion,
         executioncount,
         memoryAllocation,
         testing,
@@ -75,6 +76,7 @@ data class TestResults(
         var partial: PartialCredit? = null,
         // execution
         // checkExecutedSubmission doesn't complete
+        var recursion: RecursionComparison? = null,
         var executionCount: ResourceUsageComparison? = null,
         var memoryAllocation: ResourceUsageComparison? = null,
         var testing: TestingResult? = null,
@@ -91,6 +93,7 @@ data class TestResults(
         check(complete.complexity?.failed == false)
         check(complete.features?.failed == false)
         check(complete.lineCount?.failed == false)
+        check(complete.recursion?.failed == false)
         check(complete.executionCount?.failed == false)
         check(complete.memoryAllocation?.failed == false)
         check(complete.coverage?.failed == false)
@@ -173,6 +176,9 @@ data class TestResults(
         val errors: List<String>,
         val failed: Boolean = errors.isNotEmpty()
     )
+
+    @JsonClass(generateAdapter = true)
+    data class RecursionComparison(val missingMethods: List<String>, val failed: Boolean = missingMethods.isNotEmpty())
 
     @JsonClass(generateAdapter = true)
     data class PartialCredit(

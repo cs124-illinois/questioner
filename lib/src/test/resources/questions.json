@@ -17,14 +17,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Write a class method that provides a recursive implementation of factorial,\n * accepting and returning `long` arguments.\n * Throw an `IllegalArgumentException` on invalid inputs.\n */\n\n@Correct(name = \"Recursive Factorial\", version = \"2022.7.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  public static long factorial(long input) {\n    if (input <= 0) { // mutate-disable-conditional-boundary\n      throw new IllegalArgumentException();\n    }\n    if (input == 1) {\n      return 1;\n    }\n    return input * factorial(input - 1);\n  }\n\n  @FixedParameters private static final List<Long> FIXED = Arrays.asList(-10L, -1L, 0L, 1L, 2L);\n\n  @RandomParameters\n  private static long randomParameters(Random random) {\n    return random.nextInt(32);\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/recursivefactorial/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/recursivefactorial/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -326,7 +327,8 @@
         "comment": 0,
         "blank": 1
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [
       {
@@ -504,7 +506,8 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       }
     ],
     "incorrect": [
@@ -516,7 +519,8 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/recursivefactorial/incorrect/java/iterative/Question.java",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": []
       }
     ],
     "common": [],
@@ -699,7 +703,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "hasKotlin": true,
     "published": {
@@ -1189,7 +1194,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -1207,14 +1212,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.EdgeType;\nimport edu.illinois.cs.cs125.jenisol.core.ProvideFileSystem;\nimport edu.illinois.cs.cs125.jenisol.core.RandomType;\nimport edu.illinois.cs.cs125.jenisol.core.SimpleType;\nimport edu.illinois.cs.cs125.jenisol.core.generators.JenisolFileSystem;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.io.IOException;\nimport java.nio.charset.StandardCharsets;\nimport java.util.Map;\nimport java.util.Random;\nimport java.util.Scanner;\n\n/*\n * Question to test filesystem generation.\n */\n\n@Correct(name = \"Read Hello World!\", version = \"2023.11.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  @ProvideFileSystem\n  public static void test() throws IOException {\n    // mutate-disable-string-literal-trim mutate-disable-string-literal\n    String greeter = new Scanner(\"testing.txt\").useDelimiter(\"\\\\A\").next();\n    System.out.println(greeter);\n  }\n\n  @SimpleType\n  private static final JenisolFileSystem[] SIMPLE =\n      new JenisolFileSystem[] {\n        new JenisolFileSystem(\n            Map.of(\"testing.txt\", \"Hello, world!\".getBytes(StandardCharsets.UTF_8)))\n      };\n\n  @EdgeType private static final JenisolFileSystem[] EDGE = new JenisolFileSystem[] {};\n\n  @RandomType\n  private static JenisolFileSystem randomInput(Random random) {\n    return new JenisolFileSystem(\n        Map.of(\"testing.txt\", (\"\" + random.nextInt()).getBytes(StandardCharsets.UTF_8)));\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/readhelloworld/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/readhelloworld/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -1422,7 +1428,8 @@
         "comment": 1,
         "blank": 2
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [],
     "incorrect": [],
@@ -1653,7 +1660,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -1671,14 +1678,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Write a method named `equals88` that returns `true` if its `int` argument is equal to 88,\n * our magic number.\n */\n\n@Correct(name = \"Equals 88\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\n@Wrap\npublic class Question {\n  boolean equals88(int value) {\n    return value == 88;\n  }\n\n  @FixedParameters private static final List<Integer> FIXED = Arrays.asList(88, 188, 888, 8);\n\n  @RandomParameters\n  private static int randomInts(Random random) {\n    if (random.nextBoolean()) {\n      return 88;\n    } else {\n      return random.nextInt();\n    }\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/equals88/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/equals88/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -1778,7 +1786,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [],
     "incorrect": [],
@@ -1902,7 +1911,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -1923,14 +1932,17 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Squirrel",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.jenisol.core.Three;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Generators;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Define a public class named `Squirrel`.\n * The `Squirrel` constructor should accept a `String` name, `String` tree, and `int` acorns,\n * in that order.\n * Reject `null` names and trees using `assert`, and also `assert` that acorns is greater than 0\n * and less than or equal to 24.\n * (Squirrels don't get too greedy and never acquire more acorns than that!)\n * Override equals and consider two `Squirrel` instances to be equal if they have the same name\n * and tree.\n * Do not provide getters or setters for your variables or expose them publicly.\n */\n\n@SuppressWarnings(\"FieldCanBeLocal\")\n@Correct(name = \"Squirrel Equality\", version = \"2022.7.0\", author = \"challen@illinois.edu\")\npublic class Squirrel {\n  private final String name;\n  private final String tree;\n  private final int acorns;\n\n  public Squirrel(String setName, String setTree, int setAcorns) {\n    assert setName != null;\n    assert setTree != null;\n    assert setAcorns > 0 && setAcorns <= 9;\n    name = setName;\n    tree = setTree;\n    acorns = setAcorns;\n  }\n\n  @Override\n  public boolean equals(Object o) {\n    if (!(o instanceof Squirrel other)) {\n      return false;\n    }\n    return name.equals(other.name) && tree.equals(other.tree);\n  }\n\n  @FixedParameters\n  private static final List<Three<String, String, Integer>> FIXED =\n      Arrays.asList(\n          new Three<>(\"Patch\", \"Elm\", 8),\n          new Three<>(null, \"Elm\", 8),\n          new Three<>(\"Patch\", null, 8),\n          new Three<>(\"Patch\", \"Elm\", 0),\n          new Three<>(\"Patch\", \"Elm\", 10),\n          new Three<>(\"Patch\", \"Elm\", 9),\n          new Three<>(\"Marty\", \"Elm\", 8),\n          new Three<>(\"Patch\", \"Oak\", 1),\n          new Three<>(\"Patch\", \"Elm\", 8));\n\n  @RandomParameters\n  private static Three<String, String, Integer> randomParameters(Random random) {\n    String name = Generators.randomAlphanumericString(random, 16);\n    String breed = Generators.randomAlphanumericString(random, 32);\n    int lives = random.nextInt(26);\n    return new Three<>(name, breed, lives);\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/tripleequals/Squirrel.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/tripleequals/Squirrel.java",
+      "suppressions": [
+        "FieldCanBeLocal"
+      ]
     },
     "correct": {
       "klass": "Squirrel",
@@ -2527,7 +2539,10 @@
         "comment": 0,
         "blank": 3
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": [
+        "FieldCanBeLocal"
+      ]
     },
     "alternativeSolutions": [
       {
@@ -2905,7 +2920,8 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       }
     ],
     "incorrect": [],
@@ -3289,7 +3305,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "hasKotlin": true,
     "published": {
@@ -4274,7 +4291,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -4295,14 +4312,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Counter",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Define and implement a `public` class `Counter`.\n * `Counter` should provide a single public constructor that accepts an `int` parameter.\n * It should also provide `increment` and `decrement` methods, both taking no parameters and\n * returning `void`.\n * `increment` should increase the stored count, while `decrement` should decrease it.\n * Finally, provide a `getValue` method that returns the stored value.\n */\n\n@Correct(name = \"Counter\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\npublic class Counter {\n  private int value;\n\n  public Counter(int setValue) {\n    value = setValue;\n  }\n\n  public void increment() {\n    value++;\n  }\n\n  public void decrement() {\n    value--;\n  }\n\n  public int getValue() {\n    return value;\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/counterobject/Counter.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/counterobject/Counter.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Counter",
@@ -4595,7 +4613,8 @@
         "comment": 0,
         "blank": 5
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [
       {
@@ -4782,7 +4801,8 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       }
     ],
     "incorrect": [],
@@ -4975,7 +4995,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "hasKotlin": true,
     "published": {
@@ -5465,7 +5486,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -5488,7 +5509,7 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {
       "maxDeadCode": 2
@@ -5497,7 +5518,8 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Given two `int` variables `first` and `second` that are already declared and initialized,\n * print their sum.\n */\n\n@Correct(name = \"Print Sum\", author = \"challen@illinois.edu\", version = \"2021.6.0\", maxDeadCode = 2)\npublic class Question {\n  public static void printSum(int first, int second) {\n    // TEMPLATE_START\n    System.out.println(first + second);\n    // TEMPLATE_END\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/printsum/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/printsum/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -5552,7 +5574,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [
       {
@@ -5696,7 +5719,10 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": [
+          "ConstantConditions"
+        ]
       },
       {
         "klass": "QuestionKt",
@@ -5749,7 +5775,8 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       }
     ],
     "incorrect": [
@@ -5761,7 +5788,10 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/printsum/incorrect/java/toomuchoutput/Question.java",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": [
+          "InfiniteLoopStatement"
+        ]
       }
     ],
     "common": [],
@@ -5822,7 +5852,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "hasKotlin": true,
     "published": {
@@ -5941,7 +5972,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -5959,14 +5990,17 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\n\n/*\n * Write a method `larger` that returns the larger of two `int` arguments.\n */\n@SuppressWarnings(\"ManualMinMaxCalculation\")\n@Correct(name = \"Larger of Two\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\n@Wrap\npublic class Question {\n  int larger(int first, int second) {\n    if (first > second) { // mutate-disable-conditional-boundary\n      return first;\n    } else {\n      return second;\n    }\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/largestoftwo/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/largestoftwo/Question.java",
+      "suppressions": [
+        "ManualMinMaxCalculation"
+      ]
     },
     "correct": {
       "klass": "Question",
@@ -6164,7 +6198,10 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": [
+        "ManualMinMaxCalculation"
+      ]
     },
     "alternativeSolutions": [],
     "incorrect": [],
@@ -6386,7 +6423,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -6410,14 +6447,15 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.ArrayList;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Test feature-based dead code correction.\n */\n@Correct(name = \"With Feature Dead Code\", author = \"challen@illinois.edu\", version = \"2023.2.0\")\n@Wrap\npublic class Question {\n  List<Integer> rangeToList(int value) {\n    List<Integer> values = new ArrayList<>();\n    for (int i = 0; i < value; i += 2) {\n      values.add(i);\n    }\n    return values;\n  }\n\n  @FixedParameters private static final List<Integer> FIXED = Arrays.asList(0, 8);\n\n  @RandomParameters\n  private static int randomParameters(Random random) {\n    return random.nextInt(32);\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withfeaturedeadcode/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withfeaturedeadcode/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -6679,7 +6717,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [
       {
@@ -6899,7 +6938,8 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       }
     ],
     "incorrect": [],
@@ -7127,7 +7167,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "hasKotlin": true,
     "published": {
@@ -7622,7 +7663,7 @@
         "java.util.ArrayList",
         "java.util.List"
       ],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -7644,14 +7685,15 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.TemplateImports;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\n\n/*\n * Example to test use of import statements in method templates.\n */\n\n@Correct(name = \"With Template Imports\", version = \"2022.7.0\", author = \"challen@illinois.edu\")\n@Wrap\n@TemplateImports(paths = \"java.util.List,java.util.ArrayList,java.util.Arrays\")\npublic class Question {\n  List<Integer> max(int first, int second) {\n    return Arrays.asList(first, second);\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withtemplateimports/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withtemplateimports/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -7770,7 +7812,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [],
     "incorrect": [],
@@ -7921,7 +7964,7 @@
         "java.util.List",
         "java.util.ArrayList"
       ],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -7944,14 +7987,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Example",
       "contents": "import edu.illinois.cs.cs125.jeed.core.FeatureName;\nimport edu.illinois.cs.cs125.jeed.core.Features;\nimport edu.illinois.cs.cs125.questioner.lib.CheckFeatures;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.FeatureCheckException;\nimport edu.illinois.cs.cs125.questioner.lib.Language;\nimport java.util.ArrayList;\nimport java.util.List;\n\n/*\n * Test to ensure that we can detect unnecessary Kotlin setter or getter overrides.\n */\n\n@Correct(\n    name = \"Test Bad Kotlin Getter Setter\",\n    version = \"2023.10.0\",\n    author = \"challen@illinois.edu\")\npublic class Example {\n  private String name;\n\n  public Example(String setName) {\n    name = setName;\n  }\n\n  public String getName() {\n    return name;\n  }\n\n  public void setName(String setName) {\n    name = setName;\n  }\n\n  @CheckFeatures\n  private static List<String> checkFeatures(\n      Language language, Features solution, Features submission) {\n    if (language == Language.kotlin) {\n      if (submission.getFeatureMap().containsKey(FeatureName.GETTER)) {\n        throw new FeatureCheckException(\"Solution overrides a getter unnecessarily\");\n      }\n      if (submission.getFeatureMap().containsKey(FeatureName.SETTER)) {\n        throw new FeatureCheckException(\"Solution overrides a setter unnecessarily\");\n      }\n    }\n    return new ArrayList<>();\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badkotlingettersetter/Example.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badkotlingettersetter/Example.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Example",
@@ -8217,7 +8261,8 @@
         "comment": 0,
         "blank": 4
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [
       {
@@ -8265,7 +8310,8 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       }
     ],
     "incorrect": [
@@ -8277,7 +8323,8 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badkotlingettersetter/incorrect/kotlin/badsetter/Example.kt",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": []
       },
       {
         "klass": "Example",
@@ -8287,7 +8334,8 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badkotlingettersetter/incorrect/kotlin/badgetter/Example.kt",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": []
       }
     ],
     "common": [],
@@ -8340,7 +8388,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "hasKotlin": true,
     "published": {
@@ -8664,7 +8713,341 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
+    },
+    "fauxStatic": false
+  },
+  "Test Raw Types": {
+    "name": "Test Raw Types",
+    "type": "KLASS",
+    "klass": "Question",
+    "metadata": {
+      "contentHash": "80372b0e7d4e514d671829b477af19a7",
+      "packageName": "com.examples.testing.withrawtypes",
+      "version": "2023.11.0",
+      "author": "challen@illinois.edu",
+      "javaDescription": "<p>Test support for raw type error filtering.</p>",
+      "usedFiles": [],
+      "templateImports": [],
+      "focused": true,
+      "publish": true,
+      "questionerVersion": "2023.11.16"
+    },
+    "annotatedControls": {},
+    "question": {
+      "klass": "Question",
+      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\nimport java.util.ArrayList;\nimport java.util.List;\n\n/*\n * Test support for raw type error filtering.\n */\n@SuppressWarnings(\"rawtypes\")\n@Correct(name = \"Test Raw Types\", version = \"2023.11.0\", author = \"challen@illinois.edu\", focused = true)\npublic class Question {\n  public static List testing() {\n    return new ArrayList();\n  }\n}",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withrawtypes/Question.java",
+      "suppressions": [
+        "rawtypes"
+      ]
+    },
+    "correct": {
+      "klass": "Question",
+      "contents": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Question {\n  public static List testing() {\n    return new ArrayList();\n  }\n}\n",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withrawtypes/Question.java",
+      "complexity": 1,
+      "features": {
+        "featureMap": {
+          "METHOD": 1,
+          "RETURN": 1,
+          "CLASS": 1,
+          "NEW_KEYWORD": 1,
+          "VISIBILITY_MODIFIERS": 2,
+          "STATIC_METHOD": 1,
+          "IMPORT": 2
+        },
+        "featureList": [
+          {
+            "feature": "IMPORT",
+            "location": {
+              "line": 1,
+              "column": 0
+            }
+          },
+          {
+            "feature": "IMPORT",
+            "location": {
+              "line": 2,
+              "column": 0
+            }
+          },
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 4,
+              "column": 0
+            }
+          },
+          {
+            "feature": "CLASS",
+            "location": {
+              "line": 4,
+              "column": 7
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 4,
+              "column": 22
+            }
+          },
+          {
+            "feature": "VISIBILITY_MODIFIERS",
+            "location": {
+              "line": 5,
+              "column": 2
+            }
+          },
+          {
+            "feature": "STATIC_METHOD",
+            "location": {
+              "line": 5,
+              "column": 9
+            }
+          },
+          {
+            "feature": "METHOD",
+            "location": {
+              "line": 5,
+              "column": 16
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 5,
+              "column": 31
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 6,
+              "column": 4
+            }
+          },
+          {
+            "feature": "RETURN",
+            "location": {
+              "line": 6,
+              "column": 4
+            }
+          },
+          {
+            "feature": "NEW_KEYWORD",
+            "location": {
+              "line": 6,
+              "column": 11
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 6,
+              "column": 26
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 7,
+              "column": 2
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 8,
+              "column": 0
+            }
+          }
+        ],
+        "importList": [
+          "java.util.ArrayList",
+          "java.util.List"
+        ],
+        "typeList": [
+          "List"
+        ],
+        "identifierList": [],
+        "dottedMethodList": []
+      },
+      "lineCount": {
+        "source": 7,
+        "comment": 0,
+        "blank": 2
+      },
+      "expectedDeadCount": 0,
+      "suppressions": [
+        "rawtypes"
+      ]
+    },
+    "alternativeSolutions": [],
+    "incorrect": [],
+    "common": [],
+    "importWhitelist": [],
+    "importBlacklist": [],
+    "checkstyleSuppressions": [],
+    "slug": "test-raw-types",
+    "hasKotlin": false,
+    "published": {
+      "name": "Test Raw Types",
+      "type": "KLASS",
+      "path": "test-raw-types",
+      "author": "challen@illinois.edu",
+      "version": "2023.11.0",
+      "packageName": "com.examples.testing.withrawtypes",
+      "languages": [
+        "java"
+      ],
+      "descriptions": {
+        "java": "<p>Test support for raw type error filtering.</p>"
+      },
+      "complexity": {
+        "java": 1
+      },
+      "features": {
+        "java": {
+          "featureMap": {
+            "METHOD": 1,
+            "RETURN": 1,
+            "CLASS": 1,
+            "NEW_KEYWORD": 1,
+            "VISIBILITY_MODIFIERS": 2,
+            "STATIC_METHOD": 1,
+            "IMPORT": 2
+          },
+          "featureList": [
+            {
+              "feature": "IMPORT",
+              "location": {
+                "line": 1,
+                "column": 0
+              }
+            },
+            {
+              "feature": "IMPORT",
+              "location": {
+                "line": 2,
+                "column": 0
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 4,
+                "column": 0
+              }
+            },
+            {
+              "feature": "CLASS",
+              "location": {
+                "line": 4,
+                "column": 7
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 4,
+                "column": 22
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 5,
+                "column": 2
+              }
+            },
+            {
+              "feature": "STATIC_METHOD",
+              "location": {
+                "line": 5,
+                "column": 9
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 5,
+                "column": 16
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 5,
+                "column": 31
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 6,
+                "column": 4
+              }
+            },
+            {
+              "feature": "RETURN",
+              "location": {
+                "line": 6,
+                "column": 4
+              }
+            },
+            {
+              "feature": "NEW_KEYWORD",
+              "location": {
+                "line": 6,
+                "column": 11
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 6,
+                "column": 26
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 7,
+                "column": 2
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 8,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [
+            "java.util.ArrayList",
+            "java.util.List"
+          ],
+          "typeList": [
+            "List"
+          ],
+          "identifierList": [],
+          "dottedMethodList": []
+        }
+      },
+      "lineCounts": {
+        "java": {
+          "source": 7,
+          "comment": 0,
+          "blank": 2
+        }
+      },
+      "templateImports": [],
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -8685,14 +9068,15 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.NotNull;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Map;\n\n/*\n * Test whether Map automatic whitelisting works.\n * Note that tests are in Questioner.\n */\n\n@Correct(name = \"With Map Extras\", author = \"challen@illinois.edu\", version = \"2023.9.0\")\n@Wrap\npublic class Question {\n  int mapSize(@NotNull Map<String, Integer> map) {\n    return map.size();\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withmapextras/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withmapextras/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -8820,7 +9204,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [],
     "incorrect": [],
@@ -8975,7 +9360,7 @@
         "java.util.Map",
         "java.util.Set"
       ],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -8993,14 +9378,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.NotNull;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Testing @NotNull annotation on constructor parameters.\n */\n\n@Correct(name = \"Test Constructor NotNull\", version = \"2022.10.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  private final int stringLength;\n\n  public Question(@NotNull String value) {\n    stringLength = value.length();\n  }\n\n  public int getStringLength() {\n    return stringLength;\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withconstructornotnull/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withconstructornotnull/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -9215,7 +9601,8 @@
         "comment": 0,
         "blank": 3
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [],
     "incorrect": [],
@@ -9453,7 +9840,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -9477,14 +9864,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Child",
       "contents": "import edu.illinois.cs.cs125.jeed.core.FeatureName;\nimport edu.illinois.cs.cs125.jeed.core.Features;\nimport edu.illinois.cs.cs125.jenisol.core.Both;\nimport edu.illinois.cs.cs125.questioner.lib.CheckFeatures;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.FeatureCheckException;\nimport java.util.ArrayList;\nimport java.util.List;\n\n/*\n * Test bad use of superclass method.\n */\n\n@Correct(\n    name = \"Bad Extra Private Variable\",\n    version = \"2023.10.0\",\n    author = \"challen@illinois.edu\")\npublic class Child extends Parent {\n  private final String firstName;\n\n  public Child(String setFirstName, String setLastName) {\n    super(setLastName);\n    firstName = setFirstName;\n  }\n\n  @Override\n  public String toString() {\n    return firstName + \" \" + getLastName();\n  }\n\n  @CheckFeatures\n  private static List<String> checkFeatures(Features solution, Features submission) {\n    int solutionVariableCount = solution.getFeatureMap().getOrDefault(FeatureName.CLASS_FIELD, 0);\n    int submissionVariableCount =\n        submission.getFeatureMap().getOrDefault(FeatureName.CLASS_FIELD, 0);\n    if (submissionVariableCount > solutionVariableCount) {\n      throw new FeatureCheckException(\"Submission declares too many fields\");\n    }\n    return new ArrayList<>();\n  }\n\n  @Both\n  private static String checkName(Parent parent) {\n    return parent.getLastName();\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badextraprivatevariable/Child.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badextraprivatevariable/Child.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Child",
@@ -9739,7 +10127,8 @@
         "comment": 0,
         "blank": 3
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [
       {
@@ -9841,7 +10230,8 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       }
     ],
     "incorrect": [
@@ -9853,7 +10243,8 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badextraprivatevariable/incorrect/java/extraprivatefield/Child.java",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": []
       },
       {
         "klass": "Child",
@@ -9863,7 +10254,8 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/badextraprivatevariable/incorrect/kotlin/extraprivatefield/Child.kt",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": []
       }
     ],
     "common": [
@@ -9972,7 +10364,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "hasKotlin": true,
     "published": {
@@ -10339,7 +10732,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -10357,14 +10750,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Classroom",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Getter and setter testing.\n */\n\n@Correct(\n    name = \"Classroom Getters and Setters\",\n    version = \"2022.9.0\",\n    author = \"challen@illinois.edu\")\npublic class Classroom {\n  private final String name;\n  private int capacity;\n\n  public Classroom(String setName, int setEnrollment) {\n    assert setEnrollment >= 0;\n    assert setName != null;\n    name = setName;\n    capacity = setEnrollment;\n  }\n\n  public int getCapacity() {\n    return capacity;\n  }\n\n  public void setCapacity(int setEnrollment) {\n    assert setEnrollment >= 0;\n    capacity = setEnrollment;\n  }\n\n  public String getName() {\n    return name;\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withgettersandsetters/Classroom.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withgettersandsetters/Classroom.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Classroom",
@@ -10825,7 +11219,8 @@
         "comment": 0,
         "blank": 5
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [],
     "incorrect": [],
@@ -11309,7 +11704,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -11330,14 +11725,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Testing dead code comments.\n */\n@Correct(name = \"With Dead Code Annotation\", version = \"2023.2.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  public static int whatever(int value) {\n    if (value % 2 == 0) {\n      return value * 2;\n    }\n    assert false;\n    // mutate-disable\n    return -1; // dead code\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withdeadcodeannotation/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withdeadcodeannotation/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -11575,7 +11971,8 @@
         "comment": 1,
         "blank": 1
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 1,
+      "suppressions": []
     },
     "alternativeSolutions": [
       {
@@ -11745,7 +12142,8 @@
           "comment": 0,
           "blank": 1
         },
-        "expectedDeadCount": 1
+        "expectedDeadCount": 1,
+        "suppressions": []
       }
     ],
     "incorrect": [],
@@ -11921,7 +12319,8 @@
         "comment": 0,
         "blank": 1
       },
-      "expectedDeadCount": 1
+      "expectedDeadCount": 1,
+      "suppressions": []
     },
     "hasKotlin": true,
     "published": {
@@ -12339,7 +12738,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -12361,14 +12760,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Book",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Question to test detection of Kotlin faux properties in Jenisol 2023.7.0.\n */\n@Correct(\n    name = \"Kotlin Faux Property Testing\",\n    version = \"2023.7.0\",\n    author = \"challen@illinois.edu\")\npublic class Book {\n  private String name;\n\n  public void setName(String setName) {\n    name = setName;\n  }\n\n  public String getName() {\n    return name;\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withkotlinfauxproperty/Book.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withkotlinfauxproperty/Book.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Book",
@@ -12577,7 +12977,8 @@
         "comment": 0,
         "blank": 3
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [
       {
@@ -12663,7 +13064,8 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       }
     ],
     "incorrect": [
@@ -12675,7 +13077,8 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withkotlinfauxproperty/incorrect/withfauxproperty/Book.kt",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": []
       }
     ],
     "common": [],
@@ -12766,7 +13169,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "hasKotlin": true,
     "published": {
@@ -13071,7 +13475,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -13091,14 +13495,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Test to make sure we can parse the empty constructor.\n */\n\n@Correct(name = \"Test Empty Constructor\", version = \"2022.9.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  private int value = 0;\n\n  int next() {\n    return value++;\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withemptyconstructor/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withemptyconstructor/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -13228,7 +13633,8 @@
         "comment": 0,
         "blank": 2
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [
       {
@@ -13409,7 +13815,8 @@
           "comment": 0,
           "blank": 3
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       }
     ],
     "incorrect": [],
@@ -13562,7 +13969,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -13582,14 +13989,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\n\n/*\n * Testing class size based memoization defense.\n */\n\n@Correct(name = \"Test Memoization Defense\", version = \"2023.10.0\", author = \"challen@illinois.edu\")\n@Wrap\npublic class Question {\n  int returnValue(int value) {\n    return value;\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/testmemoizationdefense/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/testmemoizationdefense/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -13672,7 +14080,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [],
     "incorrect": [
@@ -13684,7 +14093,8 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/testmemoizationdefense/incorrect/java/memoized/Question.java",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": []
       }
     ],
     "common": [],
@@ -13790,7 +14200,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -13813,14 +14223,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jeed.core.Features;\nimport edu.illinois.cs.cs125.jenisol.core.BoundComplexity;\nimport edu.illinois.cs.cs125.jenisol.core.FilterParameters;\nimport edu.illinois.cs.cs125.jenisol.core.SkipTest;\nimport edu.illinois.cs.cs125.questioner.lib.CheckFeatures;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.FeatureCheckException;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport edu.illinois.cs.cs125.questioner.lib.features.FeatureHelpers;\nimport java.util.ArrayList;\nimport java.util.List;\n\n/*\n * Test whether feature checking works.\n */\n\n@Correct(name = \"With Feature Check\", author = \"challen@illinois.edu\", version = \"2022.7.0\")\n@Wrap\npublic class Question {\n  @FilterParameters\n  private static void filterParameters(int range) {\n    if (range < 0) {\n      throw new SkipTest();\n    }\n    if (range > 1024) {\n      throw new BoundComplexity();\n    }\n  }\n\n  int sumTo(int range) {\n    return (range * (range + 1)) / 2;\n  }\n\n  @CheckFeatures\n  private static List<String> checkFeatures(Features solution, Features submission) {\n    if (FeatureHelpers.usesLoop(submission)) {\n      throw new FeatureCheckException(\"Submission uses a loop\");\n    }\n    return new ArrayList<>();\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withfeaturecheck/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withfeaturecheck/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -13925,7 +14336,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [
       {
@@ -14023,7 +14435,8 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       }
     ],
     "incorrect": [
@@ -14035,7 +14448,8 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withfeaturecheck/incorrect/java/usesloop/Question.java",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": []
       },
       {
         "klass": "Question",
@@ -14045,7 +14459,8 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/testing/withfeaturecheck/incorrect/kotlin/usesloop/Question.kt",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": []
       }
     ],
     "common": [],
@@ -14150,7 +14565,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "hasKotlin": true,
     "published": {
@@ -14363,7 +14779,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -14381,14 +14797,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.jenisol.core.Two;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Generators;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Write a function `combine` that, given two `String` arguments, returns the second appended to\n * the first.\n * Except you should omit the first two characters of each `String`.\n * For example, given `Java` and `Kotlin`, you would return `vatlin`.\n * You can assume that each `String` is of length at least two.\n */\n\n@Correct(name = \"Combine Minus Two\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\n@Wrap\npublic class Question {\n  String combine(String first, String second) {\n    return first.substring(2) + second.substring(2);\n  }\n\n  @FixedParameters\n  private static final List<Two<String, String>> FIXED =\n      Arrays.asList(new Two<>(\"Java\", \"Kotlin\"), new Two<>(\"CS125\", \"CS124\"));\n\n  @RandomParameters\n  private static Two<String, String> randomStrings(Random random) {\n    String first = Generators.randomAlphanumericStringWithLength(random, random.nextInt(32) + 2);\n    String second = Generators.randomAlphanumericStringWithLength(random, random.nextInt(32) + 2);\n    return new Two<>(first, second);\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/combineminustwo/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/combineminustwo/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -14533,7 +14950,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [],
     "incorrect": [],
@@ -14702,7 +15120,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -14722,14 +15140,17 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\n\n/*\n * Write a method `fancyCompare` that takes two `String` arguments. If the two `String`s are equal,\n * return -1.\n * Otherwise, return the length of the longer `String`.\n * You should `assert` that both inputs are not `null`.\n */\n\n@SuppressWarnings(\"ManualMinMaxCalculation\")\n@Correct(name = \"Fancy String Compare\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\n@Wrap\npublic class Question {\n  int fancyEquals(String first, String second) {\n    assert first != null;\n    assert second != null;\n    if (first.equals(second)) {\n      return -1;\n      // mutate-disable-conditional-boundary\n      // mutate-disable-modify-length-and-size\n    } else if (first.length() > second.length()) {\n      return first.length();\n    } else {\n      return second.length();\n    }\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/fancystringcompare/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/fancystringcompare/Question.java",
+      "suppressions": [
+        "ManualMinMaxCalculation"
+      ]
     },
     "correct": {
       "klass": "Question",
@@ -15184,7 +15605,10 @@
         "comment": 2,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": [
+        "ManualMinMaxCalculation"
+      ]
     },
     "alternativeSolutions": [],
     "incorrect": [
@@ -15196,7 +15620,11 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/fancystringcompare/incorrect/badequals/Question.java",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": [
+          "ManualMinMaxCalculation",
+          "StringEquality"
+        ]
       }
     ],
     "common": [],
@@ -15674,7 +16102,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -15701,14 +16129,15 @@
       ],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.NotNull;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Generators;\nimport edu.illinois.cs.cs125.questioner.lib.TemplateImports;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.HashSet;\nimport java.util.Random;\nimport java.util.Set;\n\n/*\n * Given a non-`null` `String` containing comma-separated values, write a method `detectDuplicates`\n * that returns `true` if the `String` includes duplicate values, and `false` otherwise.\n * Trim whitespace from all `String`s.\n */\n\n@Correct(name = \"String Duplicates\", author = \"challen@illinois.edu\", version = \"2022.2.0\")\n@Wrap\n@TemplateImports(paths = \"java.util.Map, java.util.HashMap\")\npublic class Question {\n  boolean detectDuplicates(@NotNull String input) {\n    Set<String> values = new HashSet<>();\n    for (String part : input.split(\",\")) {\n      String current = part.trim();\n      if (values.contains(current)) {\n        return true;\n      }\n      values.add(current);\n    }\n    return false;\n  }\n\n  @RandomParameters\n  private static String randomParameters(Random random) {\n    String[] values = new String[random.nextInt(32) + 32];\n    for (int i = 0; i < values.length; i++) {\n      String current = Generators.randomAlphanumericString(random, 32);\n      if (random.nextBoolean()) {\n        values[i] = \" \" + current;\n      } else {\n        values[i] = current + \" \";\n      }\n    }\n    if (random.nextBoolean()) {\n      values[random.nextInt(values.length)] =\n          new String(values[random.nextInt(values.length)].toCharArray());\n    }\n    return String.join(\",\", values);\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/stringduplicates/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/stringduplicates/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -16084,7 +16513,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [
       {
@@ -16485,7 +16915,8 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       },
       {
         "klass": "Question",
@@ -16841,7 +17272,8 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       }
     ],
     "incorrect": [],
@@ -17209,7 +17641,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "hasKotlin": true,
     "published": {
@@ -17957,7 +18390,7 @@
         "java.util.Map",
         "java.util.HashMap"
       ],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -17977,14 +18410,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.FilterParameters;\nimport edu.illinois.cs.cs125.jenisol.core.SkipTest;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Testing question for recursion checks on private methods.\n */\n\n@Correct(name = \"Private Recursive Helper\", version = \"2022.7.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  private static int rangeSumHelper(int range) {\n    if (range == 0) {\n      return 0;\n    }\n    return range + rangeSumHelper(range - 1);\n  }\n\n  @FilterParameters\n  private static void filterRangeSum(int range) {\n    if (range > 1024) {\n      throw new SkipTest();\n    }\n  }\n\n  public static int rangeSum(int range) {\n    if (range < 0) {\n      throw new IllegalArgumentException();\n    }\n    return rangeSumHelper(range);\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/privaterecursivehelper/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/privaterecursivehelper/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -18342,7 +18776,8 @@
         "comment": 0,
         "blank": 2
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [],
     "incorrect": [
@@ -18354,7 +18789,8 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/privaterecursivehelper/incorrect/java/iterative/Question.java",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": []
       }
     ],
     "common": [],
@@ -18734,7 +19170,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -18754,14 +19190,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Write a class method that provides an implementation of factorial, accepting and returning\n * `long` arguments.\n * Throw an `IllegalArgumentException` on invalid inputs.\n * Your implementation can be recursive or not.\n */\n\n@Correct(name = \"Maybe Recursive Factorial\", version = \"2022.7.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  public static long factorial(long input) {\n    if (input <= 0) { // mutate-disable-conditional-boundary\n      throw new IllegalArgumentException();\n    }\n    if (input == 1) {\n      return 1;\n    }\n    return input * factorial(input - 1);\n  }\n\n  @FixedParameters private static final List<Long> FIXED = Arrays.asList(-10L, -1L, 0L, 1L, 2L);\n\n  @RandomParameters\n  private static long randomParameters(Random random) {\n    return random.nextInt(32);\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/mayberecursivefactorial/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/mayberecursivefactorial/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -19063,7 +19500,8 @@
         "comment": 0,
         "blank": 1
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [
       {
@@ -19401,7 +19839,8 @@
           "comment": 0,
           "blank": 1
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       }
     ],
     "incorrect": [],
@@ -19726,7 +20165,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -19747,14 +20186,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Write a class named `Question` with a single `static` method `addOne` that returns its `int`\n * argument plus one.\n */\n\n@Correct(name = \"Add One Class\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\npublic class Question {\n  public static int addOne(int value) {\n    return value + 1;\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addoneclass/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addoneclass/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -19876,7 +20316,8 @@
         "comment": 0,
         "blank": 1
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [
       {
@@ -19952,7 +20393,8 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       }
     ],
     "incorrect": [],
@@ -20034,7 +20476,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "hasKotlin": true,
     "published": {
@@ -20242,7 +20685,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -20262,14 +20705,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Cougar",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.Both;\nimport edu.illinois.cs.cs125.jenisol.core.Limit;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Create and complete the implementation of the `Cougar` class.\n * Your class should be public, not final and not abstract, inherit from the `Feliform` class,\n * and provide the following methods:\n *\n * 1. Constructor that takes a `int` parameter `speed` and a second `weight`.\n * Creates a new `Cougar` with the passed speed and weight.\n * You should call the `Feliform` constructor and pass it the `String` \"cougar\" to identify the type\n * of this feliform.\n * 1. Public instance method `dangerousness` that takes no arguments and returns an `int`.\n * Return the dangerousness of this cougar which equals its speed times its weight.\n * 1. Override `public boolean equals(Object other)`.\n * Return `true` if `other` is a `Cougar` with the same speed and weight, and `false` otherwise.\n * Note that `other` may be `null` or not a `Housecat`.\n *\n * Finally, note that your class should not expose any of its internal state publicly.\n */\n@Correct(name = \"Cougar Feliform\", version = \"2021.7.0\", author = \"challen@illinois.edu\")\npublic class Cougar extends Feliform {\n  private final int speed;\n  private final int weight;\n\n  public Cougar(int setSpeed, int setWeight) {\n    super(\"cougar\");\n    speed = setSpeed;\n    weight = setWeight;\n  }\n\n  @Override\n  public int dangerousness() {\n    return speed * weight;\n  }\n\n  @Override\n  public boolean equals(Object o) {\n    if (!(o instanceof Cougar housecat)) {\n      return false;\n    }\n    return speed == housecat.speed && weight == housecat.weight;\n  }\n\n  @Both\n  @Limit(1)\n  public static String getType(Feliform feliform) {\n    return feliform.getType();\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/cougarfeliform/Cougar.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/cougarfeliform/Cougar.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Cougar",
@@ -20736,7 +21180,8 @@
         "comment": 0,
         "blank": 4
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [],
     "incorrect": [],
@@ -21228,7 +21673,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -21246,14 +21691,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.Limit;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Print \"Hello!\" without the quotes.\n * Using to test support for @Limit annotations.\n */\n\n@Correct(name = \"Print Hello\", author = \"challen@illinois.edu\", version = \"2022.7.0\")\npublic class Question {\n  @Limit(1)\n  public static void printHello() {\n    // TEMPLATE_START\n    System.out.println(\"Hello!\");\n    // TEMPLATE_END\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/printhello/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/printhello/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -21300,7 +21746,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [],
     "incorrect": [],
@@ -21371,7 +21818,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -21392,14 +21839,17 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.EdgeType;\nimport edu.illinois.cs.cs125.jenisol.core.Limit;\nimport edu.illinois.cs.cs125.jenisol.core.ProvideSystemIn;\nimport edu.illinois.cs.cs125.jenisol.core.RandomType;\nimport edu.illinois.cs.cs125.jenisol.core.SimpleType;\nimport edu.illinois.cs.cs125.jenisol.core.generators.SystemIn;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.util.Arrays;\nimport java.util.Random;\nimport java.util.Scanner;\n\n/*\n * Testing STDIN generation and interleaving.\n */\n\n@SuppressWarnings(\"StringOperationCanBeSimplified\")\n@Correct(name = \"Input Interleaving Test\", version = \"2022.9.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  @ProvideSystemIn\n  @Limit(1)\n  public static void echo() {\n    System.out.println(\"Hello!\");\n    Scanner scanner = new Scanner(System.in);\n    String first = scanner.nextLine();\n    System.out.println(\"First: \" + first);\n    String second = scanner.nextLine();\n    System.out.println(\"Second: \" + second);\n  }\n\n  @SimpleType\n  private static final SystemIn[] SIMPLE =\n      new SystemIn[] {new SystemIn(Arrays.asList(\"Test\", \"Me\"))};\n\n  @EdgeType private static final SystemIn[] EDGE = new SystemIn[] {};\n\n  @RandomType\n  private static SystemIn randomInput(Random random) {\n    return new SystemIn(\n        Arrays.asList(new String(\"\" + random.nextInt()), new String(\"\" + random.nextInt())));\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/inputinterleavingtest/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/inputinterleavingtest/Question.java",
+      "suppressions": [
+        "StringOperationCanBeSimplified"
+      ]
     },
     "correct": {
       "klass": "Question",
@@ -21700,7 +22150,10 @@
         "comment": 0,
         "blank": 2
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": [
+        "StringOperationCanBeSimplified"
+      ]
     },
     "alternativeSolutions": [
       {
@@ -22019,7 +22472,8 @@
           "comment": 0,
           "blank": 2
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       }
     ],
     "incorrect": [],
@@ -22344,7 +22798,8 @@
         "comment": 0,
         "blank": 2
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "hasKotlin": true,
     "published": {
@@ -22974,7 +23429,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -22995,14 +23450,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.util.Arrays;\nimport java.util.List;\n\n/*\n * Example to test use of import statements.\n */\n\n@Correct(name = \"With Imports\", version = \"2022.7.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  public static List<Integer> max(int first, int second) {\n    return Arrays.asList(first, second);\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/withimports/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/withimports/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -23170,7 +23626,8 @@
         "comment": 0,
         "blank": 2
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [
       {
@@ -23274,7 +23731,8 @@
           "comment": 0,
           "blank": 2
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       }
     ],
     "incorrect": [],
@@ -23384,7 +23842,8 @@
         "comment": 0,
         "blank": 2
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "hasKotlin": true,
     "published": {
@@ -23666,7 +24125,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -23675,7 +24134,7 @@
     "type": "METHOD",
     "klass": "Question",
     "metadata": {
-      "contentHash": "c768d132152727f85e2000df512675b9",
+      "contentHash": "caeece960704ccde61e07eb0c44286e4",
       "packageName": "com.examples.addone",
       "version": "2021.6.0",
       "author": "challen@illinois.edu",
@@ -23692,18 +24151,19 @@
         "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/correct/kotlin/Question.kt"
       ],
       "templateImports": [],
-      "focused": false,
+      "focused": true,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {
       "maxLineCountMultiplier": 16.0
     },
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\n\n/*\n * Write a method `addOne` that returns its `int` argument plus one.\n */\n\n@Correct(\n    name = \"Add One\",\n    author = \"challen@illinois.edu\",\n    version = \"2021.6.0\",\n    maxLineCountMultiplier = 16)\n@Wrap\npublic class Question {\n  // Here to avoid dead code errors in the memoization test\n  @FixedParameters\n  private static final List<Integer> FIXED =\n      Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);\n\n  int addOne(int value) {\n    return value + 1;\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\n\nimport java.util.Arrays;\nimport java.util.List;\n\n/*\n * Write a method `addOne` that returns its `int` argument plus one.\n */\n\n@Correct(\n  name = \"Add One\",\n  author = \"challen@illinois.edu\",\n  version = \"2021.6.0\",\n  maxLineCountMultiplier = 16,\n  focused = true)\n@Wrap\npublic class Question {\n  // Here to avoid dead code errors in the memoization test\n  @FixedParameters\n  private static final List<Integer> FIXED =\n    Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);\n\n  int addOne(int value) {\n    return value + 1;\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -23794,7 +24254,8 @@
         "comment": 1,
         "blank": 1
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [
       {
@@ -23893,7 +24354,8 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       },
       {
         "klass": "Question",
@@ -23976,7 +24438,8 @@
           "comment": 3,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       }
     ],
     "incorrect": [
@@ -23988,7 +24451,8 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/memoization/Question.java",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": []
       },
       {
         "klass": "Question",
@@ -23998,7 +24462,8 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/addeleven/Question.java",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": []
       },
       {
         "klass": "Question",
@@ -24008,7 +24473,8 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/timeout/Question.java",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": []
       },
       {
         "klass": "Question",
@@ -24018,7 +24484,8 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/toolong/Question.java",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": []
       },
       {
         "klass": "Question",
@@ -24028,7 +24495,8 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/memorylimit/Question.java",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": []
       },
       {
         "klass": "Question",
@@ -24038,7 +24506,8 @@
         "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/deadcode/Question.java",
         "starter": false,
         "needed": true,
-        "testCount": -1
+        "testCount": -1,
+        "suppressions": []
       }
     ],
     "common": [],
@@ -24129,7 +24598,8 @@
         "comment": 3,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "hasKotlin": true,
     "published": {
@@ -24314,7 +24784,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   },
@@ -24336,14 +24806,15 @@
       "templateImports": [],
       "focused": false,
       "publish": true,
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Return the length of a string.\n * Here for Kotlin null memory usage checking.\n */\n\n@Correct(name = \"Kotlin Null Test\", version = \"2022.6.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  public static int length(String test) {\n    assert test != null;\n    return test.length();\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/kotlinnulltest/Question.java"
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/kotlinnulltest/Question.java",
+      "suppressions": []
     },
     "correct": {
       "klass": "Question",
@@ -24530,7 +25001,8 @@
         "comment": 0,
         "blank": 1
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "alternativeSolutions": [
       {
@@ -24628,7 +25100,8 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       },
       {
         "klass": "QuestionKt",
@@ -24711,7 +25184,8 @@
           "comment": 0,
           "blank": 0
         },
-        "expectedDeadCount": 0
+        "expectedDeadCount": 0,
+        "suppressions": []
       }
     ],
     "incorrect": [],
@@ -24815,7 +25289,8 @@
         "comment": 0,
         "blank": 0
       },
-      "expectedDeadCount": 0
+      "expectedDeadCount": 0,
+      "suppressions": []
     },
     "hasKotlin": true,
     "published": {
@@ -25110,7 +25585,7 @@
         }
       },
       "templateImports": [],
-      "questionerVersion": "2023.11.14"
+      "questionerVersion": "2023.11.16"
     },
     "fauxStatic": false
   }

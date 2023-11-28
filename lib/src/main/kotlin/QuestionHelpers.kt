@@ -6,6 +6,7 @@ import com.beyondgrader.resourceagent.jeed.populate
 import edu.illinois.cs.cs125.jeed.core.CheckstyleArguments
 import edu.illinois.cs.cs125.jeed.core.CheckstyleFailed
 import edu.illinois.cs.cs125.jeed.core.CompilationArguments
+import edu.illinois.cs.cs125.jeed.core.CompilationError
 import edu.illinois.cs.cs125.jeed.core.CompilationFailed
 import edu.illinois.cs.cs125.jeed.core.CompiledSource
 import edu.illinois.cs.cs125.jeed.core.Features
@@ -32,8 +33,12 @@ import edu.illinois.cs.cs125.jeed.core.stripComments
 import edu.illinois.cs.cs125.jenisol.core.CaptureOutputControlInput
 import edu.illinois.cs.cs125.jenisol.core.CapturedResult
 import edu.illinois.cs.cs125.jenisol.core.unwrap
+import edu.illinois.cs.cs125.questioner.lib.compilation.filterSuppressions
+import edu.illinois.cs.cs125.questioner.lib.compilation.removeExpected
+import org.objectweb.asm.Type
 import java.io.ByteArrayInputStream
 import java.io.InputStream
+import java.lang.reflect.Method
 import kotlin.random.Random
 
 internal fun String.pluralize(count: Int, plural: String? = null) = if (count == 1) {
@@ -128,7 +133,8 @@ fun Question.checkInitialSubmission(contents: String, language: Language, testRe
 suspend fun Question.compileSubmission(
     source: Source,
     parentClassLoader: ClassLoader,
-    testResults: TestResults
+    testResults: TestResults,
+    suppressions: Set<String>
 ): CompiledSource {
     return try {
         val actualParents = Pair(compiledCommon?.classLoader ?: parentClassLoader, compiledCommon?.fileManager)
@@ -138,8 +144,12 @@ suspend fun Question.compileSubmission(
                 parentFileManager = actualParents.second,
                 parameters = true,
             )
-        ).also {
-            testResults.complete.compileSubmission = CompiledSourceResult(it)
+        ).also { compiledSource ->
+            val errorMessages = compiledSource.messages.removeExpected().filterSuppressions(suppressions)
+            if (errorMessages.isNotEmpty()) {
+                throw CompilationFailed(errorMessages.map { CompilationError(it.location, it.message) })
+            }
+            testResults.complete.compileSubmission = CompiledSourceResult(compiledSource)
             testResults.completedSteps.add(TestResults.Step.compileSubmission)
         }
         testResults.addCheckstyleResults(
@@ -503,6 +513,43 @@ fun Question.computeLineCounts(contents: String, language: Language): TestResult
         (solutionLineCount.source * control.sourceLinesMultiplier!!).toInt(),
         control.minExtraSourceLines!!
     )
+}
+
+fun Question.checkRecursion(
+    klassName: String,
+    language: Language,
+    settings: Question.TestingSettings,
+    isSolution: Boolean,
+    results: TestResults,
+): TestResults.RecursionComparison {
+
+    val submissionRecursiveMethods = results.tests()!!.asSequence().filter {
+        it.submissionResourceUsage!!.invokedRecursiveFunctions.isNotEmpty()
+    }.map {
+        it.jenisol!!.solutionExecutable
+    }.filterIsInstance<Method>().map {
+        ResourceMonitoringResults.MethodInfo(klassName, it.name, Type.getMethodDescriptor(it))
+    }.toSet()
+
+    val expectedRecursiveMethods = if (isSolution) {
+        submissionRecursiveMethods
+    } else {
+        if (language == Language.java) {
+            validationResults?.solutionRecursiveMethods?.java
+                ?: settings.solutionRecursiveMethods?.java
+        } else {
+            validationResults?.solutionRecursiveMethods?.kotlin
+                ?: settings.solutionRecursiveMethods?.kotlin
+        }
+    }
+    check(expectedRecursiveMethods != null)
+
+    if (isSolution) {
+        results.foundRecursiveMethods = expectedRecursiveMethods
+    }
+
+    val missingRecursiveMethods = (expectedRecursiveMethods - submissionRecursiveMethods).map { it.methodName }
+    return TestResults.RecursionComparison(missingRecursiveMethods)
 }
 
 class InvertingClassLoader(

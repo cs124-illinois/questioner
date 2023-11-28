@@ -187,6 +187,17 @@ object Questions {
         questionFromDocument(it.first()!!, "$path/$author")
     }
 
+    private fun getQuestionByContentHash(contentHash: String) = questionerCollection.find(
+        Filters.and(Filters.eq("metadata.contentHash", contentHash)),
+    ).sort(Sorts.descending("updated")).let {
+        @Suppress("ReplaceSizeZeroCheckWithIsEmpty")
+        if (it.count() == 0) {
+            return null
+        }
+        check(it.count() == 1) { "Found multiple contentHash matches" }
+        questionFromDocument(it.first()!!, contentHash)
+    }
+
     private fun getQuestionByPath(path: QuestionPath) = questionerCollection.find(
         Filters.and(
             Filters.eq("published.path", path.path),
@@ -204,12 +215,16 @@ object Questions {
     }
 
     fun load(submission: Submission): Question? {
-        return if (submission.version != null && submission.author != null) {
-            getQuestionByPath(QuestionPath.fromSubmission(submission))
-        } else if (submission.author != null) {
-            getQuestionByAuthor(submission.path, submission.author)
-        } else {
-            getQuestion(submission.path)
+        return when {
+            submission.contentHash != null -> getQuestionByContentHash(submission.contentHash)
+            submission.version != null && submission.author != null -> getQuestionByPath(
+                QuestionPath.fromSubmission(
+                    submission,
+                ),
+            )
+
+            submission.author != null -> getQuestionByAuthor(submission.path, submission.author)
+            else -> getQuestion(submission.path)
         }
     }
 
@@ -276,6 +291,7 @@ data class Submission(
     val author: String?,
     val email: String?,
     val originalID: String?,
+    val contentHash: String?,
 ) {
     constructor(contents: String, language: Language, question: Question) :
         this(
@@ -288,6 +304,7 @@ data class Submission(
             question.published.author,
             null,
             null,
+            question.metadata.contentHash,
         )
 }
 

@@ -528,6 +528,7 @@ fun List<ParsedJavaFile>.findQuestions(
                     solution.removeImports(importNames + wildcardImportNames).stripPackage(),
                     Language.java,
                     solution.path,
+                    suppressions = solution.suppressions,
                 ),
                 cleanSolution,
                 alternateSolutions,
