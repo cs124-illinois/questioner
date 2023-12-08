@@ -18,11 +18,10 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation:2.3.6")
     implementation("io.ktor:ktor-server-call-logging:2.3.6")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
     implementation("org.cs124:ktor-moshi:2023.11.0")
     implementation("org.mongodb:mongodb-driver:3.12.14")
     implementation("org.slf4j:slf4j-api:2.0.9")
-    implementation("ch.qos.logback:logback-classic:1.4.12")
+    implementation("ch.qos.logback:logback-classic:1.4.14")
     implementation("io.github.microutils:kotlin-logging:3.0.5")
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 }

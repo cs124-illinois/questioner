@@ -1,0 +1,945 @@
+{
+  "name": "Add One",
+  "type": "METHOD",
+  "klass": "Question",
+  "metadata": {
+    "contentHash": "caeece960704ccde61e07eb0c44286e4",
+    "packageName": "com.examples.addone",
+    "version": "2021.6.0",
+    "author": "challen@illinois.edu",
+    "javaDescription": "<p>Write a method <code>addOne</code> that returns its <code>int</code> argument plus one.</p>",
+    "kotlinDescription": "<p>Write a method <code>addOne</code> that returns its <code>Int</code> argument plus one.</p>",
+    "usedFiles": [
+      "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/memoization/Question.java",
+      "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/addeleven/Question.java",
+      "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/timeout/Question.java",
+      "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/toolong/Question.java",
+      "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/memorylimit/Question.java",
+      "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/deadcode/Question.java",
+      "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/correct/java/Question.java",
+      "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/correct/kotlin/Question.kt"
+    ],
+    "templateImports": [],
+    "focused": true,
+    "publish": true,
+    "questionerVersion": "2023.11.16"
+  },
+  "annotatedControls": {
+    "maxLineCountMultiplier": 16.0
+  },
+  "question": {
+    "klass": "Question",
+    "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\n\nimport java.util.Arrays;\nimport java.util.List;\n\n/*\n * Write a method `addOne` that returns its `int` argument plus one.\n */\n\n@Correct(\n  name = \"Add One\",\n  author = \"challen@illinois.edu\",\n  version = \"2021.6.0\",\n  maxLineCountMultiplier = 16,\n  focused = true)\n@Wrap\npublic class Question {\n  // Here to avoid dead code errors in the memoization test\n  @FixedParameters\n  private static final List<Integer> FIXED =\n    Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16);\n\n  int addOne(int value) {\n    return value + 1;\n  }\n}",
+    "language": "java",
+    "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/Question.java",
+    "suppressions": []
+  },
+  "correct": {
+    "klass": "Question",
+    "contents": "// Here to avoid dead code errors in the memoization test\n\nint addOne(int value) {\n  return value + 1;\n}",
+    "language": "java",
+    "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/Question.java",
+    "complexity": 1,
+    "features": {
+      "featureMap": {
+        "ARITHMETIC_OPERATORS": 1,
+        "METHOD": 1,
+        "RETURN": 1
+      },
+      "featureList": [
+        {
+          "feature": "BLOCK_START",
+          "location": {
+            "line": 1,
+            "column": 22
+          }
+        },
+        {
+          "feature": "METHOD",
+          "location": {
+            "line": 4,
+            "column": 0
+          }
+        },
+        {
+          "feature": "BLOCK_START",
+          "location": {
+            "line": 4,
+            "column": 22
+          }
+        },
+        {
+          "feature": "STATEMENT_START",
+          "location": {
+            "line": 5,
+            "column": 2
+          }
+        },
+        {
+          "feature": "RETURN",
+          "location": {
+            "line": 5,
+            "column": 2
+          }
+        },
+        {
+          "feature": "ARITHMETIC_OPERATORS",
+          "location": {
+            "line": 5,
+            "column": 9
+          }
+        },
+        {
+          "feature": "STATEMENT_END",
+          "location": {
+            "line": 5,
+            "column": 18
+          }
+        },
+        {
+          "feature": "BLOCK_END",
+          "location": {
+            "line": 6,
+            "column": 0
+          }
+        },
+        {
+          "feature": "BLOCK_END",
+          "location": {
+            "line": 7,
+            "column": 0
+          }
+        }
+      ],
+      "importList": [],
+      "typeList": [
+        "int"
+      ],
+      "identifierList": [],
+      "dottedMethodList": []
+    },
+    "lineCount": {
+      "source": 3,
+      "comment": 1,
+      "blank": 1
+    },
+    "expectedDeadCount": 0,
+    "suppressions": []
+  },
+  "alternativeSolutions": [
+    {
+      "klass": "Question",
+      "contents": "int addOne(int value) {\n  return value + 2 - 1;\n}",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/correct/java/Question.java",
+      "complexity": 1,
+      "features": {
+        "featureMap": {
+          "ARITHMETIC_OPERATORS": 2,
+          "METHOD": 1,
+          "RETURN": 1
+        },
+        "featureList": [
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 1,
+              "column": 22
+            }
+          },
+          {
+            "feature": "METHOD",
+            "location": {
+              "line": 2,
+              "column": 0
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 2,
+              "column": 22
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 3,
+              "column": 2
+            }
+          },
+          {
+            "feature": "RETURN",
+            "location": {
+              "line": 3,
+              "column": 2
+            }
+          },
+          {
+            "feature": "ARITHMETIC_OPERATORS",
+            "location": {
+              "line": 3,
+              "column": 9
+            }
+          },
+          {
+            "feature": "ARITHMETIC_OPERATORS",
+            "location": {
+              "line": 3,
+              "column": 9
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 3,
+              "column": 22
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 4,
+              "column": 0
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 5,
+              "column": 20
+            }
+          }
+        ],
+        "importList": [],
+        "typeList": [
+          "int"
+        ],
+        "identifierList": [],
+        "dottedMethodList": []
+      },
+      "lineCount": {
+        "source": 3,
+        "comment": 0,
+        "blank": 0
+      },
+      "expectedDeadCount": 0,
+      "suppressions": []
+    },
+    {
+      "klass": "Question",
+      "contents": "// Note that this question was originally set up a bit differently in the demo video.\n// Now Kotlin solutions that use @file:AlsoCorrect will not be templated when @Wrap is used on the solution.\n// So the Kotlin solution should follow the class design established by the Java code, even for faux-static methods.\nfun addOne(value: Int): Int {\n  return value + 1\n}",
+      "language": "kotlin",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/correct/kotlin/Question.kt",
+      "complexity": 1,
+      "features": {
+        "featureMap": {
+          "ARITHMETIC_OPERATORS": 1,
+          "METHOD": 1,
+          "RETURN": 1,
+          "STATIC_METHOD": 1
+        },
+        "featureList": [
+          {
+            "feature": "METHOD",
+            "location": {
+              "line": 4,
+              "column": 0
+            }
+          },
+          {
+            "feature": "STATIC_METHOD",
+            "location": {
+              "line": 4,
+              "column": 0
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 4,
+              "column": 28
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 5,
+              "column": 2
+            }
+          },
+          {
+            "feature": "RETURN",
+            "location": {
+              "line": 5,
+              "column": 2
+            }
+          },
+          {
+            "feature": "ARITHMETIC_OPERATORS",
+            "location": {
+              "line": 5,
+              "column": 15
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 5,
+              "column": 17
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 6,
+              "column": 0
+            }
+          }
+        ],
+        "importList": [],
+        "typeList": [],
+        "identifierList": [],
+        "dottedMethodList": []
+      },
+      "lineCount": {
+        "source": 3,
+        "comment": 3,
+        "blank": 0
+      },
+      "expectedDeadCount": 0,
+      "suppressions": []
+    }
+  ],
+  "incorrect": [
+    {
+      "klass": "Question",
+      "contents": "int addOne(int value) {\n  if (value == 1) {\n    return 2;\n  } else if (value == 2) {\n    return 3;\n  } else if (value == 3) {\n    return 4;\n  } else if (value == 4) {\n    return 5;\n  } else if (value == 5) {\n    return 6;\n  } else if (value == 6) {\n    return 7;\n  } else if (value == 7) {\n    return 8;\n  } else if (value == 8) {\n    return 9;\n  } else if (value == 9) {\n    return 10;\n  } else if (value == 10) {\n    return 11;\n  } else if (value == 11) {\n    return 12;\n  } else if (value == 12) {\n    return 13;\n  } else if (value == 13) {\n    return 14;\n  } else if (value == 14) {\n    return 15;\n  } else if (value == 15) {\n    return 16;\n  } else if (value == 16) {\n    return 17;\n  } else {\n    return value + 1;\n  }\n}",
+      "reason": "MEMOIZATION",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/memoization/Question.java",
+      "starter": false,
+      "needed": true,
+      "testCount": -1,
+      "suppressions": []
+    },
+    {
+      "klass": "Question",
+      "contents": "int addOne(int value) {\n  return value + 11;\n}",
+      "reason": "TEST",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/addeleven/Question.java",
+      "starter": false,
+      "needed": true,
+      "testCount": -1,
+      "suppressions": []
+    },
+    {
+      "klass": "Question",
+      "contents": "int addOne(int value) {\n  int j = 0;\n  for (int i = 0; i < 1024; i++) {\n    j++;\n  }\n  return value + 1;\n}",
+      "reason": "LINECOUNT",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/timeout/Question.java",
+      "starter": false,
+      "needed": true,
+      "testCount": -1,
+      "suppressions": []
+    },
+    {
+      "klass": "Question",
+      "contents": "int addOne(int value) {\n  int toReturn = value + 1;\n  toReturn -= 1;\n  toReturn += 1;\n  toReturn -= 1;\n  toReturn += 1;\n  toReturn -= 1;\n  toReturn += 1;\n  return toReturn;\n}",
+      "reason": "TOOLONG",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/toolong/Question.java",
+      "starter": false,
+      "needed": true,
+      "testCount": -1,
+      "suppressions": []
+    },
+    {
+      "klass": "Question",
+      "contents": "private final int[] values = new int[1024];\n\nint addOne(int value) {\n  return value + 1;\n}",
+      "reason": "MEMORYLIMIT",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/memorylimit/Question.java",
+      "starter": false,
+      "needed": true,
+      "testCount": -1,
+      "suppressions": []
+    },
+    {
+      "klass": "Question",
+      "contents": "int addOne(int value) {\n  if (value == 1234567) {\n    return 1234568;\n  }\n  return value + 1;\n}",
+      "reason": "DEADCODE",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/incorrect/java/deadcode/Question.java",
+      "starter": false,
+      "needed": true,
+      "testCount": -1,
+      "suppressions": []
+    }
+  ],
+  "common": [],
+  "javaTemplate": "public class Question {\n  {{{ contents }}}\n}",
+  "kotlinTemplate": "class Question {\n  {{{ contents }}}\n}",
+  "importWhitelist": [],
+  "importBlacklist": [],
+  "checkstyleSuppressions": [],
+  "slug": "add-one",
+  "kotlinSolution": {
+    "klass": "Question",
+    "contents": "// Note that this question was originally set up a bit differently in the demo video.\n// Now Kotlin solutions that use @file:AlsoCorrect will not be templated when @Wrap is used on the solution.\n// So the Kotlin solution should follow the class design established by the Java code, even for faux-static methods.\nfun addOne(value: Int): Int {\n  return value + 1\n}",
+    "language": "kotlin",
+    "path": "/Users/challen/code/questioner-problems/src/main/java/com/examples/addone/correct/kotlin/Question.kt",
+    "complexity": 1,
+    "features": {
+      "featureMap": {
+        "ARITHMETIC_OPERATORS": 1,
+        "METHOD": 1,
+        "RETURN": 1,
+        "STATIC_METHOD": 1
+      },
+      "featureList": [
+        {
+          "feature": "METHOD",
+          "location": {
+            "line": 4,
+            "column": 0
+          }
+        },
+        {
+          "feature": "STATIC_METHOD",
+          "location": {
+            "line": 4,
+            "column": 0
+          }
+        },
+        {
+          "feature": "BLOCK_START",
+          "location": {
+            "line": 4,
+            "column": 28
+          }
+        },
+        {
+          "feature": "STATEMENT_START",
+          "location": {
+            "line": 5,
+            "column": 2
+          }
+        },
+        {
+          "feature": "RETURN",
+          "location": {
+            "line": 5,
+            "column": 2
+          }
+        },
+        {
+          "feature": "ARITHMETIC_OPERATORS",
+          "location": {
+            "line": 5,
+            "column": 15
+          }
+        },
+        {
+          "feature": "STATEMENT_END",
+          "location": {
+            "line": 5,
+            "column": 17
+          }
+        },
+        {
+          "feature": "BLOCK_END",
+          "location": {
+            "line": 6,
+            "column": 0
+          }
+        }
+      ],
+      "importList": [],
+      "typeList": [],
+      "identifierList": [],
+      "dottedMethodList": []
+    },
+    "lineCount": {
+      "source": 3,
+      "comment": 3,
+      "blank": 0
+    },
+    "expectedDeadCount": 0,
+    "suppressions": []
+  },
+  "hasKotlin": true,
+  "published": {
+    "name": "Add One",
+    "type": "METHOD",
+    "path": "add-one",
+    "author": "challen@illinois.edu",
+    "version": "2021.6.0",
+    "packageName": "com.examples.addone",
+    "languages": [
+      "java",
+      "kotlin"
+    ],
+    "descriptions": {
+      "java": "<p>Write a method <code>addOne</code> that returns its <code>int</code> argument plus one.</p>",
+      "kotlin": "<p>Write a method <code>addOne</code> that returns its <code>Int</code> argument plus one.</p>"
+    },
+    "complexity": {
+      "java": 1,
+      "kotlin": 1
+    },
+    "features": {
+      "java": {
+        "featureMap": {
+          "ARITHMETIC_OPERATORS": 1,
+          "METHOD": 1,
+          "RETURN": 1
+        },
+        "featureList": [
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 1,
+              "column": 22
+            }
+          },
+          {
+            "feature": "METHOD",
+            "location": {
+              "line": 4,
+              "column": 0
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 4,
+              "column": 22
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 5,
+              "column": 2
+            }
+          },
+          {
+            "feature": "RETURN",
+            "location": {
+              "line": 5,
+              "column": 2
+            }
+          },
+          {
+            "feature": "ARITHMETIC_OPERATORS",
+            "location": {
+              "line": 5,
+              "column": 9
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 5,
+              "column": 18
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 6,
+              "column": 0
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 7,
+              "column": 0
+            }
+          }
+        ],
+        "importList": [],
+        "typeList": [
+          "int"
+        ],
+        "identifierList": [],
+        "dottedMethodList": []
+      },
+      "kotlin": {
+        "featureMap": {
+          "ARITHMETIC_OPERATORS": 1,
+          "METHOD": 1,
+          "RETURN": 1,
+          "STATIC_METHOD": 1
+        },
+        "featureList": [
+          {
+            "feature": "METHOD",
+            "location": {
+              "line": 4,
+              "column": 0
+            }
+          },
+          {
+            "feature": "STATIC_METHOD",
+            "location": {
+              "line": 4,
+              "column": 0
+            }
+          },
+          {
+            "feature": "BLOCK_START",
+            "location": {
+              "line": 4,
+              "column": 28
+            }
+          },
+          {
+            "feature": "STATEMENT_START",
+            "location": {
+              "line": 5,
+              "column": 2
+            }
+          },
+          {
+            "feature": "RETURN",
+            "location": {
+              "line": 5,
+              "column": 2
+            }
+          },
+          {
+            "feature": "ARITHMETIC_OPERATORS",
+            "location": {
+              "line": 5,
+              "column": 15
+            }
+          },
+          {
+            "feature": "STATEMENT_END",
+            "location": {
+              "line": 5,
+              "column": 17
+            }
+          },
+          {
+            "feature": "BLOCK_END",
+            "location": {
+              "line": 6,
+              "column": 0
+            }
+          }
+        ],
+        "importList": [],
+        "typeList": [],
+        "identifierList": [],
+        "dottedMethodList": []
+      }
+    },
+    "lineCounts": {
+      "java": {
+        "source": 3,
+        "comment": 1,
+        "blank": 1
+      },
+      "kotlin": {
+        "source": 3,
+        "comment": 3,
+        "blank": 0
+      }
+    },
+    "templateImports": [],
+    "questionerVersion": "2023.11.16",
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 26,
+      "mutationCount": 6,
+      "solutionMaxRuntime": 11,
+      "bootstrapLength": 1899,
+      "mutationLength": 85,
+      "incorrectLength": 1117,
+      "calibrationLength": 44,
+      "solutionCoverage": {
+        "covered": 1,
+        "total": 1,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 192,
+        "kotlin": 192
+      },
+      "memoryAllocation": {
+        "java": 352,
+        "kotlin": 352
+      },
+      "solutionRecursiveMethods": {
+        "java": [],
+        "kotlin": []
+      },
+      "solutionLoadedClasses": {
+        "java": [
+          "java.lang.Integer",
+          "java.lang.Character",
+          "java.lang.Long",
+          "java.lang.Short",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "java.lang.Byte",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ],
+        "kotlin": [
+          "java.lang.Integer",
+          "java.lang.Character",
+          "java.lang.Long",
+          "java.lang.Short",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "java.lang.Byte",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
+      }
+    }
+  },
+  "testingSettings": {
+    "seed": 124,
+    "testCount": 64,
+    "timeout": 352,
+    "outputLimit": 0,
+    "perTestOutputLimit": 1024,
+    "javaWhitelist": [
+      "java.lang.",
+      "java.io.PrintStream",
+      "kotlin.Metadata",
+      "kotlin.reflect.jvm.",
+      "java.util.Iterator",
+      "java.util.Collection",
+      "java.lang.Integer",
+      "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+      "java.lang.Character",
+      "java.lang.Long",
+      "java.lang.Short",
+      "Question",
+      "java.lang.Object",
+      "java.lang.Class",
+      "java.lang.String",
+      "jdk.internal.reflect.MethodAccessorImpl",
+      "java.lang.Byte",
+      "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+    ],
+    "kotlinWhitelist": [
+      "java.lang.",
+      "java.io.PrintStream",
+      "kotlin.Metadata",
+      "kotlin.reflect.jvm.",
+      "java.util.Iterator",
+      "java.util.Collection",
+      "java.util.",
+      "kotlin.",
+      "java.lang.Integer",
+      "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+      "java.lang.Character",
+      "java.lang.Long",
+      "java.lang.Short",
+      "Question",
+      "java.lang.Object",
+      "java.lang.Class",
+      "java.lang.String",
+      "jdk.internal.reflect.MethodAccessorImpl",
+      "java.lang.Byte",
+      "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+    ],
+    "shrink": false,
+    "executionCountLimit": {
+      "java": 3072,
+      "kotlin": 3072
+    },
+    "allocationLimit": {
+      "java": 5632,
+      "kotlin": 5632
+    },
+    "solutionClassSize": {
+      "java": 106,
+      "kotlin": 173
+    },
+    "solutionDeadCode": {
+      "java": 0,
+      "kotlin": 0
+    },
+    "checkBlacklist": true,
+    "disableLineCountLimit": false,
+    "disableAllocationLimit": false,
+    "solutionRecursiveMethods": {
+      "java": [],
+      "kotlin": []
+    },
+    "minTestCount": -1,
+    "maxTestCount": -1,
+    "suppressions": []
+  },
+  "testTestingLimits": {
+    "timeout": 128,
+    "outputLimit": 512,
+    "executionCountLimit": {
+      "java": 1024,
+      "kotlin": 1024
+    },
+    "allocationLimit": {
+      "java": 16512,
+      "kotlin": 16512
+    }
+  },
+  "validationResults": {
+    "seed": 124,
+    "requiredTestCount": 26,
+    "mutationCount": 6,
+    "solutionMaxRuntime": 11,
+    "bootstrapLength": 1899,
+    "mutationLength": 85,
+    "incorrectLength": 1117,
+    "calibrationLength": 44,
+    "solutionCoverage": {
+      "covered": 1,
+      "total": 1,
+      "missed": 0
+    },
+    "executionCounts": {
+      "java": 192,
+      "kotlin": 192
+    },
+    "memoryAllocation": {
+      "java": 352,
+      "kotlin": 352
+    },
+    "solutionRecursiveMethods": {
+      "java": [],
+      "kotlin": []
+    },
+    "solutionLoadedClasses": {
+      "java": [
+        "java.lang.Integer",
+        "java.lang.Character",
+        "java.lang.Long",
+        "java.lang.Short",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "java.lang.Byte",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlin": [
+        "java.lang.Integer",
+        "java.lang.Character",
+        "java.lang.Long",
+        "java.lang.Short",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "java.lang.Byte",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ]
+    }
+  },
+  "fauxStatic": true,
+  "testTestingIncorrect": [
+    {
+      "deltas": [
+        "--- Correct.java",
+        "+++ Incorrect.java",
+        "@@ -1,2 +1,0 @@",
+        "-// Here to avoid dead code errors in the memoization test",
+        "-",
+        "@@ -4,1 +2,1 @@",
+        "-  return value + 1;",
+        "+  return value + 11;"
+      ],
+      "language": "java",
+      "incorrectIndex": 0,
+      "testCount": 0,
+      "suppressions": []
+    },
+    {
+      "deltas": [
+        "--- Correct.java",
+        "+++ Incorrect.java",
+        "@@ -4,1 +4,1 @@",
+        "-  return value + 1;",
+        "+  return value + 0;"
+      ],
+      "language": "java",
+      "incorrectIndex": 3,
+      "testCount": 0,
+      "suppressions": []
+    },
+    {
+      "deltas": [
+        "--- Correct.java",
+        "+++ Incorrect.java",
+        "@@ -4,1 +4,1 @@",
+        "-  return value + 1;",
+        "+  return value + 2;"
+      ],
+      "language": "java",
+      "incorrectIndex": 4,
+      "testCount": 0,
+      "suppressions": []
+    },
+    {
+      "deltas": [
+        "--- Correct.java",
+        "+++ Incorrect.java",
+        "@@ -4,1 +4,1 @@",
+        "-  return value + 1;",
+        "+  return value - 1;"
+      ],
+      "language": "java",
+      "incorrectIndex": 2,
+      "testCount": 0,
+      "suppressions": []
+    },
+    {
+      "deltas": [
+        "--- Correct.java",
+        "+++ Incorrect.java",
+        "@@ -4,1 +4,1 @@",
+        "-  return value + 1;",
+        "+  return 0;"
+      ],
+      "language": "java",
+      "incorrectIndex": 5,
+      "testCount": 0,
+      "suppressions": []
+    },
+    {
+      "deltas": [
+        "--- Correct.java",
+        "+++ Incorrect.java",
+        "@@ -4,1 +4,1 @@",
+        "-  return value + 1;",
+        "+  return value;"
+      ],
+      "language": "java",
+      "incorrectIndex": 1,
+      "testCount": 0,
+      "suppressions": []
+    },
+    {
+      "deltas": [
+        "--- Correct.java",
+        "+++ Incorrect.java",
+        "@@ -4,1 +4,1 @@",
+        "-  return value + 1;",
+        "+  return 1;"
+      ],
+      "language": "java",
+      "mutation": "REMOVE_PLUS",
+      "testCount": 1,
+      "suppressions": []
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-package edu.illinois.cs.cs125.questioner.plugin.save
+package edu.illinois.cs.cs125.questioner.plugin.parse
 
 import edu.illinois.cs.cs125.jeed.core.KtLintArguments
 import edu.illinois.cs.cs125.jeed.core.SnippetArguments
@@ -12,11 +12,11 @@ import edu.illinois.cs.cs125.questioner.antlr.KotlinLexer
 import edu.illinois.cs.cs125.questioner.antlr.KotlinParser
 import edu.illinois.cs.cs125.questioner.antlr.KotlinParser.ImportHeaderContext
 import edu.illinois.cs.cs125.questioner.lib.AlsoCorrect
+import edu.illinois.cs.cs125.questioner.lib.Correct
 import edu.illinois.cs.cs125.questioner.lib.Incorrect
 import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.Starter
-import edu.illinois.cs.cs125.questioner.lib.toReason
 import io.kotest.common.runBlocking
 import org.antlr.v4.runtime.BaseErrorListener
 import org.antlr.v4.runtime.CharStream
@@ -29,7 +29,7 @@ import org.intellij.markdown.flavours.commonmark.CommonMarkFlavourDescriptor
 import org.intellij.markdown.html.HtmlGenerator
 import java.io.File
 
-data class ParsedKotlinFile(val path: String, val contents: String) {
+internal data class ParsedKotlinFile(val path: String, val contents: String) {
     constructor(file: File) : this(file.path, file.readText().replace("\r\n", "\n"))
 
     init {
@@ -54,16 +54,23 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
         null
     }
 
-    val alternateSolution = if (topLevelFile) {
+    private val alternateSolution = if (topLevelFile) {
         parseTree.preamble().fileAnnotations().getAnnotation(AlsoCorrect::class.java)
     } else {
         topLevelClass!!.getAnnotation(AlsoCorrect::class.java)
     }
+    val isAlternateSolution = alternateSolution != null
 
-    val starter = if (topLevelFile) {
+    private val starter = if (topLevelFile) {
         parseTree.preamble().fileAnnotations().getAnnotation(Starter::class.java)
     } else {
         topLevelClass!!.getAnnotation(Starter::class.java)
+    }
+    val isStarter = starter != null
+
+    val isCorrect = when (topLevelFile) {
+        true -> parseTree.preamble().fileAnnotations().getAnnotation(Correct::class.java) != null
+        false -> topLevelClass!!.getAnnotation(Correct::class.java) != null
     }
 
     val incorrect = if (topLevelFile) {
@@ -85,8 +92,7 @@ data class ParsedKotlinFile(val path: String, val contents: String) {
             content.expression()?.text?.removeSurrounding("\"")
         } ?: "test"
     }
-
-    val isQuestioner = alternateSolution != null || starter != null || incorrect != null
+    val isIncorrect = incorrect != null
 
     fun toIncorrectFile(cleanSpec: CleanSpec): Question.IncorrectFile {
         check(incorrect != null) { "Not an incorrect file" }
@@ -441,7 +447,9 @@ data class ParsedKotlinContent(val tree: KotlinParser.KotlinFileContext, val str
 internal fun String.parseKotlin() = CharStreams.fromStream(StringInputStream(this)).let { stream ->
     KotlinLexer(stream).also { it.removeErrorListeners() }.let { lexer ->
         CommonTokenStream(lexer).let { tokens ->
-            KotlinParser(tokens).also { parser ->
+            KotlinParser(tokens).apply {
+                // makeThreadSafe()
+            }.also { parser ->
                 parser.removeErrorListeners()
                 parser.addErrorListener(
                     object : BaseErrorListener() {

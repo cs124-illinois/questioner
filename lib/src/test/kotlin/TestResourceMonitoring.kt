@@ -1,6 +1,11 @@
 package edu.illinois.cs.cs125.questioner.lib
 
-import edu.illinois.cs.cs125.jeed.core.*
+import edu.illinois.cs.cs125.jeed.core.ConfiguredSandboxPlugin
+import edu.illinois.cs.cs125.jeed.core.Jacoco
+import edu.illinois.cs.cs125.jeed.core.LineLimitExceeded
+import edu.illinois.cs.cs125.jeed.core.Sandbox
+import edu.illinois.cs.cs125.jeed.core.Source
+import edu.illinois.cs.cs125.jeed.core.compile
 import edu.illinois.cs.cs125.jenisol.core.unwrap
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldHaveSize
@@ -16,10 +21,8 @@ import io.kotest.matchers.string.shouldStartWith
 import io.kotest.matchers.types.beInstanceOf
 import java.lang.reflect.Method
 import kotlin.random.Random
-import kotlin.time.ExperimentalTime
 
 @Suppress("UNUSED")
-@ExperimentalTime // for kotest's String.config
 class TestResourceMonitoring : StringSpec({
     "should warm up successfully" {
         ResourceMonitoring.toString()

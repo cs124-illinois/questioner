@@ -1,0 +1,411 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
+    <title>Add One</title>
+    <style>
+html {
+  font-size: 13px;
+}
+</style>
+  </head>
+  <body>
+    <div class="container">
+    
+    <h1>Add One</h1>
+    <span class="badge rounded-pill bg-primary">challen@illinois.edu</span>
+    <span class="badge rounded-pill bg-secondary">2021.6.0</span>
+    <span class="badge rounded-pill bg-success">Kotlin</span>
+    <h2>Descriptions and Solutions</h2>
+    <h3>Java</h3>
+    <h4>Description</h4>
+    <figure>
+    <blockquote class="blockquote">
+    <p>Write a method <code>addOne</code> that returns its <code>int</code> argument plus one.</p>
+    </blockquote>
+    <figcaption class="blockquote-footer">Java description</figcaption>
+    </figure>
+    <h4>Solution</h4>
+    <pre><code class="java">// Here to avoid dead code errors in the memoization test
+
+int addOne(int value) {
+  return value + 1;
+}</code></pre>
+    
+    <h3>Kotlin</h3>
+        <h4>Description</h4>
+        <figure>
+        <blockquote class="blockquote">
+        <p>Write a method <code>addOne</code> that returns its <code>Int</code> argument plus one.</p>
+        </blockquote>
+        <figcaption class="blockquote-footer">Kotlin description</figcaption>
+        </figure>
+        <h4>Solution</h4>
+        <pre><code class="kotlin">// Note that this question was originally set up a bit differently in the demo video.
+// Now Kotlin solutions that use @file:AlsoCorrect will not be templated when @Wrap is used on the solution.
+// So the Kotlin solution should follow the class design established by the Java code, even for faux-static methods.
+fun addOne(value: Int): Int {
+  return value + 1
+}</code></pre>
+    <h2>Incorrect Examples</h2>
+<p>Used 12 incorrect examples to generate test cases.</p>
+
+    <h3>Incorrect 0</h3>
+    <p>@Incorrect annotated: (Reason DEADCODE)</p>
+            <div class="alert alert-success" role="alert">Testing succeeded, but found 2 too many lines of dead code as expected.</div>
+            <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Tests</th>
+          <th scope="col">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1023</td>
+          <td>53</td>
+        </tr>
+      </tbody>
+    </table>
+    <pre>No explanation available</pre>
+        <pre><code class="java"> int addOne(int value) {
+  if (value == 1234567) {
+    return 1234568;
+  }
+  return value + 1;
+}</code></pre>
+        
+
+    <h3>Incorrect 1</h3>
+    <p>@Incorrect annotated: (Reason MEMORYLIMIT)</p>
+            <div class="alert alert-success" role="alert">Testing succeeded, but submission allocated 8720 too many bytes as expected.</div>
+            <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Tests</th>
+          <th scope="col">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1023</td>
+          <td>57</td>
+        </tr>
+      </tbody>
+    </table>
+    <pre>No explanation available</pre>
+        <pre><code class="java"> private final int[] values = new int[1024];
+
+int addOne(int value) {
+  return value + 1;
+}</code></pre>
+        
+
+    <h3>Incorrect 2</h3>
+    <p>@Incorrect annotated: (Reason TOOLONG)</p>
+            <div class="alert alert-success" role="alert">Testing succeeded, but submission contained 3 too many lines of code as expected.</div>
+            <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Tests</th>
+          <th scope="col">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1023</td>
+          <td>61</td>
+        </tr>
+      </tbody>
+    </table>
+    <pre>No explanation available</pre>
+        <pre><code class="java"> int addOne(int value) {
+  int toReturn = value + 1;
+  toReturn -= 1;
+  toReturn += 1;
+  toReturn -= 1;
+  toReturn += 1;
+  toReturn -= 1;
+  toReturn += 1;
+  return toReturn;
+}</code></pre>
+        
+
+    <h3>Incorrect 3</h3>
+    <p>@Incorrect annotated: (Reason LINECOUNT)</p>
+            <div class="alert alert-success" role="alert">Testing succeeded, but submission ran for 6282234 too many line counts as expected.</div>
+            <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Tests</th>
+          <th scope="col">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1023</td>
+          <td>546</td>
+        </tr>
+      </tbody>
+    </table>
+    <pre>No explanation available</pre>
+        <pre><code class="java"> int addOne(int value) {
+  int j = 0;
+  for (int i = 0; i &lt; 1024; i++) {
+    j++;
+  }
+  return value + 1;
+}</code></pre>
+        
+
+    <h3>Incorrect 4</h3>
+    <p>Mutation (REMOVE_PLUS)</p>
+            <div class="alert alert-success" role="alert">Quickly found a failing test.</div>
+            <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Tests</th>
+          <th scope="col">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2</td>
+          <td>1</td>
+        </tr>
+      </tbody>
+    </table>
+    <pre>Testing addOne(int value = 1) failed:
+Solution returned: 2
+Submission returned: 1</pre>
+        <pre><code class="java"> // Here to avoid dead code errors in the memoization test
+
+int addOne(int value) {
+  // Modified by remove-plus. Originally:
+  // return value + 1;
+  return 1;
+}</code></pre>
+        
+
+    <h3>Incorrect 5</h3>
+    <p>Mutation (REMOVE_METHOD)</p>
+            <div class="alert alert-success" role="alert">Quickly found a failing test.</div>
+            <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Tests</th>
+          <th scope="col">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>1</td>
+        </tr>
+      </tbody>
+    </table>
+    <pre>Testing addOne(int value = 0) failed:
+Solution returned: 1
+Submission returned: 0</pre>
+        <pre><code class="java"> // Here to avoid dead code errors in the memoization test
+
+int addOne(int value) {
+  // Modified by remove-method. Originally:
+  // return value + 1;
+  return 0;
+}</code></pre>
+        
+
+    <h3>Incorrect 6</h3>
+    <p>Mutation (NUMBER_LITERAL)</p>
+            <div class="alert alert-success" role="alert">Quickly found a failing test.</div>
+            <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Tests</th>
+          <th scope="col">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>2</td>
+        </tr>
+      </tbody>
+    </table>
+    <pre>Testing addOne(int value = 0) failed:
+Solution returned: 1
+Submission returned: 2</pre>
+        <pre><code class="java"> // Here to avoid dead code errors in the memoization test
+
+int addOne(int value) {
+  // Modified by number-literal. Originally:
+  // return value + 1;
+  return value + 2;
+}</code></pre>
+        
+
+    <h3>Incorrect 7</h3>
+    <p>Mutation (PLUS_OR_MINUS_ONE_TO_ZERO)</p>
+            <div class="alert alert-success" role="alert">Quickly found a failing test.</div>
+            <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Tests</th>
+          <th scope="col">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>1</td>
+        </tr>
+      </tbody>
+    </table>
+    <pre>Testing addOne(int value = 0) failed:
+Solution returned: 1
+Submission returned: 0</pre>
+        <pre><code class="java"> // Here to avoid dead code errors in the memoization test
+
+int addOne(int value) {
+  // Modified by plus-or-minus-one-to-zero. Originally:
+  // return value + 1;
+  return value + 0;
+}</code></pre>
+        
+
+    <h3>Incorrect 8</h3>
+    <p>Mutation (PLUS_TO_MINUS)</p>
+            <div class="alert alert-success" role="alert">Quickly found a failing test.</div>
+            <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Tests</th>
+          <th scope="col">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>1</td>
+        </tr>
+      </tbody>
+    </table>
+    <pre>Testing addOne(int value = 0) failed:
+Solution returned: 1
+Submission returned: -1</pre>
+        <pre><code class="java"> // Here to avoid dead code errors in the memoization test
+
+int addOne(int value) {
+  // Modified by plus-to-minus. Originally:
+  // return value + 1;
+  return value - 1;
+}</code></pre>
+        
+
+    <h3>Incorrect 9</h3>
+    <p>Mutation (REMOVE_PLUS)</p>
+            <div class="alert alert-success" role="alert">Quickly found a failing test.</div>
+            <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Tests</th>
+          <th scope="col">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>2</td>
+        </tr>
+      </tbody>
+    </table>
+    <pre>Testing addOne(int value = 0) failed:
+Solution returned: 1
+Submission returned: 0</pre>
+        <pre><code class="java"> // Here to avoid dead code errors in the memoization test
+
+int addOne(int value) {
+  // Modified by remove-plus. Originally:
+  // return value + 1;
+  return value;
+}</code></pre>
+        
+
+    <h3>Incorrect 10</h3>
+    <p>@Incorrect annotated</p>
+            <div class="alert alert-success" role="alert">Quickly found a failing test.</div>
+            <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">Tests</th>
+          <th scope="col">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>1</td>
+        </tr>
+      </tbody>
+    </table>
+    <pre>Testing addOne(int value = 0) failed:
+Solution returned: 1
+Submission returned: 11</pre>
+        <pre><code class="java"> int addOne(int value) {
+  return value + 11;
+}</code></pre>
+        
+
+    <h3>Incorrect 11</h3>
+    <p>@Incorrect annotated: (Reason MEMOIZATION)</p><div class="alert alert-warning" role = "alert">Computing complexity failed: Submission complexity 17 exceeds maximum of 16.
+The solution has 1 code path.</div>
+        <pre><code class="java"> int addOne(int value) {
+  if (value == 1) {
+    return 2;
+  } else if (value == 2) {
+    return 3;
+  } else if (value == 3) {
+    return 4;
+  } else if (value == 4) {
+    return 5;
+  } else if (value == 5) {
+    return 6;
+  } else if (value == 6) {
+    return 7;
+  } else if (value == 7) {
+    return 8;
+  } else if (value == 8) {
+    return 9;
+  } else if (value == 9) {
+    return 10;
+  } else if (value == 10) {
+    return 11;
+  } else if (value == 11) {
+    return 12;
+  } else if (value == 12) {
+    return 13;
+  } else if (value == 13) {
+    return 14;
+  } else if (value == 14) {
+    return 15;
+  } else if (value == 15) {
+    return 16;
+  } else if (value == 16) {
+    return 17;
+  } else {
+    return value + 1;
+  }
+}</code></pre>
+        
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

@@ -13,7 +13,7 @@ dependencies {
 
     testJavaagent("com.beyondgrader.resource-agent:agent:2023.9.0")
 
-    implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
+    api("com.squareup.moshi:moshi-kotlin:1.15.0")
     implementation("org.apache.commons:commons-text:1.11.0")
     implementation("io.github.java-diff-utils:java-diff-utils:4.12")
     implementation("org.ow2.asm:asm:9.6")
@@ -24,7 +24,7 @@ dependencies {
     api("com.beyondgrader.resource-agent:virtualfsplugin:2023.9.0") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2023.11.5")
+    api("org.cs124.jeed:core:2023.12.1")
     api("org.cs124:jenisol:2023.11.5")
     api("org.cs124:libcs1:2023.11.1")
     api("com.fasterxml.jackson.core:jackson-databind:2.16.0")

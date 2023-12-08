@@ -13,7 +13,7 @@ dependencies {
 
     implementation(gradleApi())
     implementation(project(":lib"))
-    implementation("org.jetbrains:markdown:0.5.2") {
+    implementation("org.jetbrains:markdown:0.6.0") {
         exclude(module = "kotlin-runtime")
         exclude(module = "kotlin-js")
     }
@@ -22,7 +22,6 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.16.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.0")
     implementation("com.github.slugify:slugify:3.0.6")
-    implementation("org.apache.httpcomponents.client5:httpclient5-fluent:5.2.1")
 
     testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
 }

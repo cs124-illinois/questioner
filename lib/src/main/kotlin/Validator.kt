@@ -1,66 +1,41 @@
 package edu.illinois.cs.cs125.questioner.lib
 
-import com.github.benmanes.caffeine.cache.Cache
-import com.github.benmanes.caffeine.cache.Caffeine
-import java.io.File
+import java.nio.file.Path
+import kotlin.io.path.deleteIfExists
 
-@Suppress("unused")
-class Validator(
-    questionsFile: File,
-    private val sourceDir: String,
-    private val seed: Int,
-    private val maxMutationCount: Int
-) {
-    private val questionCache: Cache<String, Question> = Caffeine.newBuilder().maximumSize(4).recordStats().build()
-
-    private val questions = loadFromPath(questionsFile, sourceDir).also {
-        assert(it.isNotEmpty())
-    }
-
-    private fun QuestionCoordinates.getQuestion(json: String): Question = questionCache.get(path) {
+private inline fun <reified E : Exception, T> retryOn(limit: Int, method: () -> T): Pair<T, Int> {
+    for (retry in 0 until limit) {
         try {
-            moshi.adapter(Question::class.java).fromJson(json)
+            return Pair(method(), retry)
         } catch (e: Exception) {
-            null
-        }
-    }
-
-    suspend fun validate(
-        name: String,
-        verbose: Boolean = false,
-        force: Boolean = false,
-        testing: Boolean = false
-    ): Pair<Question, ValidationReport?> {
-        val questionString = questions[name] ?: error("no question named $name ")
-
-        val questionCoordinates = moshi.adapter(QuestionCoordinates::class.java).fromJson(questionString)
-        val question = questionCoordinates!!.getQuestion(questionString)
-
-        if (question.validated && !force) {
-            if (verbose) {
-                println("$name: up-to-date")
-            }
-            return Pair(question, null)
-        }
-        if (!testing) {
-            questionCoordinates.validationFile(sourceDir).delete()
-            question.reportFile(sourceDir).delete()
-        }
-        try {
-            question.validate(seed, maxMutationCount).also { report ->
-                if (!testing) {
-                    println("$name: ${report.summary}")
-                    questionCoordinates.validationFile(sourceDir)
-                        .writeText(moshi.adapter(Question::class.java).indent("  ").toJson(question))
-                    question.reportFile(sourceDir).writeText(report.report())
-                }
-                return Pair(question, report)
-            }
-        } catch (e: ValidationFailed) {
-            if (!testing) {
-                question.reportFile(sourceDir).writeText(e.report(question))
+            if (e is E && retry != limit - 1) {
+                continue
             }
             throw e
         }
     }
+    error("Shouldn't get here")
+}
+
+@Suppress("unused")
+suspend fun String.validate(seed: Int, maxMutationCount: Int, retries: Int) {
+    val file = Path.of(this).toFile()
+    check(file.exists())
+
+    val question = file.loadQuestion()
+    check(question != null)
+
+    val reportPath = Path.of(this).parent.resolve("report.html")
+    val (report, retried) = try {
+        retryOn<RetryValidation, ValidationReport>(retries) { question.validate(seed, maxMutationCount) }
+    } catch (e: Exception) {
+        reportPath.deleteIfExists()
+        throw e
+    } finally {
+        question.writeToFile(file)
+    }
+
+    check(question.validated) { "Question should be validated" }
+    reportPath.toFile().writeText(report.report())
+    println("${question.name}: ${report.summary} ($retried)")
 }

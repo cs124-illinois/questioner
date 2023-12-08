@@ -13,7 +13,6 @@ import edu.illinois.cs.cs125.jeed.core.KtLintFailed
 import edu.illinois.cs.cs125.jeed.core.LineLimitExceeded
 import edu.illinois.cs.cs125.jeed.core.Sandbox
 import edu.illinois.cs.cs125.jeed.core.Source
-import edu.illinois.cs.cs125.jeed.core.SourceExecutionArguments
 import edu.illinois.cs.cs125.jeed.core.TemplatingFailed
 import edu.illinois.cs.cs125.jeed.core.checkstyle
 import edu.illinois.cs.cs125.jeed.core.compile
@@ -103,11 +102,17 @@ suspend fun Question.testTests(
     }
     testingLoaders.add(random.nextInt(testingLoaders.size + 1), compiledSolutionForTesting)
 
+    // Allow giving questions a bit of extra time on first run
+    val adjustedTimeout = if (testingCount == 0) {
+        limits.timeout + control.initialTestingDelay!!
+    } else {
+        limits.timeout
+    }.toLong()
+
     val executionArguments = Sandbox.ExecutionArguments(
-        timeout = limits.timeout.toLong(),
+        timeout = adjustedTimeout,
         maxOutputLines = limits.outputLimit,
-        permissions = SourceExecutionArguments.GENERALLY_UNSAFE_PERMISSIONS,
-        permissionBlacklist = true,
+        permissions = Question.SAFE_PERMISSIONS,
         returnTimeout = Question.DEFAULT_RETURN_TIMEOUT
     )
 

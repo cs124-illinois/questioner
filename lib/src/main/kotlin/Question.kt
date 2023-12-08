@@ -3,7 +3,6 @@ package edu.illinois.cs.cs125.questioner.lib
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
 import com.squareup.moshi.JsonClass
-import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import edu.illinois.cs.cs125.jeed.core.CompilationArguments
 import edu.illinois.cs.cs125.jeed.core.Features
@@ -12,17 +11,12 @@ import edu.illinois.cs.cs125.jeed.core.MutatedSource
 import edu.illinois.cs.cs125.jeed.core.Mutation
 import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.compile
-import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
 import java.io.File
+import java.lang.reflect.ReflectPermission
+import java.util.PropertyPermission
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.primaryConstructor
-import edu.illinois.cs.cs125.jeed.core.moshi.Adapters as JeedAdapters
 import edu.illinois.cs.cs125.jenisol.core.solution as jenisol
-
-val moshi: Moshi = Moshi.Builder().apply {
-    Adapters.forEach { add(it) }
-    JeedAdapters.forEach { add(it) }
-}.build()
 
 private val sharedClassWhitelist = setOf(
     "java.lang.",
@@ -173,7 +167,8 @@ data class Question(
         val javaDescription: String,
         val kotlinDescription: String?,
         val citation: Citation?,
-        val usedFiles: List<String> = listOf(),
+        val usedFiles: Set<String> = setOf(),
+        val unusedFiles: Set<String> = setOf(),
         val templateImports: Set<String> = setOf(),
         val focused: Boolean? = null,
         val publish: Boolean? = null,
@@ -213,6 +208,7 @@ data class Question(
         val maxComplexityMultiplier: Double?,
         val maxLineCountMultiplier: Double?,
         val maxClassSizeMultiplier: Double?,
+        val initialTestingDelay: Int?
     ) {
         companion object {
             const val DEFAULT_SOLUTION_THROWS = false
@@ -239,6 +235,7 @@ data class Question(
             const val DEFAULT_MIN_FAIL_FAST_COMPLEXITY = 16
             const val DEFAULT_MIN_FAIL_FAST_CLASS_SIZE_MULTIPLIER = 16
             const val DEFAULT_MAX_EXECUTION_COUNT: Long = DEFAULT_MAX_TIMEOUT.toLong() * 1024 * 1024
+            const val DEFAULT_INITIAL_TESTING_DELAY: Int = 0
 
             val DEFAULTS = TestingControl(
                 DEFAULT_SOLUTION_THROWS,
@@ -263,6 +260,7 @@ data class Question(
                 DEFAULT_MAX_COMPLEXITY_MULTIPLIER,
                 DEFAULT_MAX_LINECOUNT_MULTIPLIER,
                 DEFAULT_MAX_CLASSSIZE_MULTIPLIER,
+                DEFAULT_INITIAL_TESTING_DELAY
             )
         }
     }
@@ -568,7 +566,9 @@ ${question.contents}
 
     var testingSettings: TestingSettings? = null
     var testTestingLimits: TestTestingLimits? = null
-    var validationResults: ValidationResults? = null
+
+    val validationResults: ValidationResults?
+        get() = published.validationResults
 
     val validated: Boolean
         get() = testingSettings != null
@@ -595,6 +595,17 @@ ${question.contents}
         const val UNLIMITED_OUTPUT_LINES = 102400
         const val MIN_PER_TEST_LINES = 1024
         const val DEFAULT_MAX_OUTPUT_SIZE = 8 * 1024 * 1024
+
+        @Transient
+        val SAFE_PERMISSIONS =
+            setOf(
+                RuntimePermission("accessDeclaredMembers"),
+                ReflectPermission("suppressAccessChecks"),
+                RuntimePermission("getClassLoader"),
+                RuntimePermission("localeServiceProvider"),
+                RuntimePermission("charsetProvider"),
+                PropertyPermission("*", "read")
+            )
     }
 
     fun warm() {
@@ -605,6 +616,16 @@ ${question.contents}
         compilationDefinedClass
         solution
         featureChecker
+    }
+
+    var correctPath: String? = null
+
+    @Transient
+    var testingCount: Int = 0
+
+    fun cleanForUpload() {
+        correctPath = null
+        testingCount = 0
     }
 }
 
@@ -622,113 +643,34 @@ fun String.deTemplate(template: String?): String {
     }
 }
 
-fun QuestionCoordinates.validationFile(sourceDir: String) = File(
-    sourceDir,
-    "${metadata.packageName.replace(".", File.separator)}/.validation.json"
-)
-
-fun Question.validationFile(sourceDir: String) = File(
-    sourceDir,
-    "${metadata.packageName.replace(".", File.separator)}/.validation.json"
-)
-
-fun Question.reportFile(sourceDir: String) = File(
-    sourceDir,
-    "${metadata.packageName.replace(".", File.separator)}/report.html"
-)
-
-fun loadQuestionFile(questionsFile: File, sourceDir: String): Map<QuestionCoordinates, String> =
-    moshi.adapter<Map<String, Any>>(
-        Types.newParameterizedType(
-            Map::class.java,
-            String::class.java,
-            Any::class.java
-        )
-    ).fromJson(questionsFile.readText())!!.mapValues { (_, value) ->
-        moshi.adapter(Any::class.java).toJson(value)
-    }.mapKeys { (_, value) ->
-        moshi.adapter(QuestionCoordinates::class.java).fromJson(value)!!
-    }.mapValues { (questionCoordinates, question) ->
-        val validationPath = questionCoordinates.validationFile(sourceDir)
-        when (validationPath.exists()) {
-            false -> question
-            true -> validationPath.readText()
-        }
-    }.mapKeys { (questionCoordinates) ->
-        val validationPath = questionCoordinates.validationFile(sourceDir)
-        when (validationPath.exists()) {
-            false -> questionCoordinates
-            true -> {
-                val newCoordinates =
-                    moshi.adapter(QuestionCoordinates::class.java).fromJson(validationPath.readText())!!
-                if (newCoordinates.metadata.contentHash == questionCoordinates.metadata.contentHash) {
-                    newCoordinates
-                } else {
-                    questionCoordinates
-                }
-            }
-        }
-    }
-
-
-fun loadQuestionsFromPath(questionsFile: File, sourceDir: String) =
-    loadQuestionFile(questionsFile, sourceDir).mapValues { (_, json) ->
-        moshi.adapter(Question::class.java).fromJson(json)!!
-    }
-
-fun loadCoordinatesFromPath(questionsFile: File, sourceDir: String) = loadQuestionFile(questionsFile, sourceDir).keys
-
-fun loadFromPath(questionsFile: File, sourceDir: String) =
-    loadQuestionFile(questionsFile, sourceDir).mapKeys { (questionCoordinates) -> questionCoordinates.published.name }
-
 fun Collection<Question>.toJSON(): String =
     moshi.adapter<List<Question>>(Types.newParameterizedType(List::class.java, Question::class.java))
         .toJson(this.toList())
 
-fun File.loadQuestions() = try {
-    moshi.adapter<Map<String, Question>>(
-        Types.newParameterizedType(
-            Map::class.java,
-            String::class.java,
-            Question::class.java
-        )
-    ).fromJson(readText())!!
+
+fun File.loadQuestionList() =
+    moshi.adapter<List<Question>>(Types.newParameterizedType(List::class.java, Question::class.java))
+        .fromJson(readText())!!
+
+fun File.loadQuestion() = try {
+    moshi.adapter(Question::class.java).fromJson(readText())!!
 } catch (e: Exception) {
-    mapOf()
+    null
 }
 
-fun File.saveQuestions(questions: Map<String, Question>) =
-    writeText(
-        moshi.adapter<Map<String, Question>>(
-            Types.newParameterizedType(
-                Map::class.java,
-                String::class.java,
-                Question::class.java
-            )
-        ).indent("  ").toJson(questions)
+fun Question.writeToFile(file: File) = try {
+    file.writeText(moshi.adapter(Question::class.java).indent("  ").toJson(this))
+} catch (e: Exception) {
+    null
+}
+
+fun Collection<Question>.writeToFile(file: File) {
+    file.writeText(
+        moshi.adapter<List<Question>>(
+            Types.newParameterizedType(List::class.java, Question::class.java)
+        ).indent("  ").toJson(this.toList())
     )
-
-@Suppress("SpellCheckingInspection")
-fun String.toReason() = when (uppercase()) {
-    "DESIGN" -> Question.IncorrectFile.Reason.DESIGN
-    "TEST" -> Question.IncorrectFile.Reason.TEST
-    "COMPILE" -> Question.IncorrectFile.Reason.COMPILE
-    "CHECKSTYLE" -> Question.IncorrectFile.Reason.CHECKSTYLE
-    "TIMEOUT" -> Question.IncorrectFile.Reason.TIMEOUT
-    "DEADCODE" -> Question.IncorrectFile.Reason.DEADCODE
-    "LINECOUNT" -> Question.IncorrectFile.Reason.LINECOUNT
-    "TOOLONG" -> Question.IncorrectFile.Reason.TOOLONG
-    "MEMORYLIMIT" -> Question.IncorrectFile.Reason.MEMORYLIMIT
-    "RECURSION" -> Question.IncorrectFile.Reason.RECURSION
-    "COMPLEXITY" -> Question.IncorrectFile.Reason.COMPLEXITY
-    "FEATURES" -> Question.IncorrectFile.Reason.FEATURES
-    "TOOMUCHOUTPUT" -> Question.IncorrectFile.Reason.TOOMUCHOUTPUT
-    "MEMOIZATION" -> Question.IncorrectFile.Reason.MEMOIZATION
-    "CLASSSIZE" -> Question.IncorrectFile.Reason.CLASSSIZE
-    else -> error("Invalid incorrect reason: $this")
 }
-
-fun String.toCoordinates() = moshi.adapter(QuestionCoordinates::class.java).fromJson(this)
 
 private inline infix fun <reified T : Any> T.merge(other: T): T {
     val nameToProperty = T::class.declaredMemberProperties.associateBy { it.name }

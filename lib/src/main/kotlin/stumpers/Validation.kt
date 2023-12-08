@@ -4,13 +4,9 @@ package edu.illinois.cs.cs125.questioner.lib.stumpers
 
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.TestResults
+import edu.illinois.cs.cs125.questioner.lib.VERSION
 import edu.illinois.cs.cs125.questioner.lib.test
 import java.time.Instant
-import java.util.Properties
-
-val VERSION: String = Properties().also {
-    it.load((object {}).javaClass.getResourceAsStream("/edu.illinois.cs.cs124.questioner.lib.version"))
-}.getProperty("version")
 
 fun TestResults.validated() = complete.partial?.passedSteps?.quality == true
 suspend fun Solution.validate(question: Question): Solution {

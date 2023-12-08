@@ -1,4 +1,4 @@
-package edu.illinois.cs.cs125.questioner.plugin.save
+package edu.illinois.cs.cs125.questioner.plugin.parse
 
 import com.google.googlejavaformat.java.Formatter
 import edu.illinois.cs.cs125.jeed.core.CheckstyleArguments
@@ -26,8 +26,9 @@ import edu.illinois.cs.cs125.questioner.lib.Starter
 import edu.illinois.cs.cs125.questioner.lib.TemplateImports
 import edu.illinois.cs.cs125.questioner.lib.Whitelist
 import edu.illinois.cs.cs125.questioner.lib.Wrap
-import edu.illinois.cs.cs125.questioner.lib.toReason
 import io.kotest.common.runBlocking
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import org.antlr.v4.runtime.BaseErrorListener
 import org.antlr.v4.runtime.CharStream
 import org.antlr.v4.runtime.CharStreams
@@ -38,9 +39,10 @@ import org.apache.tools.ant.filters.StringInputStream
 import org.intellij.markdown.flavours.commonmark.CommonMarkFlavourDescriptor
 import org.intellij.markdown.html.HtmlGenerator
 import java.io.File
+import java.util.regex.Pattern
 
-data class ParsedJavaFile(val path: String, val contents: String) {
-    constructor(file: File) : this(file.path, file.readText().replace("\r\n", "\n"))
+internal data class ParsedJavaFile(val path: String, val contents: String) {
+    constructor(file: File) : this(file.path, file.readText())
 
     init {
         require(path.endsWith(".java")) { "Can only parse Java files" }
@@ -179,6 +181,8 @@ data class ParsedJavaFile(val path: String, val contents: String) {
         }
     }
 
+    val isCorrect = topLevelClass.getAnnotation(Correct::class.java) != null
+
     val correct = topLevelClass.getAnnotation(Correct::class.java)?.let { annotation ->
         @Suppress("TooGenericExceptionCaught")
         try {
@@ -221,6 +225,7 @@ data class ParsedJavaFile(val path: String, val contents: String) {
                 val maxComplexityMultiplier = parameters["maxComplexityMultiplier"]?.toDouble()
                 val maxLineCountMultiplier = parameters["maxLineCountMultiplier"]?.toDouble()
                 val maxClassSizeMultiplier = parameters["maxClassSizeMultiplier"]?.toDouble()
+                val initialTestingDelay = parameters["initialTestingDelay"]?.toInt()
 
                 Question.CorrectData(
                     path,
@@ -253,6 +258,7 @@ data class ParsedJavaFile(val path: String, val contents: String) {
                         maxComplexityMultiplier,
                         maxLineCountMultiplier,
                         maxClassSizeMultiplier,
+                        initialTestingDelay,
                     ),
                 )
             }
@@ -262,8 +268,10 @@ data class ParsedJavaFile(val path: String, val contents: String) {
         }
     }
 
-    val starter = topLevelClass.getAnnotation(Starter::class.java)
+    val isStarter = topLevelClass.getAnnotation(Starter::class.java) != null
+    private val starter = topLevelClass.getAnnotation(Starter::class.java)
 
+    val isIncorrect = topLevelClass.getAnnotation(Incorrect::class.java) != null
     val incorrect = topLevelClass.getAnnotation(Incorrect::class.java)?.let { annotation ->
         @Suppress("TooGenericExceptionCaught")
         try {
@@ -275,7 +283,10 @@ data class ParsedJavaFile(val path: String, val contents: String) {
         }
     }
 
-    val alternateSolution = topLevelClass.getAnnotation(AlsoCorrect::class.java)
+    val isAlternateSolution = topLevelClass.getAnnotation(AlsoCorrect::class.java) != null
+    private val alternateSolution = topLevelClass.getAnnotation(AlsoCorrect::class.java)
+
+    val isQuestioner = isAlternateSolution || isStarter || isIncorrect
 
     val type = mutableListOf<String>().also {
         if (correct != null) {
@@ -650,8 +661,7 @@ $cleanContent
                     require(correct != null || removeLines.isEmpty()) {
                         "Found unused imports in $path: ${unusedImports.joinToString(",") { it.message }}"
                     }
-                    content.lines().filterIndexed { index, _ -> !removeLines.contains(index + 1) }
-                        .joinToString("\n")
+                    content.lines().filterIndexed { index, _ -> !removeLines.contains(index + 1) }.joinToString("\n")
                 }
             }.let {
                 if (stripTemplate) {
@@ -703,33 +713,38 @@ data class ParsedJavaContent(
     val stream: CharStream,
 )
 
-internal fun String.parseJava() = CharStreams.fromStream(StringInputStream(this)).let { stream ->
-    JavaLexer(stream).also { it.removeErrorListeners() }.let { lexer ->
-        CommonTokenStream(lexer).let { tokens ->
-            JavaParser(tokens).also { parser ->
-                parser.removeErrorListeners()
-                parser.addErrorListener(
-                    object : BaseErrorListener() {
-                        override fun syntaxError(
-                            recognizer: Recognizer<*, *>?,
-                            offendingSymbol: Any?,
-                            line: Int,
-                            charPositionInLine: Int,
-                            msg: String?,
-                            e: RecognitionException?,
-                        ) {
-                            // Ignore messages that are not errors...
-                            if (e == null) {
-                                return
-                            }
-                            throw e
-                        }
-                    },
-                )
+private val parserLimiter = Semaphore(1)
+internal fun String.parseJava() = runBlocking {
+    parserLimiter.withPermit {
+        CharStreams.fromStream(StringInputStream(this)).let { stream ->
+            JavaLexer(stream).also { it.removeErrorListeners() }.let { lexer ->
+                CommonTokenStream(lexer).let { tokens ->
+                    JavaParser(tokens).also { parser ->
+                        parser.removeErrorListeners()
+                        parser.addErrorListener(
+                            object : BaseErrorListener() {
+                                override fun syntaxError(
+                                    recognizer: Recognizer<*, *>?,
+                                    offendingSymbol: Any?,
+                                    line: Int,
+                                    charPositionInLine: Int,
+                                    msg: String?,
+                                    e: RecognitionException?,
+                                ) {
+                                    // Ignore messages that are not errors...
+                                    if (e == null) {
+                                        return
+                                    }
+                                    throw e
+                                }
+                            },
+                        )
+                    }
+                }.compilationUnit()
+            }.let { tree ->
+                ParsedJavaContent(tree, stream)
             }
-        }.compilationUnit()
-    }.let { tree ->
-        ParsedJavaContent(tree, stream)
+        }
     }
 }
 
@@ -849,3 +864,15 @@ fun String.methodIsMarkedPublicOrStatic(): Boolean {
             }
     }
 }
+
+private val emailRegex = Pattern.compile(
+    "[a-zA-Z0-9+._%\\-]{1,256}" +
+        "@" +
+        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+        "(" +
+        "\\." +
+        "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+        ")+",
+)
+
+private fun String.isEmail(): Boolean = emailRegex.matcher(this).matches()

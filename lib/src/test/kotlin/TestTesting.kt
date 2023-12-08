@@ -7,21 +7,10 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
 
-import java.nio.file.Path
-
-private val validator = Validator(
-    Path.of(object {}::class.java.getResource("/questions.json")!!.toURI()).toFile(),
-    "",
-    seed = 124,
-    maxMutationCount = 64
-)
 
 class TestTesting : StringSpec({
-    "it should load questions" {
-        loadFromPath(Path.of(object {}::class.java.getResource("/questions.json")!!.toURI()).toFile(), "")
-    }
     "it should test a question" {
-        val (question) = validator.validate("Add One", force = true, testing = true).also { (question, report) ->
+        val (question) = Validator.validate("Add One").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
             report!!.requiredTestCount shouldBeGreaterThan 0
@@ -37,7 +26,7 @@ int addOne(int value) {
         }
     }
     "it should test a question with partial credit" {
-        val (question) = validator.validate("Add One", force = true, testing = true).also { (question, report) ->
+        val (question) = Validator.validate("Add One").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
             report!!.requiredTestCount shouldBeGreaterThan 0
@@ -61,7 +50,7 @@ int addOne(int value) {
         }
     }
     "it should test a question with steps" {
-        val (question) = validator.validate("Add One", force = true, testing = true).also { (question, report) ->
+        val (question) = Validator.validate("Add One").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
             report!!.requiredTestCount shouldBeGreaterThan 0
@@ -155,7 +144,7 @@ int addOne(int value) {
         }
     }
     "it should identify incorrect submissions to a method problem" {
-        val (question) = validator.validate("Add One", force = true, testing = true).also { (question, report) ->
+        val (question) = Validator.validate("Add One").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
             report!!.requiredTestCount shouldBeGreaterThan 0
@@ -187,7 +176,7 @@ class Testing { }
         }
     }
     "it should test a Map question with extra imports" {
-        val (question) = validator.validate("With Map Extras", force = true, testing = true)
+        val (question) = Validator.validate("With Map Extras")
             .also { (question, report) ->
                 question.validated shouldBe true
                 report shouldNotBe null
@@ -223,7 +212,7 @@ int mapSize(Map<String, Integer> map) {
         }
     }
     "it should test recursive question correctly" {
-        val (question) = validator.validate("Recursive Factorial", force = true, testing = true)
+        val (question) = Validator.validate("Recursive Factorial")
             .also { (question, report) ->
                 question.validated shouldBe true
                 report shouldNotBe null

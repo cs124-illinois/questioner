@@ -38,7 +38,12 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         if (!succeeded) {
             if (failed.checkExecutedSubmission != null) {
                 throw SolutionFailed(file, failed.checkExecutedSubmission!!)
-            } else if (complete.testing?.passed == false) {
+            }
+            val percentLineCountCompleted = resourceMonitoringResults!!.submissionLines.toDouble() / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
+            if (timeout && !lineCountTimeout && percentLineCountCompleted < 0.1) {
+                throw RetryValidation()
+            }
+            if (complete.testing?.passed == false) {
                 throw SolutionFailed(file, summary)
             } else {
                 check(complete.testing?.failedReceiverGeneration == true) {
@@ -177,6 +182,10 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             try {
                 validate(file.reason)
             } catch (e: Exception) {
+                val percentLineCountCompleted = resourceMonitoringResults!!.submissionLines.toDouble() / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
+                if (timeout && !lineCountTimeout && percentLineCountCompleted < 0.1) {
+                    throw RetryValidation()
+                }
                 throw if (succeeded) {
                     WrongReasonPassed(file, e.message!!)
                 } else {
@@ -531,7 +540,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         ),
     )
 
-    validationResults = Question.ValidationResults(
+    published.validationResults = Question.ValidationResults(
         seed = seed,
         requiredTestCount = requiredTestCount,
         mutationCount = mutations.size,
@@ -546,7 +555,6 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         solutionRecursiveMethods = solutionRecursiveMethods,
         solutionLoadedClasses = solutionLoadedClasses
     )
-    published.validationResults = validationResults
 
     return ValidationReport(
         this,
@@ -642,6 +650,8 @@ ${path?.let { "$path\n" } ?: ""}---
 $contents
 ---""".trimStart()
 }
+
+class RetryValidation : ValidationFailed()
 
 class SolutionFailed(val solution: Question.FlatFile, val explanation: String) : ValidationFailed() {
     override val message = """

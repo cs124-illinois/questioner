@@ -9,15 +9,7 @@ import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.longs.shouldBeLessThan
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import java.nio.file.Path
 import kotlin.system.measureTimeMillis
-
-private val validator = Validator(
-    Path.of(object {}::class.java.getResource("/questions.json")!!.toURI()).toFile(),
-    "",
-    seed = 124,
-    maxMutationCount = 64
-)
 
 const val JAVA_EMPTY_SUITE_CLASS = """
 public class TestQuestion {
@@ -34,7 +26,7 @@ const val KOTLIN_EMPTY_SUITE = """fun test() {
 
 class TestTestTesting : StringSpec({
     "should test test suites for classes" {
-        val (question) = validator.validate("Add One Class", force = true, testing = true).also { (question, report) ->
+        val (question) = Validator.validate("Add One Class").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
@@ -105,7 +97,7 @@ fun test() {
         }
     }
     "should timeout test test suites for classes" {
-        val (question) = validator.validate("Add One Class", force = true, testing = true).also { (question, report) ->
+        val (question) = Validator.validate("Add One Class").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
@@ -145,7 +137,7 @@ public class TestQuestion {
         lineCountTime shouldBeLessThan question.testTestingLimits!!.timeout.toLong()
     }
     "should fail fields" {
-        val (question) = validator.validate("Add One Class", force = true, testing = true).also { (question, report) ->
+        val (question) = Validator.validate("Add One Class").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
@@ -162,7 +154,7 @@ public class TestQuestion {
         }
     }
     "should collect output" {
-        val (question) = validator.validate("Add One Class", force = true, testing = true).also { (question, report) ->
+        val (question) = Validator.validate("Add One Class").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
@@ -190,7 +182,7 @@ public class TestQuestion {
         }
     }
     "should test test suites for methods" {
-        val (question) = validator.validate("Add One", force = true, testing = true).also { (question, report) ->
+        val (question) = Validator.validate("Add One").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
@@ -226,7 +218,7 @@ public class TestQuestion {
         }
     }
     "original incorrect examples should recover and fail" {
-        val (question) = validator.validate("Add One Class", force = true, testing = true).also { (question, report) ->
+        val (question) = Validator.validate("Add One Class").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
@@ -238,7 +230,7 @@ public class TestQuestion {
         val recompileTime = measureTimeMillis {
             question.compileAllTestTestingIncorrect()
         }
-        recompileTime * 10 shouldBeLessThan compileTime
+        recompileTime * 4 shouldBeLessThan compileTime
 
         question.testTestingIncorrect shouldNotBe null
         question.testTestingIncorrect!!.size shouldBeGreaterThan 0

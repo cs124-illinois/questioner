@@ -5,93 +5,157 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import edu.illinois.cs.cs125.questioner.plugin.save.SaveQuestions
+import edu.illinois.cs.cs125.questioner.lib.VERSION
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
+import org.gradle.api.tasks.Delete
+import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.testing.Test
-import java.io.File
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class QuestionerConfig(val endpoints: List<EndPoint> = listOf()) {
     data class EndPoint(val name: String, val token: String, val url: String)
 }
 
-fun Project.javaSourceDir(): File =
-    extensions.getByType(JavaPluginExtension::class.java)
-        .sourceSets.getByName("main").java.srcDirs.let {
-            check(it.size == 1) { "Found multiple source directories: ${it.joinToString(",")}" }
-            it.first()!!
-        }
+open class QuestionerConfigExtension {
+    var seed: Int = 124
+    var maxMutationCount: Int = 32
+    var concurrency: Int = (Runtime.getRuntime().availableProcessors().toDouble() * 0.75).toInt().coerceAtLeast(1)
+    var retries: Int = 4
+}
+
+private val testFiles = listOf("TestAllQuestions.kt", "TestUnvalidatedQuestions.kt", "TestFocusedQuestions.kt")
 
 @Suppress("unused")
 class QuestionerPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val config = project.extensions.create("questioner", QuestionerConfigExtension::class.java)
-        val configuration =
-            project.file(".questioner.yaml").let {
-                if (it.exists()) {
-                    try {
-                        ObjectMapper(YAMLFactory()).apply { registerKotlinModule() }.readValue(it)
-                    } catch (e: Exception) {
-                        project.logger.warn("Invalid questioner.yaml file.")
-                        QuestionerConfig()
-                    }
-                } else {
-                    QuestionerConfig()
-                }
-            }
+
+        // Add build directory to test source set so that our tests are compiled
+        project.extensions.getByType(JavaPluginExtension::class.java)
+            .sourceSets.getByName("test").java.srcDirs(project.layout.buildDirectory.dir("questioner").get().asFile)
+
+        // Add clean task
+        project.tasks.register("cleanQuestions", Delete::class.java) {
+            it.delete(
+                project.extensions.getByType(JavaPluginExtension::class.java)
+                    .sourceSets.getByName("main").allSource
+                    .filter { file -> file.name == ".validation.json" || file.name == "report.html" || file.name == ".question.json" },
+            )
+        }
+
+        // Reconfigure source tasks like linters to avoid using our outputs
+        project.tasks.withType(SourceTask::class.java) { sourceTask ->
+            sourceTask.exclude("**/.question.json")
+            sourceTask.exclude("questions.json", *testFiles.toTypedArray())
+        }
+        // Add custom test tasks
+        project.tasks.create("testAllQuestions", Test::class.java) { testTask ->
+            testTask.setTestNameIncludePatterns(listOf("TestAllQuestions"))
+            testTask.outputs.upToDateWhen { false }
+        }
+        project.tasks.create("testUnvalidatedQuestions", Test::class.java) { testTask ->
+            testTask.setTestNameIncludePatterns(listOf("TestUnvalidatedQuestions"))
+            testTask.outputs.upToDateWhen { false }
+        }
+        project.tasks.create("testFocusedQuestions", Test::class.java) { testTask ->
+            testTask.setTestNameIncludePatterns(listOf("TestFocusedQuestions"))
+            testTask.outputs.upToDateWhen { false }
+        }
+        project.tasks.getByName("test") { testTask ->
+            testTask as Test
+            testTask.setTestNameIncludePatterns(listOf("TestUnvalidatedQuestions"))
+            testTask.outputs.upToDateWhen { false }
+        }
 
         val saveQuestions = project.tasks.register("saveQuestions", SaveQuestions::class.java).get()
-        val generateMetatests = project.tasks.register("generateQuestionMetatests", GenerateMetatests::class.java).get()
-        generateMetatests.dependsOn(project.tasks.getByName("processResources"))
-        project.afterEvaluate {
-            project.tasks.getByName("processResources").dependsOn(saveQuestions)
+        val collectQuestions = project.tasks.register("collectQuestions", CollectQuestions::class.java).get()
+        collectQuestions.dependsOn(saveQuestions)
+        collectQuestions.outputs.upToDateWhen { false }
 
-            generateMetatests.seed = config.seed
-            generateMetatests.maxMutationCount = config.maxMutationCount
-
-            project.configurations.getByName("runtimeClasspath") { conf ->
-                val agentJarPath =
-                    conf.resolvedConfiguration.resolvedArtifacts.find {
-                        it.moduleVersion.id.group == "com.beyondgrader.resource-agent" &&
-                            it.moduleVersion.id.name == "agent"
-                    }!!.file.absolutePath
-                project.tasks.withType(Test::class.java) {
-                    it.jvmArgs("-javaagent:$agentJarPath")
+        val generateQuestionTests =
+            project.tasks.register("generateQuestionTests", GenerateQuestionTests::class.java).get()
+                .also { generateMetatests ->
+                    generateMetatests.dependsOn(collectQuestions)
+                    project.tasks.getByName("compileTestKotlin").dependsOn(generateMetatests)
                 }
+
+        project.afterEvaluate {
+            // Add library dependency
+            project.configurations.getByName("implementation").dependencies.find { dependency ->
+                dependency.group == "org.cs124" && dependency.name == "questioner"
+            }?.let {
+                error("Found explicit questioner library dependency. Please remove it, since it is automatically added by the plugin.")
+            }
+            project.dependencies.add("implementation", project.dependencies.create("org.cs124:questioner:$VERSION"))
+
+            // Pass config values to test generation task
+            generateQuestionTests.seed = config.seed
+            generateQuestionTests.maxMutationCount = config.maxMutationCount
+            generateQuestionTests.concurrency = config.concurrency
+            generateQuestionTests.retries = config.retries
+
+            project.tasks.withType(Test::class.java).forEach { testTask ->
+                testTask.dependsOn(generateQuestionTests)
+                testTask.mustRunAfter(generateQuestionTests)
+            }
+
+            val agentJarPath = project.configurations.getByName("runtimeClasspath")
+                .resolvedConfiguration.resolvedArtifacts
+                .find { artifact ->
+                    artifact.moduleVersion.id.group == "com.beyondgrader.resource-agent" &&
+                        artifact.moduleVersion.id.name == "agent"
+                }!!.file.absolutePath
+            project.tasks.withType(Test::class.java) { testTask ->
+                testTask.jvmArgs("-javaagent:$agentJarPath")
             }
         }
-        if (configuration.endpoints.isNotEmpty()) {
+
+        val uploadConfiguration = project.file(".questioner.yaml").let { questionerConfigFile ->
+            if (questionerConfigFile.exists()) {
+                try {
+                    ObjectMapper(YAMLFactory()).apply { registerKotlinModule() }.readValue(questionerConfigFile)
+                } catch (e: Exception) {
+                    project.logger.warn("Invalid questioner.yaml file.")
+                    QuestionerConfig()
+                }
+            } else {
+                QuestionerConfig()
+            }
+        }
+        if (uploadConfiguration.endpoints.isNotEmpty()) {
             val publishAll = project.tasks.register("publishQuestions").get()
-            configuration.endpoints.forEach { (name, token, url) ->
+            publishAll.outputs.upToDateWhen { false }
+            uploadConfiguration.endpoints.forEach { (name, token, url) ->
                 val publishQuestions =
-                    project.tasks.register("${name}PublishQuestions", PublishQuestions::class.java).get()
+                    project.tasks.register("publishQuestionsTo$name", PublishQuestions::class.java).get()
                 publishQuestions.token = token
                 publishQuestions.destination = url
-                publishQuestions.dependsOn(saveQuestions)
+                publishQuestions.dependsOn(collectQuestions)
+                publishQuestions.outputs.upToDateWhen { false }
+                publishQuestions.description = "Publish questions to $name"
                 publishAll.dependsOn(publishQuestions)
             }
         }
-        project.extensions.getByType(JavaPluginExtension::class.java)
-            .sourceSets.getByName("main").resources { it.srcDirs(project.layout.buildDirectory.dir("questioner")) }
-        project.tasks.register("cleanQuestions", CleanQuestions::class.java)
-        project.tasks.register("printSlowQuestions", PrintSlowQuestions::class.java)
-        val reconfigureTesting = project.tasks.register("reconfigureTesting", ReconfigureTesting::class.java).get()
-        project.tasks.getByName("test").dependsOn(reconfigureTesting)
-        project.tasks.getByName("test").mustRunAfter(reconfigureTesting)
-        project.tasks.getByName("compileJava").mustRunAfter(reconfigureTesting)
-        project.tasks.getByName("compileKotlin").mustRunAfter(reconfigureTesting)
-        project.tasks.getByName("jar").mustRunAfter(reconfigureTesting)
-        project.tasks.getByName("test").dependsOn(generateMetatests)
-        project.tasks.getByName("compileTestKotlin").dependsOn(generateMetatests)
-        try {
-            project.tasks.getByName("formatKotlinTest").dependsOn(generateMetatests)
-        } catch (_: Exception) {
+        project.tasks.register("printSlowQuestions", PrintSlowQuestions::class.java) { printSlowQuestions ->
+            printSlowQuestions.dependsOn("collectQuestions")
+            printSlowQuestions.outputs.upToDateWhen { false }
         }
-        try {
-            project.tasks.getByName("lintKotlinTest").dependsOn(generateMetatests)
-        } catch (_: Exception) {
+        /*
+        project.tasks.register("reconfigureTesting") {
+            project.tasks.getByName("compileJava").enabled = false
+            project.tasks.getByName("compileKotlin").enabled = false
+            project.tasks.getByName("jar").enabled = false
+        }.get().also { reconfigureTesting ->
+            project.tasks.withType(Test::class.java).forEach { testTask ->
+                testTask.dependsOn(reconfigureTesting)
+                testTask.mustRunAfter(reconfigureTesting)
+            }
+            project.tasks.getByName("compileJava").mustRunAfter(reconfigureTesting)
+            project.tasks.getByName("compileKotlin").mustRunAfter(reconfigureTesting)
+            project.tasks.getByName("jar").mustRunAfter(reconfigureTesting)
         }
+         */
     }
 }
