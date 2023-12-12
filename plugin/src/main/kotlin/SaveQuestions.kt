@@ -24,11 +24,6 @@ import java.util.stream.Collectors
 import javax.inject.Inject
 
 abstract class SaveQuestions : DefaultTask() {
-    init {
-        group = "Build"
-        description = "Save questions to JSON."
-    }
-
     @Internal
     val sourceSet: SourceSet =
         project.extensions.getByType(JavaPluginExtension::class.java).sourceSets.getByName("main")

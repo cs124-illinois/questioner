@@ -9,6 +9,8 @@ import edu.illinois.cs.cs125.jenisol.core.ParameterGroup
 import edu.illinois.cs.cs125.jenisol.core.TestResult
 import edu.illinois.cs.cs125.jenisol.core.fullName
 import edu.illinois.cs.cs125.jenisol.core.isBoth
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import java.lang.reflect.Constructor
 import java.lang.reflect.Executable
 import java.lang.reflect.Method
@@ -16,6 +18,8 @@ import java.time.Instant
 
 data class CorrectResults(val incorrect: Question.FlatFile, val results: TestResults)
 data class IncorrectResults(val incorrect: Question.IncorrectFile, val results: TestResults)
+
+private val limiter = Semaphore(1)
 
 @Suppress("LongMethod", "ComplexMethod")
 suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): ValidationReport {
@@ -39,7 +43,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             if (failed.checkExecutedSubmission != null) {
                 throw SolutionFailed(file, failed.checkExecutedSubmission!!)
             }
-            val percentLineCountCompleted = resourceMonitoringResults!!.submissionLines.toDouble() / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
+            val percentLineCountCompleted =
+                resourceMonitoringResults!!.submissionLines.toDouble() / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
             if (timeout && !lineCountTimeout && percentLineCountCompleted < 0.1) {
                 throw RetryValidation()
             }
@@ -182,7 +187,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             try {
                 validate(file.reason)
             } catch (e: Exception) {
-                val percentLineCountCompleted = resourceMonitoringResults!!.submissionLines.toDouble() / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
+                val percentLineCountCompleted =
+                    resourceMonitoringResults!!.submissionLines.toDouble() / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
                 if (timeout && !lineCountTimeout && percentLineCountCompleted < 0.1) {
                     throw RetryValidation()
                 }
@@ -418,7 +424,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         .maxOrNull() ?: error("No incorrect results")
 
     val incorrectMaxRuntime = useTestingIncorrect.mapNotNull { it.results.taskResults?.interval?.length?.toInt() }.max()
-    val incorrectAllocation = useTestingIncorrect.map { it.results }.setResourceUsage(bothJava = true) { it.memoryAllocation }
+    val incorrectAllocation =
+        useTestingIncorrect.map { it.results }.setResourceUsage(bothJava = true) { it.memoryAllocation }
 
     val bootstrapRandomStartCount = firstCorrectResults.maxOfOrNull { results ->
         val maxComplexity = results.tests()!!.maxOf { it.complexity!! }
@@ -451,11 +458,10 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         suppressions = correct.suppressions
     )
     val calibrationResults = (setOf(correct) + alternativeSolutions).map { right ->
-        test(
-            right.contents,
-            right.language,
-            calibrationSettings
-        ).let {
+        val results = limiter.withPermit {
+            test(right.contents, right.language, calibrationSettings)
+        }
+        results.let {
             it.checkCorrect(right, true)
             CorrectResults(right, it)
         }

@@ -14,9 +14,9 @@ dependencies {
 
     implementation(project(":lib"))
 
-    implementation("io.ktor:ktor-server-netty:2.3.6")
-    implementation("io.ktor:ktor-server-content-negotiation:2.3.6")
-    implementation("io.ktor:ktor-server-call-logging:2.3.6")
+    implementation("io.ktor:ktor-server-netty:2.3.7")
+    implementation("io.ktor:ktor-server-content-negotiation:2.3.7")
+    implementation("io.ktor:ktor-server-call-logging:2.3.7")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.cs124:ktor-moshi:2023.11.0")
     implementation("org.mongodb:mongodb-driver:3.12.14")

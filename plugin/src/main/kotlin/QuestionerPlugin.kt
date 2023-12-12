@@ -11,6 +11,7 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.SourceTask
+import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.testing.Test
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -32,11 +33,11 @@ class QuestionerPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val config = project.extensions.create("questioner", QuestionerConfigExtension::class.java)
 
-        // Add build directory to test source set so that our tests are compiled
+        val saveQuestions = project.tasks.register("saveQuestions", SaveQuestions::class.java).get()
+
         project.extensions.getByType(JavaPluginExtension::class.java)
             .sourceSets.getByName("test").java.srcDirs(project.layout.buildDirectory.dir("questioner").get().asFile)
 
-        // Add clean task
         project.tasks.register("cleanQuestions", Delete::class.java) {
             it.delete(
                 project.extensions.getByType(JavaPluginExtension::class.java)
@@ -45,12 +46,14 @@ class QuestionerPlugin : Plugin<Project> {
             )
         }
 
-        // Reconfigure source tasks like linters to avoid using our outputs
         project.tasks.withType(SourceTask::class.java) { sourceTask ->
             sourceTask.exclude("**/.question.json")
             sourceTask.exclude("questions.json", *testFiles.toTypedArray())
+            if (sourceTask !is JavaCompile) {
+                saveQuestions.mustRunAfter(sourceTask)
+            }
         }
-        // Add custom test tasks
+
         project.tasks.create("testAllQuestions", Test::class.java) { testTask ->
             testTask.setTestNameIncludePatterns(listOf("TestAllQuestions"))
             testTask.outputs.upToDateWhen { false }
@@ -69,7 +72,6 @@ class QuestionerPlugin : Plugin<Project> {
             testTask.outputs.upToDateWhen { false }
         }
 
-        val saveQuestions = project.tasks.register("saveQuestions", SaveQuestions::class.java).get()
         val collectQuestions = project.tasks.register("collectQuestions", CollectQuestions::class.java).get()
         collectQuestions.dependsOn(saveQuestions)
         collectQuestions.outputs.upToDateWhen { false }
@@ -82,7 +84,6 @@ class QuestionerPlugin : Plugin<Project> {
                 }
 
         project.afterEvaluate {
-            // Add library dependency
             project.configurations.getByName("implementation").dependencies.find { dependency ->
                 dependency.group == "org.cs124" && dependency.name == "questioner"
             }?.let {
@@ -90,7 +91,6 @@ class QuestionerPlugin : Plugin<Project> {
             }
             project.dependencies.add("implementation", project.dependencies.create("org.cs124:questioner:$VERSION"))
 
-            // Pass config values to test generation task
             generateQuestionTests.seed = config.seed
             generateQuestionTests.maxMutationCount = config.maxMutationCount
             generateQuestionTests.concurrency = config.concurrency
@@ -142,20 +142,5 @@ class QuestionerPlugin : Plugin<Project> {
             printSlowQuestions.dependsOn("collectQuestions")
             printSlowQuestions.outputs.upToDateWhen { false }
         }
-        /*
-        project.tasks.register("reconfigureTesting") {
-            project.tasks.getByName("compileJava").enabled = false
-            project.tasks.getByName("compileKotlin").enabled = false
-            project.tasks.getByName("jar").enabled = false
-        }.get().also { reconfigureTesting ->
-            project.tasks.withType(Test::class.java).forEach { testTask ->
-                testTask.dependsOn(reconfigureTesting)
-                testTask.mustRunAfter(reconfigureTesting)
-            }
-            project.tasks.getByName("compileJava").mustRunAfter(reconfigureTesting)
-            project.tasks.getByName("compileKotlin").mustRunAfter(reconfigureTesting)
-            project.tasks.getByName("jar").mustRunAfter(reconfigureTesting)
-        }
-         */
     }
 }
