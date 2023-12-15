@@ -22,8 +22,8 @@ open class PrintSlowQuestions : DefaultTask() {
         val questions = inputFile.loadQuestionList()
         questions
             .filter { it.validated }
-            .filter { it.published.validationResults!!.requiredTestCount > it.control.minTestCount!! }
-            .sortedBy { -1 * it.published.validationResults!!.requiredTestCount }
+            .filter { it.validationResults!!.requiredTestCount > it.control.minTestCount!! }
+            .sortedBy { -1 * it.validationResults!!.requiredTestCount }
             .forEach {
                 project.logger.warn("${it.published.path}: ${it.validationResults!!.requiredTestCount} ${it.question.path}")
             }

@@ -14,6 +14,7 @@ import edu.illinois.cs.cs125.jeed.core.getStackTraceForSource
 import edu.illinois.cs.cs125.jeed.core.moshi.CompiledSourceResult
 import edu.illinois.cs.cs125.jenisol.core.TestResult
 import edu.illinois.cs.cs125.jenisol.core.safePrint
+import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
 import edu.illinois.cs.cs125.jenisol.core.TestResult as JenisolTestResult
 
 @JsonClass(generateAdapter = true)
@@ -53,6 +54,7 @@ data class TestResults(
         features,
         lineCount,
         partial,
+
         // execution
         checkExecutedSubmission,
         recursion,
@@ -165,9 +167,9 @@ data class TestResults(
         val failed: Boolean = submission >= limit
     ) {
         init {
-            require(solution >= 0) { "Invalid solution resource usage: $solution"}
-            require(submission >= 0) { "Invalid submission resource usage: $submission"}
-            require(limit >= 0) { "Invalid resource limit: $limit"}
+            require(solution >= 0) { "Invalid solution resource usage: $solution" }
+            require(submission >= 0) { "Invalid submission resource usage: $submission" }
+            require(limit >= 0) { "Invalid resource limit: $limit" }
         }
     }
 
@@ -288,6 +290,9 @@ data class TestResults(
         }
 
     fun toJson(): String = moshi.adapter(TestResults::class.java).toJson(this)
+
+    @Transient
+    val canCache = !(timeout && !lineCountTimeout)
 }
 
 fun TestResult<*, *>.asTestResult(source: Source) = TestResults.TestingResult.TestResult(

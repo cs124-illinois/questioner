@@ -11,7 +11,6 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.SourceTask
-import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.testing.Test
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -49,9 +48,6 @@ class QuestionerPlugin : Plugin<Project> {
         project.tasks.withType(SourceTask::class.java) { sourceTask ->
             sourceTask.exclude("**/.question.json")
             sourceTask.exclude("questions.json", *testFiles.toTypedArray())
-            if (sourceTask !is JavaCompile) {
-                saveQuestions.mustRunAfter(sourceTask)
-            }
         }
 
         project.tasks.create("testAllQuestions", Test::class.java) { testTask ->

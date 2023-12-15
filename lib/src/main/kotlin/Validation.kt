@@ -546,7 +546,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         ),
     )
 
-    published.validationResults = Question.ValidationResults(
+    validationResults = Question.ValidationResults(
         seed = seed,
         requiredTestCount = requiredTestCount,
         mutationCount = mutations.size,

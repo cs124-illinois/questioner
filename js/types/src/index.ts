@@ -113,7 +113,7 @@ export type Citation = Static<typeof Citation>
 export const QuestionType = Union(Literal("SNIPPET"), Literal("METHOD"), Literal("KLASS"))
 export type QuestionType = Static<typeof QuestionType>
 
-export const Question = QuestionPath.And(
+export const QuestionPublished = QuestionPath.And(
   Record({
     name: String,
     type: QuestionType,
@@ -124,16 +124,24 @@ export const Question = QuestionPath.And(
     features: Dictionary(FeatureValue, Languages),
     lineCounts: Dictionary(LineCounts, Languages),
     templateImports: RuntypeArray(String),
+    questionerVersion: String,
+    contentHash: String,
+    canTestTest: Boolean,
   }),
 ).And(
   Partial({
     citation: Citation,
     starters: Dictionary(String, Languages),
-    validationResults: ValidationResults,
-    questionerVersion: String,
   }),
 )
-export type Question = Static<typeof Question>
+export type QuestionPublished = Static<typeof QuestionPublished>
+
+export const NamedQuestion = QuestionPublished.And(
+  Record({
+    questionAuthor: String,
+  }),
+)
+export type NamedQuestion = Static<typeof NamedQuestion>
 
 export const QuestionMetadata = Record({
   contentHash: String,
@@ -141,42 +149,36 @@ export const QuestionMetadata = Record({
   version: String,
   author: String,
   javaDescription: String,
+  questionerVersion: String,
+  usedFiles: RuntypeArray(String),
+  unusedFiles: RuntypeArray(String),
+  templateImports: RuntypeArray(String),
 }).And(
   Partial({
     kotlinDescription: String,
     citation: Citation,
-    usedFiles: RuntypeArray(String),
-    templateImports: RuntypeArray(String),
     focused: Boolean,
     publish: Boolean,
-    questionerVersion: String,
   }),
 )
-export type QuestionMetadata = Static<typeof Question>
+export type QuestionMetadata = Static<typeof QuestionMetadata>
+
+export const Question = Record({
+  published: QuestionPublished,
+  metadata: QuestionMetadata,
+  validationResults: ValidationResults,
+})
+export type Question = Static<typeof Question>
+
+export const SubmissionType = Union(Literal("SOLVE"), Literal("TESTTESTING"))
 
 export const Submission = Record({
-  path: String,
+  type: SubmissionType,
+  contentHash: String,
   language: Languages,
   contents: String,
-}).And(
-  Partial({
-    disableLineCountLimit: Boolean,
-    email: String,
-    originalID: String,
-  }),
-)
+})
 export type Submission = Static<typeof Submission>
-
-export const TestTestingSubmission = Record({
-  path: String,
-  language: Languages,
-  contents: String,
-}).And(
-  Partial({
-    limit: Number,
-  }),
-)
-export type TestTestingSubmission = Static<typeof TestTestingSubmission>
 
 export const TestResult = Record({
   name: String,
@@ -518,15 +520,13 @@ export const CacheStats = Record({
 export type CacheStats = Static<typeof CacheStats>
 
 export const ServerResponse = Record({
-  results: TestResults,
   canCache: Boolean,
   cacheStats: CacheStats,
-})
+  duration: Number,
+}).And(
+  Partial({
+    solveResults: TestResults,
+    testTestingResults: TestTestResults,
+  }),
+)
 export type ServerResponse = Static<typeof ServerResponse>
-
-export const ServerTestTestingResponse = Record({
-  results: TestTestResults,
-  canCache: Boolean,
-  cacheStats: CacheStats,
-})
-export type ServerTestTestingResponse = Static<typeof ServerTestTestingResponse>

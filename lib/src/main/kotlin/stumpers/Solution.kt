@@ -13,7 +13,7 @@ import org.bson.BsonDocument
 import org.bson.Document
 import org.bson.json.JsonWriterSettings
 import java.time.Instant
-import edu.illinois.cs.cs125.questioner.lib.moshi
+import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
 import kotlin.random.Random
 
 private val jsonWriterSettings = JsonWriterSettings

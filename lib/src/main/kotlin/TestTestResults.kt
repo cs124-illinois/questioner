@@ -9,6 +9,7 @@ import edu.illinois.cs.cs125.jeed.core.KtLintResults
 import edu.illinois.cs.cs125.jeed.core.Sandbox
 import edu.illinois.cs.cs125.jeed.core.TemplatingFailed
 import edu.illinois.cs.cs125.jeed.core.moshi.CompiledSourceResult
+import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
 
 @JsonClass(generateAdapter = true)
 data class TestTestResults(
@@ -93,4 +94,7 @@ data class TestTestResults(
         val succeeded: Boolean = correct == total && incorrect == 0,
         val shortCircuited: Boolean = correct + incorrect < total
     )
+
+    @Transient
+    val canCache = !(timeout && !lineCountTimeout)
 }

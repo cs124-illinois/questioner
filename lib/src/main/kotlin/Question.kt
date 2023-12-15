@@ -11,6 +11,7 @@ import edu.illinois.cs.cs125.jeed.core.MutatedSource
 import edu.illinois.cs.cs125.jeed.core.Mutation
 import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.compile
+import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
 import java.io.File
 import java.lang.reflect.ReflectPermission
 import java.util.PropertyPermission
@@ -29,17 +30,6 @@ private val sharedClassWhitelist = setOf(
 
 @Suppress("EnumNaming", "EnumEntryName")
 enum class Language { java, kotlin }
-
-@JsonClass(generateAdapter = true)
-data class QuestionCoordinates(
-    val published: Question.Published,
-    val metadata: Question.Metadata,
-    val testingSettings: Question.TestingSettings?,
-    val validated: Boolean = testingSettings != null
-) {
-    val path = "${published.author}/${published.path}/${published.version}/${metadata.contentHash}"
-}
-
 
 @Suppress("MemberVisibilityCanBePrivate", "LargeClass", "TooManyFunctions")
 @JsonClass(generateAdapter = true)
@@ -115,6 +105,7 @@ data class Question(
         },
         metadata.templateImports,
         metadata.questionerVersion,
+        metadata.contentHash
     ),
 ) {
     @Transient
@@ -154,8 +145,9 @@ data class Question(
         val features: Map<Language, Features>,
         val lineCounts: Map<Language, LineCounts>,
         val templateImports: Set<String>,
-        val questionerVersion: String?,
-        var validationResults: ValidationResults? = null
+        val questionerVersion: String,
+        val contentHash: String,
+        val canTestTest: Boolean = type == Type.KLASS || type == Type.METHOD
     )
 
     @JsonClass(generateAdapter = true)
@@ -165,14 +157,14 @@ data class Question(
         val version: String,
         val author: String,
         val javaDescription: String,
+        val questionerVersion: String,
         val kotlinDescription: String?,
         val citation: Citation?,
         val usedFiles: Set<String> = setOf(),
         val unusedFiles: Set<String> = setOf(),
         val templateImports: Set<String> = setOf(),
         val focused: Boolean? = null,
-        val publish: Boolean? = null,
-        val questionerVersion: String?
+        val publish: Boolean? = null
     ) {
         init {
             check(templateImports.size == templateImports.toSet().size)
@@ -567,14 +559,10 @@ ${question.contents}
     var testingSettings: TestingSettings? = null
     var testTestingLimits: TestTestingLimits? = null
 
-    val validationResults: ValidationResults?
-        get() = published.validationResults
+    var validationResults: ValidationResults? = null
 
     val validated: Boolean
         get() = testingSettings != null
-
-    @Transient
-    val canTestTest = type == Type.KLASS || type == Type.METHOD
 
     val testTestingValidated: Boolean
         get() = testTestingLimits != null
@@ -627,6 +615,9 @@ ${question.contents}
         correctPath = null
         testingCount = 0
     }
+
+    @Transient
+    val fullPath = "${published.author}/${published.path}/${published.version}/${metadata.contentHash}"
 }
 
 fun String.deTemplate(template: String?): String {

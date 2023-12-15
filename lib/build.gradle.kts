@@ -13,13 +13,13 @@ dependencies {
 
     testJavaagent("com.beyondgrader.resource-agent:agent:2023.9.0")
 
-    api("com.squareup.moshi:moshi-kotlin:1.15.0")
     implementation("org.apache.commons:commons-text:1.11.0")
     implementation("io.github.java-diff-utils:java-diff-utils:4.12")
     implementation("org.ow2.asm:asm:9.6")
     implementation("org.mongodb:mongodb-driver:3.12.14")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.21")
 
+    api("com.squareup.moshi:moshi-kotlin:1.15.0")
     api("com.beyondgrader.resource-agent:agent:2023.9.0")
     api("com.beyondgrader.resource-agent:virtualfsplugin:2023.9.0") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")

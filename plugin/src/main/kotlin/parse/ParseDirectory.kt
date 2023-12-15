@@ -7,6 +7,7 @@ import edu.illinois.cs.cs125.questioner.lib.VERSION
 import edu.illinois.cs.cs125.questioner.lib.loadQuestion
 import org.jetbrains.annotations.NotNull
 import java.io.File
+import java.nio.file.FileSystems
 import java.nio.file.Files
 import java.nio.file.Path
 import java.security.DigestInputStream
@@ -37,7 +38,7 @@ fun Path.parseDirectory(baseDirectory: Path, force: Boolean = false, questionerV
     require(solution.packageName != "") { "Solutions should not have an empty package name" }
     require(solution.className != "") { "Solutions should not have an empty class name" }
 
-    val allFiles = parent.allFiles()
+    val allFiles = allFiles()
     val parsedJavaFiles = allFiles.filter { it.name.endsWith(".java") }.map { ParsedJavaFile(it) }
     val parsedKotlinFiles = allFiles.filter { it.path.endsWith(".kt") }.map { ParsedKotlinFile(it) }
 
@@ -261,6 +262,7 @@ fun Path.parseDirectory(baseDirectory: Path, force: Boolean = false, questionerV
         solution.correct.version,
         solution.correct.author,
         solution.correct.description,
+        questionerVersion,
         kotlinSolution?.description,
         solution.citation,
         usedFiles.keys.map { path -> baseDirectory.relativize(Path.of(path)).toString() }.toSet(),
@@ -273,7 +275,6 @@ fun Path.parseDirectory(baseDirectory: Path, force: Boolean = false, questionerV
         javaImports,
         solution.correct.focused,
         solution.correct.publish,
-        questionerVersion,
     )
 
     if (metadata.kotlinDescription != null && kotlinSolution != null) {
@@ -311,12 +312,10 @@ fun Path.parseDirectory(baseDirectory: Path, force: Boolean = false, questionerV
     )
 }
 
-fun Path.allFiles() = Files.walk(this)
+fun Path.allFiles() = Files.walk(parent)
     .filter { path ->
         Files.isRegularFile(path) && !Files.isDirectory(path) && (
-            path.name.endsWith(".java") || path.name.endsWith(
-                ".kt",
-            )
+            path.name.endsWith(".java") || path.name.endsWith(".kt")
             )
     }
     .map { path -> path.toFile() }
@@ -325,7 +324,7 @@ fun Path.allFiles() = Files.walk(this)
     .sortedBy { it.path }
 
 @Suppress("unused")
-fun Path.newestFile(): File = allFiles().sortedBy { it.lastModified() }.reversed().first()
+private fun Path.newestFile(): File = allFiles().sortedBy { it.lastModified() }.reversed().first()
 private fun Path.directoryHash(questionerVersion: String) = MessageDigest.getInstance("MD5").let { md5 ->
     allFiles().forEach { file ->
         DigestInputStream(file.inputStream(), md5).apply {
@@ -338,8 +337,8 @@ private fun Path.directoryHash(questionerVersion: String) = MessageDigest.getIns
     "${md5.digest().fold("") { str, it -> str + "%02x".format(it) }}-v$questionerVersion"
 }
 
-private fun String.importToPath() = replace(".", System.getProperty("file.separator"))
-private fun String.pathToImport() = replace(System.getProperty("file.separator"), ".")
+private fun String.importToPath() = replace(".", FileSystems.getDefault().separator)
+private fun String.pathToImport() = replace(FileSystems.getDefault().separator, ".")
 
 private fun Path.toJavaFile() = resolveSibling("${fileName.toString().removeSuffix(".java")}.java")
 private fun ParsedJavaFile.getMappedImports(baseDirectory: Path) = listedImports
