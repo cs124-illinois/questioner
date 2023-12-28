@@ -94,6 +94,8 @@ internal data class ParsedKotlinFile(val path: String, val contents: String) {
     }
     val isIncorrect = incorrect != null
 
+    val isQuestioner = isAlternateSolution || isStarter || isIncorrect
+
     fun toIncorrectFile(cleanSpec: CleanSpec): Question.IncorrectFile {
         check(incorrect != null) { "Not an incorrect file" }
         return Question.IncorrectFile(

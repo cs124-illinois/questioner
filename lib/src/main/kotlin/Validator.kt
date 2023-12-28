@@ -3,15 +3,15 @@ package edu.illinois.cs.cs125.questioner.lib
 import java.nio.file.Path
 import kotlin.io.path.deleteIfExists
 
-private inline fun <reified E : Exception, T> retryOn(limit: Int, method: () -> T): Pair<T, Int> {
+private inline fun retryOn(limit: Int, method: () -> ValidationReport): Pair<ValidationReport, Int> {
     for (retry in 0 until limit) {
         try {
             return Pair(method(), retry)
         } catch (e: Exception) {
-            if (e is E && retry != limit - 1) {
+            if (e is RetryValidation && retry != limit - 1) {
                 continue
             }
-            throw e
+            throw e.cause ?: e
         }
     }
     error("Shouldn't get here")
@@ -27,7 +27,7 @@ suspend fun String.validate(seed: Int, maxMutationCount: Int, retries: Int) {
 
     val reportPath = Path.of(this).parent.resolve("report.html")
     val (report, retried) = try {
-        retryOn<RetryValidation, ValidationReport>(retries) { question.validate(seed, maxMutationCount) }
+        retryOn(retries) { question.validate(seed, maxMutationCount) }
     } catch (e: Exception) {
         reportPath.deleteIfExists()
         throw e
@@ -37,5 +37,5 @@ suspend fun String.validate(seed: Int, maxMutationCount: Int, retries: Int) {
 
     check(question.validated) { "Question should be validated" }
     reportPath.toFile().writeText(report.report())
-    println("${question.name}: ${report.summary} ($retried)")
+    println("${question.published.name}: ${report.summary} ($retried)")
 }

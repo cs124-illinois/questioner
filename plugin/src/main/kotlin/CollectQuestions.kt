@@ -1,8 +1,10 @@
 package edu.illinois.cs.cs125.questioner.plugin
 
+import com.squareup.moshi.Types
 import edu.illinois.cs.cs125.questioner.lib.Language
+import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.loadQuestion
-import edu.illinois.cs.cs125.questioner.lib.writeToFile
+import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
 import edu.illinois.cs.cs125.questioner.plugin.parse.ParsedJavaFile
 import io.kotest.inspectors.forAll
 import org.gradle.api.DefaultTask
@@ -40,9 +42,9 @@ abstract class CollectQuestions : DefaultTask() {
                     this.correctPath = correctPath.toString()
                 }
             }.filterNotNull()
-            .sortedBy { it.name }
+            .sortedBy { it.published.name }
 
-        check(questions.map { q -> q.metadata.contentHash }.toSet().size == questions.size) {
+        check(questions.map { q -> q.published.contentHash }.toSet().size == questions.size) {
             "Duplicate Question hash"
         }
 
@@ -51,7 +53,7 @@ abstract class CollectQuestions : DefaultTask() {
             .groupBy { q -> q.published.descriptions[Language.java] }
             .filterValues { it.size > 1 }
             .forAll { (_, questions) ->
-                logger.warn("Found questions with identical Java descriptions: ${questions.joinToString { q -> q.name }}")
+                logger.warn("Found questions with identical Java descriptions: ${questions.joinToString { q -> q.published.name }}")
             }
 
         questions
@@ -59,7 +61,7 @@ abstract class CollectQuestions : DefaultTask() {
             .groupBy { q -> q.published.descriptions[Language.kotlin] }
             .filterValues { it.size > 1 }
             .forAll { (_, questions) ->
-                logger.warn("Found questions with identical Kotlin descriptions: ${questions.joinToString { q -> q.name }}")
+                logger.warn("Found questions with identical Kotlin descriptions: ${questions.joinToString { q -> q.published.name }}")
             }
 
         questions.map { q -> q.metadata.unusedFiles }.flatten().forEach {
@@ -68,4 +70,12 @@ abstract class CollectQuestions : DefaultTask() {
 
         questions.writeToFile(outputFile)
     }
+}
+
+private fun Collection<Question>.writeToFile(file: File) {
+    file.writeText(
+        moshi.adapter<List<Question>>(
+            Types.newParameterizedType(List::class.java, Question::class.java),
+        ).indent("  ").toJson(this.toList()),
+    )
 }

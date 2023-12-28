@@ -1,11 +1,12 @@
 package edu.illinois.cs.cs125.questioner.plugin
 
+import com.squareup.moshi.Types
+import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
 import edu.illinois.cs.cs125.questioner.lib.writeToFile
 import edu.illinois.cs.cs125.questioner.plugin.parse.ParsedJavaFile
 import edu.illinois.cs.cs125.questioner.plugin.parse.ParsedKotlinFile
 import edu.illinois.cs.cs125.questioner.plugin.parse.parseDirectory
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.InputFiles
@@ -39,7 +40,9 @@ abstract class SaveQuestions : DefaultTask() {
 
     @InputFiles
     @Suppress("unused")
-    val inputFiles: FileCollection = sourceSet.allSource.filter { it.name.endsWith(".java") || it.name.endsWith(".kt") }
+    val inputFiles: Set<File> =
+        sourceSet.allSource.filter { it.name.endsWith(".java") || it.name.endsWith(".kt") }.files +
+            project.layout.buildDirectory.dir("questioner/packageMap.json").get().asFile
 
     @OutputFiles
     @Suppress("unused")
@@ -55,6 +58,8 @@ abstract class SaveQuestions : DefaultTask() {
             workQueue.submit(ParseDirectory::class.java) { parameters ->
                 parameters.getBaseDirectory().set(sourceDirectoryPath.toFile())
                 parameters.getCorrectDirectory().set(path.toFile())
+                parameters.getPackageMap()
+                    .set(project.layout.buildDirectory.dir("questioner/packageMap.json").get().asFile)
             }
         }
     }
@@ -80,6 +85,8 @@ interface ParseDirectoryWorkParameters : WorkParameters {
     fun getCorrectDirectory(): RegularFileProperty
 
     fun getBaseDirectory(): RegularFileProperty
+
+    fun getPackageMap(): RegularFileProperty
 }
 
 abstract class ParseDirectory : WorkAction<ParseDirectoryWorkParameters> {
@@ -87,11 +94,12 @@ abstract class ParseDirectory : WorkAction<ParseDirectoryWorkParameters> {
         val correctDirectory = parameters.getCorrectDirectory().get().asFile.toPath()
         val baseDirectory = parameters.getBaseDirectory().get().asFile.toPath()
         val questionPath = correctDirectory.parent.resolve(".question.json")
+        val packageMap = parameters.getPackageMap().get().asFile.readFromFile()
 
         val repeatCount = 2
         repeat(repeatCount) { i ->
             try {
-                correctDirectory.parseDirectory(baseDirectory).writeToFile(questionPath.toFile())
+                correctDirectory.parseDirectory(baseDirectory, packageMap).writeToFile(questionPath.toFile())
                 return
             } catch (e: Exception) {
                 if (i == repeatCount - 1) {
@@ -102,3 +110,11 @@ abstract class ParseDirectory : WorkAction<ParseDirectoryWorkParameters> {
         }
     }
 }
+
+private fun File.readFromFile(): Map<String, List<String>> = moshi.adapter<Map<String, List<String>>>(
+    Types.newParameterizedType(
+        Map::class.java,
+        String::class.java,
+        Types.newParameterizedType(List::class.java, String::class.java),
+    ),
+).fromJson(readText())!!

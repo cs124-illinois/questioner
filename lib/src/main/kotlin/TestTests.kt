@@ -41,7 +41,7 @@ suspend fun Question.testTests(
     settings: Question.TestTestingSettings = Question.TestTestingSettings(),
     limits: Question.TestTestingLimits = testTestingLimits!!
 ): TestTestResults {
-    check(type != Question.Type.SNIPPET) { "Test testing not supported for snippets" }
+    check(published.type != Question.Type.SNIPPET) { "Test testing not supported for snippets" }
     check(settings.limit >= 2) { "Limit must be at least 2" }
 
     warm()
@@ -267,7 +267,7 @@ fun Question.templateTestSuites(
     contents: String,
     language: Language
 ): Pair<Source, String?> {
-    val template = when (type) {
+    val template = when (published.type) {
         Question.Type.KLASS -> null
         Question.Type.METHOD -> {
             when (language) {
@@ -495,7 +495,7 @@ fun Question.checkInitialTestTestingSubmission(
         // If the code doesn't parse as a snippet, fall back to compiler error messages which are usually more useful
         return true
     }
-    when (type) {
+    when (published.type) {
         Question.Type.SNIPPET -> error("Snippets not supported for test testing")
 
         Question.Type.METHOD -> {

@@ -34,86 +34,29 @@ enum class Language { java, kotlin }
 @Suppress("MemberVisibilityCanBePrivate", "LargeClass", "TooManyFunctions")
 @JsonClass(generateAdapter = true)
 data class Question(
-    val name: String,
-    val type: Type,
+    val published: Published,
+    val classification: Classification,
     val klass: String,
     val metadata: Metadata,
     val annotatedControls: TestingControl,
     val question: FlatFile,
-    val correct: FlatFile,
+    val solutionByLanguage: Map<Language, FlatFile>,
     val alternativeSolutions: List<FlatFile>,
-    val incorrect: List<IncorrectFile>,
+    val incorrectExamples: List<IncorrectFile>,
     val common: List<String>?,
-    var javaTemplate: String?,
-    var kotlinTemplate: String?,
+    val templateByLanguage: Map<Language, String>?,
     val importWhitelist: Set<String>,
     val importBlacklist: Set<String>,
-    val checkstyleSuppressions: Set<String>,
-    val slug: String,
-    val kotlinSolution: FlatFile?,
-    val questionerVersion: String? = null,
-    val detemplatedJavaStarter: String? = incorrect.find { it.language == Language.java && it.starter }?.contents,
-    val detemplatedKotlinStarter: String? = incorrect.find { it.language == Language.kotlin && it.starter }?.contents,
-    val hasKotlin: Boolean =
-        metadata.kotlinDescription != null && kotlinSolution != null &&
-            ((detemplatedJavaStarter != null) == (detemplatedKotlinStarter != null)),
-    val published: Published = Published(
-        name,
-        type,
-        slug,
-        metadata.author,
-        metadata.version,
-        metadata.citation,
-        metadata.packageName,
-        mutableSetOf(Language.java).apply {
-            if (hasKotlin) {
-                add(Language.kotlin)
-            }
-        }.toSet(),
-        mutableMapOf(Language.java to metadata.javaDescription).apply {
-            if (hasKotlin) {
-                put(Language.kotlin, metadata.kotlinDescription!!)
-            }
-        }.toMap(),
-        detemplatedJavaStarter?.let {
-            mutableMapOf(Language.java to detemplatedJavaStarter).apply {
-                if (hasKotlin) {
-                    put(Language.kotlin, detemplatedKotlinStarter!!)
-                }
-            }.toMap()
-        },
-        mutableMapOf(Language.java to correct.complexity!!).apply {
-            if (hasKotlin) {
-                put(
-                    Language.kotlin,
-                    alternativeSolutions
-                        .filter { it.language == Language.kotlin }
-                        .mapNotNull { it.complexity }
-                        .minOrNull()!!
-                )
-            }
-        },
-        mutableMapOf(Language.java to correct.features!!).apply {
-            if (hasKotlin) {
-                put(Language.kotlin, kotlinSolution!!.features!!)
-            }
-        },
-        mutableMapOf(Language.java to correct.lineCount!!).apply {
-            if (hasKotlin) {
-                put(Language.kotlin, kotlinSolution!!.lineCount!!)
-            }
-        },
-        metadata.templateImports,
-        metadata.questionerVersion,
-        metadata.contentHash
-    ),
+    val checkstyleSuppressions: Set<String>
 ) {
     @Transient
-    val correctByLanguage = mutableMapOf(Language.java to correct.contents).apply {
-        if (hasKotlin) {
-            put(Language.kotlin, alternativeSolutions.find { it.language == Language.kotlin }!!.contents)
-        }
-    }
+    val hasKotlin = published.languages.contains(Language.kotlin)
+
+    fun getTemplate(language: Language) = templateByLanguage?.get(language)
+
+    fun getSolution(language: Language) = solutionByLanguage[language]
+
+    fun getCorrect(language: Language) = solutionByLanguage[language]?.contents
 
     enum class Type { KLASS, METHOD, SNIPPET }
 
@@ -131,45 +74,38 @@ data class Question(
 
     @JsonClass(generateAdapter = true)
     data class Published(
-        val name: String,
-        val type: Type,
+        val contentHash: String,
         val path: String,
         val author: String,
         val version: String,
+        val name: String,
+        val type: Type,
         val citation: Citation?,
         val packageName: String,
         val languages: Set<Language>,
         val descriptions: Map<Language, String>,
         val starters: Map<Language, String>?,
-        val complexity: Map<Language, Int>,
-        val features: Map<Language, Features>,
-        val lineCounts: Map<Language, LineCounts>,
         val templateImports: Set<String>,
         val questionerVersion: String,
-        val contentHash: String,
+        val authorName: String = "",
         val canTestTest: Boolean = type == Type.KLASS || type == Type.METHOD
     )
 
     @JsonClass(generateAdapter = true)
+    data class Classification(
+        val featuresByLanguage: Map<Language, Features>,
+        val lineCounts: Map<Language, LineCounts>,
+        val complexity: Map<Language, Int>,
+        var recursiveMethodsByLanguage: Map<Language, Set<ResourceMonitoringResults.MethodInfo>>? = null,
+        var loadedClassesByLanguage: Map<Language, Set<String>>? = null,
+    )
+
+    @JsonClass(generateAdapter = true)
     data class Metadata(
-        val contentHash: String,
-        val packageName: String,
-        val version: String,
-        val author: String,
-        val javaDescription: String,
-        val questionerVersion: String,
-        val kotlinDescription: String?,
-        val citation: Citation?,
-        val usedFiles: Set<String> = setOf(),
         val unusedFiles: Set<String> = setOf(),
-        val templateImports: Set<String> = setOf(),
         val focused: Boolean? = null,
         val publish: Boolean? = null
     ) {
-        init {
-            check(templateImports.size == templateImports.toSet().size)
-        }
-
         companion object {
             const val DEFAULT_FOCUSED = false
             const val DEFAULT_PUBLISH = true
@@ -281,7 +217,7 @@ data class Question(
         val checkBlacklist: Boolean = true,
         val disableLineCountLimit: Boolean = false,
         val disableAllocationLimit: Boolean = false,
-        var solutionRecursiveMethods: LanguagesRecursiveMethods? = null,
+        var solutionRecursiveMethods: Map<Language, Set<ResourceMonitoringResults.MethodInfo>>? = null,
         val minTestCount: Int = -1,
         val maxTestCount: Int = -1,
         val suppressions: Set<String>? = null
@@ -320,25 +256,11 @@ data class Question(
         val solutionCoverage: TestResults.CoverageComparison.LineCoverage,
         val executionCounts: LanguagesResourceUsage,
         val memoryAllocation: LanguagesResourceUsage,
-        val solutionRecursiveMethods: LanguagesRecursiveMethods,
-        val solutionLoadedClasses: LanguagesSolutionLoadedClasses,
         val solutionMaxClassSize: LanguagesResourceUsage? = null
     )
 
     @JsonClass(generateAdapter = true)
     data class LanguagesResourceUsage(val java: Long, val kotlin: Long? = null)
-
-    @JsonClass(generateAdapter = true)
-    data class LanguagesRecursiveMethods(
-        val java: Set<ResourceMonitoringResults.MethodInfo>,
-        val kotlin: Set<ResourceMonitoringResults.MethodInfo>? = null
-    )
-
-    @JsonClass(generateAdapter = true)
-    data class LanguagesSolutionLoadedClasses(
-        val java: Set<String>,
-        val kotlin: Set<String>? = null
-    )
 
     @JsonClass(generateAdapter = true)
     data class LanguagesSolutionClassSize(
@@ -398,7 +320,7 @@ data class Question(
             if (_contents != null) {
                 return _contents!!
             }
-            return question.correctByLanguage[language]!!.let {
+            return question.getCorrect(language)!!.let {
                 DiffUtils.patch(it.lines(), UnifiedDiffUtils.parseUnifiedDiff(deltas))
             }.joinToString("\n").also {
                 _contents = it
@@ -533,11 +455,6 @@ ${question.contents}
         }
     }
 
-    fun getTemplate(language: Language) = when (language) {
-        Language.java -> javaTemplate
-        Language.kotlin -> kotlinTemplate
-    }
-
     fun Set<String>.topLevelClasses() = map { it.split("$").first() }.distinct()
 
     fun Language.extension() = when (this) {
@@ -617,7 +534,7 @@ ${question.contents}
     }
 
     @Transient
-    val fullPath = "${published.author}/${published.path}/${published.version}/${metadata.contentHash}"
+    val fullPath = "${published.author}/${published.path}/${published.version}/${published.contentHash}"
 }
 
 fun String.deTemplate(template: String?): String {
@@ -655,14 +572,6 @@ fun Question.writeToFile(file: File) = try {
     null
 }
 
-fun Collection<Question>.writeToFile(file: File) {
-    file.writeText(
-        moshi.adapter<List<Question>>(
-            Types.newParameterizedType(List::class.java, Question::class.java)
-        ).indent("  ").toJson(this.toList())
-    )
-}
-
 private inline infix fun <reified T : Any> T.merge(other: T): T {
     val nameToProperty = T::class.declaredMemberProperties.associateBy { it.name }
     val primaryConstructor = T::class.primaryConstructor!!
@@ -672,4 +581,14 @@ private inline infix fun <reified T : Any> T.merge(other: T): T {
         (property.get(other) ?: property.get(this))
     }
     return primaryConstructor.callBy(args)
+}
+
+fun <T> makeLanguageMap(java: T?, kotlin: T?) = if (java != null) {
+    mutableMapOf(Language.java to java).apply {
+        if (kotlin != null) {
+            put(Language.kotlin, kotlin)
+        }
+    }.toMap()
+} else {
+    null
 }

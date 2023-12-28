@@ -32,7 +32,10 @@ class QuestionerPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val config = project.extensions.create("questioner", QuestionerConfigExtension::class.java)
 
-        val saveQuestions = project.tasks.register("saveQuestions", SaveQuestions::class.java).get()
+        val buildPackageMap = project.tasks.register("buildPackageMap", BuildPackageMap::class.java).get()
+        val saveQuestions = project.tasks.register("saveQuestions", SaveQuestions::class.java) {
+            it.dependsOn(buildPackageMap)
+        }.get()
 
         project.extensions.getByType(JavaPluginExtension::class.java)
             .sourceSets.getByName("test").java.srcDirs(project.layout.buildDirectory.dir("questioner").get().asFile)
@@ -47,7 +50,7 @@ class QuestionerPlugin : Plugin<Project> {
 
         project.tasks.withType(SourceTask::class.java) { sourceTask ->
             sourceTask.exclude("**/.question.json")
-            sourceTask.exclude("questions.json", *testFiles.toTypedArray())
+            sourceTask.exclude("questions.json", "packageMap.json", *testFiles.toTypedArray())
         }
 
         project.tasks.create("testAllQuestions", Test::class.java) { testTask ->

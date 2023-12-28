@@ -21,7 +21,7 @@ suspend fun Solution.validate(question: Question): Solution {
         validation = Solution.Validation(
             Instant.now(),
             question.published.version,
-            question.metadata.contentHash,
+            question.published.contentHash,
             VERSION
         )
     )

@@ -7,7 +7,7 @@ object Validator {
     private val questions =
         moshi.adapter<List<Question>>(Types.newParameterizedType(List::class.java, Question::class.java))
             .fromJson(object {}::class.java.getResource("/questions.json")!!.readText())!!
-            .associateBy { question -> question.name }
+            .associateBy { question -> question.published.name }
 
     suspend fun validate(name: String): Pair<Question, ValidationReport?> {
         val question = questions[name] ?: error("no question named $name")

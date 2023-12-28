@@ -26,7 +26,7 @@ internal data class Submission(
 }
 
 internal fun Question.toSubmission(type: Submission.SubmissionType, language: Language, contents: String) =
-    Submission(type, metadata.contentHash, language, contents)
+    Submission(type, published.contentHash, language, contents)
 
 internal suspend fun Submission.test(question: Question): ServerResponse {
     // FIXME

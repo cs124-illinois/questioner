@@ -79,7 +79,7 @@ fun Question.checkInitialSubmission(contents: String, language: Language, testRe
         // If the code doesn't parse as a snippet, fall back to compiler error messages which are usually more useful
         return true
     }
-    when (type) {
+    when (published.type) {
         Question.Type.SNIPPET -> {
             if (snippetProperties.importCount > 0) {
                 testResults.failed.checkInitialSubmission = "import statements are not allowed for this problem"
@@ -305,9 +305,9 @@ fun Question.checkExecutedSubmission(
 suspend fun Question.mutations(seed: Int, count: Int) =
     templateSubmission(
         if (getTemplate(Language.java) != null) {
-            "// TEMPLATE_START\n" + correct.contents + "\n// TEMPLATE_END \n"
+            "// TEMPLATE_START\n" + solutionByLanguage[Language.java]!!.contents + "\n// TEMPLATE_END \n"
         } else {
-            correct.contents
+            solutionByLanguage[Language.java]!!.contents
         }, Language.java
     ).allFixedMutations(random = Random(seed)).mapNotNull {
         try {
@@ -339,13 +339,13 @@ Please report a bug so that we can improve the mutation engine.
                 try {
                     it.contents.deTemplate(getTemplate(Language.java))
                 } catch (e: Exception) {
-                    correct.contents
+                    getCorrect(Language.java)!!
                 }, it
             )
         }
         .filter { (contents, _) ->
             // Templated questions sometimes will mutate the template
-            contents != correct.contents
+            contents != getCorrect(Language.java)!!
         }
         .distinctBy { (contents, _) ->
             contents.stripComments(Source.FileType.JAVA).hashCode()
@@ -410,7 +410,7 @@ fun Question.computeClassSize(
 class MaxComplexityExceeded(message: String) : RuntimeException(message)
 
 fun Question.computeComplexity(contents: String, language: Language): TestResults.ComplexityComparison {
-    val solutionComplexity = published.complexity[language]
+    val solutionComplexity = classification.complexity[language]
     check(solutionComplexity != null) { "Solution complexity not available for $language" }
 
     val maxComplexity =
@@ -419,9 +419,9 @@ fun Question.computeComplexity(contents: String, language: Language): TestResult
             .coerceAtLeast(Question.TestingControl.DEFAULT_MIN_FAIL_FAST_COMPLEXITY)
 
     val submissionComplexity = when {
-        type == Question.Type.SNIPPET && contents.isBlank() -> 0
+        published.type == Question.Type.SNIPPET && contents.isBlank() -> 0
         language == Language.java -> {
-            val source = when (type) {
+            val source = when (published.type) {
                 Question.Type.KLASS -> Source(mapOf("$klass.java" to contents))
                 Question.Type.METHOD -> Source(
                     mapOf(
@@ -435,7 +435,7 @@ $contents
                 Question.Type.SNIPPET -> Source.fromJavaSnippet(contents, trim = false)
             }
             source.complexity().let { results ->
-                when (type) {
+                when (published.type) {
                     Question.Type.KLASS -> results.lookupFile("$klass.java")
                     Question.Type.METHOD -> results.lookup(klass, "$klass.java").complexity
                     Question.Type.SNIPPET -> results.lookup("").complexity
@@ -444,12 +444,12 @@ $contents
         }
 
         language == Language.kotlin -> {
-            val source = when (type) {
+            val source = when (published.type) {
                 Question.Type.SNIPPET -> Source.fromKotlinSnippet(contents, trim = false)
                 else -> Source(mapOf("$klass.kt" to contents))
             }
             source.complexity().let { results ->
-                when (type) {
+                when (published.type) {
                     Question.Type.SNIPPET -> results.lookup("").complexity
                     else -> results.lookupFile("$klass.kt")
                 }
@@ -471,7 +471,7 @@ fun Question.checkFeatures(
     submissionFeatures: Features,
     language: Language
 ): TestResults.FeaturesComparison {
-    val solutionFeatures = published.features[language]
+    val solutionFeatures = classification.featuresByLanguage[language]
     check(solutionFeatures != null) { "Solution features not available" }
 
     val errors = if (featureChecker != null) {
@@ -491,7 +491,7 @@ fun Question.checkFeatures(
 class MaxLineCountExceeded(message: String) : RuntimeException(message)
 
 fun Question.computeLineCounts(contents: String, language: Language): TestResults.LineCountComparison {
-    val solutionLineCount = published.lineCounts[language]
+    val solutionLineCount = classification.lineCounts[language]
     check(solutionLineCount != null) { "Solution line count not available" }
 
     val maxLineCount = (control.maxLineCountMultiplier!! * solutionLineCount.source).toInt()
@@ -531,16 +531,9 @@ fun Question.checkRecursion(
         ResourceMonitoringResults.MethodInfo(klassName, it.name, Type.getMethodDescriptor(it))
     }.toSet()
 
-    val expectedRecursiveMethods = if (isSolution) {
-        submissionRecursiveMethods
-    } else {
-        if (language == Language.java) {
-            validationResults?.solutionRecursiveMethods?.java
-                ?: settings.solutionRecursiveMethods?.java
-        } else {
-            validationResults?.solutionRecursiveMethods?.kotlin
-                ?: settings.solutionRecursiveMethods?.kotlin
-        }
+    val expectedRecursiveMethods = when {
+        isSolution -> submissionRecursiveMethods
+        else -> classification.recursiveMethodsByLanguage?.get(language) ?: settings.solutionRecursiveMethods?.get(language)
     }
     check(expectedRecursiveMethods != null)
 

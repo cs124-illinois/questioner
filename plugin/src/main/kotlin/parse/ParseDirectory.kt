@@ -5,6 +5,7 @@ import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.VERSION
 import edu.illinois.cs.cs125.questioner.lib.loadQuestion
+import edu.illinois.cs.cs125.questioner.lib.makeLanguageMap
 import org.jetbrains.annotations.NotNull
 import java.io.File
 import java.nio.file.FileSystems
@@ -13,14 +14,20 @@ import java.nio.file.Path
 import java.security.DigestInputStream
 import java.security.MessageDigest
 import java.util.stream.Collectors
-import kotlin.io.path.isDirectory
 import kotlin.io.path.isRegularFile
 import kotlin.io.path.name
 import kotlin.io.path.relativeTo
 
 private val slugify = Slugify.builder().build()
 
-fun Path.parseDirectory(baseDirectory: Path, force: Boolean = false, questionerVersion: String = VERSION): Question {
+fun Path.parseDirectory(
+    baseDirectory: Path,
+    inputPackageMap: Map<String, List<String>>?,
+    force: Boolean = false,
+    questionerVersion: String = VERSION,
+): Question {
+    val packageMap = inputPackageMap ?: baseDirectory.buildPackageMap()
+
     val outputFile = parent.resolve(".question.json")
     val existingQuestion = outputFile.toFile().loadQuestion()
 
@@ -29,7 +36,7 @@ fun Path.parseDirectory(baseDirectory: Path, force: Boolean = false, questionerV
     }
 
     val contentHash = directoryHash(questionerVersion)
-    if (!force && existingQuestion?.metadata?.contentHash == contentHash) {
+    if (!force && existingQuestion?.published?.contentHash == contentHash) {
         return existingQuestion
     }
 
@@ -69,8 +76,10 @@ fun Path.parseDirectory(baseDirectory: Path, force: Boolean = false, questionerV
     val commonImports =
         commonFiles.map { parsedJavaFile -> "${parsedJavaFile.packageName}.${parsedJavaFile.className}" }.toSet()
 
-    val mappedImports = solution.getMappedImports(baseDirectory)
-    val importNames = mappedImports.getLocalImportNames(baseDirectory) + commonImports
+    val localImports = solution.importsToPackages().map {
+        packageMap[it] ?: listOf()
+    }.flatten().mapNotNull { Path.of(it) }.asSequence()
+    val importNames = localImports.getLocalImportNames(baseDirectory) + commonImports
 
     var javaTemplate = File("${solution.path}.hbs").let { file ->
         when {
@@ -91,21 +100,21 @@ fun Path.parseDirectory(baseDirectory: Path, force: Boolean = false, questionerV
         addUsedFile(it.path, "Template")
     }?.readText()?.stripPackage()
 
-    val kotlinSolution = parsedKotlinFiles.find { it.isAlternateSolution && it.description != null }
+    val parsedKotlinSolution = parsedKotlinFiles.find { it.isAlternateSolution && it.description != null }
     if (parsedKotlinFiles.any { it.isAlternateSolution }) {
-        check(kotlinSolution != null) {
+        check(parsedKotlinSolution != null) {
             "Found Kotlin solutions but no description comment"
         }
     }
 
     if (solution.autoStarter) {
-        kotlinSolution?.extractStarter(solution.wrapWith)
+        parsedKotlinSolution?.extractStarter(solution.wrapWith)
     }
 
     val hasJavaTemplate = solution.contents.lines().let { lines ->
         lines.any { it.contains("TEMPLATE_START") } && lines.any { it.contains("TEMPLATE_END") }
     }
-    val hasKotlinTemplate = kotlinSolution?.contents?.lines()?.let { lines ->
+    val hasKotlinTemplate = parsedKotlinSolution?.contents?.lines()?.let { lines ->
         lines.any { it.contains("TEMPLATE_START") } && lines.any { it.contains("TEMPLATE_END") }
     } ?: false
 
@@ -119,7 +128,7 @@ fun Path.parseDirectory(baseDirectory: Path, force: Boolean = false, questionerV
     }
 
     if (hasKotlinTemplate && kotlinTemplate == null && solution.wrapWith == null) {
-        kotlinTemplate = kotlinSolution!!.extractTemplate(importNames) ?: error(
+        kotlinTemplate = parsedKotlinSolution!!.extractTemplate(importNames) ?: error(
             "Can't extract Kotlin template",
         )
     }
@@ -134,7 +143,7 @@ fun Path.parseDirectory(baseDirectory: Path, force: Boolean = false, questionerV
             )
         }
 
-    val alternateSolutions = parsedJavaFiles.filter { it.isAlternateSolution }
+    val alternativeSolutions = parsedJavaFiles.filter { it.isAlternateSolution }
         .onEach { addUsedFile(it.path, "Alternate") }
         .map {
             it.toAlternateFile(javaCleanSpec)
@@ -147,7 +156,7 @@ fun Path.parseDirectory(baseDirectory: Path, force: Boolean = false, questionerV
             )
         }.toList()
 
-    val common = mappedImports.getLocalImportPaths().map { path ->
+    val common = localImports.getLocalImportPaths().map { path ->
         addUsedFile(path.toString(), "Common")
         ParsedJavaFile(path.toFile()).contents.stripPackage()
     } + commonFiles.map { file ->
@@ -182,7 +191,7 @@ fun Path.parseDirectory(baseDirectory: Path, force: Boolean = false, questionerV
     }
 
     if (solution.autoStarter) {
-        val autoStarter = kotlinSolution?.extractStarter(solution.wrapWith)
+        val autoStarter = parsedKotlinSolution?.extractStarter(solution.wrapWith)
         if (autoStarter != null && kotlinStarterFile != null) {
             error("autoStarter succeeded but Kotlin starter file found. Please remove it.\n" + kotlinStarterFile.path)
         }
@@ -192,14 +201,14 @@ fun Path.parseDirectory(baseDirectory: Path, force: Boolean = false, questionerV
     // Needed to set imports properly
     solution.clean(javaCleanSpec)
 
-    val javaImports = (solution.usedImports + solution.templateImports).toMutableSet()
+    val templateImports = (solution.usedImports + solution.templateImports).toMutableSet()
     // HACK HACK: Allow java.util.Set methods when java.util.Map is used and no @TemplateImports
-    if (!solution.hasTemplateImports && javaImports.contains("java.util.Map")) {
-        javaImports += "java.util.Set"
+    if (!solution.hasTemplateImports && templateImports.contains("java.util.Map")) {
+        templateImports += "java.util.Set"
     }
-    val kotlinImports = ((kotlinSolution?.usedImports ?: listOf()) + solution.templateImports).toSet()
+    val kotlinImports = ((parsedKotlinSolution?.usedImports ?: listOf()) + solution.templateImports).toSet()
 
-    javaImports
+    templateImports
         .filter { it.endsWith(".NotNull") || it.endsWith(".NonNull") }
         .filter { it != NotNull::class.java.name }
         .also {
@@ -225,12 +234,12 @@ fun Path.parseDirectory(baseDirectory: Path, force: Boolean = false, questionerV
                 |  {{{ contents }}}
                 |}
         """.trimMargin()
-        if (javaImports.isNotEmpty()) {
-            javaTemplate = javaImports.joinToString("\n") { "import $it;" } + "\n\n$javaTemplate"
+        if (templateImports.isNotEmpty()) {
+            javaTemplate = templateImports.joinToString("\n") { "import $it;" } + "\n\n$javaTemplate"
         }
 
-        if (kotlinSolution != null) {
-            kotlinTemplate = if (kotlinSolution.topLevelFile) {
+        if (parsedKotlinSolution != null) {
+            kotlinTemplate = if (parsedKotlinSolution.topLevelFile) {
                 "{{{ contents }}}"
             } else {
                 """class ${solution.wrapWith} {
@@ -248,36 +257,29 @@ fun Path.parseDirectory(baseDirectory: Path, force: Boolean = false, questionerV
     kotlinStarterFile?.also { incorrectExamples.add(0, it) }
     javaStarterFile?.also { incorrectExamples.add(0, it) }
 
-    val (cleanSolution, questionType) = solution.toCleanSolution(javaCleanSpec)
+    val (javaSolution, type) = solution.toCleanSolution(javaCleanSpec)
 
-    if (questionType == Question.Type.METHOD) {
-        check(!cleanSolution.contents.methodIsMarkedPublicOrStatic()) {
+    if (type == Question.Type.METHOD) {
+        check(!javaSolution.contents.methodIsMarkedPublicOrStatic()) {
             "Do not use public modifiers on method-only problems, and use static only on private helpers: ${solution.path}"
         }
     }
 
+    val javaDescription = solution.correct.description
+    val kotlinDescription = parsedKotlinSolution?.description
+
     val metadata = Question.Metadata(
-        contentHash,
-        solution.packageName,
-        solution.correct.version,
-        solution.correct.author,
-        solution.correct.description,
-        questionerVersion,
-        kotlinSolution?.description,
-        solution.citation,
-        usedFiles.keys.map { path -> baseDirectory.relativize(Path.of(path)).toString() }.toSet(),
         allFiles
             .map { file -> file.path }
             .filter { path -> !usedFiles.containsKey(path) }
             .map { path ->
                 baseDirectory.relativize(Path.of(path)).toString()
             }.toSet(),
-        javaImports,
         solution.correct.focused,
         solution.correct.publish,
     )
 
-    if (metadata.kotlinDescription != null && kotlinSolution != null) {
+    if (kotlinDescription != null) {
         val hasJavaStarter = incorrectExamples.any { it.language == Language.java && it.starter }
         val hasKotlinStarter = incorrectExamples.any { it.language == Language.kotlin && it.starter }
         if (hasJavaStarter) {
@@ -285,30 +287,68 @@ fun Path.parseDirectory(baseDirectory: Path, force: Boolean = false, questionerV
         }
     }
 
-    return Question(
-        solution.correct.name,
-        questionType,
+    val slug = solution.correct.path ?: slugify.slugify(solution.correct.name)
+    val detemplatedJavaStarter = incorrectExamples.find { it.language == Language.java && it.starter }?.contents
+    val detemplatedKotlinStarter = incorrectExamples.find { it.language == Language.kotlin && it.starter }?.contents
+
+    val hasKotlin: Boolean = kotlinDescription != null
+
+    val kotlinSolution = parsedKotlinSolution?.toAlternateFile(kotlinCleanSpec)
+
+    val kotlinComplexity = alternativeSolutions
+        .filter { it.language == Language.kotlin }
+        .mapNotNull { it.complexity }
+        .minOrNull()
+
+    val published = Question.Published(
+        contentHash = contentHash,
+        path = slug,
+        author = solution.correct.author,
+        version = solution.correct.version,
+        name = solution.correct.name,
+        type = type,
+        citation = solution.citation,
+        packageName = solution.packageName,
+        languages = mutableSetOf(Language.java).apply {
+            if (hasKotlin) {
+                add(Language.kotlin)
+            }
+        }.toSet(),
+        descriptions = makeLanguageMap(javaDescription, kotlinDescription)!!,
+        starters = makeLanguageMap(detemplatedJavaStarter, detemplatedKotlinStarter),
+        templateImports = templateImports,
+        questionerVersion = questionerVersion,
+    )
+
+    val classification = Question.Classification(
+        featuresByLanguage = makeLanguageMap(javaSolution.features!!, kotlinSolution?.features)!!,
+        lineCounts = makeLanguageMap(javaSolution.lineCount!!, kotlinSolution?.lineCount)!!,
+        complexity = makeLanguageMap(javaSolution.complexity!!, kotlinComplexity)!!,
+    )
+
+    val question = Question.FlatFile(
         solution.className,
-        metadata,
-        solution.correct.control,
-        Question.FlatFile(
-            solution.className,
-            solution.removeImports(importNames).stripPackage(),
-            Language.java,
-            solution.path,
-            suppressions = solution.suppressions,
-        ),
-        cleanSolution,
-        alternateSolutions,
-        incorrectExamples,
-        common,
-        javaTemplate,
-        kotlinTemplate,
-        solution.whitelist,
-        solution.blacklist,
-        solution.checkstyleSuppress,
-        solution.correct.path ?: slugify.slugify(solution.correct.name),
-        kotlinSolution?.toAlternateFile(kotlinCleanSpec),
+        solution.removeImports(importNames).stripPackage(),
+        Language.java,
+        solution.path,
+        suppressions = solution.suppressions,
+    )
+
+    return Question(
+        published = published,
+        classification = classification,
+        klass = solution.className,
+        metadata = metadata,
+        annotatedControls = solution.correct.control,
+        question = question,
+        solutionByLanguage = makeLanguageMap(javaSolution, kotlinSolution)!!,
+        alternativeSolutions = alternativeSolutions,
+        incorrectExamples = incorrectExamples,
+        common = common,
+        templateByLanguage = makeLanguageMap(javaTemplate, kotlinTemplate),
+        importWhitelist = solution.whitelist,
+        importBlacklist = solution.blacklist,
+        checkstyleSuppressions = solution.checkstyleSuppress,
     )
 }
 
@@ -337,43 +377,24 @@ private fun Path.directoryHash(questionerVersion: String) = MessageDigest.getIns
     "${md5.digest().fold("") { str, it -> str + "%02x".format(it) }}-v$questionerVersion"
 }
 
-private fun String.importToPath() = replace(".", FileSystems.getDefault().separator)
-private fun String.pathToImport() = replace(FileSystems.getDefault().separator, ".")
+private fun String.pathToImport() = removeSuffix(".java").replace(FileSystems.getDefault().separator, ".")
 
 private fun Path.toJavaFile() = resolveSibling("${fileName.toString().removeSuffix(".java")}.java")
-private fun ParsedJavaFile.getMappedImports(baseDirectory: Path) = listedImports
-    .asSequence()
-    .map { importName ->
-        when {
-            importName.endsWith(".*") -> Pair(importName.removeSuffix(".*"), true)
-            else -> Pair(importName, false)
-        }
-    }
-    .map { (importName, isDirectory) -> Pair(baseDirectory.resolve(importName.importToPath()), isDirectory) }
-    .filter { (importPath, isDirectory) ->
-        when (isDirectory) {
-            true -> importPath.isDirectory()
-            false -> importPath.resolveSibling("${importPath.fileName}.java").isRegularFile()
-        }
-    }.map { (importPath) -> importPath }
-    .filterNotNull()
+
+private fun ParsedJavaFile.importsToPackages() = listedImports.map { importName ->
+    importName.split(".").dropLast(1).joinToString(".")
+}.toSet()
 
 private fun Sequence<Path>.getLocalImportPaths() = map { path ->
     when {
-        path.isDirectory() ->
-            Files.walk(path, 1).filter { it.endsWith(".java") || it.endsWith(".kt") }.collect(Collectors.toList())
-
         path.toJavaFile().isRegularFile() -> listOf(path.toJavaFile())
-        else -> error("Invalid file type")
+        else -> error("Invalid path type")
     }
 }.flatten().toSet()
 
 private fun Sequence<Path>.getLocalImportNames(baseDirectory: Path) = map { path ->
     when {
-        path.isDirectory() -> path.relativeTo(baseDirectory).toString().pathToImport() + ".*"
-
         path.toJavaFile().isRegularFile() -> path.relativeTo(baseDirectory).toString().pathToImport()
-
-        else -> error("Invalid file type: $path")
+        else -> error("Invalid path type: $path")
     }
 }.toSet()

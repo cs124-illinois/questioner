@@ -31,30 +31,12 @@ export const LanguagesResourceUsage = Record({
 )
 export type LanguagesResourceUsage = Static<typeof LanguagesResourceUsage>
 
-export const LanguagesSolutionLoadedClasses = Record({
-  java: RuntypeArray(String),
-}).And(
-  Partial({
-    kotlin: RuntypeArray(String),
-  }),
-)
-export type LanguagesSolutionLoadedClasses = Static<typeof LanguagesSolutionLoadedClasses>
-
 export const MethodInfo = Record({
   className: String,
   methodName: String,
   descriptor: String,
 })
 export type MethodInfo = Static<typeof MethodInfo>
-
-export const LanguagesRecursiveMethods = Record({
-  java: RuntypeArray(MethodInfo),
-}).And(
-  Partial({
-    kotlin: RuntypeArray(MethodInfo),
-  }),
-)
-export type LanguagesRecursiveMethods = Static<typeof LanguagesRecursiveMethods>
 
 export const LineCoverage = Record({
   covered: Number,
@@ -75,9 +57,11 @@ export const ValidationResults = Record({
   solutionCoverage: LineCoverage,
   executionCounts: LanguagesResourceUsage,
   memoryAllocation: LanguagesResourceUsage,
-  solutionRecursiveMethods: LanguagesRecursiveMethods,
-  solutionLoadedClasses: LanguagesSolutionLoadedClasses,
-})
+}).And(
+  Partial({
+    solutionMaxClassSize: LanguagesResourceUsage,
+  }),
+)
 export type ValidationResults = Static<typeof ValidationResults>
 
 export const Languages = Union(Literal("java"), Literal("kotlin"))
@@ -115,17 +99,15 @@ export type QuestionType = Static<typeof QuestionType>
 
 export const QuestionPublished = QuestionPath.And(
   Record({
+    contentHash: String,
     name: String,
     type: QuestionType,
     packageName: String,
     languages: RuntypeArray(Languages),
     descriptions: Dictionary(String, Languages),
-    complexity: Dictionary(Number, Languages),
-    features: Dictionary(FeatureValue, Languages),
-    lineCounts: Dictionary(LineCounts, Languages),
     templateImports: RuntypeArray(String),
     questionerVersion: String,
-    contentHash: String,
+    authorName: String,
     canTestTest: Boolean,
   }),
 ).And(
@@ -136,27 +118,22 @@ export const QuestionPublished = QuestionPath.And(
 )
 export type QuestionPublished = Static<typeof QuestionPublished>
 
-export const NamedQuestion = QuestionPublished.And(
-  Record({
-    questionAuthor: String,
-  }),
-)
-export type NamedQuestion = Static<typeof NamedQuestion>
-
-export const QuestionMetadata = Record({
-  contentHash: String,
-  packageName: String,
-  version: String,
-  author: String,
-  javaDescription: String,
-  questionerVersion: String,
-  usedFiles: RuntypeArray(String),
-  unusedFiles: RuntypeArray(String),
-  templateImports: RuntypeArray(String),
+export const QuestionClassification = Record({
+  featuresByLanguage: Dictionary(FeatureValue, Languages),
+  complexity: Dictionary(Number, Languages),
+  lineCounts: Dictionary(LineCounts, Languages),
 }).And(
   Partial({
-    kotlinDescription: String,
-    citation: Citation,
+    recursiveMethodsByLanguage: Dictionary(RuntypeArray(MethodInfo), Languages),
+    loadedClassesByLanguage: Dictionary(RuntypeArray(String), Languages),
+  }),
+)
+export type QuestionClassification = Static<typeof QuestionClassification>
+
+export const QuestionMetadata = Record({
+  unusedFiles: RuntypeArray(String),
+}).And(
+  Partial({
     focused: Boolean,
     publish: Boolean,
   }),
@@ -165,9 +142,12 @@ export type QuestionMetadata = Static<typeof QuestionMetadata>
 
 export const Question = Record({
   published: QuestionPublished,
-  metadata: QuestionMetadata,
-  validationResults: ValidationResults,
-})
+  classification: QuestionClassification,
+}).And(
+  Partial({
+    validationResults: ValidationResults,
+  }),
+)
 export type Question = Static<typeof Question>
 
 export const SubmissionType = Union(Literal("SOLVE"), Literal("TESTTESTING"))
@@ -530,3 +510,10 @@ export const ServerResponse = Record({
   }),
 )
 export type ServerResponse = Static<typeof ServerResponse>
+
+export const QuestionTagged = QuestionPublished.And(
+  Record({
+    tags: Array(String),
+  }),
+)
+export type QuestionTagged = Static<typeof QuestionTagged>

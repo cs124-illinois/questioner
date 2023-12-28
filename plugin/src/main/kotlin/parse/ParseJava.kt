@@ -1,6 +1,5 @@
 package edu.illinois.cs.cs125.questioner.plugin.parse
 
-import com.google.googlejavaformat.java.Formatter
 import edu.illinois.cs.cs125.jeed.core.CheckstyleArguments
 import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.checkstyle
@@ -440,9 +439,7 @@ $cleanContent
             correctSolution.substring(0..prefix) +
                 "return$starterReturn; // You may need to remove this starter code" +
                 correctSolution.substring(postfix until correctSolution.length)
-            ).let {
-            Formatter().formatSource(it)
-        }.javaDeTemplate(false, wrapWith).let {
+            ).googleFormat().javaDeTemplate(false, wrapWith).let {
             Question.IncorrectFile(
                 className,
                 it,
@@ -650,8 +647,7 @@ $cleanContent
             .split("\n")
             .filterIndexed { index, _ -> (index + 1) !in toRemove }
             .joinToString("\n")
-            .trim()
-            .let { Formatter().formatSource(it) }
+            .trim().googleFormat()
             .let { content ->
                 Source.fromJava(content).checkstyle(CheckstyleArguments(failOnError = false)).let { results ->
                     val unusedImports = results.errors.filter { error ->

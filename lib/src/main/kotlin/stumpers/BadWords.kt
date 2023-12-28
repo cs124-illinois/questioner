@@ -8,7 +8,7 @@ import edu.illinois.cs.cs125.questioner.lib.templateSubmission
 private val badWords = mutableMapOf<Question, Set<String>>()
 
 fun Question.badWords() = badWords.getOrPut(this) {
-    correct.contents.let {
+    getCorrect(Language.java)!!.let {
         if (getTemplate(Language.java) != null) {
             "// TEMPLATE_START\n$it\n// TEMPLATE_END \n"
         } else {

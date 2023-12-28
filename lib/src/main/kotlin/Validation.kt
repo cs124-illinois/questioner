@@ -21,6 +21,8 @@ data class IncorrectResults(val incorrect: Question.IncorrectFile, val results: 
 
 private val limiter = Semaphore(1)
 
+private const val RETRY_THRESHOLD = 0.5
+
 @Suppress("LongMethod", "ComplexMethod")
 suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): ValidationReport {
 
@@ -35,6 +37,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     val javaClassWhitelist = mutableSetOf<String>().apply { addAll(defaultJavaClassWhitelist) }
     val kotlinClassWhitelist = mutableSetOf<String>().apply { addAll(defaultKotlinClassWhitelist) }
 
+    val javaSolution = getSolution(Language.java)!!
+
     fun TestResults.checkCorrect(file: Question.FlatFile, finalChecks: Boolean = false) {
         if (taskResults?.threw != null) {
             throw SolutionTestingThrew(file, taskResults!!.threw!!)
@@ -45,14 +49,12 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             }
             val percentLineCountCompleted =
                 resourceMonitoringResults!!.submissionLines.toDouble() / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
-            if (timeout && !lineCountTimeout && percentLineCountCompleted < 0.1) {
-                throw RetryValidation()
-            }
-            if (complete.testing?.passed == false) {
-                throw SolutionFailed(file, summary)
-            } else {
-                check(complete.testing?.failedReceiverGeneration == true) {
-                    when {
+
+            val exception = when {
+                complete.testing?.passed == false -> SolutionFailed(file, summary)
+                complete.testing?.failedReceiverGeneration == true -> SolutionReceiverGeneration(file)
+                else -> {
+                    val message = when {
                         failedSteps.contains(TestResults.Step.compileSubmission) -> {
                             val templated = if (getTemplate(file.language) != null) {
                                 templateSubmission(file.contents, language)
@@ -60,33 +62,38 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
                                 null
                             }
                             """Error compiling solution:
-                                |---
-                                |${file.contents}
-                                |${
+                                        |---
+                                        |${file.contents}
+                                        |${
                                 if (templated != null) {
                                     """
-                                    |--- (After templating)
-                                    |${templated.contents}
-                                    ---
-                                    """.trimMargin()
+                                            |--- (After templating)
+                                            |${templated.contents}
+                                            ---
+                                            """.trimMargin()
                                 } else {
                                     ""
                                 }
                             }
-                                |---
-                                |${
+                                        |---
+                                        |${
                                 failed.compileSubmission!!.message ?: failed.compileSubmission!!.errors.joinToString(
                                     "\n"
                                 )
                             }
-                            """.trimMargin()
+                                    """.trimMargin()
 
                         }
 
                         else -> summary
                     }
+                    SolutionFailed(file, message)
                 }
-                throw SolutionReceiverGeneration(file)
+            }
+            if (timeout && !lineCountTimeout && percentLineCountCompleted < RETRY_THRESHOLD) {
+                throw RetryValidation(exception)
+            } else {
+                throw exception
             }
         }
         if (failedLinting!!) {
@@ -177,11 +184,11 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             } else {
                 complete.ktlint!!.errors.joinToString("\n") { it.message }
             }
-            throw IncorrectFailedLinting(file, correct, errors)
+            throw IncorrectFailedLinting(file, javaSolution, errors)
         }
         if (mutated) {
             if (succeeded) {
-                throw IncorrectPassed(file, correct)
+                throw IncorrectPassed(file, javaSolution)
             }
         } else {
             try {
@@ -189,13 +196,14 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             } catch (e: Exception) {
                 val percentLineCountCompleted =
                     resourceMonitoringResults!!.submissionLines.toDouble() / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
-                if (timeout && !lineCountTimeout && percentLineCountCompleted < 0.1) {
-                    throw RetryValidation()
+                val exception = when (succeeded) {
+                    true -> WrongReasonPassed(file, e.message!!)
+                    else -> IncorrectWrongReason(file, e.message!!, summary)
                 }
-                throw if (succeeded) {
-                    WrongReasonPassed(file, e.message!!)
+                if (timeout && !lineCountTimeout && percentLineCountCompleted < RETRY_THRESHOLD) {
+                    throw RetryValidation(exception)
                 } else {
-                    IncorrectWrongReason(file, e.message!!, summary)
+                    throw exception
                 }
             }
         }
@@ -203,7 +211,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             && tests()?.size?.let { it > control.maxTestCount!! } == true
         ) {
             val failingInput = tests()!!.find { !it.passed }?.arguments
-            throw IncorrectTooManyTests(file, correct, tests()!!.size, control.maxTestCount!!, failingInput)
+            throw IncorrectTooManyTests(file, javaSolution, tests()!!.size, control.maxTestCount!!, failingInput)
         }
         val solutionThrew = tests()?.filter {
             it.jenisol!!.solution.threw != null
@@ -214,7 +222,11 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
                 && exception !is IllegalStateException
         }
         if (!control.solutionThrows!! && solutionThrew != null) {
-            throw SolutionThrew(correct, solutionThrew.jenisol!!.solution.threw!!, solutionThrew.jenisol.parameters)
+            throw SolutionThrew(
+                javaSolution,
+                solutionThrew.jenisol!!.solution.threw!!,
+                solutionThrew.jenisol.parameters
+            )
         }
         val size = toJson().length
         if (toJson().length > Question.DEFAULT_MAX_OUTPUT_SIZE) {
@@ -230,10 +242,10 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     val maxTestCount = control.maxTestCount!!.coerceAtMost(solution.maxCount)
 
     val solutionDeadCode = Question.LanguagesResourceUsage(
-        (setOf(correct) + alternativeSolutions).filter {
+        (setOf(javaSolution) + alternativeSolutions).filter {
             it.language === Language.java
         }.maxOf { it.expectedDeadCount ?: 0 }.toLong(),
-        (setOf(correct) + alternativeSolutions).filter {
+        (setOf(javaSolution) + alternativeSolutions).filter {
             it.language === Language.kotlin
         }.maxOfOrNull { it.expectedDeadCount ?: 0 }?.toLong()
     )
@@ -253,13 +265,13 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
         ),
         solutionDeadCode = solutionDeadCode,
-        suppressions = correct.suppressions
+        suppressions = javaSolution.suppressions
         // No execution count limit
         // No allocation limit
         // No known recursive methods yet
     )
 
-    val firstCorrectResults = (setOf(correct) + alternativeSolutions).map { right ->
+    val firstCorrectResults = (setOf(javaSolution) + alternativeSolutions).map { right ->
         test(right.contents, right.language, bootstrapSettings, isSolution = true).also { testResults ->
             testResults.checkCorrect(right)
         }
@@ -282,8 +294,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     check(solutionJavaRecursiveMethods != null)
     val solutionKotlinRecursiveMethods = firstCorrectResults.getRecursiveMethods(Language.kotlin)
 
-    val solutionRecursiveMethods =
-        Question.LanguagesRecursiveMethods(solutionJavaRecursiveMethods, solutionKotlinRecursiveMethods)
+    val solutionRecursiveMethods = makeLanguageMap(solutionJavaRecursiveMethods, solutionKotlinRecursiveMethods)
 
     val bootstrapSolutionCoverage = firstCorrectResults
         .mapNotNull { it.complete.coverage }
@@ -308,15 +319,15 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     val mutationStart = Instant.now()
     val mutations = mutations(seed, control.maxMutationCount ?: maxMutationCount).also {
         if (it.size < control.minMutationCount!!) {
-            throw TooFewMutations(correct, it.size, control.minMutationCount!!)
+            throw TooFewMutations(javaSolution, it.size, control.minMutationCount!!)
         }
     }
-    val allIncorrect = (incorrect + mutations).also { allIncorrect ->
-        check(allIncorrect.all { it.contents != correct.contents }) {
+    val allIncorrect = (incorrectExamples + mutations).also { allIncorrect ->
+        check(allIncorrect.all { it.contents != javaSolution.contents }) {
             "Incorrect solution identical to correct solution"
         }
         if (allIncorrect.isEmpty()) {
-            throw NoIncorrect(correct)
+            throw NoIncorrect(javaSolution)
         }
     }
     val mutationLength = Instant.now().toEpochMilli() - mutationStart.toEpochMilli()
@@ -343,7 +354,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         solutionRecursiveMethods = solutionRecursiveMethods,
         solutionDeadCode = solutionDeadCode,
         solutionClassSize = bootstrapClassSize,
-        suppressions = correct.suppressions
+        suppressions = javaSolution.suppressions
     )
     val incorrectResults = allIncorrect.map { wrong ->
         val specificIncorrectSettings = if (wrong.reason == Question.IncorrectFile.Reason.MEMORYLIMIT) {
@@ -376,10 +387,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     }.filterNotNull()
 
     testTestingIncorrect = useTestingIncorrect.mapIndexed { i, result ->
-        val correct = when (result.incorrect.language) {
-            Language.java -> correctByLanguage[Language.java]
-            Language.kotlin -> correctByLanguage[Language.kotlin]
-        }!!.lines()
+        val correct = getCorrect(result.incorrect.language)!!.lines()
         val extension = when (result.incorrect.language) {
             Language.java -> ".java"
             Language.kotlin -> ".kt"
@@ -387,7 +395,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         val diffs = DiffUtils.diff(correct, result.incorrect.contents.lines())
         val unifiedDiffs =
             UnifiedDiffUtils.generateUnifiedDiff("Correct$extension", "Incorrect$extension", correct, diffs, 0)
-        val incorrectIndex = if (allIncorrect[i] in incorrect) {
+        val incorrectIndex = if (allIncorrect[i] in incorrectExamples) {
             i
         } else {
             null
@@ -455,9 +463,9 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         solutionRecursiveMethods = solutionRecursiveMethods,
         solutionDeadCode = solutionDeadCode,
         solutionClassSize = bootstrapClassSize,
-        suppressions = correct.suppressions
+        suppressions = javaSolution.suppressions
     )
-    val calibrationResults = (setOf(correct) + alternativeSolutions).map { right ->
+    val calibrationResults = (setOf(javaSolution) + alternativeSolutions).map { right ->
         val results = limiter.withPermit {
             test(right.contents, right.language, calibrationSettings)
         }
@@ -490,9 +498,6 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     } else {
         null
     }
-
-    val solutionLoadedClasses =
-        Question.LanguagesSolutionLoadedClasses(solutionLoadedClassesJava.toSet(), solutionLoadedClassesKotlin)
 
     val calibrationLength = Instant.now().toEpochMilli() - calibrationStart.toEpochMilli()
 
@@ -530,7 +535,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         solutionRecursiveMethods = solutionRecursiveMethods,
         solutionDeadCode = solutionDeadCode,
         solutionClassSize = bootstrapClassSize,
-        suppressions = correct.suppressions
+        suppressions = javaSolution.suppressions
     )
 
     testTestingLimits = Question.TestTestingLimits(
@@ -557,10 +562,11 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         calibrationLength = calibrationLength,
         solutionCoverage = solutionCoverage,
         executionCounts = solutionExecutionCounts,
-        memoryAllocation = solutionAllocation,
-        solutionRecursiveMethods = solutionRecursiveMethods,
-        solutionLoadedClasses = solutionLoadedClasses
+        memoryAllocation = solutionAllocation
     )
+
+    classification.recursiveMethodsByLanguage = solutionRecursiveMethods!!
+    classification.loadedClassesByLanguage = makeLanguageMap(solutionLoadedClassesJava, solutionLoadedClassesKotlin)!!
 
     return ValidationReport(
         this,
@@ -650,14 +656,14 @@ data class ValidationReport(
     val summary = Summary(incorrect.size, requiredTestCount, requiredTime, hasKotlin)
 }
 
-sealed class ValidationFailed : Exception() {
+sealed class ValidationFailed(cause: Exception? = null) : Exception(cause) {
     fun printContents(contents: String, path: String?) = """
 ${path?.let { "$path\n" } ?: ""}---
 $contents
 ---""".trimStart()
 }
 
-class RetryValidation : ValidationFailed()
+class RetryValidation(cause: Exception) : ValidationFailed(cause)
 
 class SolutionFailed(val solution: Question.FlatFile, val explanation: String) : ValidationFailed() {
     override val message = """

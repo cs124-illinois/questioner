@@ -34,7 +34,7 @@ internal suspend fun addStumperSolution(
             validation = Solution.Validation(
                 submitted,
                 question.published.version,
-                question.metadata.contentHash,
+                question.published.contentHash,
                 VERSION,
             ),
         )

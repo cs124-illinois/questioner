@@ -14,7 +14,7 @@ private fun wrapDocument(question: Question, body: String) = """
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
-    <title>${question.name}</title>
+    <title>${question.published.name}</title>
     <style>
 html {
   font-size: 13px;
@@ -36,9 +36,9 @@ html {
         ""
     }
 }
-    <h1>${question.name}</h1>
-    <span class="badge rounded-pill bg-primary">${question.metadata.author}</span>
-    <span class="badge rounded-pill bg-secondary">${question.metadata.version}</span>
+    <h1>${question.published.name}</h1>
+    <span class="badge rounded-pill bg-primary">${question.published.author}</span>
+    <span class="badge rounded-pill bg-secondary">${question.published.version}</span>
     ${
     if (question.hasKotlin) {
         """<span class="badge rounded-pill bg-success">Kotlin</span>"""
@@ -51,18 +51,16 @@ html {
     <h4>Description</h4>
     <figure>
     <blockquote class="blockquote">
-    ${question.metadata.javaDescription}
+    ${question.published.descriptions[Language.java]!!}
     </blockquote>
     <figcaption class="blockquote-footer">Java description</figcaption>
     </figure>
     <h4>Solution</h4>
-    <pre><code class="java">${StringEscapeUtils.escapeHtml4(question.correct.contents)}</code></pre>
+    <pre><code class="java">${StringEscapeUtils.escapeHtml4(question.getCorrect(Language.java)!!)}</code></pre>
     ${
-    question.detemplatedJavaStarter?.let {
+    question.published.starters?.get(Language.java)?.let {
         """<h4>Starter Code</h4><pre><code class="java">${
-            StringEscapeUtils.escapeHtml4(
-                question.detemplatedJavaStarter
-            )
+            StringEscapeUtils.escapeHtml4(it)
         }</code></pre>"""
     } ?: ""
 }
@@ -72,17 +70,15 @@ html {
         <h4>Description</h4>
         <figure>
         <blockquote class="blockquote">
-        ${question.metadata.kotlinDescription}
+        ${question.published.descriptions[Language.kotlin]!!}
         </blockquote>
         <figcaption class="blockquote-footer">Kotlin description</figcaption>
         </figure>
         <h4>Solution</h4>
         <pre><code class="kotlin">${StringEscapeUtils.escapeHtml4(question.alternativeSolutions.find { it.language == Language.kotlin }!!.contents)}</code></pre>""" +
-            (question.detemplatedKotlinStarter?.let {
+            (question.published.starters?.get(Language.kotlin)?.let {
                 """<h4>Starter Code</h4><pre><code class="java">${
-                    StringEscapeUtils.escapeHtml4(
-                        question.detemplatedKotlinStarter
-                    )
+                    StringEscapeUtils.escapeHtml4(it)
                 }</code></pre>"""
             } ?: "")
     } else {

@@ -28,7 +28,7 @@ class TestValidation : StringSpec({
                 report!!.requiredTestCount shouldBeGreaterThan 0
             }
         val differentName =
-            question.correctByLanguage[Language.java]!!.replace("rangeSumHelper", "rangeSumHelping")
+            question.getCorrect(Language.java)!!.replace("rangeSumHelper", "rangeSumHelping")
         question.test(differentName, Language.java).also {
             it.checkAll()
         }

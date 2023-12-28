@@ -34,7 +34,7 @@ internal fun getQuestionByPath(path: String): Question? = questionerCollection.f
 
 internal fun Submission.getQuestion() = questionCache.get(contentHash) {
     questionerCollection.find(
-        Filters.and(Filters.eq("metadata.contentHash", contentHash)),
+        Filters.and(Filters.eq("published.contentHash", contentHash)),
     ).sort(Sorts.descending("updated")).let { results ->
         @Suppress("ReplaceSizeZeroCheckWithIsEmpty")
         if (results.count() == 0) {
