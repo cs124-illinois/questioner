@@ -50,25 +50,39 @@ class QuestionerPlugin : Plugin<Project> {
 
         project.tasks.withType(SourceTask::class.java) { sourceTask ->
             sourceTask.exclude("**/.question.json")
+            sourceTask.exclude("**/report.html")
             sourceTask.exclude("questions.json", "packageMap.json", *testFiles.toTypedArray())
         }
+
+        val reconfigureForTesting = project.tasks.register("reconfigureForTesting") {
+            project.tasks.getByName("compileJava").enabled = false
+            project.tasks.getByName("compileKotlin").enabled = false
+            project.tasks.getByName("jar").enabled = false
+        }
+        project.tasks.getByName("compileJava").mustRunAfter(reconfigureForTesting)
+        project.tasks.getByName("compileKotlin").mustRunAfter(reconfigureForTesting)
+        project.tasks.getByName("jar").mustRunAfter(reconfigureForTesting)
 
         project.tasks.create("testAllQuestions", Test::class.java) { testTask ->
             testTask.setTestNameIncludePatterns(listOf("TestAllQuestions"))
             testTask.outputs.upToDateWhen { false }
+            testTask.dependsOn(reconfigureForTesting)
         }
         project.tasks.create("testUnvalidatedQuestions", Test::class.java) { testTask ->
             testTask.setTestNameIncludePatterns(listOf("TestUnvalidatedQuestions"))
             testTask.outputs.upToDateWhen { false }
+            testTask.dependsOn(reconfigureForTesting)
         }
         project.tasks.create("testFocusedQuestions", Test::class.java) { testTask ->
             testTask.setTestNameIncludePatterns(listOf("TestFocusedQuestions"))
             testTask.outputs.upToDateWhen { false }
+            testTask.dependsOn(reconfigureForTesting)
         }
         project.tasks.getByName("test") { testTask ->
             testTask as Test
             testTask.setTestNameIncludePatterns(listOf("TestUnvalidatedQuestions"))
             testTask.outputs.upToDateWhen { false }
+            testTask.dependsOn(reconfigureForTesting)
         }
 
         val collectQuestions = project.tasks.register("collectQuestions", CollectQuestions::class.java).get()
