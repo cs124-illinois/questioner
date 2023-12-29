@@ -211,10 +211,17 @@ fun main(): Unit = runBlocking {
     }
 
     logger.info { "Warming Jeed" }
-    warmJeed(2, failLint = false)
-
+    try {
+        warmJeed(2, failLint = false)
+    } catch (e: Exception) {
+        logger.warn { e }
+    }
     logger.info { "Warming Questioner" }
-    warm()
+    try {
+        warm()
+    } catch (e: Exception) {
+        logger.warn { e }
+    }
 
     logger.info { "Starting server" }
     embeddedServer(Netty, port = 8888, module = Application::questioner).start(wait = true)
