@@ -13,3 +13,6 @@ fun Features.usesLoop() = featureMap[FeatureName.WHILE_LOOPS] > 0
 
 fun Features.hasFeature(feature: FeatureName) = featureMap[feature] > 0
 fun Features.doesNotHaveFeature(feature: FeatureName) = featureMap[feature] == 0
+
+fun Features.hasFeatures(features: List<FeatureName>) = features.any { feature -> featureMap[feature] > 0 }
+fun Features.doesNotHaveFeatures(features: List<FeatureName>) = features.any { feature -> featureMap[feature] == 0 }

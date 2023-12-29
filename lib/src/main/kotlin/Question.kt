@@ -37,7 +37,7 @@ data class Question(
     val published: Published,
     val classification: Classification,
     val klass: String,
-    val metadata: Metadata,
+    var metadata: Metadata?,
     val annotatedControls: TestingControl,
     val question: FlatFile,
     val solutionByLanguage: Map<Language, FlatFile>,
@@ -300,7 +300,7 @@ data class Question(
     ) {
         @Suppress("SpellCheckingInspection")
         enum class Reason {
-            DESIGN, COMPILE, TEST, CHECKSTYLE, TIMEOUT, DEADCODE, LINECOUNT, TOOLONG, MEMORYLIMIT, RECURSION, COMPLEXITY, FEATURES, TOOMUCHOUTPUT, MEMOIZATION, CLASSSIZE
+            DESIGN, COMPILE, TEST, CHECKSTYLE, KTLINT, TIMEOUT, DEADCODE, LINECOUNT, TOOLONG, MEMORYLIMIT, RECURSION, COMPLEXITY, FEATURES, TOOMUCHOUTPUT, MEMOIZATION, CLASSSIZE
         }
     }
 
@@ -531,6 +531,7 @@ ${question.contents}
     fun cleanForUpload() {
         correctPath = null
         testingCount = 0
+        metadata = null
     }
 
     @Transient

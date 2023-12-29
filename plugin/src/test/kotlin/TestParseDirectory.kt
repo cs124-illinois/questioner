@@ -19,7 +19,7 @@ class TestParseDirectory : StringSpec({
             .also { question ->
                 question.published.path shouldBe "add-one"
                 question.incorrectExamples shouldHaveSize 6
-                question.metadata.unusedFiles shouldBe emptySet()
+                question.metadata!!.unusedFiles shouldBe emptySet()
             }
     }
     "it should parse the cougarfeliform directory" {
@@ -27,7 +27,7 @@ class TestParseDirectory : StringSpec({
             .also { question ->
                 question.published.path shouldBe "cougar-feliform"
                 question.common!! shouldHaveSize 1
-                question.metadata.unusedFiles shouldBe emptySet()
+                question.metadata!!.unusedFiles shouldBe emptySet()
             }
     }
     "it should parse the withcommoncode directory" {
@@ -53,7 +53,7 @@ class TestParseDirectory : StringSpec({
                 .also { question ->
                     question.published.path shouldBe "add-one"
                     question.incorrectExamples shouldHaveSize 6
-                    question.metadata.unusedFiles shouldBe emptySet()
+                    question.metadata!!.unusedFiles shouldBe emptySet()
                 }
             directory.parseDirectory(fixturesDirectory, null, true, questionerVersion = "FOO")
                 .also { question ->

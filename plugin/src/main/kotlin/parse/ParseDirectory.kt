@@ -31,10 +31,6 @@ fun Path.parseDirectory(
     val outputFile = parent.resolve(".question.json")
     val existingQuestion = outputFile.toFile().loadQuestion()
 
-    if (!force && existingQuestion != null && outputFile.toFile().lastModified() > newestFile().lastModified()) {
-        return existingQuestion
-    }
-
     val contentHash = directoryHash(questionerVersion)
     if (!force && existingQuestion?.published?.contentHash == contentHash) {
         return existingQuestion
@@ -327,10 +323,10 @@ fun Path.parseDirectory(
     )
 
     val question = Question.FlatFile(
-        solution.className,
-        solution.removeImports(importNames).stripPackage(),
-        Language.java,
-        solution.path,
+        klass = solution.className,
+        contents = solution.removeImports(importNames).stripPackage(),
+        language = Language.java,
+        path = solution.path,
         suppressions = solution.suppressions,
     )
 

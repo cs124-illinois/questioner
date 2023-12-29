@@ -47,7 +47,7 @@ abstract class GenerateQuestionTests : DefaultTask() {
                 val questionsForFile = when (file.name) {
                     "TestAllQuestions.kt" -> questions
                     "TestUnvalidatedQuestions.kt" -> questions.filter { !it.validated }
-                    "TestFocusedQuestions.kt" -> questions.filter { it.metadata.focused == true }
+                    "TestFocusedQuestions.kt" -> questions.filter { it.metadata?.focused == true }
                     else -> error("Invalid file name ${file.name}")
                 }
                 val klass = file.name.removeSuffix(".kt")

@@ -178,11 +178,14 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     }
 
     fun TestResults.checkIncorrect(file: Question.IncorrectFile, mutated: Boolean) {
-        if (!mutated && failedLinting == true) {
-            val errors = if (language == Language.java) {
-                complete.checkstyle!!.errors.joinToString("\n") { it.message }
-            } else {
-                complete.ktlint!!.errors.joinToString("\n") { it.message }
+        if (!mutated && failedLinting == true && !listOf(
+                Question.IncorrectFile.Reason.CHECKSTYLE,
+                Question.IncorrectFile.Reason.KTLINT
+            ).contains(file.reason)
+        ) {
+            val errors = when (language) {
+                Language.java -> complete.checkstyle!!.errors.joinToString("\n") { it.message }
+                Language.kotlin -> complete.ktlint!!.errors.joinToString("\n") { it.message }
             }
             throw IncorrectFailedLinting(file, javaSolution, errors)
         }
@@ -584,8 +587,12 @@ private fun TestResults.validate(reason: Question.IncorrectFile.Reason) {
             "Expected submission not to compile"
         }
 
-        Question.IncorrectFile.Reason.CHECKSTYLE -> require(failed.checkstyle != null) {
+        Question.IncorrectFile.Reason.CHECKSTYLE -> require(failed.checkstyle != null || complete.checkstyle?.errors?.isNotEmpty() == true) {
             "Expected submission to fail checkstyle"
+        }
+
+        Question.IncorrectFile.Reason.KTLINT -> require(failed.ktlint != null || complete.ktlint?.errors?.isNotEmpty() == true) {
+            "Expected submission to fail ktlint"
         }
 
         Question.IncorrectFile.Reason.DESIGN -> require(failed.checkCompiledSubmission != null || failed.checkExecutedSubmission != null) {
@@ -658,7 +665,7 @@ data class ValidationReport(
 
 sealed class ValidationFailed(cause: Exception? = null) : Exception(cause) {
     fun printContents(contents: String, path: String?) = """
-${path?.let { "$path\n" } ?: ""}---
+${path?.let { "file://$path\n" } ?: ""}---
 $contents
 ---""".trimStart()
 }

@@ -37,7 +37,7 @@ open class PublishQuestions : DefaultTask() {
         val uri = URI(destination)
         require(uri.scheme == "http" || uri.scheme == "https") { "Invalid destination scheme: ${uri.scheme}" }
 
-        val questions = inputFile.loadQuestionList().filter { question -> question.metadata.publish != false }
+        val questions = inputFile.loadQuestionList().filter { question -> question.metadata?.publish != false }
         require(questions.isNotEmpty()) { "No questions to publish" }
         require(questions.all { question -> question.validated }) { "Cannot publish until all questions are validated" }
         questions.forEach { question -> question.cleanForUpload() }

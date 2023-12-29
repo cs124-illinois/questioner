@@ -116,5 +116,6 @@ internal fun String.toReason() = when (uppercase()) {
     "TOOMUCHOUTPUT" -> Question.IncorrectFile.Reason.TOOMUCHOUTPUT
     "MEMOIZATION" -> Question.IncorrectFile.Reason.MEMOIZATION
     "CLASSSIZE" -> Question.IncorrectFile.Reason.CLASSSIZE
+    "KTLINT" -> Question.IncorrectFile.Reason.KTLINT
     else -> error("Invalid incorrect reason: $this")
 }

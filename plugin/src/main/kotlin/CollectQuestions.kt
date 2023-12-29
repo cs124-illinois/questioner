@@ -64,7 +64,7 @@ abstract class CollectQuestions : DefaultTask() {
                 logger.warn("Found questions with identical Kotlin descriptions: ${questions.joinToString { q -> q.published.name }}")
             }
 
-        questions.map { q -> q.metadata.unusedFiles }.flatten().forEach {
+        questions.map { q -> q.metadata?.unusedFiles ?: listOf() }.flatten().forEach {
             logger.warn("$it will not be included in the build")
         }
 
