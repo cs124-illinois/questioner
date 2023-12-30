@@ -151,13 +151,29 @@ export const Question = Record({
 export type Question = Static<typeof Question>
 
 export const SubmissionType = Union(Literal("SOLVE"), Literal("TESTTESTING"))
+export type SubmissionType = Static<typeof SubmissionType>
+
+export const SelectionStrategy = Union(Literal("HARDEST"), Literal("EASIEST"), Literal("EVENLY_SPACED"))
+export type SelectionStrategy = Static<typeof SelectionStrategy>
+
+export const TestTestingSettings = Partial({
+  shortCircuit: Boolean,
+  limit: Number,
+  SelectionStrategy: SelectionStrategy,
+  seed: Number,
+})
+export type TestTestingSettings = Static<typeof TestTestingSettings>
 
 export const Submission = Record({
   type: SubmissionType,
   contentHash: String,
   language: Languages,
   contents: String,
-})
+}).And(
+  Partial({
+    testTestingSettings: TestTestingSettings,
+  }),
+)
 export type Submission = Static<typeof Submission>
 
 export const TestResult = Record({
