@@ -225,13 +225,16 @@ data class Question(
 
     @JsonClass(generateAdapter = true)
     data class TestTestingSettings(
-        val shortCircuit: Boolean = false,
-        val limit: Int = Int.MAX_VALUE,
-        val selectionStrategy: SelectionStrategy = SelectionStrategy.EVENLY_SPACED,
+        val shortCircuit: Boolean? = null,
+        val limit: Int? = null,
+        val selectionStrategy: SelectionStrategy? = null,
         val seed: Long? = null
     ) {
         enum class SelectionStrategy {
             HARDEST, EASIEST, EVENLY_SPACED
+        }
+        companion object {
+            val DEFAULTS = TestTestingSettings(false, Int.MAX_VALUE, SelectionStrategy.EVENLY_SPACED, null)
         }
     }
 
@@ -573,12 +576,14 @@ fun Question.writeToFile(file: File) = try {
     null
 }
 
-private inline infix fun <reified T : Any> T.merge(other: T): T {
+inline infix fun <reified T : Any> T.merge(other: T?): T {
+    if (other == null) {
+        return this
+    }
     val nameToProperty = T::class.declaredMemberProperties.associateBy { it.name }
     val primaryConstructor = T::class.primaryConstructor!!
     val args = primaryConstructor.parameters.associateWith { parameter ->
         val property = nameToProperty[parameter.name]!!
-
         (property.get(other) ?: property.get(this))
     }
     return primaryConstructor.callBy(args)

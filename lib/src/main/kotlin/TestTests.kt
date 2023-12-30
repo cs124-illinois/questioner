@@ -38,11 +38,13 @@ import kotlin.random.Random
 suspend fun Question.testTests(
     contents: String,
     language: Language,
-    settings: Question.TestTestingSettings = Question.TestTestingSettings(),
+    passedSettings: Question.TestTestingSettings? = null,
     limits: Question.TestTestingLimits = testTestingLimits!!
 ): TestTestResults {
+    val settings = Question.TestTestingSettings.DEFAULTS merge passedSettings
+
     check(published.type != Question.Type.SNIPPET) { "Test testing not supported for snippets" }
-    check(settings.limit >= 2) { "Limit must be at least 2" }
+    check(settings.limit!! >= 2) { "Limit must be at least 2" }
 
     warm()
 
@@ -86,7 +88,7 @@ suspend fun Question.testTests(
     }
 
     val incorrectLimit = (settings.limit - 1).coerceAtMost(testingIncorrect.size)
-    val testingMutations = when (settings.selectionStrategy) {
+    val testingMutations = when (settings.selectionStrategy!!) {
         Question.TestTestingSettings.SelectionStrategy.EASIEST -> testingIncorrect.take(incorrectLimit)
         Question.TestTestingSettings.SelectionStrategy.HARDEST -> testingIncorrect.takeLast(incorrectLimit)
         Question.TestTestingSettings.SelectionStrategy.EVENLY_SPACED -> {
@@ -240,7 +242,7 @@ suspend fun Question.testTests(
         } else {
             "\n"
         }
-        if (incorrect > 0 && settings.shortCircuit) {
+        if (incorrect > 0 && settings.shortCircuit!!) {
             break
         }
     }

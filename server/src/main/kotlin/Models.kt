@@ -21,6 +21,7 @@ internal data class Submission(
     val language: Language,
     val contents: String,
     val originalID: String? = null,
+    val testTestingSettings: Question.TestTestingSettings? = null,
 ) {
     enum class SubmissionType { SOLVE, TESTTESTING }
 }
@@ -39,7 +40,7 @@ internal suspend fun Submission.test(question: Question): ServerResponse {
         }
 
         Submission.SubmissionType.TESTTESTING -> {
-            val testTestingResults = question.testTests(contents, language)
+            val testTestingResults = question.testTests(contents, language, testTestingSettings)
             ServerResponse(testTestingResults = testTestingResults, canCache = testTestingResults.canCache)
         }
     }.copy(cacheStats = getStats(), duration = Instant.now().toEpochMilli() - start.toEpochMilli())
