@@ -354,7 +354,7 @@ Please report a bug so that we can improve the mutation engine.
         .take(count)
         .map { (contents, source) ->
             Question.IncorrectFile(
-                klass,
+                published.klass,
                 contents,
                 Question.IncorrectFile.Reason.TEST,
                 Language.java,
@@ -422,11 +422,11 @@ fun Question.computeComplexity(contents: String, language: Language): TestResult
         published.type == Question.Type.SNIPPET && contents.isBlank() -> 0
         language == Language.java -> {
             val source = when (published.type) {
-                Question.Type.KLASS -> Source(mapOf("$klass.java" to contents))
+                Question.Type.KLASS -> Source(mapOf("${published.klass}.java" to contents))
                 Question.Type.METHOD -> Source(
                     mapOf(
-                        "$klass.java" to """
-public class $klass {
+                        "${published.klass}.java" to """
+public class ${published.klass} {
 $contents
 }""".trimStart()
                     )
@@ -436,8 +436,8 @@ $contents
             }
             source.complexity().let { results ->
                 when (published.type) {
-                    Question.Type.KLASS -> results.lookupFile("$klass.java")
-                    Question.Type.METHOD -> results.lookup(klass, "$klass.java").complexity
+                    Question.Type.KLASS -> results.lookupFile("${published.klass}.java")
+                    Question.Type.METHOD -> results.lookup(published.klass, "${published.klass}.java").complexity
                     Question.Type.SNIPPET -> results.lookup("").complexity
                 }
             }
@@ -446,12 +446,12 @@ $contents
         language == Language.kotlin -> {
             val source = when (published.type) {
                 Question.Type.SNIPPET -> Source.fromKotlinSnippet(contents, trim = false)
-                else -> Source(mapOf("$klass.kt" to contents))
+                else -> Source(mapOf("${published.klass}.kt" to contents))
             }
             source.complexity().let { results ->
                 when (published.type) {
                     Question.Type.SNIPPET -> results.lookup("").complexity
-                    else -> results.lookupFile("$klass.kt")
+                    else -> results.lookupFile("${published.klass}.kt")
                 }
             }
         }
@@ -533,7 +533,9 @@ fun Question.checkRecursion(
 
     val expectedRecursiveMethods = when {
         isSolution -> submissionRecursiveMethods
-        else -> classification.recursiveMethodsByLanguage?.get(language) ?: settings.solutionRecursiveMethods?.get(language)
+        else -> classification.recursiveMethodsByLanguage?.get(language) ?: settings.solutionRecursiveMethods?.get(
+            language
+        )
     }
     check(expectedRecursiveMethods != null)
 

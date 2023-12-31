@@ -62,7 +62,7 @@ suspend fun Question.test(
                 Language.java ->
                     compileSubmission(
                         source,
-                        InvertingClassLoader(setOf(klass)),
+                        InvertingClassLoader(setOf(published.klass)),
                         results,
                         settings.suppressions ?: setOf()
                     )
@@ -70,7 +70,7 @@ suspend fun Question.test(
                 Language.kotlin ->
                     kompileSubmission(
                         source,
-                        InvertingClassLoader(setOf(klass, "${klass}Kt")),
+                        InvertingClassLoader(setOf(published.klass, "${published.klass}Kt")),
                         results
                     )
             }
@@ -269,7 +269,7 @@ suspend fun Question.test(
             results.failedSteps.add(TestResults.Step.checkExecutedSubmission)
             when (threw) {
                 is ClassNotFoundException -> results.failed.checkExecutedSubmission =
-                    "Class design error:\n  Could not find class $klass"
+                    "Class design error:\n  Could not find class ${published.klass}"
 
                 is SubmissionDesignError -> results.failed.checkExecutedSubmission =
                     "Class design error:\n  ${threw.message}"

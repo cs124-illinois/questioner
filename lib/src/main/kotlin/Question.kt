@@ -36,7 +36,6 @@ enum class Language { java, kotlin }
 data class Question(
     val published: Published,
     val classification: Classification,
-    val klass: String,
     var metadata: Metadata?,
     val annotatedControls: TestingControl,
     val question: FlatFile,
@@ -82,6 +81,7 @@ data class Question(
         val type: Type,
         val citation: Citation?,
         val packageName: String,
+        val klass: String,
         val languages: Set<Language>,
         val descriptions: Map<Language, String>,
         val starters: Map<Language, String>?,
@@ -102,6 +102,7 @@ data class Question(
 
     @JsonClass(generateAdapter = true)
     data class Metadata(
+        val allFiles: Set<String> = setOf(),
         val unusedFiles: Set<String> = setOf(),
         val focused: Boolean? = null,
         val publish: Boolean? = null
@@ -338,7 +339,7 @@ data class Question(
                 Language.java ->
                     question.compileSubmission(
                         source,
-                        InvertingClassLoader(setOf(question.klass)),
+                        InvertingClassLoader(setOf(question.published.klass)),
                         results,
                         suppressions
                     )
@@ -346,7 +347,7 @@ data class Question(
                 Language.kotlin ->
                     question.kompileSubmission(
                         source,
-                        InvertingClassLoader(setOf(question.klass, "${question.klass}Kt")),
+                        InvertingClassLoader(setOf(question.published.klass, "${question.published.klass}Kt")),
                         results
                     )
             }.let {
@@ -437,20 +438,20 @@ ${question.contents}
             require(it.size == 1)
             it.first()
         }.also {
-            require(it == klass) {
-                "Solution defined a name that is different from the parsed name: $it != $klass"
+            require(it == published.klass) {
+                "Solution defined a name that is different from the parsed name: $it != $published.klass"
             }
         }
     }
 
     @delegate:Transient
     val solution by lazy {
-        jenisol(compiledSolution.classLoader.loadClass(klass))
+        jenisol(compiledSolution.classLoader.loadClass(published.klass))
     }
 
     @delegate:Transient
     val featureChecker by lazy {
-        compiledSolution.classLoader.loadClass(klass).declaredMethods.filter { it.isCheckFeatures() }.let {
+        compiledSolution.classLoader.loadClass(published.klass).declaredMethods.filter { it.isCheckFeatures() }.let {
             require(it.size <= 1) { "Can only use @CheckFeatures once" }
             it.firstOrNull()
         }?.also {
@@ -494,7 +495,7 @@ ${question.contents}
         validationMutation.compiled(this)
     }
 
-    fun filename(language: Language) = "$klass.${language.extension()}"
+    fun filename(language: Language) = "${published.klass}.${language.extension()}"
 
     @Suppress("unused")
     companion object {

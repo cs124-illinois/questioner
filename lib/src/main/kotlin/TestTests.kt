@@ -48,7 +48,7 @@ suspend fun Question.testTests(
 
     warm()
 
-    val testKlass = "Test$klass"
+    val testKlass = "Test${published.klass}"
     val results = TestTestResults(language)
 
     // checkInitialTestTestingSubmission
@@ -57,12 +57,10 @@ suspend fun Question.testTests(
     }
 
     val compilationClassLoader = when (language) {
-        Language.java -> InvertingClassLoader(
-            setOf(testKlass), compiledSolutionForTesting.classloader
-        )
-
+        Language.java -> InvertingClassLoader(setOf(testKlass), compiledSolutionForTesting.classloader)
         Language.kotlin -> InvertingClassLoader(
-            setOf(testKlass, "${testKlass}Kt"), compiledSolutionForTesting.classloader
+            setOf(testKlass, "${testKlass}Kt"),
+            compiledSolutionForTesting.classloader
         )
     }
     val compiledSubmission = try {
@@ -204,7 +202,7 @@ suspend fun Question.testTests(
 
         when (threw) {
             is ClassNotFoundException -> results.failed.checkExecutedSubmission =
-                "Class design error:\n  Could not find class $klass"
+                "Class design error:\n  Could not find class ${published.klass}"
 
             is NoClassDefFoundError -> results.failed.checkExecutedSubmission =
                 "Class design error:\n  Attempted to use unavailable class ${threw.message}"
@@ -274,14 +272,14 @@ fun Question.templateTestSuites(
         Question.Type.METHOD -> {
             when (language) {
                 Language.java -> {
-                    """public class Test${klass} extends $klass {
+                    """public class Test${published.klass} extends ${published.klass} {
   {{{ contents }}}
 }
 """
                 }
 
                 Language.kotlin -> {
-                    """class Test${klass} : ${klass}() {
+                    """class Test${published.klass} : ${published.klass}() {
   {{{ contents }}}
 }"""
                 }
@@ -291,7 +289,7 @@ fun Question.templateTestSuites(
         Question.Type.SNIPPET -> error("Testing not supported for snippets")
     }
 
-    val fileName = "Test${klass}.${language.extension()}"
+    val fileName = "Test${published.klass}.${language.extension()}"
     return if (template == null) {
         Pair(Source(mapOf(fileName to contents)), null)
     } else {
@@ -387,18 +385,18 @@ private fun Class<*>.getTestingMethod() = declaredMethods.find { testingMethod -
 fun Question.checkCompiledTestSuite(
     compiledTestSuite: CompiledSource,
     testResults: TestTestResults
-): String? = compiledTestSuite.classLoader.definedClasses.topLevelClasses().let {
-    val testKlass = "Test$klass"
+): String? = compiledTestSuite.classLoader.definedClasses.topLevelClasses().let { klasses ->
+    val testKlass = "Test${published.klass}"
 
     when {
-        it.size != 1 -> {
+        klasses.size != 1 -> {
             testResults.failed.checkCompiledSubmission =
-                "Test suite should define a single public class $testKlass with an empty or omitted constructor"
+                "Test suite should define a single public class with an empty or omitted constructor"
             testResults.failedSteps.add(TestTestResults.Step.checkCompiledSubmission)
             return null
         }
     }
-    var klass = it.first()
+    var klass = klasses.first()
     if (compiledTestSuite.source.type == Source.FileType.KOTLIN &&
         (solution.skipReceiver || solution.fauxStatic) &&
         klass == "${testKlass}Kt"
@@ -407,7 +405,7 @@ fun Question.checkCompiledTestSuite(
     } else {
         if (klass != testKlass) {
             testResults.failed.checkCompiledSubmission =
-                "Test suite defines incorrect class: ${it.first()} != $testKlass"
+                "Test suite defines incorrect class: ${klasses.first()} != $testKlass"
             testResults.failedSteps.add(TestTestResults.Step.checkCompiledSubmission)
             return null
         }
@@ -422,7 +420,7 @@ fun Question.checkCompiledTestSuite(
         val fields = testingKlass.declaredFields.toSet().filter { field ->
             field.name != "${"$"}assertionsDisabled" && !(compiledTestSuite.source.type == Source.FileType.KOTLIN && field.name == "Companion")
         }
-        if  (fields.isNotEmpty()) {
+        if (fields.isNotEmpty()) {
             testResults.failed.checkCompiledSubmission =
                 "Testing class may not declare fields"
             testResults.failedSteps.add(TestTestResults.Step.checkCompiledSubmission)
@@ -451,8 +449,8 @@ class CopyableClassLoader(override val bytecodeForClasses: Map<String, ByteArray
 }
 
 fun Question.fixTestingMethods(classLoader: JeedClassLoader): ClassLoader {
-    val methodsToOpen = classLoader.loadClass(klass).declaredMethods.filter { it.isPackagePrivate() }.map { it.name }
-    val classReader = ClassReader(classLoader.bytecodeForClasses[klass])
+    val methodsToOpen = classLoader.loadClass(published.klass).declaredMethods.filter { it.isPackagePrivate() }.map { it.name }
+    val classReader = ClassReader(classLoader.bytecodeForClasses[published.klass])
     val classWriter = ClassWriter(classReader, 0)
     val openingVisitor = object : ClassVisitor(Opcodes.ASM8, classWriter) {
         override fun visitMethod(
@@ -470,7 +468,7 @@ fun Question.fixTestingMethods(classLoader: JeedClassLoader): ClassLoader {
         }
     }
     classReader.accept(openingVisitor, 0)
-    return CopyableClassLoader(mapOf(klass to classWriter.toByteArray()), classLoader.parent)
+    return CopyableClassLoader(mapOf(published.klass to classWriter.toByteArray()), classLoader.parent)
 }
 
 fun linspace(stop: Int, num: Int): List<Int> {

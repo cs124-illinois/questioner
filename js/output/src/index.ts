@@ -25,7 +25,7 @@ export const simplifyTestResult = (result: TestingResult): TestResult[] => {
   const { tests } = result
   const simplestFailure = tests
     .filter(({ passed, explanation }) => !passed && explanation)
-    .sort((a, b) => (a.explanation as string).length - (b.explanation as string).length)[0]
+    .sort((a, b) => a.explanation!.length - b.explanation!.length)[0]
 
   if (!simplestFailure) {
     return []
@@ -44,7 +44,7 @@ export type OutputOptions = {
   showWithTestResults?: Step[]
   defaultIndentation?: number
 }
-const DEFAULT_OPTIONS: OutputOptions = {
+export const DEFAULT_OPTIONS: OutputOptions = {
   successMessage: "Your code passed all tests and code quality checks.",
   defaultIndentation: 2,
 }
@@ -69,6 +69,7 @@ export const terminalOutput = (
   const indentation = outputOptions.defaultIndentation
 
   const testingCompleted = results.completedSteps.includes("testing")
+  const testingSucceeded = results.completedSteps.includes("testing") && results.succeeded === true
 
   if (results.failedSteps.length > 0 || results.timeout) {
     const { failed } = results
@@ -137,7 +138,7 @@ export const terminalOutput = (
       }
     } else if (
       failed.checkCompiledSubmission ||
-      failed.checkExecutedSubmission ||
+      (failed.checkExecutedSubmission && (!testingCompleted || testingSucceeded)) ||
       failed.features ||
       failed.classSize
     ) {
@@ -164,16 +165,10 @@ export const terminalOutput = (
         retry: false,
         output: `Your submission was too long to test:\n${indentString(failed.lineCount, indentation)}`,
       }
-    } else if (!testingCompleted) {
-      return {
-        error: true,
-        retry: true,
-        output: `Invalid testing result. If this happens repeatedly, please report a bug.`,
-      }
     }
   }
 
-  if (!results.complete.testing) {
+  if (!testingCompleted) {
     return {
       error: true,
       retry: true,
@@ -274,7 +269,7 @@ export const terminalOutput = (
         output: "Error printing testing output. If this happens repeatedly, please report a bug.",
       }
     }
-    const { testing } = results.complete
+    const testing = results.complete.testing!
     const failures = simplifyTestResult(testing)
     const lastFailure = failures[failures.length - 1]
 

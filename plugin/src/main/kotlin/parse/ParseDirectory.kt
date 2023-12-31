@@ -31,6 +31,15 @@ fun Path.parseDirectory(
     val outputFile = parent.resolve(".question.json")
     val existingQuestion = outputFile.toFile().loadQuestion()
 
+    val allFiles = allFiles()
+    if (!force &&
+        existingQuestion != null &&
+        existingQuestion.metadata?.allFiles == allFiles.map { file -> file.path }.toSet() &&
+        outputFile.toFile().lastModified() > newestFile().lastModified()
+    ) {
+        return existingQuestion
+    }
+
     val contentHash = directoryHash(questionerVersion)
     if (!force && existingQuestion?.published?.contentHash == contentHash) {
         return existingQuestion
@@ -41,7 +50,6 @@ fun Path.parseDirectory(
     require(solution.packageName != "") { "Solutions should not have an empty package name" }
     require(solution.className != "") { "Solutions should not have an empty class name" }
 
-    val allFiles = allFiles()
     val parsedJavaFiles = allFiles.filter { it.name.endsWith(".java") }.map { ParsedJavaFile(it) }
     val parsedKotlinFiles = allFiles.filter { it.path.endsWith(".kt") }.map { ParsedKotlinFile(it) }
 
@@ -265,12 +273,11 @@ fun Path.parseDirectory(
     val kotlinDescription = parsedKotlinSolution?.description
 
     val metadata = Question.Metadata(
+        allFiles.map { file -> file.path }.toSet(),
         allFiles
             .map { file -> file.path }
             .filter { path -> !usedFiles.containsKey(path) }
-            .map { path ->
-                baseDirectory.relativize(Path.of(path)).toString()
-            }.toSet(),
+            .toSet(),
         solution.correct.focused,
         solution.correct.publish,
     )
@@ -298,6 +305,7 @@ fun Path.parseDirectory(
 
     val published = Question.Published(
         contentHash = contentHash,
+        klass = solution.className,
         path = slug,
         author = solution.correct.author,
         version = solution.correct.version,
@@ -333,7 +341,6 @@ fun Path.parseDirectory(
     return Question(
         published = published,
         classification = classification,
-        klass = solution.className,
         metadata = metadata,
         annotatedControls = solution.correct.control,
         question = question,
@@ -350,9 +357,9 @@ fun Path.parseDirectory(
 
 fun Path.allFiles() = Files.walk(parent)
     .filter { path ->
-        Files.isRegularFile(path) && !Files.isDirectory(path) && (
-            path.name.endsWith(".java") || path.name.endsWith(".kt")
-            )
+        Files.isRegularFile(path) &&
+            !Files.isDirectory(path) &&
+            (path.name.endsWith(".java") || path.name.endsWith(".kt"))
     }
     .map { path -> path.toFile() }
     .collect(Collectors.toList())

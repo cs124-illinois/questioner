@@ -32,7 +32,7 @@ abstract class CollectQuestions : DefaultTask() {
         val questions = inputFiles.files
             .map { file ->
                 val question = file.loadQuestion()!!
-                val correctPath = Path.of(file.path).parent.resolve("${question.klass}.java")
+                val correctPath = Path.of(file.path).parent.resolve("${question.published.klass}.java")
                 if (!correctPath.exists() || !ParsedJavaFile(correctPath.toFile()).isCorrect) {
                     logger.warn("Removing question file $file that matches no @Correct annotation")
                     file.delete()

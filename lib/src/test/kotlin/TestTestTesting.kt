@@ -237,7 +237,7 @@ public class TestQuestion {
         question.testTestingIncorrect!!.forEach { incorrect ->
             incorrect.language shouldBe Language.java
             incorrect.compiled(question).also {
-                (it.classloader as CopyableClassLoader).bytecodeForClasses.keys shouldContain question.klass
+                (it.classloader as CopyableClassLoader).bytecodeForClasses.keys shouldContain question.published.klass
             }
             question.test(incorrect.contents(question), incorrect.language).also {
                 it.complete.testing?.passed shouldBe false

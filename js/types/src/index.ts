@@ -109,6 +109,7 @@ export const QuestionPublished = QuestionPath.And(
     questionerVersion: String,
     authorName: String,
     canTestTest: Boolean,
+    klass: String,
   }),
 ).And(
   Partial({
