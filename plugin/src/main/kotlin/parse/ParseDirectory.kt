@@ -34,6 +34,7 @@ fun Path.parseDirectory(
     val allFiles = allFiles()
     if (!force &&
         existingQuestion != null &&
+        existingQuestion.published.questionerVersion == questionerVersion &&
         existingQuestion.metadata?.allFiles == allFiles.map { file -> file.path }.toSet() &&
         outputFile.toFile().lastModified() > newestFile().lastModified()
     ) {
