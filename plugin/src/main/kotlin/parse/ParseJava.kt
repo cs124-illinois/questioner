@@ -359,14 +359,19 @@ $cleanContent
 
             Question.Type.SNIPPET -> Source.fromSnippet(cleanContent)
         }
-        val complexity = source.complexity().let { results ->
-            when (questionType) {
-                Question.Type.KLASS -> results.lookupFile("$className.java")
-                Question.Type.METHOD -> results.lookup(className, "$className.java").complexity
-                Question.Type.SNIPPET -> results.lookup("").complexity
+        val complexity = try {
+            source.complexity().let { results ->
+                when (questionType) {
+                    Question.Type.KLASS -> results.lookupFile("$className.java")
+                    Question.Type.METHOD -> results.lookup(className, "$className.java").complexity
+                    Question.Type.SNIPPET -> results.lookup("").complexity
+                }
+            }.also {
+                check(it > 0) { "Invalid complexity value" }
             }
-        }.also {
-            check(it > 0) { "Invalid complexity value" }
+        } catch (e: Exception) {
+            System.err.println("Error computing complexity: ${e}\n---\n$cleanContent---\n${source.contents}---")
+            throw e
         }
         val lineCounts = cleanContent.countLines(Source.FileType.JAVA)
         val features = source.features().let { features ->

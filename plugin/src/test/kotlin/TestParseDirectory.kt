@@ -12,7 +12,7 @@ val fixturesDirectory: Path = Path.of(object {}::class.java.getResource("/src/ma
 
 class TestParseDirectory : StringSpec({
     "it should find correct files" {
-        fixturesDirectory.getCorrectFiles() shouldHaveSize 3
+        fixturesDirectory.getCorrectFiles() shouldHaveSize 4
     }
     "it should parse the addone directory" {
         fixturesDirectory.resolve("com/examples/addone/Question.java").parseDirectory(fixturesDirectory, null, true)
@@ -46,6 +46,10 @@ class TestParseDirectory : StringSpec({
                     flatFile.contents.lines().any { line -> line.startsWith("com.examples.testing.common.Value;") }
                 } shouldBe true
             }
+    }
+    "it should parse the switchexpression directory" {
+        fixturesDirectory.resolve("com/examples/switch_expression/Question.java")
+            .parseDirectory(fixturesDirectory, null, true)
     }
     "it should include version in the hash" {
         fixturesDirectory.resolve("com/examples/addone/Question.java").also { directory ->
