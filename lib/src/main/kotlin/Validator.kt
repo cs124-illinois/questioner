@@ -28,6 +28,9 @@ suspend fun String.validate(seed: Int, maxMutationCount: Int, retries: Int) {
     val reportPath = Path.of(this).parent.resolve("report.html")
     val (report, retried) = try {
         retryOn(retries) { question.validate(seed, maxMutationCount) }
+    } catch (e: ValidationFailed) {
+        reportPath.toFile().writeText(e.report(question))
+        throw e
     } catch (e: Exception) {
         reportPath.deleteIfExists()
         throw e

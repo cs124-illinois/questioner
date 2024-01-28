@@ -15,11 +15,6 @@ private fun wrapDocument(question: Question, body: String) = """
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
     <title>${question.published.name}</title>
-    <style>
-html {
-  font-size: 13px;
-}
-</style>
   </head>
   <body>
     <div class="container">
@@ -189,10 +184,21 @@ fun ValidationReport.report(): String {
         .reversed()
         .mapIndexed { i, it -> it.html(i, question) }
         .joinToString("\n")
+    val testingSequence = if (solutionTestingSequence != null) {
+        """
+        |<h2>Testing Sequence</h2>
+        |<pre><code class="text">
+        |${solutionTestingSequence.joinToString("\n")}
+        |</code></pre>
+        """.trimMargin()
+    } else {
+        ""
+    }
     val body = """
         |<h2>Incorrect Examples</h2>
         |<p>Used ${incorrect.size} incorrect examples to generate test cases.</p>
         |$incorrectBody
+        |$testingSequence
         |""".trimMargin()
     return wrapDocument(question, body)
 }
@@ -214,6 +220,7 @@ fun ValidationFailed.report(question: Question): String {
     |<p><strong>Please verify that this solution matches the reference solution.</strong></p>
 """.trimMargin()
         }
+
         is SolutionReceiverGeneration -> {
             """
     |<h2>Solution Failed Testing</h2>
@@ -230,10 +237,11 @@ fun ValidationFailed.report(question: Question): String {
     |Consider adding parameter generation methods for your constructor.</p>
 """.trimMargin()
         }
+
         is SolutionThrew -> {
             """
     |<h2>Solution Not Expected to Throw</h2>
-    |<p>The olution was not expected to throw, but threw <code>$threw</code> on parameters <code>$parameters</code>.</p>
+    |<p>The solution was not expected to throw, but threw <code>$threw</code> on parameters <code>$parameters</code>.</p>
     |<pre><code class="${
                 if (solution.language == Language.java) {
                     "java"
@@ -247,6 +255,7 @@ fun ValidationFailed.report(question: Question): String {
     |</ul>
 """.trimMargin()
         }
+
         is SolutionLacksEntropy -> {
             """
     |<h2>Solution Results Lack Entropy</h2>
@@ -261,6 +270,7 @@ fun ValidationFailed.report(question: Question): String {
     |<p>You may need to add or adjust your @RandomParameters method.</p>
 """.trimMargin()
         }
+
         is NoIncorrect -> {
             """
                 |<h2>No Incorrect Examples Found</h2>
@@ -269,6 +279,7 @@ fun ValidationFailed.report(question: Question): String {
                 |</p>
             """.trimMargin()
         }
+
         is TooFewMutations -> {
             """
                 |<h2>Too Few Mutations Found</h2>
@@ -277,6 +288,7 @@ fun ValidationFailed.report(question: Question): String {
                 |</p>
             """.trimMargin()
         }
+
         is TooMuchOutput -> {
             """
                 |<h2>Too Much Output</h2>
@@ -291,6 +303,7 @@ fun ValidationFailed.report(question: Question): String {
                 |<p>Consider reducing the number of tests using <code>@Correct(minTestCount = NUM)</code>.</p>
             """.trimMargin()
         }
+
         is IncorrectPassed -> {
             val contents = incorrect.mutation?.marked()?.contents?.deTemplate(question.getTemplate(incorrect.language))
                 ?: incorrect.contents
@@ -317,6 +330,7 @@ fun ValidationFailed.report(question: Question): String {
             |</ul>
             """.trimMargin()
         }
+
         is IncorrectTooManyTests -> {
             val contents = incorrect.mutation?.marked()?.contents?.deTemplate(question.getTemplate(incorrect.language))
                 ?: incorrect.contents
@@ -344,6 +358,7 @@ fun ValidationFailed.report(question: Question): String {
             }<li>You may also need to increase the test count using <code>@Correct(maxTestCount = NUM)</code></li>
                 |</ul>""".trimMargin()
         }
+
         is IncorrectWrongReason -> {
             """
                 |<h2>Incorrect Code Failed for the Wrong Reason</h2>
@@ -358,6 +373,7 @@ fun ValidationFailed.report(question: Question): String {
             }"> ${StringEscapeUtils.escapeHtml4(incorrect.contents)}</code></pre>
                 |<p>Check the arguments to <code>@Incorrect(reason = REASON)</code></p>""".trimMargin()
         }
+
         is WrongReasonPassed -> {
             """
                 |<h2>Code Expected to Fail Passed</h2>
@@ -372,6 +388,7 @@ fun ValidationFailed.report(question: Question): String {
             }"> ${StringEscapeUtils.escapeHtml4(incorrect.contents)}</code></pre>
                 |<p>Check the arguments to <code>@Incorrect(reason = REASON)</code></p>""".trimMargin()
         }
+
         is SolutionDeadCode -> {
             """
                |<h2>Solution Contains Dead Code</h2>
@@ -380,6 +397,7 @@ fun ValidationFailed.report(question: Question): String {
                |</p>
            """.trimMargin()
         }
+
         is SolutionFailedLinting -> {
             """
                |<h2>Solution Failed Linting</h2>
@@ -387,6 +405,7 @@ fun ValidationFailed.report(question: Question): String {
                |</p>
            """.trimMargin()
         }
+
         else -> error("Invalid error: $this")
     }
     return wrapDocument(question, body)

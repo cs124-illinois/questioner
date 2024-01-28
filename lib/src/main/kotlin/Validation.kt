@@ -571,13 +571,19 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     classification.recursiveMethodsByLanguage = solutionRecursiveMethods!!
     classification.loadedClassesByLanguage = makeLanguageMap(solutionLoadedClassesJava, solutionLoadedClassesKotlin)!!
 
+    val solutionTestingSequence = try {
+        calibrationResults.first().results.printSolutionTestingSequence()
+    } catch (e: Exception) {
+        null
+    }
     return ValidationReport(
         this,
         calibrationResults,
         incorrectResults,
         requiredTestCount,
         solutionMaxRuntime,
-        hasKotlin
+        hasKotlin,
+        solutionTestingSequence
     )
 }
 
@@ -651,7 +657,8 @@ data class ValidationReport(
     val incorrect: List<IncorrectResults>,
     val requiredTestCount: Int,
     val requiredTime: Int,
-    val hasKotlin: Boolean
+    val hasKotlin: Boolean,
+    val solutionTestingSequence: List<String>?
 ) {
     data class Summary(
         val incorrect: Int,
@@ -898,4 +905,66 @@ fun List<TestResults>.setResourceUsage(
             }?.solution?.times(multiplier)?.toLong()
     }
     return Question.LanguagesResourceUsage(javaValue, kotlinValue)
+}
+
+private val hashCodeRegex = Regex("@[0-9a-fA-F]+$")
+fun TestResults.printSolutionTestingSequence(): List<String> {
+    val jenisolResults = taskResults!!.returned as edu.illinois.cs.cs125.jenisol.core.TestResults
+
+    val orderedReceivers = mutableMapOf<String, MutableList<String>>()
+    jenisolResults.forEach { result ->
+        val namesToCheck = listOf(result.solutionReceiver.toString(), result.solution.returned.toString())
+        for (checkingName in namesToCheck) {
+            if (checkingName == "null") {
+                continue
+            }
+            val regexMatch = hashCodeRegex.find(checkingName)
+            if (regexMatch !== null) {
+                val solutionClass = checkingName.replace(hashCodeRegex, "")
+                if (!orderedReceivers.contains(solutionClass)) {
+                    orderedReceivers[solutionClass] = mutableListOf()
+                }
+                if (!orderedReceivers[solutionClass]!!.contains(checkingName)) {
+                    orderedReceivers[solutionClass]!! += checkingName
+                }
+            }
+        }
+    }
+
+    val outputRemaps = mutableMapOf<String, String>()
+    for ((klass, receiverList) in orderedReceivers) {
+        if (receiverList.size == 1) {
+            outputRemaps[receiverList.first()] = klass
+        } else {
+            for ((i, receiver) in receiverList.withIndex()) {
+                outputRemaps[receiver] = "$klass#$i"
+            }
+        }
+    }
+
+    return jenisolResults.mapIndexed { i, result ->
+        val receiverName = result.solutionReceiver.toString()
+        val resultName = result.solution.returned.toString()
+
+        val callString = if (receiverName != "null") {
+            "${receiverName}.${result.solutionMethodString}"
+        } else {
+            result.solutionMethodString
+        }
+        val resultString = if (result.solution.threw != null) {
+            "threw ${result.solution.threw}"
+        } else {
+            if (resultName != "null") {
+                "-> $resultName"
+            } else {
+                ""
+            }
+        }
+
+        var fullString = "${i.toString().padStart(3, ' ')}: $callString $resultString"
+        for ((to, from) in outputRemaps) {
+            fullString = fullString.replace(to, from)
+        }
+        fullString
+    }
 }
