@@ -14,11 +14,10 @@ import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.exists
 
+const val GENERATION_SEED = 124
+
 @Suppress("unused")
 abstract class GenerateQuestionTests : DefaultTask() {
-    @get:Input
-    abstract var seed: Int
-
     @get:Input
     abstract var maxMutationCount: Int
 
@@ -52,7 +51,7 @@ abstract class GenerateQuestionTests : DefaultTask() {
                 }
                 val klass = file.name.removeSuffix(".kt")
                 val contents = if (questionsForFile.isNotEmpty()) {
-                    questionsForFile.joinToString("\n") { question -> question.generateSpec(seed, maxMutationCount, retries) }
+                    questionsForFile.joinToString("\n") { question -> question.generateSpec(GENERATION_SEED, maxMutationCount, retries) }
                 } else {
                     when (file.name) {
                         "TestAllQuestions.kt" -> "no questions found"

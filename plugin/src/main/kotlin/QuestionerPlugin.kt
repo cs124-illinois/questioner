@@ -19,11 +19,10 @@ data class QuestionerConfig(val endpoints: List<EndPoint> = listOf()) {
 }
 
 open class QuestionerConfigExtension {
-    var seed: Int = 124
-    var maxMutationCount: Int = 32
+    var maxMutationCount: Int = 256
     var concurrency: Double = 0.5
     var retries: Int = 4
-    val ignorePackages = listOf("com.github.cs124_illinois.questioner.examples.")
+    val ignorePackages = listOf("com.github.cs124_illinois.questioner.examples.", "com.examples.")
 }
 
 private val testFiles = listOf("TestAllQuestions.kt", "TestUnvalidatedQuestions.kt", "TestFocusedQuestions.kt")
@@ -147,7 +146,6 @@ class QuestionerPlugin : Plugin<Project> {
             }
             project.dependencies.add("implementation", project.dependencies.create("org.cs124:questioner:$VERSION"))
 
-            generateQuestionTests.seed = config.seed
             generateQuestionTests.maxMutationCount = config.maxMutationCount
             generateQuestionTests.concurrency = (Runtime.getRuntime().availableProcessors().toDouble() * config.concurrency).toInt().coerceAtLeast(1)
             generateQuestionTests.retries = config.retries
