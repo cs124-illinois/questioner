@@ -95,6 +95,32 @@ internal val annotationsToDestroy =
     )
 internal val annotationsToSnip = setOf(NotNull::class.java.simpleName)
 
+internal val controlAnnotations =
+    setOf(
+        Whitelist::class.java.simpleName,
+        Blacklist::class.java.simpleName,
+        TemplateImports::class.java.simpleName,
+        DesignOnly::class.java.simpleName,
+        Wrap::class.java.simpleName,
+        Configure::class.java.simpleName,
+        Cite::class.java.simpleName,
+        Limit::class.java.simpleName,
+        ProvideSystemIn::class.java.simpleName,
+        ProvideFileSystem::class.java.simpleName,
+        KotlinMirrorOK::class.java.simpleName,
+        Verify::class.java.simpleName,
+        Both::class.java.simpleName,
+        FilterParameters::class.java.simpleName,
+        SimpleType::class.java.simpleName,
+        EdgeType::class.java.simpleName,
+        RandomType::class.java.simpleName,
+        InstanceValidator::class.java.simpleName,
+        CheckFeatures::class.java.simpleName,
+        Ignore::class.java.simpleName,
+        Compare::class.java.simpleName,
+    )
+internal val controlImports = controlAnnotations.map { "edu.illinois.cs.cs125.questioner.lib.$it" }.toSet()
+
 internal val importsToRemove = annotationsToRemove.map { "edu.illinois.cs.cs125.questioner.lib.$it" }.toSet() +
     "edu.illinois.cs.cs125.questioner.lib.Ignore"
 internal val packagesToRemove = setOf("edu.illinois.cs.cs125.jenisol")

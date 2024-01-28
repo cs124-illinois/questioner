@@ -45,8 +45,25 @@ abstract class CollectQuestions : DefaultTask() {
             .sortedBy { it.published.name }
 
         check(questions.map { q -> q.published.contentHash }.toSet().size == questions.size) {
-            "Duplicate Question hash"
+            "Found duplicate question hash"
         }
+
+        questions.map { q ->
+            "${q.published.path}${
+                if (q.published.author !== "") {
+                    "/${q.published.author}"
+                } else {
+                    ""
+                }
+            }"
+        }
+            .groupingBy { path -> path }
+            .eachCount()
+            .filter { it.value > 1 }.let { duplicateList ->
+                check(duplicateList.isEmpty()) {
+                    "Found questions with duplicate coordinates: ${duplicateList.map { it.key }.joinToString(",")}"
+                }
+            }
 
         questions
             .filter { q -> q.published.descriptions[Language.java] != null }

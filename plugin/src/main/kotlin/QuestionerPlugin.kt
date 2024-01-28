@@ -21,8 +21,9 @@ data class QuestionerConfig(val endpoints: List<EndPoint> = listOf()) {
 open class QuestionerConfigExtension {
     var seed: Int = 124
     var maxMutationCount: Int = 32
-    var concurrency: Int = (Runtime.getRuntime().availableProcessors().toDouble() * 0.75).toInt().coerceAtLeast(1)
+    var concurrency: Double = 0.5
     var retries: Int = 4
+    val ignorePackages = listOf("com.github.cs124_illinois.questioner.examples.")
 }
 
 private val testFiles = listOf("TestAllQuestions.kt", "TestUnvalidatedQuestions.kt", "TestFocusedQuestions.kt")
@@ -96,6 +97,48 @@ class QuestionerPlugin : Plugin<Project> {
                     project.tasks.getByName("compileTestKotlin").dependsOn(generateMetatests)
                 }
 
+        val uploadConfiguration = project.file(".questioner.yaml").let { questionerConfigFile ->
+            if (questionerConfigFile.exists()) {
+                try {
+                    ObjectMapper(YAMLFactory()).apply { registerKotlinModule() }.readValue(questionerConfigFile)
+                } catch (e: Exception) {
+                    project.logger.warn("Invalid questioner.yaml file.")
+                    QuestionerConfig()
+                }
+            } else {
+                QuestionerConfig()
+            }
+        }
+
+        var publishingTasks = listOf<PublishQuestions>()
+        if (uploadConfiguration.endpoints.isNotEmpty()) {
+            val publishAll = project.tasks.register("publishQuestions").get()
+            publishAll.outputs.upToDateWhen { false }
+            publishingTasks = uploadConfiguration.endpoints.map { (name, token, url) ->
+                val publishQuestions =
+                    project.tasks.register("publishQuestionsTo$name", PublishQuestions::class.java).get()
+                publishQuestions.token = token
+                publishQuestions.destination = url
+                publishQuestions.dependsOn(collectQuestions)
+                publishQuestions.outputs.upToDateWhen { false }
+                publishQuestions.description = "Publish questions to $name"
+                publishAll.dependsOn(publishQuestions)
+                publishQuestions
+            }
+        } else {
+            val publishAll = project.tasks.register("publishQuestions") { task ->
+                task.doLast {
+                    error("No publishing configuration found. Please add a .questioner.yaml file to the root of your repository.")
+                }
+            }.get()
+            publishAll.outputs.upToDateWhen { false }
+        }
+
+        project.tasks.register("printSlowQuestions", PrintSlowQuestions::class.java) { printSlowQuestions ->
+            printSlowQuestions.dependsOn("collectQuestions")
+            printSlowQuestions.outputs.upToDateWhen { false }
+        }
+
         project.afterEvaluate {
             project.configurations.getByName("implementation").dependencies.find { dependency ->
                 dependency.group == "org.cs124" && dependency.name == "questioner"
@@ -106,8 +149,12 @@ class QuestionerPlugin : Plugin<Project> {
 
             generateQuestionTests.seed = config.seed
             generateQuestionTests.maxMutationCount = config.maxMutationCount
-            generateQuestionTests.concurrency = config.concurrency
+            generateQuestionTests.concurrency = (Runtime.getRuntime().availableProcessors().toDouble() * config.concurrency).toInt().coerceAtLeast(1)
             generateQuestionTests.retries = config.retries
+
+            publishingTasks.forEach { task ->
+                task.ignorePackages = config.ignorePackages
+            }
 
             project.tasks.withType(Test::class.java).forEach { testTask ->
                 testTask.dependsOn(generateQuestionTests)
@@ -123,37 +170,6 @@ class QuestionerPlugin : Plugin<Project> {
             project.tasks.withType(Test::class.java) { testTask ->
                 testTask.jvmArgs("-javaagent:$agentJarPath")
             }
-        }
-
-        val uploadConfiguration = project.file(".questioner.yaml").let { questionerConfigFile ->
-            if (questionerConfigFile.exists()) {
-                try {
-                    ObjectMapper(YAMLFactory()).apply { registerKotlinModule() }.readValue(questionerConfigFile)
-                } catch (e: Exception) {
-                    project.logger.warn("Invalid questioner.yaml file.")
-                    QuestionerConfig()
-                }
-            } else {
-                QuestionerConfig()
-            }
-        }
-        if (uploadConfiguration.endpoints.isNotEmpty()) {
-            val publishAll = project.tasks.register("publishQuestions").get()
-            publishAll.outputs.upToDateWhen { false }
-            uploadConfiguration.endpoints.forEach { (name, token, url) ->
-                val publishQuestions =
-                    project.tasks.register("publishQuestionsTo$name", PublishQuestions::class.java).get()
-                publishQuestions.token = token
-                publishQuestions.destination = url
-                publishQuestions.dependsOn(collectQuestions)
-                publishQuestions.outputs.upToDateWhen { false }
-                publishQuestions.description = "Publish questions to $name"
-                publishAll.dependsOn(publishQuestions)
-            }
-        }
-        project.tasks.register("printSlowQuestions", PrintSlowQuestions::class.java) { printSlowQuestions ->
-            printSlowQuestions.dependsOn("collectQuestions")
-            printSlowQuestions.outputs.upToDateWhen { false }
         }
     }
 }

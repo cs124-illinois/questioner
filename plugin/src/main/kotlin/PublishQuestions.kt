@@ -17,7 +17,7 @@ import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import java.util.zip.GZIPOutputStream
 
-open class PublishQuestions : DefaultTask() {
+abstract class PublishQuestions : DefaultTask() {
     @Input
     lateinit var token: String
 
@@ -26,6 +26,9 @@ open class PublishQuestions : DefaultTask() {
 
     @InputFile
     val inputFile: File = project.layout.buildDirectory.dir("questioner/questions.json").get().asFile
+
+    @get:Input
+    abstract var ignorePackages: List<String>
 
     init {
         group = "Publish"
@@ -37,8 +40,30 @@ open class PublishQuestions : DefaultTask() {
         val uri = URI(destination)
         require(uri.scheme == "http" || uri.scheme == "https") { "Invalid destination scheme: ${uri.scheme}" }
 
-        val questions = inputFile.loadQuestionList().filter { question -> question.metadata?.publish != false }
-        require(questions.isNotEmpty()) { "No questions to publish" }
+        val allQuestions = inputFile.loadQuestionList()
+        val questions = allQuestions.filter { question ->
+            question.metadata?.publish != false && !ignorePackages.any { prefix ->
+                question.published.packageName.startsWith(prefix)
+            }
+        }
+        require(questions.isNotEmpty()) {
+            val ignoredQuestions = allQuestions.filter { question -> question.metadata?.publish == false }
+            "No questions to publish: ${
+                if (ignorePackages.isNotEmpty()) {
+                    "disabled packages ${ignorePackages.joinToString(",")}"
+                } else {
+                    ""
+                }
+            }${
+                if (ignoredQuestions.isNotEmpty()) {
+                    ", ignored questions ${
+                        ignoredQuestions.map { question -> question.published.packageName }.joinToString(",")
+                    }"
+                } else {
+                    ""
+                }
+            }"
+        }
         require(questions.all { question -> question.validated }) { "Cannot publish until all questions are validated" }
         questions.forEach { question -> question.cleanForUpload() }
 
@@ -52,7 +77,18 @@ open class PublishQuestions : DefaultTask() {
                 HttpClient.newHttpClient().send(httpRequest, HttpResponse.BodyHandlers.ofString())
             }.also { httpResponse ->
                 check(httpResponse.statusCode() == HttpURLConnection.HTTP_OK) {
-                    "Upload request to $destination failed: ${httpResponse.statusCode()}"
+                    val message = try {
+                        httpResponse.body()
+                    } catch (e: Exception) {
+                        null
+                    }
+                    "Upload request to $destination failed: ${httpResponse.statusCode()}${
+                        if (message != null) {
+                            "\n$message"
+                        } else {
+                            ""
+                        }
+                    }"
                 }
             }
     }

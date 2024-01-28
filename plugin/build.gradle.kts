@@ -116,3 +116,6 @@ signing {
         gradle.taskGraph.allTasks.any { it is PublishToMavenRepository }
     }
 }
+tasks.withType<Javadoc> {
+    exclude("edu/illinois/cs/cs125/questioner/antlr/**")
+}

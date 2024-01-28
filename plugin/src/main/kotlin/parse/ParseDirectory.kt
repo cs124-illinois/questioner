@@ -47,23 +47,23 @@ fun Path.parseDirectory(
     }
 
     val solution = ParsedJavaFile(toFile())
-    require(solution.correct != null) { "Solutions should have @Correct metadata" }
-    require(solution.packageName != "") { "Solutions should not have an empty package name" }
-    require(solution.className != "") { "Solutions should not have an empty class name" }
+    check(solution.correct != null) { "Solutions should have @Correct metadata" }
+    check(solution.packageName != "") { "Solutions should not have an empty package name" }
+    check(solution.className != "") { "Solutions should not have an empty class name" }
 
     val parsedJavaFiles = allFiles.filter { it.name.endsWith(".java") }.map { ParsedJavaFile(it) }
     val parsedKotlinFiles = allFiles.filter { it.path.endsWith(".kt") }.map { ParsedKotlinFile(it) }
 
     parsedJavaFiles.filter { it.isCorrect && it.path != solution.path }.let { otherSolutions ->
-        require(otherSolutions.isEmpty()) {
-            "Solutions cannot be nested: ${otherSolutions.first().path} is inside ${Path.of(solution.path).parent}"
+        check(otherSolutions.isEmpty()) {
+            """Solutions cannot be nested: file://${otherSolutions.first().path} is inside file://${Path.of(solution.path).parent}"""
         }
     }
 
     val usedFiles = parsedJavaFiles.filter { it.isCorrect }.associate { it.path to "Correct" }.toMutableMap()
     fun addUsedFile(path: String, whatFor: String, canBe: Set<String> = setOf()) {
-        require(path !in usedFiles || canBe.contains(usedFiles[path])) {
-            "$path already used as ${usedFiles[path]!!}"
+        check(path !in usedFiles || canBe.contains(usedFiles[path])) {
+            """file://$path already used as file://${usedFiles[path]!!}"""
         }
         usedFiles[path] = whatFor
     }
@@ -72,7 +72,7 @@ fun Path.parseDirectory(
         !parsedJavaFile.isCorrect && Path.of(parsedJavaFile.path).parent == parent
     }.also { files ->
         files.find { it.isQuestioner }?.also {
-            error("@Incorrect, @Starter, and alternate solutions should not be in the same directory as the reference solution: ${it.path})")
+            error("""@Incorrect, @Starter, and alternate solutions should not be in the same directory as the reference solution: file://${it.path})""")
         }
         files.forEach { file ->
             addUsedFile(file.path, "Common")
@@ -108,7 +108,13 @@ fun Path.parseDirectory(
     val parsedKotlinSolution = parsedKotlinFiles.find { it.isAlternateSolution && it.description != null }
     if (parsedKotlinFiles.any { it.isAlternateSolution }) {
         check(parsedKotlinSolution != null) {
-            "Found Kotlin solutions but no description comment"
+            """Found Kotlin solutions but no description comment: file://${solution.path}"""
+        }
+    }
+
+    parsedKotlinFiles.filter { it.isAlternateSolution }.forEach {
+        check(!it.hasControlAnnotations) {
+            """Found control annotations on an @AlternateSolution. Please remove them: file://${it.path}"""
         }
     }
 
@@ -128,13 +134,13 @@ fun Path.parseDirectory(
 
     if (hasJavaTemplate && javaTemplate == null && solution.wrapWith == null) {
         javaTemplate = solution.extractTemplate(importNames) ?: error(
-            "Can't extract Java template",
+            """Can't extract Java template: file://${solution.path}""",
         )
     }
 
     if (hasKotlinTemplate && kotlinTemplate == null && solution.wrapWith == null) {
         kotlinTemplate = parsedKotlinSolution!!.extractTemplate(importNames) ?: error(
-            "Can't extract Kotlin template",
+            """Can't extract Kotlin template: file://${parsedKotlinSolution.path}""",
         )
     }
 
@@ -171,17 +177,17 @@ fun Path.parseDirectory(
     val javaStarter = parsedJavaFiles
         .filter { it.isStarter }
         .also {
-            assert(it.size <= 1) {
-                "Solution ${solution.correct.name} provided multiple files marked as starter code"
+            check(it.size <= 1) {
+                """Solution ${solution.correct.name} provided multiple files marked as starter code: file://${solution.path}"""
             }
         }.firstOrNull()
 
     check(!(solution.autoStarter && javaStarter != null)) {
-        "autoStarter set to true but found a file marked as @Starter. Please remove it.\n${javaStarter!!.path}"
+        """autoStarter set to true but found a file marked as @Starter. Please remove it: file://${javaStarter!!.path}"""
     }
 
     val javaStarterFile = if (solution.autoStarter) {
-        solution.extractStarter() ?: error("autoStarter enabled but starter generation failed")
+        solution.extractStarter() ?: error("""autoStarter enabled but starter generation failed: file://${solution.path}""")
     } else {
         javaStarter?.toStarterFile(javaCleanSpec)?.also {
             addUsedFile(it.path!!, "Starter", setOf("Incorrect"))
@@ -189,7 +195,7 @@ fun Path.parseDirectory(
     }
 
     var kotlinStarterFile = parsedKotlinFiles.filter { it.isStarter }.also {
-        require(it.size <= 1) { "Provided multiple file with Kotlin starter code" }
+        check(it.size <= 1) { """Provided multiple file with Kotlin starter code: file://${solution.path}""" }
     }.firstOrNull()?.let {
         addUsedFile(it.path, "Starter", setOf("Incorrect"))
         it.toStarterFile(kotlinCleanSpec)
@@ -198,7 +204,7 @@ fun Path.parseDirectory(
     if (solution.autoStarter) {
         val autoStarter = parsedKotlinSolution?.extractStarter(solution.wrapWith)
         if (autoStarter != null && kotlinStarterFile != null) {
-            error("autoStarter succeeded but Kotlin starter file found. Please remove it.\n" + kotlinStarterFile.path)
+            error("""autoStarter succeeded but Kotlin starter file found. Please remove it: file://${kotlinStarterFile.path}""")
         }
         kotlinStarterFile = autoStarter
     }
@@ -217,22 +223,22 @@ fun Path.parseDirectory(
         .filter { it.endsWith(".NotNull") || it.endsWith(".NonNull") }
         .filter { it != NotNull::class.java.name }
         .also {
-            require(it.isEmpty()) {
-                "Please use the Questioner @NotNull annotation from ${NotNull::class.java.name}"
+            check(it.isEmpty()) {
+                """Please use the Questioner @NotNull annotation from ${NotNull::class.java.name}: file://${solution.path}"""
             }
         }
 
     kotlinImports
         .filter { it.endsWith(".NotNull") || it.endsWith(".NonNull") }
         .also {
-            require(it.isEmpty()) {
-                "@NotNull or @NonNull annotations will not be applied when used in Kotlin solutions"
+            check(it.isEmpty()) {
+                """@NotNull or @NonNull annotations will not be applied when used in Kotlin solutions: file://${solution.path}"""
             }
         }
 
     if (solution.wrapWith != null) {
-        require(javaTemplate == null && kotlinTemplate == null) {
-            "Can't use both a template and @Wrap"
+        check(javaTemplate == null && kotlinTemplate == null) {
+            """Can't use both a template and @Wrap: file://${solution.path}"""
         }
 
         javaTemplate = """public class ${solution.wrapWith} {
@@ -266,7 +272,7 @@ fun Path.parseDirectory(
 
     if (type == Question.Type.METHOD) {
         check(!javaSolution.contents.methodIsMarkedPublicOrStatic()) {
-            "Do not use public modifiers on method-only problems, and use static only on private helpers: ${solution.path}"
+            """Do not use public modifiers on method-only problems, and use static only on private helpers: file://${solution.path}"""
         }
     }
 
@@ -287,7 +293,7 @@ fun Path.parseDirectory(
         val hasJavaStarter = incorrectExamples.any { it.language == Language.java && it.starter }
         val hasKotlinStarter = incorrectExamples.any { it.language == Language.kotlin && it.starter }
         if (hasJavaStarter) {
-            check(hasKotlinStarter) { "Kotlin starter code is missing for ${solution.path}" }
+            check(hasKotlinStarter) { """Kotlin starter code is missing for file://${solution.path}""" }
         }
     }
 
@@ -392,13 +398,13 @@ private fun ParsedJavaFile.importsToPackages() = listedImports.map { importName 
 private fun Sequence<Path>.getLocalImportPaths() = map { path ->
     when {
         path.toJavaFile().isRegularFile() -> listOf(path.toJavaFile())
-        else -> error("Invalid path type")
+        else -> error("""Invalid path type: file://$path""")
     }
 }.flatten().toSet()
 
 private fun Sequence<Path>.getLocalImportNames(baseDirectory: Path) = map { path ->
     when {
         path.toJavaFile().isRegularFile() -> path.relativeTo(baseDirectory).toString().pathToImport()
-        else -> error("Invalid path type: $path")
+        else -> error("""Invalid path type: file://$path""")
     }
 }.toSet()

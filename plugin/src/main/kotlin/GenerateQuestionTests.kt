@@ -93,8 +93,8 @@ fun Question.generateSpec(seed: Int, maxMutationCount: Int, retries: Int): Strin
     val jsonPath = Path.of(correctPath).parent.resolve(".question.json")
     check(jsonPath.exists())
     return """
-        |"${published.name} (${published.packageName}) should validate" {
-        |    "$jsonPath".validate(seed = $seed, maxMutationCount = $maxMutationCount, retries = $retries)
+        |${"\"\"\""}${published.name} (${published.packageName}) should validate${"\"\"\""} {
+        |    ${"\"\"\""}$jsonPath${"\"\"\""}.validate(seed = $seed, maxMutationCount = $maxMutationCount, retries = $retries)
         |}
     """.trimMargin()
 }

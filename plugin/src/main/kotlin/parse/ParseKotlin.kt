@@ -54,17 +54,15 @@ internal data class ParsedKotlinFile(val path: String, val contents: String) {
         null
     }
 
-    private val alternateSolution = if (topLevelFile) {
-        parseTree.preamble().fileAnnotations().getAnnotation(AlsoCorrect::class.java)
-    } else {
-        topLevelClass!!.getAnnotation(AlsoCorrect::class.java)
+    private val alternateSolution = when (topLevelFile) {
+        true -> parseTree.preamble().fileAnnotations().getAnnotation(AlsoCorrect::class.java)
+        false -> topLevelClass!!.getAnnotation(AlsoCorrect::class.java)
     }
     val isAlternateSolution = alternateSolution != null
 
-    private val starter = if (topLevelFile) {
-        parseTree.preamble().fileAnnotations().getAnnotation(Starter::class.java)
-    } else {
-        topLevelClass!!.getAnnotation(Starter::class.java)
+    private val starter = when (topLevelFile) {
+        true -> parseTree.preamble().fileAnnotations().getAnnotation(Starter::class.java)
+        false -> topLevelClass!!.getAnnotation(Starter::class.java)
     }
     val isStarter = starter != null
 
@@ -72,6 +70,9 @@ internal data class ParsedKotlinFile(val path: String, val contents: String) {
         true -> parseTree.preamble().fileAnnotations().getAnnotation(Correct::class.java) != null
         false -> topLevelClass!!.getAnnotation(Correct::class.java) != null
     }
+
+    val hasControlAnnotations =
+        parseTree.preamble().importList().importHeader().map { it.toFullName() }.toSet().intersect(controlImports).isNotEmpty()
 
     val incorrect = if (topLevelFile) {
         parseTree.preamble().fileAnnotations().getAnnotation(Incorrect::class.java)
@@ -483,10 +484,18 @@ fun KotlinParser.FileAnnotationsContext.getAnnotation(vararg toFind: Class<*>): 
         annotation.identifier()?.text != null && toFind.map { it.simpleName }.contains(annotation.identifier().text)
     }
 
+fun KotlinParser.FileAnnotationsContext.getAnnotation(vararg toFind: String): KotlinParser.UnescapedAnnotationContext? =
+    fileAnnotation()?.flatMap { it.unescapedAnnotation() }?.find { annotation ->
+        annotation.identifier()?.text != null && toFind.contains(annotation.identifier().text)
+    }
+
 fun KotlinParser.ClassDeclarationContext.getAnnotation(annotation: Class<*>): KotlinParser.AnnotationContext? =
     modifierList()?.annotations()?.find {
         it.annotation()?.LabelReference()?.text == "@${annotation.simpleName}"
     }?.annotation()
+
+fun KotlinParser.ClassDeclarationContext.getAnnotation(vararg toFind: String): KotlinParser.AnnotationContext? =
+    modifierList()?.annotations()?.find { toFind.contains(it.annotation()?.LabelReference()?.text) }?.annotation()
 
 fun KotlinParser.KotlinFileContext.comment() =
     topLevelObject().find { it.DelimitedComment() != null }?.DelimitedComment()?.text
