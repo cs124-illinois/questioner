@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.VERSION
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -15,14 +16,16 @@ import org.gradle.api.tasks.testing.Test
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class QuestionerConfig(val endpoints: List<EndPoint> = listOf()) {
-    data class EndPoint(val name: String, val token: String, val url: String)
+    data class EndPoint(val name: String, val token: String, val url: String, val label: String? = null)
 }
 
+typealias ExcludeMethod = (name: QuestionerConfig.EndPoint, question: Question) -> Boolean
 open class QuestionerConfigExtension {
     var maxMutationCount: Int = 256
     var concurrency: Double = 0.5
     var retries: Int = 4
     val ignorePackages = listOf("com.github.cs124_illinois.questioner.examples.", "com.examples.")
+    val publishExcludes: ExcludeMethod = { _: QuestionerConfig.EndPoint, _: Question -> true }
 }
 
 private val testFiles = listOf("TestAllQuestions.kt", "TestUnvalidatedQuestions.kt", "TestFocusedQuestions.kt")
@@ -113,14 +116,14 @@ class QuestionerPlugin : Plugin<Project> {
         if (uploadConfiguration.endpoints.isNotEmpty()) {
             val publishAll = project.tasks.register("publishQuestions").get()
             publishAll.outputs.upToDateWhen { false }
-            publishingTasks = uploadConfiguration.endpoints.map { (name, token, url) ->
+            publishingTasks = uploadConfiguration.endpoints.map { endpoint ->
                 val publishQuestions =
-                    project.tasks.register("publishQuestionsTo$name", PublishQuestions::class.java).get()
-                publishQuestions.token = token
-                publishQuestions.destination = url
+                    project.tasks.register("publishQuestionsTo${endpoint.name}", PublishQuestions::class.java).get()
+                publishQuestions.endpoint = endpoint
+                publishQuestions.publishExcludes = config.publishExcludes
                 publishQuestions.dependsOn(collectQuestions)
                 publishQuestions.outputs.upToDateWhen { false }
-                publishQuestions.description = "Publish questions to $name"
+                publishQuestions.description = "Publish questions to ${endpoint.name} (${endpoint.url})"
                 publishAll.dependsOn(publishQuestions)
                 publishQuestions
             }

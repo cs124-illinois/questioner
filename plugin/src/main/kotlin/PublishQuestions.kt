@@ -19,16 +19,16 @@ import java.util.zip.GZIPOutputStream
 
 abstract class PublishQuestions : DefaultTask() {
     @Input
-    lateinit var token: String
-
-    @Input
-    lateinit var destination: String
+    lateinit var endpoint: QuestionerConfig.EndPoint
 
     @InputFile
     val inputFile: File = project.layout.buildDirectory.dir("questioner/questions.json").get().asFile
 
     @get:Input
     abstract var ignorePackages: List<String>
+
+    @get:Input
+    abstract var publishExcludes: ExcludeMethod
 
     init {
         group = "Publish"
@@ -37,17 +37,22 @@ abstract class PublishQuestions : DefaultTask() {
 
     @TaskAction
     fun publish() {
-        val uri = URI(destination)
+        val uri = URI(endpoint.url)
         require(uri.scheme == "http" || uri.scheme == "https") { "Invalid destination scheme: ${uri.scheme}" }
 
-        val allQuestions = inputFile.loadQuestionList()
-        val questions = allQuestions.filter { question ->
-            question.metadata?.publish != false && !ignorePackages.any { prefix ->
-                question.published.packageName.startsWith(prefix)
-            }
+        val allQuestions = inputFile.loadQuestionList().filter { question ->
+            !ignorePackages.any { prefix -> question.published.packageName.startsWith(prefix) }
         }
+
+        val questions = allQuestions.filter { question ->
+            question.metadata?.publish != false
+        }.filter { question ->
+            !publishExcludes(endpoint, question)
+        }
+
         require(questions.isNotEmpty()) {
             val ignoredQuestions = allQuestions.filter { question -> question.metadata?.publish == false }
+            val unpublishedQuestions = ignoredQuestions.filter { question -> !publishExcludes(endpoint, question) }
             "No questions to publish: ${
                 if (ignorePackages.isNotEmpty()) {
                     "disabled packages ${ignorePackages.joinToString(",")}"
@@ -57,7 +62,15 @@ abstract class PublishQuestions : DefaultTask() {
             }${
                 if (ignoredQuestions.isNotEmpty()) {
                     ", ignored questions ${
-                        ignoredQuestions.map { question -> question.published.packageName }.joinToString(",")
+                        ignoredQuestions.joinToString(",") { question -> question.published.path }
+                    }"
+                } else {
+                    ""
+                }
+            }${
+                if (unpublishedQuestions.isNotEmpty()) {
+                    ", unpublished questions ${
+                        unpublishedQuestions.joinToString(",") { question -> question.published.path }
                     }"
                 } else {
                     ""
@@ -69,7 +82,7 @@ abstract class PublishQuestions : DefaultTask() {
 
         HttpRequest.newBuilder()
             .uri(uri)
-            .header("Authorization", """Bearer $token""")
+            .header("Authorization", """Bearer ${endpoint.token}""")
             .header("Content-Type", "application/json")
             .header("Content-Encoding", "gzip")
             .POST(HttpRequest.BodyPublishers.ofByteArray(questions.toJSON().gzip()))
@@ -82,7 +95,7 @@ abstract class PublishQuestions : DefaultTask() {
                     } catch (e: Exception) {
                         null
                     }
-                    "Upload request to $destination failed: ${httpResponse.statusCode()}${
+                    "Upload request to ${endpoint.url} failed: ${httpResponse.statusCode()}${
                         if (message != null) {
                             "\n$message"
                         } else {
