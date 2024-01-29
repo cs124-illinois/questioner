@@ -315,6 +315,7 @@ fun Path.parseDirectory(
         klass = solution.className,
         path = slug,
         author = solution.correct.author,
+        authorName = solution.correct.authorName,
         version = solution.correct.version,
         name = solution.correct.name,
         type = type,

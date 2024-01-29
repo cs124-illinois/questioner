@@ -189,10 +189,12 @@ internal data class ParsedJavaFile(val path: String, val contents: String) {
                 val path = parameters["path"]
                 val name = parameters["name"] ?: error("name field not set on @Correct")
                 val version = parameters["version"] ?: error("version field not set on @Correct")
-                val author = parameters["author"] ?: ""
-                if (author !== "") {
-                    check(author.isEmail()) { "author field is not an email address" }
-                }
+
+                val author = parameters["author"] ?: error("author field not set on @Correct")
+                check(author.isEmail()) { "author field is not an email address" }
+
+                val authorName = parameters["authorName"] ?: ""
+
                 val description = annotation.comment().let { comment ->
                     markdownParser.buildMarkdownTreeFromString(comment).let { astNode ->
                         HtmlGenerator(comment, astNode, CommonMarkFlavourDescriptor()).generateHtml()
@@ -231,6 +233,7 @@ internal data class ParsedJavaFile(val path: String, val contents: String) {
                     name,
                     version,
                     author,
+                    authorName,
                     description,
                     focused,
                     publish,

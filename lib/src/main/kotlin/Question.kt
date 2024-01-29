@@ -65,6 +65,7 @@ data class Question(
         val name: String,
         val version: String,
         val author: String,
+        val authorName: String,
         val description: String,
         val focused: Boolean,
         val publish: Boolean,
@@ -87,7 +88,7 @@ data class Question(
         val starters: Map<Language, String>?,
         val templateImports: Set<String>,
         val questionerVersion: String,
-        val authorName: String = "",
+        val authorName: String,
         val canTestTest: Boolean = type == Type.KLASS || type == Type.METHOD
     )
 

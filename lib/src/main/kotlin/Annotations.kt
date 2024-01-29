@@ -11,9 +11,10 @@ import java.lang.reflect.ParameterizedType
 @Target(AnnotationTarget.CLASS)
 annotation class Correct(
     val name: String,
+    val author: String,
     val version: String,
-    val author: String = "",
     val path: String = "",
+    val authorName: String = "",
     val solutionThrows: Boolean = Question.TestingControl.DEFAULT_SOLUTION_THROWS,
     val focused: Boolean = Question.Metadata.DEFAULT_FOCUSED,
     val publish: Boolean = Question.Metadata.DEFAULT_PUBLISH,
