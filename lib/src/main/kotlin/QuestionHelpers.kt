@@ -152,6 +152,7 @@ suspend fun Question.compileSubmission(
             testResults.complete.compileSubmission = CompiledSourceResult(compiledSource)
             testResults.completedSteps.add(TestResults.Step.compileSubmission)
         }
+        val checkstyleSuppressions = suppressions.filter { it.startsWith("checkstyle:") }.toSet()
         testResults.addCheckstyleResults(
             source.checkstyle(
                 CheckstyleArguments(

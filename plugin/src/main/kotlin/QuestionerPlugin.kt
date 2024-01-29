@@ -13,6 +13,7 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.testing.Test
+import java.util.function.BiPredicate
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class QuestionerConfig(val endpoints: List<EndPoint> = listOf()) {
@@ -20,12 +21,17 @@ data class QuestionerConfig(val endpoints: List<EndPoint> = listOf()) {
 }
 
 typealias ExcludeMethod = (name: QuestionerConfig.EndPoint, question: Question) -> Boolean
+
+@Suppress("UNUSED")
 open class QuestionerConfigExtension {
     var maxMutationCount: Int = 256
     var concurrency: Double = 0.5
     var retries: Int = 4
-    val ignorePackages = listOf("com.github.cs124_illinois.questioner.examples.", "com.examples.")
-    val publishExcludes: ExcludeMethod = { _: QuestionerConfig.EndPoint, _: Question -> true }
+    var ignorePackages = listOf("com.github.cs124_illinois.questioner.examples.", "com.examples.")
+    var publishExcludes: BiPredicate<QuestionerConfig.EndPoint, Question> = BiPredicate { _, _ -> true }
+    fun configurePublishExcludes(action: BiPredicate<QuestionerConfig.EndPoint, Question>) {
+        publishExcludes = action
+    }
 }
 
 private val testFiles = listOf("TestAllQuestions.kt", "TestUnvalidatedQuestions.kt", "TestFocusedQuestions.kt")
@@ -150,7 +156,8 @@ class QuestionerPlugin : Plugin<Project> {
             project.dependencies.add("implementation", project.dependencies.create("org.cs124:questioner:$VERSION"))
 
             generateQuestionTests.maxMutationCount = config.maxMutationCount
-            generateQuestionTests.concurrency = (Runtime.getRuntime().availableProcessors().toDouble() * config.concurrency).toInt().coerceAtLeast(1)
+            generateQuestionTests.concurrency =
+                (Runtime.getRuntime().availableProcessors().toDouble() * config.concurrency).toInt().coerceAtLeast(1)
             generateQuestionTests.retries = config.retries
 
             publishingTasks.forEach { task ->

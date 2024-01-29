@@ -20,7 +20,6 @@ import edu.illinois.cs.cs125.jenisol.core.Verify
 import edu.illinois.cs.cs125.questioner.lib.AlsoCorrect
 import edu.illinois.cs.cs125.questioner.lib.Blacklist
 import edu.illinois.cs.cs125.questioner.lib.CheckFeatures
-import edu.illinois.cs.cs125.questioner.lib.CheckstyleSuppress
 import edu.illinois.cs.cs125.questioner.lib.Cite
 import edu.illinois.cs.cs125.questioner.lib.Correct
 import edu.illinois.cs.cs125.questioner.lib.Ignore
@@ -75,7 +74,6 @@ internal val annotationsToRemove =
         Limit::class.java.simpleName,
         ProvideSystemIn::class.java.simpleName,
         ProvideFileSystem::class.java.simpleName,
-        CheckstyleSuppress::class.java.simpleName,
         KotlinMirrorOK::class.java.simpleName,
     )
 internal val annotationsToDestroy =

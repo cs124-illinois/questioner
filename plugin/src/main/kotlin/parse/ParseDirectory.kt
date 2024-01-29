@@ -358,8 +358,7 @@ fun Path.parseDirectory(
         common = common,
         templateByLanguage = makeLanguageMap(javaTemplate, kotlinTemplate),
         importWhitelist = solution.whitelist,
-        importBlacklist = solution.blacklist,
-        checkstyleSuppressions = solution.checkstyleSuppress,
+        importBlacklist = solution.blacklist
     )
 }
 

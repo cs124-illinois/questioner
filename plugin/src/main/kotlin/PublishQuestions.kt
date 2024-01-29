@@ -2,6 +2,7 @@
 
 package edu.illinois.cs.cs125.questioner.plugin
 
+import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.loadQuestionList
 import edu.illinois.cs.cs125.questioner.lib.toJSON
 import org.gradle.api.DefaultTask
@@ -15,6 +16,7 @@ import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
+import java.util.function.BiPredicate
 import java.util.zip.GZIPOutputStream
 
 abstract class PublishQuestions : DefaultTask() {
@@ -28,7 +30,7 @@ abstract class PublishQuestions : DefaultTask() {
     abstract var ignorePackages: List<String>
 
     @get:Input
-    abstract var publishExcludes: ExcludeMethod
+    abstract var publishExcludes: BiPredicate<QuestionerConfig.EndPoint, Question>
 
     init {
         group = "Publish"
@@ -47,12 +49,12 @@ abstract class PublishQuestions : DefaultTask() {
         val questions = allQuestions.filter { question ->
             question.metadata?.publish != false
         }.filter { question ->
-            !publishExcludes(endpoint, question)
+            !publishExcludes.test(endpoint, question)
         }
 
         require(questions.isNotEmpty()) {
             val ignoredQuestions = allQuestions.filter { question -> question.metadata?.publish == false }
-            val unpublishedQuestions = ignoredQuestions.filter { question -> !publishExcludes(endpoint, question) }
+            val unpublishedQuestions = ignoredQuestions.filter { question -> !publishExcludes.test(endpoint, question) }
             "No questions to publish: ${
                 if (ignorePackages.isNotEmpty()) {
                     "disabled packages ${ignorePackages.joinToString(",")}"

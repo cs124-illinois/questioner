@@ -12,6 +12,7 @@ import edu.illinois.cs.cs125.jeed.core.Mutation
 import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.compile
 import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
+import org.checkerframework.framework.qual.Unused
 import java.io.File
 import java.lang.reflect.ReflectPermission
 import java.util.PropertyPermission
@@ -46,8 +47,10 @@ data class Question(
     val templateByLanguage: Map<Language, String>?,
     val importWhitelist: Set<String>,
     val importBlacklist: Set<String>,
-    val checkstyleSuppressions: Set<String>
+    @Suppress("unused")
+    val checkstyleSuppressions: Set<String> = setOf()
 ) {
+
     @Transient
     val hasKotlin = published.languages.contains(Language.kotlin)
 

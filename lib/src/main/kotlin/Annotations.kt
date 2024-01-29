@@ -58,9 +58,6 @@ annotation class Whitelist(val paths: String)
 annotation class Blacklist(val paths: String)
 
 @Target(AnnotationTarget.CLASS)
-annotation class CheckstyleSuppress(val suppressions: String)
-
-@Target(AnnotationTarget.CLASS)
 annotation class TemplateImports(val paths: String)
 
 @Target(AnnotationTarget.CLASS)
@@ -111,4 +108,7 @@ annotation class CheckFeatures {
 fun Method.isCheckFeatures() = isAnnotationPresent(CheckFeatures::class.java)
 
 class FeatureCheckException(message: String) : RuntimeException(message)
+
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FILE)
+annotation class Tags(vararg val value: String)
 
