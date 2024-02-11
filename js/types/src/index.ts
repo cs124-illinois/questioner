@@ -115,6 +115,7 @@ export const QuestionPublished = QuestionPath.And(
   Partial({
     citation: Citation,
     starters: Dictionary(String, Languages),
+    tags: Array(String),
   }),
 )
 export type QuestionPublished = Static<typeof QuestionPublished>
