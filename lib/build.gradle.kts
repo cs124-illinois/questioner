@@ -9,7 +9,7 @@ plugins {
     id("com.ryandens.javaagent-test") version "0.5.1"
 }
 dependencies {
-    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.1")
 
     testJavaagent("com.beyondgrader.resource-agent:agent:2023.9.0")
 
@@ -19,18 +19,18 @@ dependencies {
     implementation("org.mongodb:mongodb-driver:3.12.14")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.22")
 
-    api("com.squareup.moshi:moshi-kotlin:1.15.0")
+    api("com.squareup.moshi:moshi-kotlin:1.15.1")
     api("com.beyondgrader.resource-agent:agent:2023.9.0")
     api("com.beyondgrader.resource-agent:virtualfsplugin:2023.9.0") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2024.1.0")
+    api("org.cs124.jeed:core:2024.2.0")
     api("org.cs124:jenisol:2024.1.0")
     api("org.cs124:libcs1:2023.12.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.16.1")
 
     api("io.kotest:kotest-runner-junit5:5.8.0")
-    api("com.google.truth:truth:1.3.0")
+    api("com.google.truth:truth:1.4.0")
 }
 tasks {
     val sourcesJar by creating(Jar::class) {

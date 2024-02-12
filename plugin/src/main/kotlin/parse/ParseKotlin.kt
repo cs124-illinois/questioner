@@ -72,7 +72,22 @@ internal data class ParsedKotlinFile(val path: String, val contents: String) {
     }
 
     val hasControlAnnotations =
-        parseTree.preamble().importList().importHeader().map { it.toFullName() }.toSet().intersect(controlImports).isNotEmpty()
+        parseTree.preamble().importList().importHeader().map { it.toFullName() }.toSet().intersect(controlImports)
+            .isNotEmpty()
+
+    val suppressions = when (topLevelFile) {
+        true -> parseTree.preamble().fileAnnotations().getAnnotation(Suppress::class.java)
+            ?.valueArguments()?.valueArgument()
+            ?.map { it.text.trim().removeSurrounding("\"") }
+            ?.toSet()
+            ?: setOf()
+
+        false -> topLevelClass!!.getAnnotation(Suppress::class.java)
+            ?.valueArguments()?.valueArgument()
+            ?.map { it.text.trim().removeSurrounding("\"") }
+            ?.toSet()
+            ?: setOf()
+    }
 
     val incorrect = if (topLevelFile) {
         parseTree.preamble().fileAnnotations().getAnnotation(Incorrect::class.java)
@@ -106,6 +121,7 @@ internal data class ParsedKotlinFile(val path: String, val contents: String) {
             Language.kotlin,
             path,
             starter != null,
+            suppressions = suppressions,
         )
     }
 
@@ -164,6 +180,7 @@ internal data class ParsedKotlinFile(val path: String, val contents: String) {
             features,
             lineCounts,
             deadlineCount,
+            suppressions = suppressions,
         )
     }
 
@@ -176,6 +193,7 @@ internal data class ParsedKotlinFile(val path: String, val contents: String) {
             Language.kotlin,
             path,
             true,
+            suppressions = suppressions,
         )
     }
 

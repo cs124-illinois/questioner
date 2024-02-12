@@ -71,7 +71,8 @@ suspend fun Question.test(
                     kompileSubmission(
                         source,
                         InvertingClassLoader(setOf(published.klass, "${published.klass}Kt")),
-                        results
+                        results,
+                        settings.kotlinSuppressions ?: setOf()
                     )
             }
         } catch (e: TemplatingFailed) {

@@ -12,7 +12,6 @@ import edu.illinois.cs.cs125.jeed.core.Mutation
 import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.compile
 import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
-import org.checkerframework.framework.qual.Unused
 import java.io.File
 import java.lang.reflect.ReflectPermission
 import java.util.PropertyPermission
@@ -92,6 +91,7 @@ data class Question(
         val templateImports: Set<String>,
         val questionerVersion: String,
         val authorName: String,
+        val tags: MutableSet<String> = mutableSetOf(),
         val canTestTest: Boolean = type == Type.KLASS || type == Type.METHOD
     )
 
@@ -225,7 +225,8 @@ data class Question(
         var solutionRecursiveMethods: Map<Language, Set<ResourceMonitoringResults.MethodInfo>>? = null,
         val minTestCount: Int = -1,
         val maxTestCount: Int = -1,
-        val suppressions: Set<String>? = null
+        val suppressions: Set<String>? = null,
+        val kotlinSuppressions: Set<String>? = null
     )
 
     @JsonClass(generateAdapter = true)
@@ -352,7 +353,8 @@ data class Question(
                     question.kompileSubmission(
                         source,
                         InvertingClassLoader(setOf(question.published.klass, "${question.published.klass}Kt")),
-                        results
+                        results,
+                        suppressions
                     )
             }.let {
                 TestTestingSource(contents(question), question.fixTestingMethods(it.classLoader))

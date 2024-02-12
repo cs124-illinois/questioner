@@ -6,8 +6,8 @@ import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.loadQuestionList
 import edu.illinois.cs.cs125.questioner.lib.toJSON
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -20,17 +20,17 @@ import java.util.function.BiPredicate
 import java.util.zip.GZIPOutputStream
 
 abstract class PublishQuestions : DefaultTask() {
-    @Input
+    @Internal
     lateinit var endpoint: QuestionerConfig.EndPoint
 
     @InputFile
     val inputFile: File = project.layout.buildDirectory.dir("questioner/questions.json").get().asFile
 
-    @get:Input
-    abstract var ignorePackages: List<String>
+    @Internal
+    lateinit var ignorePackages: List<String>
 
-    @get:Input
-    abstract var publishExcludes: BiPredicate<QuestionerConfig.EndPoint, Question>
+    @Internal
+    lateinit var publishIncludes: BiPredicate<QuestionerConfig.EndPoint, Question>
 
     init {
         group = "Publish"
@@ -49,12 +49,12 @@ abstract class PublishQuestions : DefaultTask() {
         val questions = allQuestions.filter { question ->
             question.metadata?.publish != false
         }.filter { question ->
-            !publishExcludes.test(endpoint, question)
+            publishIncludes.test(endpoint, question)
         }
 
         require(questions.isNotEmpty()) {
             val ignoredQuestions = allQuestions.filter { question -> question.metadata?.publish == false }
-            val unpublishedQuestions = ignoredQuestions.filter { question -> !publishExcludes.test(endpoint, question) }
+            val unpublishedQuestions = ignoredQuestions.filter { question -> !publishIncludes.test(endpoint, question) }
             "No questions to publish: ${
                 if (ignorePackages.isNotEmpty()) {
                     "disabled packages ${ignorePackages.joinToString(",")}"

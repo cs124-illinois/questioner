@@ -21,6 +21,7 @@ import edu.illinois.cs.cs125.questioner.lib.Incorrect
 import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.Starter
+import edu.illinois.cs.cs125.questioner.lib.Tags
 import edu.illinois.cs.cs125.questioner.lib.TemplateImports
 import edu.illinois.cs.cs125.questioner.lib.Whitelist
 import edu.illinois.cs.cs125.questioner.lib.Wrap
@@ -61,6 +62,16 @@ internal data class ParsedJavaFile(val path: String, val contents: String) {
             annotation.elementValue().elementValueArrayInitializer().elementValue().map { it.text }
         } else {
             error("Invalid @SuppressWarnings annotation")
+        }
+    }.flatten().filterNotNull().map { it.removeSurrounding("\"") }.toSet()
+
+    val tags = topLevelClass.getAnnotations(Tags::class.java).asSequence().map { annotation ->
+        if (annotation.elementValue()?.expression() != null) {
+            listOf(annotation.elementValue()?.expression()?.text)
+        } else if (annotation.elementValue()?.elementValueArrayInitializer() != null) {
+            annotation.elementValue().elementValueArrayInitializer().elementValue().map { it.text }
+        } else {
+            error("Invalid @Tags annotation")
         }
     }.flatten().filterNotNull().map { it.removeSurrounding("\"") }.toSet()
 

@@ -26,6 +26,7 @@ import edu.illinois.cs.cs125.questioner.lib.Ignore
 import edu.illinois.cs.cs125.questioner.lib.Incorrect
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.Starter
+import edu.illinois.cs.cs125.questioner.lib.Tags
 import edu.illinois.cs.cs125.questioner.lib.TemplateImports
 import edu.illinois.cs.cs125.questioner.lib.Whitelist
 import edu.illinois.cs.cs125.questioner.lib.Wrap
@@ -58,6 +59,7 @@ internal fun String.stripPackage(): String {
 internal val annotationsToRemove =
     setOf(
         Correct::class.java.simpleName,
+        Tags::class.java.simpleName,
         Incorrect::class.java.simpleName,
         Starter::class.java.simpleName,
         SuppressWarnings::class.java.simpleName,
@@ -95,6 +97,7 @@ internal val annotationsToSnip = setOf(NotNull::class.java.simpleName)
 
 internal val controlAnnotations =
     setOf(
+        Tags::class.java.simpleName,
         Whitelist::class.java.simpleName,
         Blacklist::class.java.simpleName,
         TemplateImports::class.java.simpleName,

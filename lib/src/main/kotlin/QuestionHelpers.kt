@@ -152,7 +152,17 @@ suspend fun Question.compileSubmission(
             testResults.complete.compileSubmission = CompiledSourceResult(compiledSource)
             testResults.completedSteps.add(TestResults.Step.compileSubmission)
         }
-        val checkstyleSuppressions = suppressions.filter { it.startsWith("checkstyle:") }.toSet()
+        val checkstyleSuppressions = suppressions
+            .map {
+                if (it == "checkstyle") {
+                    "checkstyle:*"
+                } else {
+                    it
+                }
+            }
+            .filter { it.startsWith("checkstyle:") }
+            .map { it.removePrefix("checkstyle:") }
+            .toSet()
         testResults.addCheckstyleResults(
             source.checkstyle(
                 CheckstyleArguments(
@@ -181,7 +191,8 @@ suspend fun Question.compileSubmission(
 suspend fun Question.kompileSubmission(
     source: Source,
     parentClassLoader: ClassLoader,
-    testResults: TestResults
+    testResults: TestResults,
+    suppressions: Set<String>
 ): CompiledSource {
     return try {
         val actualParents = Pair(compiledCommon?.classLoader ?: parentClassLoader, compiledCommon?.fileManager)
@@ -200,7 +211,7 @@ suspend fun Question.kompileSubmission(
                 KtLintArguments(
                     failOnError = false,
                     indent = 2,
-                    maxLineLength = 120
+                    maxLineLength = 120,
                 )
             )
         )

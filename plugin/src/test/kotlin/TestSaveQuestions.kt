@@ -28,7 +28,8 @@ import edu.illinois.cs.cs125.jenisol.core.NotNull;
 )
 @Import(paths="examples.second, examples.first")
 @Wrap
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "unchecked"})
+@Tags({"here", "we", "go"})
 public class Second {
   public void correct(@NotNull String input) { }
   public void also(@NotNull String input) { }
@@ -49,7 +50,8 @@ public class Second {
                     it.author shouldBe "challen@illinois.edu"
                     it.description shouldBe "<p>Here is a <em>description</em>.</p>"
                 }
-                parsedFile.suppressions shouldBe listOf("rawtypes")
+                parsedFile.suppressions shouldBe listOf("rawtypes", "unchecked")
+                parsedFile.tags shouldBe listOf("here", "we", "go")
             }
         }
         "should parse a question file with multiple suppressions" {
@@ -100,7 +102,7 @@ public class Second {
                 "Second.kt",
                 """
 @file:AlsoCorrect
-
+@file:Suppress("test", "me")
 package examples
 
 import edu.illinois.cs.cs125.questioner.AlsoCorrect
@@ -119,6 +121,7 @@ fun correct() { }
                 }
                 parsedFile.comment shouldBe "Test me _markdown_."
                 parsedFile.description shouldBe "<p>Test me <em>markdown</em>.</p>"
+                parsedFile.suppressions shouldBe listOf("test", "me")
             }
         }
         "should parse a Kotlin alternate class solution" {

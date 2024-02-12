@@ -20,17 +20,15 @@ data class QuestionerConfig(val endpoints: List<EndPoint> = listOf()) {
     data class EndPoint(val name: String, val token: String, val url: String, val label: String? = null)
 }
 
-typealias ExcludeMethod = (name: QuestionerConfig.EndPoint, question: Question) -> Boolean
-
 @Suppress("UNUSED")
 open class QuestionerConfigExtension {
     var maxMutationCount: Int = 256
     var concurrency: Double = 0.5
     var retries: Int = 4
     var ignorePackages = listOf("com.github.cs124_illinois.questioner.examples.", "com.examples.")
-    var publishExcludes: BiPredicate<QuestionerConfig.EndPoint, Question> = BiPredicate { _, _ -> true }
-    fun configurePublishExcludes(action: BiPredicate<QuestionerConfig.EndPoint, Question>) {
-        publishExcludes = action
+    var publishIncludes: BiPredicate<QuestionerConfig.EndPoint, Question> = BiPredicate { _, _ -> true }
+    fun configPublishIncludes(method: BiPredicate<QuestionerConfig.EndPoint, Question>) {
+        publishIncludes = method
     }
 }
 
@@ -126,7 +124,6 @@ class QuestionerPlugin : Plugin<Project> {
                 val publishQuestions =
                     project.tasks.register("publishQuestionsTo${endpoint.name}", PublishQuestions::class.java).get()
                 publishQuestions.endpoint = endpoint
-                publishQuestions.publishExcludes = config.publishExcludes
                 publishQuestions.dependsOn(collectQuestions)
                 publishQuestions.outputs.upToDateWhen { false }
                 publishQuestions.description = "Publish questions to ${endpoint.name} (${endpoint.url})"
@@ -161,6 +158,7 @@ class QuestionerPlugin : Plugin<Project> {
             generateQuestionTests.retries = config.retries
 
             publishingTasks.forEach { task ->
+                task.publishIncludes = config.publishIncludes
                 task.ignorePackages = config.ignorePackages
             }
 

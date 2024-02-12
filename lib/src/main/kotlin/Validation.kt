@@ -38,6 +38,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     val kotlinClassWhitelist = mutableSetOf<String>().apply { addAll(defaultKotlinClassWhitelist) }
 
     val javaSolution = getSolution(Language.java)!!
+    val kotlinSolution = getSolution(Language.kotlin)
 
     fun TestResults.checkCorrect(file: Question.FlatFile, finalChecks: Boolean = false) {
         if (taskResults?.threw != null) {
@@ -268,7 +269,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
         ),
         solutionDeadCode = solutionDeadCode,
-        suppressions = javaSolution.suppressions
+        suppressions = javaSolution.suppressions,
+        kotlinSuppressions = kotlinSolution?.suppressions
         // No execution count limit
         // No allocation limit
         // No known recursive methods yet
@@ -357,7 +359,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         solutionRecursiveMethods = solutionRecursiveMethods,
         solutionDeadCode = solutionDeadCode,
         solutionClassSize = bootstrapClassSize,
-        suppressions = javaSolution.suppressions
+        suppressions = javaSolution.suppressions,
+        kotlinSuppressions = kotlinSolution?.suppressions
     )
     val incorrectResults = allIncorrect.map { wrong ->
         val specificIncorrectSettings = if (wrong.reason == Question.IncorrectFile.Reason.MEMORYLIMIT) {
@@ -466,7 +469,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         solutionRecursiveMethods = solutionRecursiveMethods,
         solutionDeadCode = solutionDeadCode,
         solutionClassSize = bootstrapClassSize,
-        suppressions = javaSolution.suppressions
+        suppressions = javaSolution.suppressions,
+        kotlinSuppressions = kotlinSolution?.suppressions
     )
     val calibrationResults = (setOf(javaSolution) + alternativeSolutions).map { right ->
         val results = limiter.withPermit {
@@ -538,7 +542,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         solutionRecursiveMethods = solutionRecursiveMethods,
         solutionDeadCode = solutionDeadCode,
         solutionClassSize = bootstrapClassSize,
-        suppressions = javaSolution.suppressions
+        suppressions = javaSolution.suppressions,
+        kotlinSuppressions = kotlinSolution?.suppressions
     )
 
     testTestingLimits = Question.TestTestingLimits(
