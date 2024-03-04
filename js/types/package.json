@@ -1,11 +1,11 @@
 {
   "name": "@cs124/questioner-types",
-  "version": "2024.2.0",
+  "version": "2024.3.0",
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "checker": "yarn depcheck && yarn prettier && yarn eslint && yarn tsc",
+    "checker": "yarn depcheck && yarn prettier && yarn eslint && yarn tsc && yarn build",
     "clean": "rimraf dist",
     "depcheck": "depcheck --ignores=prettier-plugin-*,rimraf --ignore-dirs=dist",
     "eslint": "eslint src/**",
@@ -23,10 +23,10 @@
   },
   "devDependencies": {
     "@cs124/jeed-types": "2024.2.0",
-    "@typescript-eslint/eslint-plugin": "6.21.0",
-    "@typescript-eslint/parser": "6.21.0",
+    "@typescript-eslint/eslint-plugin": "7.1.0",
+    "@typescript-eslint/parser": "7.1.0",
     "depcheck": "1.4.7",
-    "eslint": "8.56.0",
+    "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "npm-check-updates": "16.14.15",
     "prettier": "3.2.5",

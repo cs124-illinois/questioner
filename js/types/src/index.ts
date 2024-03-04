@@ -60,6 +60,7 @@ export const ValidationResults = Record({
 }).And(
   Partial({
     solutionMaxClassSize: LanguagesResourceUsage,
+    canTestTest: Boolean,
   }),
 )
 export type ValidationResults = Static<typeof ValidationResults>
@@ -108,7 +109,6 @@ export const QuestionPublished = QuestionPath.And(
     templateImports: RuntypeArray(String),
     questionerVersion: String,
     authorName: String,
-    canTestTest: Boolean,
     klass: String,
   }),
 ).And(
@@ -200,6 +200,7 @@ export const TestResult = Record({
     found: String,
     explanation: String,
     output: String,
+    stdin: String,
     complexity: Number,
     submissionStackTrace: String,
     differs: RuntypeArray(
@@ -518,9 +519,11 @@ export const CacheStats = Record({
 export type CacheStats = Static<typeof CacheStats>
 
 export const ServerResponse = Record({
+  type: SubmissionType,
   canCache: Boolean,
   cacheStats: CacheStats,
   duration: Number,
+  version: String,
 }).And(
   Partial({
     solveResults: TestResults,

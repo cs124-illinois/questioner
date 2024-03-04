@@ -18,7 +18,7 @@ internal val questionerCollection: MongoCollection<BsonDocument> = run {
         System.setProperty("javax.net.ssl.trustStore", keystore)
         System.setProperty("javax.net.ssl.trustStorePassword", System.getenv("KEYSTORE_PASSWORD"))
     }
-    val collection = System.getenv("MONGODB_COLLECTION") ?: "questioner"
+    val collection = System.getenv("MONGODB_COLLECTION") ?: error("Must set MONGODB_COLLECTION")
     val mongoUri = MongoClientURI(System.getenv("MONGODB")!!, MongoClientOptions.builder().sslContext(sslContext))
     val database = mongoUri.database ?: error("MONGODB must specify database to use")
     MongoClient(mongoUri).getDatabase(database).getCollection(collection, BsonDocument::class.java)

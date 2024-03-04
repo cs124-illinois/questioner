@@ -91,8 +91,7 @@ data class Question(
         val templateImports: Set<String>,
         val questionerVersion: String,
         val authorName: String,
-        val tags: MutableSet<String> = mutableSetOf(),
-        val canTestTest: Boolean = type == Type.KLASS || type == Type.METHOD
+        val tags: MutableSet<String> = mutableSetOf()
     )
 
     @JsonClass(generateAdapter = true)
@@ -141,7 +140,8 @@ data class Question(
         val maxComplexityMultiplier: Double?,
         val maxLineCountMultiplier: Double?,
         val maxClassSizeMultiplier: Double?,
-        val initialTestingDelay: Int?
+        val initialTestingDelay: Int?,
+        val canTestTest: Boolean?
     ) {
         companion object {
             const val DEFAULT_SOLUTION_THROWS = false
@@ -169,6 +169,7 @@ data class Question(
             const val DEFAULT_MIN_FAIL_FAST_CLASS_SIZE_MULTIPLIER = 16
             const val DEFAULT_MAX_EXECUTION_COUNT: Long = DEFAULT_MAX_TIMEOUT.toLong() * 1024 * 1024
             const val DEFAULT_INITIAL_TESTING_DELAY: Int = 0
+            const val DEFAULT_CAN_TESTTEST: Boolean = true
 
             val DEFAULTS = TestingControl(
                 DEFAULT_SOLUTION_THROWS,
@@ -193,7 +194,8 @@ data class Question(
                 DEFAULT_MAX_COMPLEXITY_MULTIPLIER,
                 DEFAULT_MAX_LINECOUNT_MULTIPLIER,
                 DEFAULT_MAX_CLASSSIZE_MULTIPLIER,
-                DEFAULT_INITIAL_TESTING_DELAY
+                DEFAULT_INITIAL_TESTING_DELAY,
+                DEFAULT_CAN_TESTTEST
             )
         }
     }
@@ -265,7 +267,8 @@ data class Question(
         val solutionCoverage: TestResults.CoverageComparison.LineCoverage,
         val executionCounts: LanguagesResourceUsage,
         val memoryAllocation: LanguagesResourceUsage,
-        val solutionMaxClassSize: LanguagesResourceUsage? = null
+        val solutionMaxClassSize: LanguagesResourceUsage? = null,
+        val canTestTest: Boolean = false
     )
 
     @JsonClass(generateAdapter = true)

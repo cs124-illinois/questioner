@@ -103,7 +103,7 @@ fun Application.questioner() {
 
             val validated = when (submission.type) {
                 Submission.SubmissionType.SOLVE -> question.validated
-                Submission.SubmissionType.TESTTESTING -> question.testTestingValidated
+                Submission.SubmissionType.TESTTESTING -> question.testTestingValidated && question.validationResults?.canTestTest == true
             }
             if (!validated) {
                 return@post call.respond(HttpStatusCode.BadRequest)

@@ -36,23 +36,33 @@ internal suspend fun Submission.test(question: Question): ServerResponse {
     return when (type) {
         Submission.SubmissionType.SOLVE -> {
             val solveResults = question.test(contents, language)
-            ServerResponse(solveResults = solveResults, canCache = solveResults.canCache)
+            ServerResponse(
+                type = Submission.SubmissionType.SOLVE,
+                solveResults = solveResults,
+                canCache = solveResults.canCache,
+            )
         }
 
         Submission.SubmissionType.TESTTESTING -> {
             val testTestingResults = question.testTests(contents, language, testTestingSettings)
-            ServerResponse(testTestingResults = testTestingResults, canCache = testTestingResults.canCache)
+            ServerResponse(
+                type = Submission.SubmissionType.TESTTESTING,
+                testTestingResults = testTestingResults,
+                canCache = testTestingResults.canCache,
+            )
         }
     }.copy(cacheStats = getStats(), duration = Instant.now().toEpochMilli() - start.toEpochMilli())
 }
 
 @JsonClass(generateAdapter = true)
 internal data class ServerResponse(
+    val type: Submission.SubmissionType,
     val solveResults: TestResults? = null,
     val testTestingResults: TestTestResults? = null,
     val canCache: Boolean,
     val cacheStats: CacheStats? = null,
     val duration: Long = 0,
+    val version: String = VERSION,
 )
 
 private val serverStarted = Instant.now()

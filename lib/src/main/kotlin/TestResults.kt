@@ -229,6 +229,7 @@ data class TestResults(
             val output: String? = null,
             val complexity: Int? = null,
             val submissionStackTrace: String? = null,
+            val stdin: String? = null,
             @Transient val jenisol: JenisolTestResult<*, *>? = null,
             @Transient val submissionResourceUsage: ResourceMonitoringCheckpoint? = null
         )
@@ -313,10 +314,10 @@ fun TestResult<*, *>.asTestResult(source: Source) = TestResults.TestingResult.Te
     } else {
         null
     },
-    submission.stdout.trim() + if (submission.truncatedLines > 0) {
+    submission.interleavedOutput.trim() + if (submission.truncatedLines > 0) {
         "\n(${submission.truncatedLines} lines truncated)\n"
     } else {
-        "\n"
+        ""
     },
     complexity,
     submission.threw?.getStackTraceForSource(
@@ -327,6 +328,7 @@ fun TestResult<*, *>.asTestResult(source: Source) = TestResults.TestingResult.Te
             "at java.base"
         )
     ),
+    submission.stdin,
     this,
     this.submission.tag as ResourceMonitoringCheckpoint
 )

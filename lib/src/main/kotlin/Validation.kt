@@ -559,6 +559,14 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         ),
     )
 
+    val canTestTest = control.canTestTest != false &&
+        (published.type == Question.Type.METHOD || published.type == Question.Type.KLASS) &&
+        !calibrationResults.any { correctResults ->
+            correctResults.results.tests()!!
+                .any { testResult -> testResult.stdin?.isNotEmpty() == true || testResult.output?.isNotEmpty() == true }
+        } &&
+        !solution.usesSystemIn && !solution.usesFileSystem
+
     validationResults = Question.ValidationResults(
         seed = seed,
         requiredTestCount = requiredTestCount,
@@ -570,7 +578,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         calibrationLength = calibrationLength,
         solutionCoverage = solutionCoverage,
         executionCounts = solutionExecutionCounts,
-        memoryAllocation = solutionAllocation
+        memoryAllocation = solutionAllocation,
+        canTestTest = canTestTest
     )
 
     classification.recursiveMethodsByLanguage = solutionRecursiveMethods!!

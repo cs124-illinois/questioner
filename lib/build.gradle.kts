@@ -25,12 +25,12 @@ dependencies {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
     api("org.cs124.jeed:core:2024.2.0")
-    api("org.cs124:jenisol:2024.1.0")
+    api("org.cs124:jenisol:2024.3.0")
     api("org.cs124:libcs1:2023.12.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.16.1")
 
     api("io.kotest:kotest-runner-junit5:5.8.0")
-    api("com.google.truth:truth:1.4.0")
+    api("com.google.truth:truth:1.4.2")
 }
 tasks {
     val sourcesJar by creating(Jar::class) {
