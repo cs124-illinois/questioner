@@ -30,8 +30,6 @@ internal fun Question.toSubmission(type: Submission.SubmissionType, language: La
     Submission(type, published.contentHash, language, contents)
 
 internal suspend fun Submission.test(question: Question): ServerResponse {
-    // FIXME
-    // val timeout = question.testingSettings!!.timeout * (System.getenv("TIMEOUT_MULTIPLIER")?.toInt() ?: 1)
     val start = Instant.now()
     return when (type) {
         Submission.SubmissionType.SOLVE -> {
