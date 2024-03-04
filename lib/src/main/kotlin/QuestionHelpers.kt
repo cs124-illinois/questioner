@@ -397,7 +397,15 @@ fun Question.computeClassSize(
         Language.java -> EmptyClassSizes.EMPTY_JAVA_CLASS_SIZE
         Language.kotlin -> EmptyClassSizes.EMPTY_KOTLIN_CLASS_SIZE
     }
-    val submissionClassSize = compiledSubmission.classLoader.sizeInBytes.toLong() - emptyClassSize
+    val submissionClassSize = (compiledSubmission.classLoader.sizeInBytes.toLong() - emptyClassSize).let { size ->
+        when {
+            size < 0 -> {
+                logger.warn { "Negative relative class size value: $size" }
+                0
+            }
+            else -> size
+        }
+    }
     val solutionClassSize = when (language) {
         Language.java -> validationResults?.solutionMaxClassSize?.java ?: settings.solutionClassSize?.java
         Language.kotlin -> validationResults?.solutionMaxClassSize?.kotlin

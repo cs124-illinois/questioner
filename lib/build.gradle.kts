@@ -19,6 +19,10 @@ dependencies {
     implementation("org.mongodb:mongodb-driver:3.12.14")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.22")
 
+    implementation("org.slf4j:slf4j-api:2.0.12")
+    implementation("ch.qos.logback:logback-classic:1.5.2")
+    implementation("io.github.microutils:kotlin-logging:3.0.5")
+
     api("com.squareup.moshi:moshi-kotlin:1.15.1")
     api("com.beyondgrader.resource-agent:agent:2023.9.0")
     api("com.beyondgrader.resource-agent:virtualfsplugin:2023.9.0") {
