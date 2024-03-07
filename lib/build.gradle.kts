@@ -20,7 +20,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.22")
 
     implementation("org.slf4j:slf4j-api:2.0.12")
-    implementation("ch.qos.logback:logback-classic:1.5.2")
+    implementation("ch.qos.logback:logback-classic:1.5.3")
     implementation("io.github.microutils:kotlin-logging:3.0.5")
 
     api("com.squareup.moshi:moshi-kotlin:1.15.1")
