@@ -403,7 +403,7 @@ suspend fun Question.test(
         results.completedSteps.add(TestResults.Step.executioncount)
 
         // memoryAllocation
-        val submissionAllocation = resourceUsage.allocatedMemory
+        val submissionAllocation = resourceUsage.allocatedMemory.coerceAtLeast(0)
         val solutionAllocation = if (language == Language.java) {
             validationResults?.memoryAllocation?.java ?: settings.solutionAllocation?.java
         } else {
