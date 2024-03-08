@@ -1,35 +1,33 @@
 {
-  "name": "@cs124/questioner-output",
+  "name": "@cs124/questioner-mongodb",
   "version": "2024.3.1",
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
-    "build": "rimraf dist && tsc",
+    "build": "tsc",
     "checker": "yarn depcheck && yarn prettier && yarn eslint && yarn tsc && yarn build",
     "clean": "rimraf dist",
-    "depcheck": "depcheck --ignores=prettier-plugin-*,rimraf",
+    "depcheck": "depcheck --ignores=prettier-plugin-*,rimraf --ignore-dirs=dist",
     "eslint": "eslint src/**",
     "ncu": "ncu",
     "prettier": "prettier -w --cache --plugin=prettier-plugin-organize-imports . && prettier-package-json --write",
     "prepublish": "rimraf dist && tsc",
-    "start": "yarn watch",
+    "start": "tsc -w",
     "tsc": "tsc --noEmit",
     "watch": "tsc -w"
   },
   "types": "dist/index.d.ts",
-  "dependencies": {
-    "@cs124/jeed-types": "2024.2.0",
-    "@cs124/questioner-types": "~/code/questioner/js/types/",
-    "capitalize": "2.0.4",
-    "indent-string": "4.0.0"
+  "peerDependencies": {
+    "@cs124/questioner-types": "~/code/questioner/js/types/"
   },
   "devDependencies": {
-    "@types/capitalize": "2.0.2",
+    "@cs124/jeed-types": "2024.2.0",
     "@typescript-eslint/eslint-plugin": "7.1.1",
     "@typescript-eslint/parser": "7.1.1",
     "depcheck": "1.4.7",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
+    "mongodb": "6.3.0",
     "npm-check-updates": "16.14.15",
     "prettier": "3.2.5",
     "prettier-package-json": "gchallen/prettier-package-json#2023.8.0",

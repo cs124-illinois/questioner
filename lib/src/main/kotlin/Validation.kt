@@ -42,7 +42,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
 
     fun TestResults.checkCorrect(file: Question.FlatFile, finalChecks: Boolean = false) {
         if (taskResults?.threw != null) {
-            throw SolutionTestingThrew(file, taskResults!!.threw!!)
+            throw SolutionTestingThrew(file, taskResults!!.threw!!, taskResults!!.output)
         }
         if (!succeeded) {
             if (failed.checkExecutedSubmission != null) {
@@ -734,11 +734,18 @@ class SolutionThrew(val solution: Question.FlatFile, val threw: Throwable, val p
     """.trimMargin()
 }
 
-class SolutionTestingThrew(val solution: Question.FlatFile, val threw: Throwable) :
+class SolutionTestingThrew(val solution: Question.FlatFile, val threw: Throwable, val output: String = "") :
     ValidationFailed() {
     override val message = """
         |Solution testing threw an exception $threw
         |${threw.stackTraceToString()}
+        |${printContents(solution.contents, solution.path)}${
+            if (output.isNotEmpty()) {
+                "\n---\n${output.trim()}\n---"
+            } else {
+                ""
+            }
+        }
     """.trimMargin()
 }
 

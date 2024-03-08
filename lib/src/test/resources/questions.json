@@ -1,7 +1,7 @@
 [
   {
     "published": {
-      "contentHash": "c114211703dca8ff080a7f5c62d39c41-v2024.3.1",
+      "contentHash": "c114211703dca8ff080a7f5c62d39c41-v2024.3.2",
       "path": "add-one",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -18,7 +18,7 @@
         "kotlin": "<p>Write a method <code>addOne</code> that returns its <code>Int</code> argument plus one.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -660,7 +660,7 @@
   },
   {
     "published": {
-      "contentHash": "ef5dda85eddfc409cf6fd1b26498e631-v2024.3.1",
+      "contentHash": "ef5dda85eddfc409cf6fd1b26498e631-v2024.3.2",
       "path": "add-one-class",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -677,7 +677,7 @@
         "kotlin": "<p>Write a function <code>addOne</code> that returns its <code>Int</code> argument plus one.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -1178,7 +1178,7 @@
   },
   {
     "published": {
-      "contentHash": "8bd7c7adf961e1e726f5d348a2897aa9-v2024.3.1",
+      "contentHash": "8bd7c7adf961e1e726f5d348a2897aa9-v2024.3.2",
       "path": "bad-extra-private-variable",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -1195,7 +1195,7 @@
         "kotlin": "<p>Test bad use of superclass method.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -2068,7 +2068,7 @@
   },
   {
     "published": {
-      "contentHash": "9bdb6c108428b48e85f16251dccdc74a-v2024.3.1",
+      "contentHash": "9bdb6c108428b48e85f16251dccdc74a-v2024.3.2",
       "path": "classroom-getters-and-setters",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -2083,7 +2083,7 @@
         "java": "<p>Getter and setter testing.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -3040,7 +3040,7 @@
   },
   {
     "published": {
-      "contentHash": "b9c2151a39b8ac192fe361c8ec50396a-v2024.3.1",
+      "contentHash": "b9c2151a39b8ac192fe361c8ec50396a-v2024.3.2",
       "path": "combine-minus-two",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -3055,7 +3055,7 @@
         "java": "<p>Write a function <code>combine</code> that, given two <code>String</code> arguments, returns the second appended to\nthe first.\nExcept you should omit the first two characters of each <code>String</code>.\nFor example, given <code>Java</code> and <code>Kotlin</code>, you would return <code>vatlin</code>.\nYou can assume that each <code>String</code> is of length at least two.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -3383,7 +3383,7 @@
   },
   {
     "published": {
-      "contentHash": "8aa6196239255ec5890b648898bc7a26-v2024.3.1",
+      "contentHash": "8aa6196239255ec5890b648898bc7a26-v2024.3.2",
       "path": "cougar-feliform",
       "author": "challen@illinois.edu",
       "version": "2021.7.0",
@@ -3398,7 +3398,7 @@
         "java": "<p>Create and complete the implementation of the <code>Cougar</code> class.\nYour class should be public, not final and not abstract, inherit from the <code>Feliform</code> class,\nand provide the following methods:</p><ol><li>Constructor that takes a <code>int</code> parameter <code>speed</code> and a second <code>weight</code>.\nCreates a new <code>Cougar</code> with the passed speed and weight.\nYou should call the <code>Feliform</code> constructor and pass it the <code>String</code> &quot;cougar&quot; to identify the type\nof this feliform.</li><li>Public instance method <code>dangerousness</code> that takes no arguments and returns an <code>int</code>.\nReturn the dangerousness of this cougar which equals its speed times its weight.</li><li>Override <code>public boolean equals(Object other)</code>.\nReturn <code>true</code> if <code>other</code> is a <code>Cougar</code> with the same speed and weight, and <code>false</code> otherwise.\nNote that <code>other</code> may be <code>null</code> or not a <code>Housecat</code>.</li></ol><p>Finally, note that your class should not expose any of its internal state publicly.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -4370,7 +4370,7 @@
   },
   {
     "published": {
-      "contentHash": "37e67a667c1ae71a3ca7b33ce5ece38d-v2024.3.1",
+      "contentHash": "37e67a667c1ae71a3ca7b33ce5ece38d-v2024.3.2",
       "path": "counter",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -4387,7 +4387,7 @@
         "kotlin": "<p>Define and implement a class <code>Counter</code>.\n<code>Counter</code> should provide primary constructor that accepts an <code>Int</code> parameter.\nIt should also provide <code>increment</code> and <code>decrement</code> methods, both taking no parameters and returning <code>Unit</code>.\n<code>increment</code> should increase the stored count, while <code>decrement</code> should decrease it.\nFinally, provide a <code>getValue</code> method that returns the stored value.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -5563,7 +5563,7 @@
   },
   {
     "published": {
-      "contentHash": "4b67acf2669013a9ef4f930f18990e9a-v2024.3.1",
+      "contentHash": "4b67acf2669013a9ef4f930f18990e9a-v2024.3.2",
       "path": "equals-88",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -5578,7 +5578,7 @@
         "java": "<p>Write a method named <code>equals88</code> that returns <code>true</code> if its <code>int</code> argument is equal to 88,\nour magic number.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -5816,7 +5816,7 @@
   },
   {
     "published": {
-      "contentHash": "841269cf40bc4f6c730eef908110e096-v2024.3.1",
+      "contentHash": "841269cf40bc4f6c730eef908110e096-v2024.3.2",
       "path": "fancy-string-compare",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -5831,7 +5831,7 @@
         "java": "<p>Write a method <code>fancyCompare</code> that takes two <code>String</code> arguments. If the two <code>String</code>s are equal,\nreturn -1.\nOtherwise, return the length of the longer <code>String</code>.\nYou should <code>assert</code> that both inputs are not <code>null</code>.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -6799,7 +6799,7 @@
   },
   {
     "published": {
-      "contentHash": "ecfc9c6942632610eb6643d66f883bf6-v2024.3.1",
+      "contentHash": "ecfc9c6942632610eb6643d66f883bf6-v2024.3.2",
       "path": "input-interleaving-test",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -6816,7 +6816,7 @@
         "kotlin": "<p>Testing STDIN generation and interleaving. In Kotlin!</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -8408,7 +8408,7 @@
   },
   {
     "published": {
-      "contentHash": "c6bd42d3ecf82954f7ced8718a06568c-v2024.3.1",
+      "contentHash": "c6bd42d3ecf82954f7ced8718a06568c-v2024.3.2",
       "path": "input-without-output-test",
       "author": "challen@illinois.edu",
       "version": "2024.3.0",
@@ -8425,7 +8425,7 @@
         "kotlin": "<p>Testing STDIN without STDOUT.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -9543,7 +9543,7 @@
   },
   {
     "published": {
-      "contentHash": "99105a440a6128047b6b38227bd31bc3-v2024.3.1",
+      "contentHash": "99105a440a6128047b6b38227bd31bc3-v2024.3.2",
       "path": "kotlin-faux-property-testing",
       "author": "challen@illinois.edu",
       "version": "2023.7.0",
@@ -9560,7 +9560,7 @@
         "kotlin": "<p>Question to test detection of Kotlin faux properties in Jenisol 2023.7.0.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -10278,7 +10278,7 @@
   },
   {
     "published": {
-      "contentHash": "31c33195e99d7d6e4d824dfeeb4b012e-v2024.3.1",
+      "contentHash": "31c33195e99d7d6e4d824dfeeb4b012e-v2024.3.2",
       "path": "kotlin-null-test",
       "author": "challen@illinois.edu",
       "version": "2022.6.0",
@@ -10295,7 +10295,7 @@
         "kotlin": "<p>Return the length of a string.\nHere for Kotlin null memory usage checking.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -11077,7 +11077,7 @@
   },
   {
     "published": {
-      "contentHash": "8a09f00ff70137bc91f131b304424e9c-v2024.3.1",
+      "contentHash": "8a09f00ff70137bc91f131b304424e9c-v2024.3.2",
       "path": "larger-of-two",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -11092,7 +11092,7 @@
         "java": "<p>Write a method <code>larger</code> that returns the larger of two <code>int</code> arguments.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -11530,7 +11530,7 @@
   },
   {
     "published": {
-      "contentHash": "7930f4424e7ccd1eb21d891bd4d6b73f-v2024.3.1",
+      "contentHash": "7930f4424e7ccd1eb21d891bd4d6b73f-v2024.3.2",
       "path": "maybe-recursive-factorial",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -11545,7 +11545,7 @@
         "java": "<p>Write a class method that provides an implementation of factorial, accepting and returning\n<code>long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.\nYour implementation can be recursive or not.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -12524,7 +12524,7 @@
   },
   {
     "published": {
-      "contentHash": "59587970b2e16d99aa6bfd9cb65c8197-v2024.3.1",
+      "contentHash": "59587970b2e16d99aa6bfd9cb65c8197-v2024.3.2",
       "path": "print-hello",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -12539,7 +12539,7 @@
         "java": "<p>Print &quot;Hello!&quot; without the quotes.\nUsing to test support for @Limit annotations.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -12671,7 +12671,7 @@
   },
   {
     "published": {
-      "contentHash": "295c2ebd4f1060ab7eb20d67a8e61b2b-v2024.3.1",
+      "contentHash": "295c2ebd4f1060ab7eb20d67a8e61b2b-v2024.3.2",
       "path": "print-stderr-hello-class",
       "author": "challen@illinois.edu",
       "version": "2024.3.0",
@@ -12686,7 +12686,7 @@
         "java": "<p>Print &quot;Hello!&quot; without the quotes.\nTest test testing output detection.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -12949,7 +12949,7 @@
   },
   {
     "published": {
-      "contentHash": "e66c894b7927e23888eb8a97437bf95e-v2024.3.1",
+      "contentHash": "e66c894b7927e23888eb8a97437bf95e-v2024.3.2",
       "path": "print-sum",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -12966,7 +12966,7 @@
         "kotlin": "<p>Given two <code>int</code> variables <code>first</code> and <code>second</code> that are already declared and initialized, print their sum.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -13435,7 +13435,7 @@
   },
   {
     "published": {
-      "contentHash": "903de44f2b8c873d85978fc69212cba1-v2024.3.1",
+      "contentHash": "903de44f2b8c873d85978fc69212cba1-v2024.3.2",
       "path": "private-recursive-helper",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -13450,7 +13450,7 @@
         "java": "<p>Testing question for recursion checks on private methods.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -14214,7 +14214,7 @@
   },
   {
     "published": {
-      "contentHash": "e25da8c36600cdb4c0a5e16ee509dfd2-v2024.3.1",
+      "contentHash": "e25da8c36600cdb4c0a5e16ee509dfd2-v2024.3.2",
       "path": "read-hello-world",
       "author": "challen@illinois.edu",
       "version": "2023.11.0",
@@ -14229,7 +14229,7 @@
         "java": "<p>Question to test filesystem generation.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -14680,7 +14680,7 @@
   },
   {
     "published": {
-      "contentHash": "8e21c84a2a0cfb74059b03213c970d22-v2024.3.1",
+      "contentHash": "8e21c84a2a0cfb74059b03213c970d22-v2024.3.2",
       "path": "recursive-factorial",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -14697,7 +14697,7 @@
         "kotlin": "<p>Write a method that provides a recursive implementation of factorial, accepting and returning <code>Long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -15877,7 +15877,7 @@
   },
   {
     "published": {
-      "contentHash": "4f52c35fd3b4a40466f8db21f7a5e806-v2024.3.1",
+      "contentHash": "4f52c35fd3b4a40466f8db21f7a5e806-v2024.3.2",
       "path": "squirrel-equality",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -15894,7 +15894,7 @@
         "kotlin": "<p>Kotlin version to test double init.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -18261,7 +18261,7 @@
   },
   {
     "published": {
-      "contentHash": "b9dcc66ce0f54153c2b01ccf1b711b2a-v2024.3.1",
+      "contentHash": "b9dcc66ce0f54153c2b01ccf1b711b2a-v2024.3.2",
       "path": "string-duplicates",
       "author": "challen@illinois.edu",
       "version": "2022.2.0",
@@ -18283,7 +18283,7 @@
         "java.util.Map",
         "java.util.HashMap"
       ],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -20544,7 +20544,7 @@
   },
   {
     "published": {
-      "contentHash": "fb978782a83ca70f0798395537f1cfbf-v2024.3.1",
+      "contentHash": "fb978782a83ca70f0798395537f1cfbf-v2024.3.2",
       "path": "test-bad-kotlin-getter-setter",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -20561,7 +20561,7 @@
         "kotlin": "<p>Test to ensure that we can detect unnecessary Kotlin setter or getter overrides.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -21295,7 +21295,7 @@
   },
   {
     "published": {
-      "contentHash": "ca288f86086a86f8d9438ba73f87b078-v2024.3.1",
+      "contentHash": "ca288f86086a86f8d9438ba73f87b078-v2024.3.2",
       "path": "test-checkstyle-suppression",
       "author": "challen@illinois.edu",
       "version": "2024.1.0",
@@ -21310,7 +21310,7 @@
         "java": "<p>Test support for checkstyle suppressions.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -21637,7 +21637,7 @@
   },
   {
     "published": {
-      "contentHash": "6077fd2410b8c17d93b597ee40a9e1ac-v2024.3.1",
+      "contentHash": "6077fd2410b8c17d93b597ee40a9e1ac-v2024.3.2",
       "path": "test-constructor-notnull",
       "author": "challen@illinois.edu",
       "version": "2022.10.0",
@@ -21652,7 +21652,7 @@
         "java": "<p>Testing @NotNull annotation on constructor parameters.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -22117,7 +22117,7 @@
   },
   {
     "published": {
-      "contentHash": "941eea26602fbb141a72f929f8cafaeb-v2024.3.1",
+      "contentHash": "941eea26602fbb141a72f929f8cafaeb-v2024.3.2",
       "path": "test-empty-constructor",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -22132,7 +22132,7 @@
         "java": "<p>Test to make sure we can parse the empty constructor.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -22610,7 +22610,7 @@
   },
   {
     "published": {
-      "contentHash": "eb0bed4310dc1c1ced4696ea5895e94e-v2024.3.1",
+      "contentHash": "eb0bed4310dc1c1ced4696ea5895e94e-v2024.3.2",
       "path": "test-memoization-defense",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -22625,7 +22625,7 @@
         "java": "<p>Testing class size based memoization defense.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -22842,7 +22842,7 @@
   },
   {
     "published": {
-      "contentHash": "8ee06f2a3692ce331553ea5537e78915-v2024.3.1",
+      "contentHash": "8ee06f2a3692ce331553ea5537e78915-v2024.3.2",
       "path": "test-raw-types",
       "author": "challen@illinois.edu",
       "version": "2023.11.0",
@@ -22857,7 +22857,7 @@
         "java": "<p>Test support for raw type error filtering.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -23176,7 +23176,7 @@
   },
   {
     "published": {
-      "contentHash": "2afb477ca02d334a820b8acd137e786f-v2024.3.1",
+      "contentHash": "2afb477ca02d334a820b8acd137e786f-v2024.3.2",
       "path": "with-common-code",
       "author": "challen@illinois.edu",
       "version": "2023.12.0",
@@ -23191,7 +23191,7 @@
         "java": "<p>Test loading common code.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -23474,7 +23474,7 @@
   },
   {
     "published": {
-      "contentHash": "a48e5bd299a5a2c4ce40ca96e1d0291b-v2024.3.1",
+      "contentHash": "a48e5bd299a5a2c4ce40ca96e1d0291b-v2024.3.2",
       "path": "with-dead-code-annotation",
       "author": "challen@illinois.edu",
       "version": "2023.2.0",
@@ -23491,7 +23491,7 @@
         "kotlin": "<p>Testing dead code comments.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -24506,7 +24506,7 @@
   },
   {
     "published": {
-      "contentHash": "bc64b8de65112d62c88635449195ce97-v2024.3.1",
+      "contentHash": "bc64b8de65112d62c88635449195ce97-v2024.3.2",
       "path": "with-feature-check",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -24523,7 +24523,7 @@
         "kotlin": "<p>For testing features.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -25087,7 +25087,7 @@
   },
   {
     "published": {
-      "contentHash": "b1f63715175b89b68bc3dae80eb3776c-v2024.3.1",
+      "contentHash": "b1f63715175b89b68bc3dae80eb3776c-v2024.3.2",
       "path": "with-feature-dead-code",
       "author": "challen@illinois.edu",
       "version": "2023.2.0",
@@ -25107,7 +25107,7 @@
         "java.util.ArrayList",
         "java.util.List"
       ],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -26324,7 +26324,7 @@
   },
   {
     "published": {
-      "contentHash": "0f384f852204ac7c20a2a2b7d58675b7-v2024.3.1",
+      "contentHash": "0f384f852204ac7c20a2a2b7d58675b7-v2024.3.2",
       "path": "with-imports",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -26341,7 +26341,7 @@
         "kotlin": "<p>Test Kotlin top-level method with import statements.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -27018,7 +27018,7 @@
   },
   {
     "published": {
-      "contentHash": "d437bb5790de0716534628aa0cab26fa-v2024.3.1",
+      "contentHash": "d437bb5790de0716534628aa0cab26fa-v2024.3.2",
       "path": "with-java-switch",
       "author": "challen@illinois.edu",
       "version": "2023.12.0",
@@ -27035,7 +27035,7 @@
         "kotlin": "<p>Test feature check using Java 14 switch expression, Kotlin equivalent.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -28504,7 +28504,7 @@
   },
   {
     "published": {
-      "contentHash": "c99317f10241df7fceaf7b25de10b379-v2024.3.1",
+      "contentHash": "c99317f10241df7fceaf7b25de10b379-v2024.3.2",
       "path": "with-map-extras",
       "author": "challen@illinois.edu",
       "version": "2023.9.0",
@@ -28522,7 +28522,7 @@
         "java.util.Map",
         "java.util.Set"
       ],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },
@@ -28816,7 +28816,7 @@
   },
   {
     "published": {
-      "contentHash": "40b8dbdb965fef74c6bb394406889faf-v2024.3.1",
+      "contentHash": "40b8dbdb965fef74c6bb394406889faf-v2024.3.2",
       "path": "with-template-imports",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -28835,7 +28835,7 @@
         "java.util.List",
         "java.util.ArrayList"
       ],
-      "questionerVersion": "2024.3.1",
+      "questionerVersion": "2024.3.2",
       "authorName": "",
       "tags": []
     },

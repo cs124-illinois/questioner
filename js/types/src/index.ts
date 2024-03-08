@@ -21,6 +21,8 @@ import {
   String,
   Union,
 } from "runtypes"
+import { SubmissionType } from "./submission"
+import { Languages } from "./languages"
 
 export const LanguagesResourceUsage = Record({
   java: Number,
@@ -64,9 +66,6 @@ export const ValidationResults = Record({
   }),
 )
 export type ValidationResults = Static<typeof ValidationResults>
-
-export const Languages = Union(Literal("java"), Literal("kotlin"))
-export type Languages = Static<typeof Languages>
 
 export const QuestionPath = Record({
   path: String,
@@ -151,9 +150,6 @@ export const Question = Record({
   }),
 )
 export type Question = Static<typeof Question>
-
-export const SubmissionType = Union(Literal("SOLVE"), Literal("TESTTESTING"))
-export type SubmissionType = Static<typeof SubmissionType>
 
 export const SelectionStrategy = Union(Literal("HARDEST"), Literal("EASIEST"), Literal("EVENLY_SPACED"))
 export type SelectionStrategy = Static<typeof SelectionStrategy>
@@ -538,3 +534,7 @@ export const QuestionTagged = QuestionPublished.And(
   }),
 )
 export type QuestionTagged = Static<typeof QuestionTagged>
+
+export * from "./submission"
+export * from "./languages"
+export * from "./coordinates"

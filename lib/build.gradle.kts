@@ -17,7 +17,7 @@ dependencies {
     implementation("io.github.java-diff-utils:java-diff-utils:4.12")
     implementation("org.ow2.asm:asm:9.6")
     implementation("org.mongodb:mongodb-driver:3.12.14")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.22")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.23")
 
     implementation("org.slf4j:slf4j-api:2.0.12")
     implementation("ch.qos.logback:logback-classic:1.5.3")
@@ -29,7 +29,7 @@ dependencies {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
     api("org.cs124.jeed:core:2024.3.1")
-    api("org.cs124:jenisol:2024.3.0")
+    api("org.cs124:jenisol:2024.3.1")
     api("org.cs124:libcs1:2024.3.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.16.1")
 
