@@ -34,7 +34,7 @@ abstract class PublishQuestions : DefaultTask() {
 
     init {
         group = "Publish"
-        description = "Publish questions."
+        description = "Publish questions to a configured endpoint."
     }
 
     @TaskAction
@@ -109,7 +109,7 @@ abstract class PublishQuestions : DefaultTask() {
     }
 }
 
-private fun String.gzip(): ByteArray? {
+internal fun String.gzip(): ByteArray? {
     check(this.isNotEmpty())
     val obj = ByteArrayOutputStream()
     GZIPOutputStream(obj).apply {

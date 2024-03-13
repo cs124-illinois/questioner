@@ -53,6 +53,7 @@ internal val logger = KotlinLogging.logger {}
 internal val questionerMaxConcurrency = System.getenv("QUESTIONER_MAX_CONCURRENCY")?.toInt() ?: 1024
 internal val questionCacheSize = System.getenv("QUESTIONER_QUESTION_CACHE_SIZE")?.toLong() ?: 16L
 private val limiter = Semaphore(System.getenv("QUESTIONER_MAX_CONCURRENCY")?.toInt() ?: 1024)
+private val warmQuestion = System.getenv("QUESTIONER_WARM_QUESTION")?.toString() ?: "hello-world"
 
 @Suppress("LongMethod")
 fun Application.questioner() {
@@ -158,7 +159,7 @@ fun Application.questioner() {
 }
 
 suspend fun warm() {
-    val question = getQuestionByPath("hello-world")
+    val question = getQuestionByPath(warmQuestion)
     check(question != null) { "Warm question should exist" }
     check(question.published.languages.contains(Language.java)) { "Warm question should support Java" }
     check(question.published.languages.contains(Language.kotlin)) { "Warm question should support Kotlin" }

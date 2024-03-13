@@ -3,6 +3,7 @@ import {
   CheckstyleResults,
   CompilationFailed,
   CompiledSourceResult,
+  Feature,
   FeatureValue,
   KtlintFailed,
   KtlintResults,
@@ -21,8 +22,9 @@ import {
   String,
   Union,
 } from "runtypes"
-import { SubmissionType } from "./submission"
 import { Languages } from "./languages"
+import { Step, TestTestingStep } from "./steps"
+import { SubmissionType } from "./submission"
 
 export const LanguagesResourceUsage = Record({
   java: Number,
@@ -401,40 +403,6 @@ export const TestTestingFailedTasks = Partial({
 })
 export type TestTestingFailedTasks = Static<typeof TestTestingFailedTasks>
 
-export const Step = Union(
-  Literal("checkInitialSubmission"),
-  Literal("templateSubmission"),
-  Literal("compileSubmission"),
-  Literal("checkstyle"),
-  Literal("ktlint"),
-  Literal("checkCompiledSubmission"),
-  Literal("classSize"),
-  Literal("complexity"),
-  Literal("features"),
-  Literal("lineCount"),
-  Literal("partial"),
-  // execution
-  Literal("checkExecutedSubmission"),
-  Literal("recursion"),
-  Literal("executioncount"),
-  Literal("memoryAllocation"),
-  Literal("testing"),
-  Literal("coverage"),
-)
-export type Step = Static<typeof Step>
-
-export const TestTestingStep = Union(
-  Literal("checkInitialSubmission"),
-  Literal("templateSubmission"),
-  Literal("compileSubmission"),
-  Literal("checkstyle"),
-  Literal("ktlint"),
-  Literal("checkCompiledSubmission"),
-  Literal("checkExecutedSubmission"),
-  Literal("testTesting"),
-)
-export type TestTestingStep = Static<typeof TestTestingStep>
-
 export const TestingOrder: Step[] = [
   "checkInitialSubmission",
   "templateSubmission",
@@ -535,6 +503,12 @@ export const QuestionTagged = QuestionPublished.And(
 )
 export type QuestionTagged = Static<typeof QuestionTagged>
 
-export * from "./submission"
-export * from "./languages"
+export const questionFeatures = (question: Question) =>
+  RuntypeArray(Feature)
+    .check(Object.keys(question.classification.featuresByLanguage.java.featureMap))
+    .filter((feature) => question.classification.featuresByLanguage.java.featureMap[feature] > 0)
+
 export * from "./coordinates"
+export * from "./languages"
+export * from "./steps"
+export * from "./submission"

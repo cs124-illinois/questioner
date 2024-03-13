@@ -117,6 +117,7 @@ class QuestionerPlugin : Plugin<Project> {
         }
 
         var publishingTasks = listOf<PublishQuestions>()
+        var dumpTasks = listOf<DumpQuestions>()
         if (uploadConfiguration.endpoints.isNotEmpty()) {
             val publishAll = project.tasks.register("publishQuestions").get()
             publishAll.outputs.upToDateWhen { false }
@@ -129,6 +130,16 @@ class QuestionerPlugin : Plugin<Project> {
                 publishQuestions.description = "Publish questions to ${endpoint.name} (${endpoint.url})"
                 publishAll.dependsOn(publishQuestions)
                 publishQuestions
+            }
+            dumpTasks = uploadConfiguration.endpoints.map { endpoint ->
+                val dumpQuestions =
+                    project.tasks.register("dumpQuestionsTo${endpoint.name}", DumpQuestions::class.java).get()
+                dumpQuestions.endpoint = endpoint
+                dumpQuestions.dependsOn(collectQuestions)
+                dumpQuestions.outputs.upToDateWhen { false }
+                dumpQuestions.description =
+                    "Dump questions that would be published to ${endpoint.name} (${endpoint.url})"
+                dumpQuestions
             }
         } else {
             val publishAll = project.tasks.register("publishQuestions") { task ->
@@ -146,11 +157,11 @@ class QuestionerPlugin : Plugin<Project> {
 
         project.afterEvaluate {
             project.configurations.getByName("implementation").dependencies.find { dependency ->
-                dependency.group == "org.cs124" && dependency.name == "questioner"
+                (dependency.group == "org.cs124" && dependency.name == "questioner") || (dependency.group == "org.cs124.questioner")
             }?.let {
                 error("Found explicit questioner library dependency. Please remove it, since it is automatically added by the plugin.")
             }
-            project.dependencies.add("implementation", project.dependencies.create("org.cs124:questioner:$VERSION"))
+            project.dependencies.add("implementation", project.dependencies.create("org.cs124.questioner:lib:$VERSION"))
 
             generateQuestionTests.maxMutationCount = config.maxMutationCount
             generateQuestionTests.concurrency =
@@ -158,6 +169,10 @@ class QuestionerPlugin : Plugin<Project> {
             generateQuestionTests.retries = config.retries
 
             publishingTasks.forEach { task ->
+                task.publishIncludes = config.publishIncludes
+                task.ignorePackages = config.ignorePackages
+            }
+            dumpTasks.forEach { task ->
                 task.publishIncludes = config.publishIncludes
                 task.ignorePackages = config.ignorePackages
             }

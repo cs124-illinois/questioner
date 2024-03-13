@@ -28,12 +28,12 @@ dependencies {
     api("com.beyondgrader.resource-agent:virtualfsplugin:2023.9.0") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2024.3.1")
+    api("org.cs124.jeed:core:2024.3.2")
     api("org.cs124:jenisol:2024.3.1")
-    api("org.cs124:libcs1:2024.3.0")
-    api("com.fasterxml.jackson.core:jackson-databind:2.16.1")
+    api("org.cs124:libcs1:2024.3.1")
+    api("com.fasterxml.jackson.core:jackson-databind:2.17.0")
 
-    api("io.kotest:kotest-runner-junit5:5.8.0")
+    api("io.kotest:kotest-runner-junit5:5.8.1")
     api("com.google.truth:truth:1.4.2")
 }
 tasks {
@@ -92,7 +92,7 @@ java {
 publishing {
     publications {
         create<MavenPublication>("questioner") {
-            artifactId = "questioner"
+            artifactId = "lib"
             from(components["java"])
             pom {
                 name = "questioner"

@@ -8,8 +8,8 @@ plugins {
     id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
 }
 allprojects {
-    group = "org.cs124"
-    version = "2024.3.2"
+    group = "org.cs124.questioner"
+    version = "2024.3.3"
 }
 subprojects {
     tasks.withType<KotlinCompile> {
