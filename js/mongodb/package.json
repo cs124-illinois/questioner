@@ -1,6 +1,6 @@
 {
   "name": "@cs124/questioner-mongodb",
-  "version": "2024.3.1",
+  "version": "2024.3.4",
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
@@ -18,12 +18,12 @@
   },
   "types": "dist/index.d.ts",
   "peerDependencies": {
-    "@cs124/questioner-types": "~/code/questioner/js/types/"
+    "@cs124/questioner-types": "2024.3.4"
   },
   "devDependencies": {
     "@cs124/jeed-types": "2024.2.0",
-    "@typescript-eslint/eslint-plugin": "7.1.1",
-    "@typescript-eslint/parser": "7.1.1",
+    "@typescript-eslint/eslint-plugin": "7.2.0",
+    "@typescript-eslint/parser": "7.2.0",
     "depcheck": "1.4.7",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
