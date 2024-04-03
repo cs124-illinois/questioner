@@ -28828,7 +28828,7 @@
   },
   {
     "published": {
-      "contentHash": "d6d5a2e560fb902c2c913eebff9402af-v2024.4.0",
+      "contentHash": "4247cadad9ced7d705f9260a96c4a236-v2024.4.0",
       "path": "with-protected-field",
       "author": "challen@illinois.edu",
       "version": "2024.4.0",
@@ -28851,18 +28851,21 @@
       "featuresByLanguage": {
         "java": {
           "featureMap": {
-            "ARITHMETIC_OPERATORS": 2,
-            "METHOD": 2,
-            "RETURN": 2,
+            "LOCAL_VARIABLE_DECLARATIONS": 1,
+            "VARIABLE_ASSIGNMENTS": 1,
+            "ARITHMETIC_OPERATORS": 4,
+            "METHOD": 3,
+            "RETURN": 3,
             "CONSTRUCTOR": 1,
-            "GETTER": 2,
+            "GETTER": 3,
             "CLASS": 1,
             "EXTENDS": 1,
             "SUPER": 1,
-            "VISIBILITY_MODIFIERS": 4,
-            "DOT_NOTATION": 4,
+            "NEW_KEYWORD": 1,
+            "VISIBILITY_MODIFIERS": 5,
+            "DOT_NOTATION": 10,
             "DOTTED_METHOD_CALL": 2,
-            "DOTTED_VARIABLE_ACCESS": 2
+            "DOTTED_VARIABLE_ACCESS": 8
           },
           "featureList": [
             {
@@ -29125,9 +29128,184 @@
               }
             },
             {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 14,
+                "column": 2
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 14,
+                "column": 9
+              }
+            },
+            {
+              "feature": "GETTER",
+              "location": {
+                "line": 14,
+                "column": 9
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 14,
+                "column": 37
+              }
+            },
+            {
+              "feature": "LOCAL_VARIABLE_DECLARATIONS",
+              "location": {
+                "line": 15,
+                "column": 10
+              }
+            },
+            {
+              "feature": "VARIABLE_ASSIGNMENTS",
+              "location": {
+                "line": 15,
+                "column": 10
+              }
+            },
+            {
+              "feature": "NEW_KEYWORD",
+              "location": {
+                "line": 15,
+                "column": 17
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 15,
+                "column": 27
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 15,
+                "column": 27
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 16,
+                "column": 4
+              }
+            },
+            {
+              "feature": "RETURN",
+              "location": {
+                "line": 16,
+                "column": 4
+              }
+            },
+            {
+              "feature": "ARITHMETIC_OPERATORS",
+              "location": {
+                "line": 16,
+                "column": 11
+              }
+            },
+            {
+              "feature": "ARITHMETIC_OPERATORS",
+              "location": {
+                "line": 16,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 16,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 16,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 16,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 16,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 16,
+                "column": 31
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 16,
+                "column": 31
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 16,
+                "column": 31
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 16,
+                "column": 31
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 16,
+                "column": 52
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 16,
+                "column": 52
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 16,
+                "column": 62
+              }
+            },
+            {
               "feature": "BLOCK_END",
               "location": {
-                "line": 13,
+                "line": 17,
+                "column": 2
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 18,
                 "column": 0
               }
             }
@@ -29135,9 +29313,12 @@
           "importList": [],
           "typeList": [
             "Parent",
-            "int"
+            "int",
+            "Inner"
           ],
-          "identifierList": [],
+          "identifierList": [
+            "test"
+          ],
           "dottedMethodList": [
             "testing",
             "anotherTest"
@@ -29146,13 +29327,13 @@
       },
       "lineCounts": {
         "java": {
-          "source": 11,
+          "source": 15,
           "comment": 0,
-          "blank": 3
+          "blank": 4
         }
       },
       "complexity": {
-        "java": 3
+        "java": 4
       }
     },
     "metadata": {
@@ -29161,13 +29342,13 @@
         "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/examples/testing/withprotectedfield/Question.java"
       ],
       "unusedFiles": [],
-      "focused": false,
+      "focused": true,
       "publish": true
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Test protected and package-private field handling.\n */\n\n@Correct(name = \"With Protected Field\", author = \"challen@illinois.edu\", version = \"2024.4.0\")\npublic class Question extends Parent {\n  public Question(int setValue, int setAnother) {\n    super(setValue, setAnother);\n  }\n\n  public int getValue() {\n    return super.value + super.testing();\n  }\n\n  public int getAnother(Parent second) {\n    return second.another + second.anotherTest();\n  }\n\n  @FixedParameters private static final List<Parent> FIXED = List.of(new Parent(10, 8));\n\n  @RandomParameters\n  private static Parent randomParent(Random random) {\n    return new Parent(random.nextInt(128) + 1, random.nextInt());\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Test protected and package-private field handling.\n */\n\n@Correct(\n    name = \"With Protected Field\",\n    author = \"challen@illinois.edu\",\n    version = \"2024.4.0\",\n    focused = true)\npublic class Question extends Parent {\n  public Question(int setValue, int setAnother) {\n    super(setValue, setAnother);\n  }\n\n  public int getValue() {\n    return super.value + super.testing();\n  }\n\n  public int getAnother(Parent second) {\n    return second.another + second.anotherTest();\n  }\n\n  public int getInner(Parent passed) {\n    Inner test = new Inner(passed.value);\n    return super.inner.value + passed.inner.value + test.value;\n  }\n\n  @FixedParameters(\"*\")\n  private static final List<Parent> FIXED = List.of(new Parent(10, 8));\n\n  @RandomParameters(\"*\")\n  private static Parent randomParent(Random random) {\n    return new Parent(random.nextInt(128) + 1, random.nextInt());\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/examples/testing/withprotectedfield/Question.java",
       "suppressions": []
@@ -29175,24 +29356,27 @@
     "solutionByLanguage": {
       "java": {
         "klass": "Question",
-        "contents": "public class Question extends Parent {\n  public Question(int setValue, int setAnother) {\n    super(setValue, setAnother);\n  }\n\n  public int getValue() {\n    return super.value + super.testing();\n  }\n\n  public int getAnother(Parent second) {\n    return second.another + second.anotherTest();\n  }\n}\n",
+        "contents": "public class Question extends Parent {\n  public Question(int setValue, int setAnother) {\n    super(setValue, setAnother);\n  }\n\n  public int getValue() {\n    return super.value + super.testing();\n  }\n\n  public int getAnother(Parent second) {\n    return second.another + second.anotherTest();\n  }\n\n  public int getInner(Parent passed) {\n    Inner test = new Inner(passed.value);\n    return super.inner.value + passed.inner.value + test.value;\n  }\n}\n",
         "language": "java",
         "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/examples/testing/withprotectedfield/Question.java",
-        "complexity": 3,
+        "complexity": 4,
         "features": {
           "featureMap": {
-            "ARITHMETIC_OPERATORS": 2,
-            "METHOD": 2,
-            "RETURN": 2,
+            "LOCAL_VARIABLE_DECLARATIONS": 1,
+            "VARIABLE_ASSIGNMENTS": 1,
+            "ARITHMETIC_OPERATORS": 4,
+            "METHOD": 3,
+            "RETURN": 3,
             "CONSTRUCTOR": 1,
-            "GETTER": 2,
+            "GETTER": 3,
             "CLASS": 1,
             "EXTENDS": 1,
             "SUPER": 1,
-            "VISIBILITY_MODIFIERS": 4,
-            "DOT_NOTATION": 4,
+            "NEW_KEYWORD": 1,
+            "VISIBILITY_MODIFIERS": 5,
+            "DOT_NOTATION": 10,
             "DOTTED_METHOD_CALL": 2,
-            "DOTTED_VARIABLE_ACCESS": 2
+            "DOTTED_VARIABLE_ACCESS": 8
           },
           "featureList": [
             {
@@ -29455,9 +29639,184 @@
               }
             },
             {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 14,
+                "column": 2
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 14,
+                "column": 9
+              }
+            },
+            {
+              "feature": "GETTER",
+              "location": {
+                "line": 14,
+                "column": 9
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 14,
+                "column": 37
+              }
+            },
+            {
+              "feature": "LOCAL_VARIABLE_DECLARATIONS",
+              "location": {
+                "line": 15,
+                "column": 10
+              }
+            },
+            {
+              "feature": "VARIABLE_ASSIGNMENTS",
+              "location": {
+                "line": 15,
+                "column": 10
+              }
+            },
+            {
+              "feature": "NEW_KEYWORD",
+              "location": {
+                "line": 15,
+                "column": 17
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 15,
+                "column": 27
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 15,
+                "column": 27
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 16,
+                "column": 4
+              }
+            },
+            {
+              "feature": "RETURN",
+              "location": {
+                "line": 16,
+                "column": 4
+              }
+            },
+            {
+              "feature": "ARITHMETIC_OPERATORS",
+              "location": {
+                "line": 16,
+                "column": 11
+              }
+            },
+            {
+              "feature": "ARITHMETIC_OPERATORS",
+              "location": {
+                "line": 16,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 16,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 16,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 16,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 16,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 16,
+                "column": 31
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 16,
+                "column": 31
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 16,
+                "column": 31
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 16,
+                "column": 31
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 16,
+                "column": 52
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 16,
+                "column": 52
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 16,
+                "column": 62
+              }
+            },
+            {
               "feature": "BLOCK_END",
               "location": {
-                "line": 13,
+                "line": 17,
+                "column": 2
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 18,
                 "column": 0
               }
             }
@@ -29465,18 +29824,21 @@
           "importList": [],
           "typeList": [
             "Parent",
-            "int"
+            "int",
+            "Inner"
           ],
-          "identifierList": [],
+          "identifierList": [
+            "test"
+          ],
           "dottedMethodList": [
             "testing",
             "anotherTest"
           ]
         },
         "lineCount": {
-          "source": 11,
+          "source": 15,
           "comment": 0,
-          "blank": 3
+          "blank": 4
         },
         "expectedDeadCount": 0,
         "suppressions": []
@@ -29487,7 +29849,7 @@
     "commonFiles": [
       {
         "klass": "Parent",
-        "contents": "import java.util.Objects;\n\npublic class Parent {\n  protected int value;\n  int another;\n\n  public Parent(int setValue, int setAnother) {\n    assert setValue > 0;\n    value = setValue;\n    another = setAnother;\n  }\n\n  @Override\n  public boolean equals(Object o) {\n    if (!(o instanceof Parent other)) {\n      return false;\n    }\n    return value == other.value && another == other.another;\n  }\n\n  @Override\n  public int hashCode() {\n    return Objects.hash(value, another);\n  }\n\n  protected int testing() {\n    return value * 2;\n  }\n\n  int anotherTest() {\n    return another * 2;\n  }\n}\n",
+        "contents": "import java.util.Objects;\n\npublic class Parent {\n  protected int value;\n  int another;\n\n  protected class Inner {\n    public int value;\n\n    protected Inner(int setValue) {\n      value = setValue;\n    }\n  }\n\n  Inner inner;\n\n  public Parent(int setValue, int setAnother) {\n    assert setValue > 0;\n    value = setValue;\n    another = setAnother;\n    inner = new Inner(setValue);\n  }\n\n  @Override\n  public boolean equals(Object o) {\n    if (!(o instanceof Parent other)) {\n      return false;\n    }\n    return value == other.value && another == other.another;\n  }\n\n  @Override\n  public int hashCode() {\n    return Objects.hash(value, another);\n  }\n\n  protected int testing() {\n    return value * 2;\n  }\n\n  int anotherTest() {\n    return another * 2;\n  }\n\n  Inner thirdTest() {\n    return inner;\n  }\n}\n",
         "language": "java"
       }
     ],

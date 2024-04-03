@@ -666,17 +666,35 @@ fun bindJeedCaptureOutputControlInput(
     }
 }
 
+private fun fixAccess(access: Int) = (access and Opcodes.ACC_PROTECTED.inv()) or Opcodes.ACC_PUBLIC
+
 fun JeedClassLoader.fixProtectedAndPackagePrivate(): ClassLoader {
     val klasses = definedClasses.associateWith { className ->
-        val fieldsToOpen = loadClass(className).declaredFields
+        val klass = loadClass(className)
+        val classesToOpen = klass.declaredClasses
+            .filter { innerClass -> innerClass.isPackagePrivate() || innerClass.isProtected() }
+            .map { innerClass -> innerClass.name }
+        val fieldsToOpen = klass.declaredFields
             .filter { field -> !field.isSynthetic && field.isPackagePrivate() || field.isProtected() }
             .map { field -> field.name }
-        val methodsToOpen = loadClass(className).declaredMethods
+        val methodsToOpen = klass.declaredMethods
             .filter { method -> !method.isSynthetic && method.isPackagePrivate() || method.isProtected() }
-            .map { method -> method.name }
+            .map { method -> method.name }.toMutableSet()
+
+        if (klass.enclosingClass != null && (klass.isProtected() || klass.isPackagePrivate())) {
+            methodsToOpen += "<init>"
+        }
+
         val classReader = ClassReader(bytecodeForClasses[className])
         val classWriter = ClassWriter(classReader, 0)
+
         val openingVisitor = object : ClassVisitor(Opcodes.ASM8, classWriter) {
+            override fun visitInnerClass(name: String, outerName: String?, innerName: String?, access: Int) =
+                when {
+                    name in classesToOpen -> super.visitInnerClass(name, outerName, innerName, fixAccess(access))
+                    else -> super.visitInnerClass(name, outerName, innerName, access)
+                }
+
             override fun visitField(
                 access: Int,
                 name: String,
@@ -684,14 +702,7 @@ fun JeedClassLoader.fixProtectedAndPackagePrivate(): ClassLoader {
                 signature: String?,
                 value: Any?
             ) = when (name) {
-                in fieldsToOpen -> super.visitField(
-                    (access and Opcodes.ACC_PROTECTED.inv()) or Opcodes.ACC_PUBLIC,
-                    name,
-                    descriptor,
-                    signature,
-                    value
-                )
-
+                in fieldsToOpen -> super.visitField(fixAccess(access), name, descriptor, signature, value)
                 else -> super.visitField(access, name, descriptor, signature, value)
             }
 
@@ -702,17 +713,11 @@ fun JeedClassLoader.fixProtectedAndPackagePrivate(): ClassLoader {
                 signature: String?,
                 exceptions: Array<out String>?
             ) = when (name) {
-                in methodsToOpen -> super.visitMethod(
-                    (access and Opcodes.ACC_PROTECTED.inv()) or Opcodes.ACC_PUBLIC,
-                    name,
-                    descriptor,
-                    signature,
-                    exceptions
-                )
-
+                in methodsToOpen -> super.visitMethod(fixAccess(access), name, descriptor, signature, exceptions)
                 else -> super.visitMethod(access, name, descriptor, signature, exceptions)
             }
         }
+
         classReader.accept(openingVisitor, 0)
         classWriter.toByteArray()
     }
