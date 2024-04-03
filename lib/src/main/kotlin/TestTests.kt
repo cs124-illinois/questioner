@@ -28,7 +28,6 @@ import edu.illinois.cs.cs125.jenisol.core.isStatic
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.ClassWriter
-import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
 import java.lang.reflect.InvocationTargetException
 import java.time.Instant
@@ -397,7 +396,7 @@ fun Question.checkCompiledTestSuite(
         }
     }
     var klass = klasses.first()
-    if (compiledTestSuite.source.type == Source.FileType.KOTLIN &&
+    if (compiledTestSuite.source.type == Source.SourceType.KOTLIN &&
         (solution.skipReceiver || solution.fauxStatic) &&
         klass == "${testKlass}Kt"
     ) {
@@ -418,7 +417,7 @@ fun Question.checkCompiledTestSuite(
             return null
         }
         val fields = testingKlass.declaredFields.toSet().filter { field ->
-            field.name != "${"$"}assertionsDisabled" && !(compiledTestSuite.source.type == Source.FileType.KOTLIN && field.name == "Companion")
+            field.name != "${"$"}assertionsDisabled" && !(compiledTestSuite.source.type == Source.SourceType.KOTLIN && field.name == "Companion")
         }
         if (fields.isNotEmpty()) {
             testResults.failed.checkCompiledSubmission =
@@ -449,7 +448,9 @@ class CopyableClassLoader(override val bytecodeForClasses: Map<String, ByteArray
 }
 
 fun Question.fixTestingMethods(classLoader: JeedClassLoader): ClassLoader {
-    val methodsToOpen = classLoader.loadClass(published.klass).declaredMethods.filter { it.isPackagePrivate() }.map { it.name }
+    val methodsToOpen = classLoader.loadClass(published.klass).declaredMethods
+        .filter { method -> method.isPackagePrivate() }
+        .map { method -> method.name }
     val classReader = ClassReader(classLoader.bytecodeForClasses[published.klass])
     val classWriter = ClassWriter(classReader, 0)
     val openingVisitor = object : ClassVisitor(Opcodes.ASM8, classWriter) {
@@ -459,18 +460,23 @@ fun Question.fixTestingMethods(classLoader: JeedClassLoader): ClassLoader {
             descriptor: String?,
             signature: String?,
             exceptions: Array<out String>?
-        ): MethodVisitor {
-            return if (name in methodsToOpen) {
-                super.visitMethod(access + Opcodes.ACC_PUBLIC, name, descriptor, signature, exceptions)
-            } else {
-                super.visitMethod(access, name, descriptor, signature, exceptions)
-            }
+        ) = when (name) {
+            in methodsToOpen -> super.visitMethod(
+                access or Opcodes.ACC_PUBLIC,
+                name,
+                descriptor,
+                signature,
+                exceptions
+            )
+
+            else -> super.visitMethod(access, name, descriptor, signature, exceptions)
         }
     }
     classReader.accept(openingVisitor, 0)
     return CopyableClassLoader(mapOf(published.klass to classWriter.toByteArray()), classLoader.parent)
 }
 
+@Suppress("SpellCheckingInspection")
 fun linspace(stop: Int, num: Int): List<Int> {
     check(num <= stop + 1) { "Bad num value" }
     val step = stop.toDouble() / (num - 1)

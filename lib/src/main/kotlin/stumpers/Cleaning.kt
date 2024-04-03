@@ -60,8 +60,9 @@ suspend fun Candidate.clean(): Solution {
     val hasBadWords = cleanedSource.hasBadWords(question.badWords()) != null
 
     val formattedSource = when (cleanedSource.type) {
-        Source.FileType.JAVA -> cleanedSource.googleFormat()
-        else -> cleanedSource.ktFormat(KtLintArguments(failOnError = false, indent = 2))
+        Source.SourceType.JAVA -> cleanedSource.googleFormat()
+        Source.SourceType.KOTLIN -> cleanedSource.ktFormat(KtLintArguments(failOnError = false, indent = 2))
+        else -> error("Invalid source type: ${cleanedSource.type}")
     }.contents.deTemplate(template)
 
     return Solution(

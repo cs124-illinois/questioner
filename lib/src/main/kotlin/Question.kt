@@ -6,6 +6,7 @@ import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Types
 import edu.illinois.cs.cs125.jeed.core.CompilationArguments
 import edu.illinois.cs.cs125.jeed.core.Features
+import edu.illinois.cs.cs125.jeed.core.JeedFileManager
 import edu.illinois.cs.cs125.jeed.core.LineCounts
 import edu.illinois.cs.cs125.jeed.core.MutatedSource
 import edu.illinois.cs.cs125.jeed.core.Mutation
@@ -43,12 +44,22 @@ data class Question(
     val alternativeSolutions: List<FlatFile>,
     val incorrectExamples: List<IncorrectFile>,
     val common: List<String>?,
+    var commonFiles: List<CommonFile>?,
     val templateByLanguage: Map<Language, String>?,
     val importWhitelist: Set<String>,
     val importBlacklist: Set<String>,
     @Suppress("unused")
     val checkstyleSuppressions: Set<String> = setOf()
 ) {
+
+    // TODO: Remove after migration
+    init {
+        if (common != null && commonFiles == null) {
+            commonFiles = common.mapIndexed { i, content ->
+                CommonFile("Common$i", content, Language.java)
+            }
+        }
+    }
 
     @Transient
     val hasKotlin = published.languages.contains(Language.kotlin)
@@ -241,6 +252,7 @@ data class Question(
         enum class SelectionStrategy {
             HARDEST, EASIEST, EVENLY_SPACED
         }
+
         companion object {
             val DEFAULTS = TestTestingSettings(false, Int.MAX_VALUE, SelectionStrategy.EVENLY_SPACED, null)
         }
@@ -294,6 +306,13 @@ data class Question(
         val lineCount: LineCounts? = null,
         val expectedDeadCount: Int? = null,
         val suppressions: Set<String> = setOf()
+    )
+
+    @JsonClass(generateAdapter = true)
+    data class CommonFile(
+        val klass: String,
+        val contents: String,
+        val language: Language
     )
 
     @JsonClass(generateAdapter = true)
@@ -365,15 +384,20 @@ data class Question(
         }
     }
 
+    data class CompiledCommon(val classLoader: ClassLoader, val fileManager: JeedFileManager)
+
     @delegate:Transient
     val compiledCommon by lazy {
-        if (common?.isNotEmpty() == true) {
-            val commonSources = common.mapIndexed { index, contents -> "Common$index.java" to contents }.toMap()
-            Source(commonSources).compile(
-                CompilationArguments(isolatedClassLoader = true, parameters = true)
-            )
-        } else {
-            null
+        commonFiles?.associate { "${it.klass}.java" to it.contents }?.let { commonMap ->
+            if (commonMap.isNotEmpty()) {
+                Source(commonMap)
+                    .compile(CompilationArguments(isolatedClassLoader = true, parameters = true))
+                    .let { compiledSource ->
+                        CompiledCommon(compiledSource.classLoader.fixProtectedAndPackagePrivate(), compiledSource.fileManager)
+                    }
+            } else {
+                null
+            }
         }
     }
 

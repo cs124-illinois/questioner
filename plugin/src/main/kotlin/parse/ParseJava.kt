@@ -670,6 +670,8 @@ $cleanContent
             .stripPackage()
     }
 
+    fun forCommon() = Question.CommonFile(className, contents.stripPackage(), Language.java)
+
     var usedImports: List<String> = listOf()
 
     private fun String.javaDeTemplate(hasTemplate: Boolean, wrappedClass: String?): String {

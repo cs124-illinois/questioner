@@ -26,7 +26,7 @@ class TestParseDirectory : StringSpec({
         fixturesDirectory.resolve("com/examples/cougarfeliform/Cougar.java").parseDirectory(fixturesDirectory, null, true)
             .also { question ->
                 question.published.path shouldBe "cougar-feliform"
-                question.common!! shouldHaveSize 1
+                question.commonFiles!! shouldHaveSize 1
                 question.metadata!!.unusedFiles shouldBe emptySet()
             }
     }
@@ -35,7 +35,7 @@ class TestParseDirectory : StringSpec({
             .parseDirectory(fixturesDirectory, null, true)
             .also { question ->
                 question.published.path shouldBe "with-common-code"
-                question.common!! shouldHaveSize 1
+                question.commonFiles!! shouldHaveSize 1
                 question.getCorrect(Language.java)!!.lines().none { line ->
                     line.startsWith("com.examples.testing.common.Value;")
                 } shouldBe true

@@ -10,6 +10,7 @@ import edu.illinois.cs.cs125.jeed.core.CompilationError
 import edu.illinois.cs.cs125.jeed.core.CompilationFailed
 import edu.illinois.cs.cs125.jeed.core.CompiledSource
 import edu.illinois.cs.cs125.jeed.core.Features
+import edu.illinois.cs.cs125.jeed.core.JeedClassLoader
 import edu.illinois.cs.cs125.jeed.core.KompilationArguments
 import edu.illinois.cs.cs125.jeed.core.KtLintArguments
 import edu.illinois.cs.cs125.jeed.core.KtLintFailed
@@ -32,9 +33,15 @@ import edu.illinois.cs.cs125.jeed.core.moshi.CompiledSourceResult
 import edu.illinois.cs.cs125.jeed.core.stripComments
 import edu.illinois.cs.cs125.jenisol.core.CaptureOutputControlInput
 import edu.illinois.cs.cs125.jenisol.core.CapturedResult
+import edu.illinois.cs.cs125.jenisol.core.isPackagePrivate
+import edu.illinois.cs.cs125.jenisol.core.isProtected
 import edu.illinois.cs.cs125.jenisol.core.unwrap
 import edu.illinois.cs.cs125.questioner.lib.compilation.filterSuppressions
 import edu.illinois.cs.cs125.questioner.lib.compilation.removeExpected
+import org.objectweb.asm.ClassReader
+import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.Opcodes
 import org.objectweb.asm.Type
 import java.io.ByteArrayInputStream
 import java.io.InputStream
@@ -192,7 +199,7 @@ suspend fun Question.kompileSubmission(
     source: Source,
     parentClassLoader: ClassLoader,
     testResults: TestResults,
-    suppressions: Set<String>
+    @Suppress("UNUSED_PARAMETER") suppressions: Set<String>
 ): CompiledSource {
     return try {
         val actualParents = Pair(compiledCommon?.classLoader ?: parentClassLoader, compiledCommon?.fileManager)
@@ -249,7 +256,7 @@ fun Question.checkCompiledSubmission(
         }
     }
     var klass = it.first()
-    if (compiledSubmission.source.type == Source.FileType.KOTLIN &&
+    if (compiledSubmission.source.type == Source.SourceType.KOTLIN &&
         (solution.skipReceiver || solution.fauxStatic) &&
         klass == "${compilationDefinedClass}Kt"
     ) {
@@ -403,6 +410,7 @@ fun Question.computeClassSize(
                 logger.warn { "Negative relative class size value: $size" }
                 0
             }
+
             else -> size
         }
     }
@@ -656,4 +664,58 @@ fun bindJeedCaptureOutputControlInput(
             resourceUsage
         )
     }
+}
+
+fun JeedClassLoader.fixProtectedAndPackagePrivate(): ClassLoader {
+    val klasses = definedClasses.associateWith { className ->
+        val fieldsToOpen = loadClass(className).declaredFields
+            .filter { field -> !field.isSynthetic && field.isPackagePrivate() || field.isProtected() }
+            .map { field -> field.name }
+        val methodsToOpen = loadClass(className).declaredMethods
+            .filter { method -> !method.isSynthetic && method.isPackagePrivate() || method.isProtected() }
+            .map { method -> method.name }
+        val classReader = ClassReader(bytecodeForClasses[className])
+        val classWriter = ClassWriter(classReader, 0)
+        val openingVisitor = object : ClassVisitor(Opcodes.ASM8, classWriter) {
+            override fun visitField(
+                access: Int,
+                name: String,
+                descriptor: String?,
+                signature: String?,
+                value: Any?
+            ) = when (name) {
+                in fieldsToOpen -> super.visitField(
+                    (access and Opcodes.ACC_PROTECTED.inv()) or Opcodes.ACC_PUBLIC,
+                    name,
+                    descriptor,
+                    signature,
+                    value
+                )
+
+                else -> super.visitField(access, name, descriptor, signature, value)
+            }
+
+            override fun visitMethod(
+                access: Int,
+                name: String,
+                descriptor: String?,
+                signature: String?,
+                exceptions: Array<out String>?
+            ) = when (name) {
+                in methodsToOpen -> super.visitMethod(
+                    (access and Opcodes.ACC_PROTECTED.inv()) or Opcodes.ACC_PUBLIC,
+                    name,
+                    descriptor,
+                    signature,
+                    exceptions
+                )
+
+                else -> super.visitMethod(access, name, descriptor, signature, exceptions)
+            }
+        }
+        classReader.accept(openingVisitor, 0)
+        classWriter.toByteArray()
+    }
+
+    return CopyableClassLoader(klasses, classLoader.parent)
 }

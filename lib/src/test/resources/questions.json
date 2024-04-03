@@ -1,7 +1,7 @@
 [
   {
     "published": {
-      "contentHash": "c114211703dca8ff080a7f5c62d39c41-v2024.3.4",
+      "contentHash": "c114211703dca8ff080a7f5c62d39c41-v2024.4.0",
       "path": "add-one",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -18,7 +18,7 @@
         "kotlin": "<p>Write a method <code>addOne</code> that returns its <code>Int</code> argument plus one.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -647,7 +647,7 @@
         "suppressions": []
       }
     ],
-    "common": [],
+    "commonFiles": [],
     "templateByLanguage": {
       "java": "public class Question {\n  {{{ contents }}}\n}",
       "kotlin": "class Question {\n  {{{ contents }}}\n}"
@@ -660,7 +660,7 @@
   },
   {
     "published": {
-      "contentHash": "ef5dda85eddfc409cf6fd1b26498e631-v2024.3.4",
+      "contentHash": "ef5dda85eddfc409cf6fd1b26498e631-v2024.4.0",
       "path": "add-one-class",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -677,7 +677,7 @@
         "kotlin": "<p>Write a function <code>addOne</code> that returns its <code>Int</code> argument plus one.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -1169,7 +1169,7 @@
       }
     ],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -1178,7 +1178,7 @@
   },
   {
     "published": {
-      "contentHash": "8bd7c7adf961e1e726f5d348a2897aa9-v2024.3.4",
+      "contentHash": "8bd7c7adf961e1e726f5d348a2897aa9-v2024.4.0",
       "path": "bad-extra-private-variable",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -1195,7 +1195,7 @@
         "kotlin": "<p>Test bad use of superclass method.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -2057,8 +2057,12 @@
         "suppressions": []
       }
     ],
-    "common": [
-      "public class Parent {\n  private final String lastName;\n\n  public Parent(String setLastName) {\n    lastName = setLastName;\n  }\n\n  public String getLastName() {\n    return lastName;\n  }\n}\n"
+    "commonFiles": [
+      {
+        "klass": "Parent",
+        "contents": "public class Parent {\n  private final String lastName;\n\n  public Parent(String setLastName) {\n    lastName = setLastName;\n  }\n\n  public String getLastName() {\n    return lastName;\n  }\n}\n",
+        "language": "java"
+      }
     ],
     "importWhitelist": [],
     "importBlacklist": [],
@@ -2068,7 +2072,7 @@
   },
   {
     "published": {
-      "contentHash": "9bdb6c108428b48e85f16251dccdc74a-v2024.3.4",
+      "contentHash": "9bdb6c108428b48e85f16251dccdc74a-v2024.4.0",
       "path": "classroom-getters-and-setters",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -2083,7 +2087,7 @@
         "java": "<p>Getter and setter testing.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -3031,7 +3035,7 @@
     },
     "alternativeSolutions": [],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -3040,7 +3044,7 @@
   },
   {
     "published": {
-      "contentHash": "b9c2151a39b8ac192fe361c8ec50396a-v2024.3.4",
+      "contentHash": "b9c2151a39b8ac192fe361c8ec50396a-v2024.4.0",
       "path": "combine-minus-two",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -3055,7 +3059,7 @@
         "java": "<p>Write a function <code>combine</code> that, given two <code>String</code> arguments, returns the second appended to\nthe first.\nExcept you should omit the first two characters of each <code>String</code>.\nFor example, given <code>Java</code> and <code>Kotlin</code>, you would return <code>vatlin</code>.\nYou can assume that each <code>String</code> is of length at least two.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -3371,7 +3375,7 @@
     },
     "alternativeSolutions": [],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "templateByLanguage": {
       "java": "public class Question {\n  {{{ contents }}}\n}"
     },
@@ -3383,7 +3387,7 @@
   },
   {
     "published": {
-      "contentHash": "8aa6196239255ec5890b648898bc7a26-v2024.3.4",
+      "contentHash": "8aa6196239255ec5890b648898bc7a26-v2024.4.0",
       "path": "cougar-feliform",
       "author": "challen@illinois.edu",
       "version": "2021.7.0",
@@ -3398,7 +3402,7 @@
         "java": "<p>Create and complete the implementation of the <code>Cougar</code> class.\nYour class should be public, not final and not abstract, inherit from the <code>Feliform</code> class,\nand provide the following methods:</p><ol><li>Constructor that takes a <code>int</code> parameter <code>speed</code> and a second <code>weight</code>.\nCreates a new <code>Cougar</code> with the passed speed and weight.\nYou should call the <code>Feliform</code> constructor and pass it the <code>String</code> &quot;cougar&quot; to identify the type\nof this feliform.</li><li>Public instance method <code>dangerousness</code> that takes no arguments and returns an <code>int</code>.\nReturn the dangerousness of this cougar which equals its speed times its weight.</li><li>Override <code>public boolean equals(Object other)</code>.\nReturn <code>true</code> if <code>other</code> is a <code>Cougar</code> with the same speed and weight, and <code>false</code> otherwise.\nNote that <code>other</code> may be <code>null</code> or not a <code>Housecat</code>.</li></ol><p>Finally, note that your class should not expose any of its internal state publicly.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -4359,8 +4363,12 @@
     },
     "alternativeSolutions": [],
     "incorrectExamples": [],
-    "common": [
-      "public abstract class Feliform {\n  private final String type;\n\n  public Feliform(String setType) {\n    type = setType;\n  }\n\n  public String getType() {\n    return type;\n  }\n\n  public abstract int dangerousness();\n}\n"
+    "commonFiles": [
+      {
+        "klass": "Feliform",
+        "contents": "public abstract class Feliform {\n  private final String type;\n\n  public Feliform(String setType) {\n    type = setType;\n  }\n\n  public String getType() {\n    return type;\n  }\n\n  public abstract int dangerousness();\n}\n",
+        "language": "java"
+      }
     ],
     "importWhitelist": [],
     "importBlacklist": [],
@@ -4370,7 +4378,7 @@
   },
   {
     "published": {
-      "contentHash": "37e67a667c1ae71a3ca7b33ce5ece38d-v2024.3.4",
+      "contentHash": "37e67a667c1ae71a3ca7b33ce5ece38d-v2024.4.0",
       "path": "counter",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -4387,7 +4395,7 @@
         "kotlin": "<p>Define and implement a class <code>Counter</code>.\n<code>Counter</code> should provide primary constructor that accepts an <code>Int</code> parameter.\nIt should also provide <code>increment</code> and <code>decrement</code> methods, both taking no parameters and returning <code>Unit</code>.\n<code>increment</code> should increase the stored count, while <code>decrement</code> should decrease it.\nFinally, provide a <code>getValue</code> method that returns the stored value.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -5554,7 +5562,7 @@
       }
     ],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -5563,7 +5571,7 @@
   },
   {
     "published": {
-      "contentHash": "4b67acf2669013a9ef4f930f18990e9a-v2024.3.4",
+      "contentHash": "4b67acf2669013a9ef4f930f18990e9a-v2024.4.0",
       "path": "equals-88",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -5578,7 +5586,7 @@
         "java": "<p>Write a method named <code>equals88</code> that returns <code>true</code> if its <code>int</code> argument is equal to 88,\nour magic number.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -5804,7 +5812,7 @@
     },
     "alternativeSolutions": [],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "templateByLanguage": {
       "java": "public class Question {\n  {{{ contents }}}\n}"
     },
@@ -5816,7 +5824,7 @@
   },
   {
     "published": {
-      "contentHash": "841269cf40bc4f6c730eef908110e096-v2024.3.4",
+      "contentHash": "841269cf40bc4f6c730eef908110e096-v2024.4.0",
       "path": "fancy-string-compare",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -5831,7 +5839,7 @@
         "java": "<p>Write a method <code>fancyCompare</code> that takes two <code>String</code> arguments. If the two <code>String</code>s are equal,\nreturn -1.\nOtherwise, return the length of the longer <code>String</code>.\nYou should <code>assert</code> that both inputs are not <code>null</code>.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -6787,7 +6795,7 @@
         ]
       }
     ],
-    "common": [],
+    "commonFiles": [],
     "templateByLanguage": {
       "java": "public class Question {\n  {{{ contents }}}\n}"
     },
@@ -6799,7 +6807,7 @@
   },
   {
     "published": {
-      "contentHash": "ecfc9c6942632610eb6643d66f883bf6-v2024.3.4",
+      "contentHash": "ecfc9c6942632610eb6643d66f883bf6-v2024.4.0",
       "path": "input-interleaving-test",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -6816,7 +6824,7 @@
         "kotlin": "<p>Testing STDIN generation and interleaving. In Kotlin!</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -8399,7 +8407,7 @@
       }
     ],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -8408,7 +8416,7 @@
   },
   {
     "published": {
-      "contentHash": "c6bd42d3ecf82954f7ced8718a06568c-v2024.3.4",
+      "contentHash": "8c51f65c402bcb22ba6bffaec20f86ef-v2024.4.0",
       "path": "input-without-output-test",
       "author": "challen@illinois.edu",
       "version": "2024.3.0",
@@ -8425,7 +8433,7 @@
         "kotlin": "<p>Testing STDIN without STDOUT.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -8864,13 +8872,13 @@
         "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/examples/inputwithoutoutputtest/correct/kotlin/Question.kt"
       ],
       "unusedFiles": [],
-      "focused": true,
+      "focused": false,
       "publish": true
     },
     "annotatedControls": {},
     "question": {
       "klass": "Question",
-      "contents": "import edu.illinois.cs.cs125.jenisol.core.EdgeType;\nimport edu.illinois.cs.cs125.jenisol.core.Limit;\nimport edu.illinois.cs.cs125.jenisol.core.ProvideSystemIn;\nimport edu.illinois.cs.cs125.jenisol.core.RandomType;\nimport edu.illinois.cs.cs125.jenisol.core.SimpleType;\nimport edu.illinois.cs.cs125.jenisol.core.generators.SystemIn;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.util.List;\nimport java.util.Random;\nimport java.util.Scanner;\n\n/*\n * Testing STDIN without STDOUT.\n */\n\n@SuppressWarnings(\"StringOperationCanBeSimplified\")\n@Correct(\n    name = \"Input Without Output Test\",\n    version = \"2024.3.0\",\n    author = \"challen@illinois.edu\",\n    focused = true)\npublic class Question {\n  @ProvideSystemIn\n  @Limit(1)\n  public static int value() {\n    Scanner scanner = new Scanner(System.in);\n    String first = scanner.nextLine();\n    return first.length();\n  }\n\n  @SimpleType\n  private static final SystemIn[] SIMPLE = new SystemIn[] {new SystemIn(List.of(\"Test\"))};\n\n  @EdgeType private static final SystemIn[] EDGE = new SystemIn[] {};\n\n  @RandomType\n  private static SystemIn randomInput(Random random) {\n    return new SystemIn(List.of(new String(\"\" + random.nextInt())));\n  }\n}",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.EdgeType;\nimport edu.illinois.cs.cs125.jenisol.core.Limit;\nimport edu.illinois.cs.cs125.jenisol.core.ProvideSystemIn;\nimport edu.illinois.cs.cs125.jenisol.core.RandomType;\nimport edu.illinois.cs.cs125.jenisol.core.SimpleType;\nimport edu.illinois.cs.cs125.jenisol.core.generators.SystemIn;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.util.List;\nimport java.util.Random;\nimport java.util.Scanner;\n\n/*\n * Testing STDIN without STDOUT.\n */\n\n@SuppressWarnings(\"StringOperationCanBeSimplified\")\n@Correct(name = \"Input Without Output Test\", version = \"2024.3.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  @ProvideSystemIn\n  @Limit(1)\n  public static int value() {\n    Scanner scanner = new Scanner(System.in);\n    String first = scanner.nextLine();\n    return first.length();\n  }\n\n  @SimpleType\n  private static final SystemIn[] SIMPLE = new SystemIn[] {new SystemIn(List.of(\"Test\"))};\n\n  @EdgeType private static final SystemIn[] EDGE = new SystemIn[] {};\n\n  @RandomType\n  private static SystemIn randomInput(Random random) {\n    return new SystemIn(List.of(new String(\"\" + random.nextInt())));\n  }\n}",
       "language": "java",
       "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/examples/inputwithoutoutputtest/Question.java",
       "suppressions": [
@@ -9534,7 +9542,7 @@
       }
     ],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -9543,7 +9551,7 @@
   },
   {
     "published": {
-      "contentHash": "99105a440a6128047b6b38227bd31bc3-v2024.3.4",
+      "contentHash": "99105a440a6128047b6b38227bd31bc3-v2024.4.0",
       "path": "kotlin-faux-property-testing",
       "author": "challen@illinois.edu",
       "version": "2023.7.0",
@@ -9560,7 +9568,7 @@
         "kotlin": "<p>Question to test detection of Kotlin faux properties in Jenisol 2023.7.0.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -10269,7 +10277,7 @@
         "suppressions": []
       }
     ],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -10278,7 +10286,7 @@
   },
   {
     "published": {
-      "contentHash": "31c33195e99d7d6e4d824dfeeb4b012e-v2024.3.4",
+      "contentHash": "31c33195e99d7d6e4d824dfeeb4b012e-v2024.4.0",
       "path": "kotlin-null-test",
       "author": "challen@illinois.edu",
       "version": "2022.6.0",
@@ -10295,7 +10303,7 @@
         "kotlin": "<p>Return the length of a string.\nHere for Kotlin null memory usage checking.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -11068,7 +11076,7 @@
       }
     ],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -11077,7 +11085,7 @@
   },
   {
     "published": {
-      "contentHash": "8a09f00ff70137bc91f131b304424e9c-v2024.3.4",
+      "contentHash": "8a09f00ff70137bc91f131b304424e9c-v2024.4.0",
       "path": "larger-of-two",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -11092,7 +11100,7 @@
         "java": "<p>Write a method <code>larger</code> that returns the larger of two <code>int</code> arguments.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -11518,7 +11526,7 @@
     },
     "alternativeSolutions": [],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "templateByLanguage": {
       "java": "public class Question {\n  {{{ contents }}}\n}"
     },
@@ -11530,7 +11538,7 @@
   },
   {
     "published": {
-      "contentHash": "7930f4424e7ccd1eb21d891bd4d6b73f-v2024.3.4",
+      "contentHash": "7930f4424e7ccd1eb21d891bd4d6b73f-v2024.4.0",
       "path": "maybe-recursive-factorial",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -11545,7 +11553,7 @@
         "java": "<p>Write a class method that provides an implementation of factorial, accepting and returning\n<code>long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.\nYour implementation can be recursive or not.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -12515,7 +12523,7 @@
       }
     ],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -12524,7 +12532,7 @@
   },
   {
     "published": {
-      "contentHash": "59587970b2e16d99aa6bfd9cb65c8197-v2024.3.4",
+      "contentHash": "59587970b2e16d99aa6bfd9cb65c8197-v2024.4.0",
       "path": "print-hello",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -12539,7 +12547,7 @@
         "java": "<p>Print &quot;Hello!&quot; without the quotes.\nUsing to test support for @Limit annotations.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -12659,7 +12667,7 @@
     },
     "alternativeSolutions": [],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "templateByLanguage": {
       "java": "public class Question {\n  public static void printHello() {\n    {{{ contents }}}\n  }\n}\n"
     },
@@ -12671,7 +12679,7 @@
   },
   {
     "published": {
-      "contentHash": "295c2ebd4f1060ab7eb20d67a8e61b2b-v2024.3.4",
+      "contentHash": "295c2ebd4f1060ab7eb20d67a8e61b2b-v2024.4.0",
       "path": "print-stderr-hello-class",
       "author": "challen@illinois.edu",
       "version": "2024.3.0",
@@ -12686,7 +12694,7 @@
         "java": "<p>Print &quot;Hello!&quot; without the quotes.\nTest test testing output detection.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -12940,7 +12948,7 @@
     },
     "alternativeSolutions": [],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -12949,7 +12957,7 @@
   },
   {
     "published": {
-      "contentHash": "e66c894b7927e23888eb8a97437bf95e-v2024.3.4",
+      "contentHash": "e66c894b7927e23888eb8a97437bf95e-v2024.4.0",
       "path": "print-sum",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -12966,7 +12974,7 @@
         "kotlin": "<p>Given two <code>int</code> variables <code>first</code> and <code>second</code> that are already declared and initialized, print their sum.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -13422,7 +13430,7 @@
         ]
       }
     ],
-    "common": [],
+    "commonFiles": [],
     "templateByLanguage": {
       "java": "public class Question {\n  public static void printSum(int first, int second) {\n    {{{ contents }}}\n  }\n}\n",
       "kotlin": "fun printSum(first: Int, second: Int) {\n  {{{ contents }}}\n}"
@@ -13435,7 +13443,7 @@
   },
   {
     "published": {
-      "contentHash": "903de44f2b8c873d85978fc69212cba1-v2024.3.4",
+      "contentHash": "903de44f2b8c873d85978fc69212cba1-v2024.4.0",
       "path": "private-recursive-helper",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -13450,7 +13458,7 @@
         "java": "<p>Testing question for recursion checks on private methods.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -14205,7 +14213,7 @@
         "suppressions": []
       }
     ],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -14214,7 +14222,7 @@
   },
   {
     "published": {
-      "contentHash": "e25da8c36600cdb4c0a5e16ee509dfd2-v2024.3.4",
+      "contentHash": "e25da8c36600cdb4c0a5e16ee509dfd2-v2024.4.0",
       "path": "read-hello-world",
       "author": "challen@illinois.edu",
       "version": "2023.11.0",
@@ -14229,7 +14237,7 @@
         "java": "<p>Question to test filesystem generation.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -14671,7 +14679,7 @@
     },
     "alternativeSolutions": [],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -14680,7 +14688,7 @@
   },
   {
     "published": {
-      "contentHash": "8e21c84a2a0cfb74059b03213c970d22-v2024.3.4",
+      "contentHash": "8e21c84a2a0cfb74059b03213c970d22-v2024.4.0",
       "path": "recursive-factorial",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -14697,7 +14705,7 @@
         "kotlin": "<p>Write a method that provides a recursive implementation of factorial, accepting and returning <code>Long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -15868,7 +15876,7 @@
         "suppressions": []
       }
     ],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -15877,7 +15885,7 @@
   },
   {
     "published": {
-      "contentHash": "4f52c35fd3b4a40466f8db21f7a5e806-v2024.3.4",
+      "contentHash": "4f52c35fd3b4a40466f8db21f7a5e806-v2024.4.0",
       "path": "squirrel-equality",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -15894,7 +15902,7 @@
         "kotlin": "<p>Kotlin version to test double init.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -18252,7 +18260,7 @@
       }
     ],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -18261,7 +18269,7 @@
   },
   {
     "published": {
-      "contentHash": "b9dcc66ce0f54153c2b01ccf1b711b2a-v2024.3.4",
+      "contentHash": "b9dcc66ce0f54153c2b01ccf1b711b2a-v2024.4.0",
       "path": "string-duplicates",
       "author": "challen@illinois.edu",
       "version": "2022.2.0",
@@ -18283,7 +18291,7 @@
         "java.util.Map",
         "java.util.HashMap"
       ],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -20528,7 +20536,7 @@
       }
     ],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "templateByLanguage": {
       "java": "import java.util.HashSet;\nimport java.util.Set;\nimport java.util.Map;\nimport java.util.HashMap;\n\npublic class Question {\n  {{{ contents }}}\n}",
       "kotlin": "import java.util.Map\nimport java.util.HashMap\n\nclass Question {\n  {{{ contents }}}\n}"
@@ -20544,7 +20552,7 @@
   },
   {
     "published": {
-      "contentHash": "fb978782a83ca70f0798395537f1cfbf-v2024.3.4",
+      "contentHash": "fb978782a83ca70f0798395537f1cfbf-v2024.4.0",
       "path": "test-bad-kotlin-getter-setter",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -20561,7 +20569,7 @@
         "kotlin": "<p>Test to ensure that we can detect unnecessary Kotlin setter or getter overrides.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -21286,7 +21294,7 @@
         ]
       }
     ],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -21295,7 +21303,7 @@
   },
   {
     "published": {
-      "contentHash": "ca288f86086a86f8d9438ba73f87b078-v2024.3.4",
+      "contentHash": "ca288f86086a86f8d9438ba73f87b078-v2024.4.0",
       "path": "test-checkstyle-suppression",
       "author": "challen@illinois.edu",
       "version": "2024.1.0",
@@ -21310,7 +21318,7 @@
         "java": "<p>Test support for checkstyle suppressions.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -21628,7 +21636,7 @@
     },
     "alternativeSolutions": [],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -21637,7 +21645,7 @@
   },
   {
     "published": {
-      "contentHash": "6077fd2410b8c17d93b597ee40a9e1ac-v2024.3.4",
+      "contentHash": "6077fd2410b8c17d93b597ee40a9e1ac-v2024.4.0",
       "path": "test-constructor-notnull",
       "author": "challen@illinois.edu",
       "version": "2022.10.0",
@@ -21652,7 +21660,7 @@
         "java": "<p>Testing @NotNull annotation on constructor parameters.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -22108,7 +22116,7 @@
     },
     "alternativeSolutions": [],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -22117,7 +22125,7 @@
   },
   {
     "published": {
-      "contentHash": "941eea26602fbb141a72f929f8cafaeb-v2024.3.4",
+      "contentHash": "941eea26602fbb141a72f929f8cafaeb-v2024.4.0",
       "path": "test-empty-constructor",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -22132,7 +22140,7 @@
         "java": "<p>Test to make sure we can parse the empty constructor.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -22601,7 +22609,7 @@
       }
     ],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -22610,7 +22618,7 @@
   },
   {
     "published": {
-      "contentHash": "eb0bed4310dc1c1ced4696ea5895e94e-v2024.3.4",
+      "contentHash": "eb0bed4310dc1c1ced4696ea5895e94e-v2024.4.0",
       "path": "test-memoization-defense",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -22625,7 +22633,7 @@
         "java": "<p>Testing class size based memoization defense.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -22830,7 +22838,7 @@
         "suppressions": []
       }
     ],
-    "common": [],
+    "commonFiles": [],
     "templateByLanguage": {
       "java": "public class Question {\n  {{{ contents }}}\n}"
     },
@@ -22842,7 +22850,7 @@
   },
   {
     "published": {
-      "contentHash": "8ee06f2a3692ce331553ea5537e78915-v2024.3.4",
+      "contentHash": "8ee06f2a3692ce331553ea5537e78915-v2024.4.0",
       "path": "test-raw-types",
       "author": "challen@illinois.edu",
       "version": "2023.11.0",
@@ -22857,7 +22865,7 @@
         "java": "<p>Test support for raw type error filtering.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -23167,7 +23175,7 @@
     },
     "alternativeSolutions": [],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -23176,7 +23184,7 @@
   },
   {
     "published": {
-      "contentHash": "2afb477ca02d334a820b8acd137e786f-v2024.3.4",
+      "contentHash": "2afb477ca02d334a820b8acd137e786f-v2024.4.0",
       "path": "with-common-code",
       "author": "challen@illinois.edu",
       "version": "2023.12.0",
@@ -23191,7 +23199,7 @@
         "java": "<p>Test loading common code.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -23463,8 +23471,12 @@
     },
     "alternativeSolutions": [],
     "incorrectExamples": [],
-    "common": [
-      "import java.util.Objects;\n\npublic class Value {\n  private int value;\n\n  public Value(int setValue) {\n    value = setValue;\n  }\n\n  @Override\n  public boolean equals(Object o) {\n    if (this == o) {\n      return true;\n    }\n    if (o == null || getClass() != o.getClass()) {\n      return false;\n    }\n    Value value1 = (Value) o;\n    return value == value1.value;\n  }\n\n  @Override\n  public int hashCode() {\n    return Objects.hash(value);\n  }\n}\n"
+    "commonFiles": [
+      {
+        "klass": "Value",
+        "contents": "import java.util.Objects;\n\npublic class Value {\n  private int value;\n\n  public Value(int setValue) {\n    value = setValue;\n  }\n\n  @Override\n  public boolean equals(Object o) {\n    if (this == o) {\n      return true;\n    }\n    if (o == null || getClass() != o.getClass()) {\n      return false;\n    }\n    Value value1 = (Value) o;\n    return value == value1.value;\n  }\n\n  @Override\n  public int hashCode() {\n    return Objects.hash(value);\n  }\n}\n",
+        "language": "java"
+      }
     ],
     "importWhitelist": [],
     "importBlacklist": [],
@@ -23474,7 +23486,7 @@
   },
   {
     "published": {
-      "contentHash": "a48e5bd299a5a2c4ce40ca96e1d0291b-v2024.3.4",
+      "contentHash": "a48e5bd299a5a2c4ce40ca96e1d0291b-v2024.4.0",
       "path": "with-dead-code-annotation",
       "author": "challen@illinois.edu",
       "version": "2023.2.0",
@@ -23491,7 +23503,7 @@
         "kotlin": "<p>Testing dead code comments.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -24497,7 +24509,7 @@
       }
     ],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -24506,7 +24518,7 @@
   },
   {
     "published": {
-      "contentHash": "bc64b8de65112d62c88635449195ce97-v2024.3.4",
+      "contentHash": "bc64b8de65112d62c88635449195ce97-v2024.4.0",
       "path": "with-feature-check",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -24523,7 +24535,7 @@
         "kotlin": "<p>For testing features.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -25074,7 +25086,7 @@
         ]
       }
     ],
-    "common": [],
+    "commonFiles": [],
     "templateByLanguage": {
       "java": "public class Question {\n  {{{ contents }}}\n}",
       "kotlin": "class Question {\n  {{{ contents }}}\n}"
@@ -25087,7 +25099,7 @@
   },
   {
     "published": {
-      "contentHash": "b1f63715175b89b68bc3dae80eb3776c-v2024.3.4",
+      "contentHash": "b1f63715175b89b68bc3dae80eb3776c-v2024.4.0",
       "path": "with-feature-dead-code",
       "author": "challen@illinois.edu",
       "version": "2023.2.0",
@@ -25107,7 +25119,7 @@
         "java.util.ArrayList",
         "java.util.List"
       ],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -26311,7 +26323,7 @@
       }
     ],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "templateByLanguage": {
       "java": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Question {\n  {{{ contents }}}\n}",
       "kotlin": "class Question {\n  {{{ contents }}}\n}"
@@ -26324,7 +26336,7 @@
   },
   {
     "published": {
-      "contentHash": "0f384f852204ac7c20a2a2b7d58675b7-v2024.3.4",
+      "contentHash": "0f384f852204ac7c20a2a2b7d58675b7-v2024.4.0",
       "path": "with-imports",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -26341,7 +26353,7 @@
         "kotlin": "<p>Test Kotlin top-level method with import statements.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -27009,7 +27021,7 @@
       }
     ],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
@@ -27018,7 +27030,7 @@
   },
   {
     "published": {
-      "contentHash": "d437bb5790de0716534628aa0cab26fa-v2024.3.4",
+      "contentHash": "d437bb5790de0716534628aa0cab26fa-v2024.4.0",
       "path": "with-java-switch",
       "author": "challen@illinois.edu",
       "version": "2023.12.0",
@@ -27035,7 +27047,7 @@
         "kotlin": "<p>Test feature check using Java 14 switch expression, Kotlin equivalent.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -28491,7 +28503,7 @@
         "suppressions": []
       }
     ],
-    "common": [],
+    "commonFiles": [],
     "templateByLanguage": {
       "java": "public class Question {\n  {{{ contents }}}\n}",
       "kotlin": "class Question {\n  {{{ contents }}}\n}"
@@ -28504,7 +28516,7 @@
   },
   {
     "published": {
-      "contentHash": "c99317f10241df7fceaf7b25de10b379-v2024.3.4",
+      "contentHash": "c99317f10241df7fceaf7b25de10b379-v2024.4.0",
       "path": "with-map-extras",
       "author": "challen@illinois.edu",
       "version": "2023.9.0",
@@ -28522,7 +28534,7 @@
         "java.util.Map",
         "java.util.Set"
       ],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -28804,7 +28816,7 @@
     },
     "alternativeSolutions": [],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "templateByLanguage": {
       "java": "import java.util.Map;\nimport java.util.Set;\n\npublic class Question {\n  {{{ contents }}}\n}"
     },
@@ -28816,7 +28828,678 @@
   },
   {
     "published": {
-      "contentHash": "40b8dbdb965fef74c6bb394406889faf-v2024.3.4",
+      "contentHash": "d6d5a2e560fb902c2c913eebff9402af-v2024.4.0",
+      "path": "with-protected-field",
+      "author": "challen@illinois.edu",
+      "version": "2024.4.0",
+      "name": "With Protected Field",
+      "type": "KLASS",
+      "packageName": "com.github.cs124_illinois.questioner.examples.testing.withprotectedfield",
+      "klass": "Question",
+      "languages": [
+        "java"
+      ],
+      "descriptions": {
+        "java": "<p>Test protected and package-private field handling.</p>"
+      },
+      "templateImports": [],
+      "questionerVersion": "2024.4.0",
+      "authorName": "",
+      "tags": []
+    },
+    "classification": {
+      "featuresByLanguage": {
+        "java": {
+          "featureMap": {
+            "ARITHMETIC_OPERATORS": 2,
+            "METHOD": 2,
+            "RETURN": 2,
+            "CONSTRUCTOR": 1,
+            "GETTER": 2,
+            "CLASS": 1,
+            "EXTENDS": 1,
+            "SUPER": 1,
+            "VISIBILITY_MODIFIERS": 4,
+            "DOT_NOTATION": 4,
+            "DOTTED_METHOD_CALL": 2,
+            "DOTTED_VARIABLE_ACCESS": 2
+          },
+          "featureList": [
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 1,
+                "column": 0
+              }
+            },
+            {
+              "feature": "CLASS",
+              "location": {
+                "line": 1,
+                "column": 7
+              }
+            },
+            {
+              "feature": "EXTENDS",
+              "location": {
+                "line": 1,
+                "column": 7
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 1,
+                "column": 37
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "CONSTRUCTOR",
+              "location": {
+                "line": 2,
+                "column": 9
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 2,
+                "column": 48
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 3,
+                "column": 4
+              }
+            },
+            {
+              "feature": "SUPER",
+              "location": {
+                "line": 3,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 3,
+                "column": 31
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 4,
+                "column": 2
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 6,
+                "column": 2
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 6,
+                "column": 9
+              }
+            },
+            {
+              "feature": "GETTER",
+              "location": {
+                "line": 6,
+                "column": 9
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 6,
+                "column": 24
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 7,
+                "column": 4
+              }
+            },
+            {
+              "feature": "RETURN",
+              "location": {
+                "line": 7,
+                "column": 4
+              }
+            },
+            {
+              "feature": "ARITHMETIC_OPERATORS",
+              "location": {
+                "line": 7,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 7,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 7,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 7,
+                "column": 25
+              }
+            },
+            {
+              "feature": "DOTTED_METHOD_CALL",
+              "location": {
+                "line": 7,
+                "column": 25
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 7,
+                "column": 40
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 8,
+                "column": 2
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 10,
+                "column": 2
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 10,
+                "column": 9
+              }
+            },
+            {
+              "feature": "GETTER",
+              "location": {
+                "line": 10,
+                "column": 9
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 10,
+                "column": 39
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 11,
+                "column": 4
+              }
+            },
+            {
+              "feature": "RETURN",
+              "location": {
+                "line": 11,
+                "column": 4
+              }
+            },
+            {
+              "feature": "ARITHMETIC_OPERATORS",
+              "location": {
+                "line": 11,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 11,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 11,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 11,
+                "column": 28
+              }
+            },
+            {
+              "feature": "DOTTED_METHOD_CALL",
+              "location": {
+                "line": 11,
+                "column": 28
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 11,
+                "column": 48
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 12,
+                "column": 2
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 13,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [
+            "Parent",
+            "int"
+          ],
+          "identifierList": [],
+          "dottedMethodList": [
+            "testing",
+            "anotherTest"
+          ]
+        }
+      },
+      "lineCounts": {
+        "java": {
+          "source": 11,
+          "comment": 0,
+          "blank": 3
+        }
+      },
+      "complexity": {
+        "java": 3
+      }
+    },
+    "metadata": {
+      "allFiles": [
+        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/examples/testing/withprotectedfield/Parent.java",
+        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/examples/testing/withprotectedfield/Question.java"
+      ],
+      "unusedFiles": [],
+      "focused": false,
+      "publish": true
+    },
+    "annotatedControls": {},
+    "question": {
+      "klass": "Question",
+      "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Test protected and package-private field handling.\n */\n\n@Correct(name = \"With Protected Field\", author = \"challen@illinois.edu\", version = \"2024.4.0\")\npublic class Question extends Parent {\n  public Question(int setValue, int setAnother) {\n    super(setValue, setAnother);\n  }\n\n  public int getValue() {\n    return super.value + super.testing();\n  }\n\n  public int getAnother(Parent second) {\n    return second.another + second.anotherTest();\n  }\n\n  @FixedParameters private static final List<Parent> FIXED = List.of(new Parent(10, 8));\n\n  @RandomParameters\n  private static Parent randomParent(Random random) {\n    return new Parent(random.nextInt(128) + 1, random.nextInt());\n  }\n}",
+      "language": "java",
+      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/examples/testing/withprotectedfield/Question.java",
+      "suppressions": []
+    },
+    "solutionByLanguage": {
+      "java": {
+        "klass": "Question",
+        "contents": "public class Question extends Parent {\n  public Question(int setValue, int setAnother) {\n    super(setValue, setAnother);\n  }\n\n  public int getValue() {\n    return super.value + super.testing();\n  }\n\n  public int getAnother(Parent second) {\n    return second.another + second.anotherTest();\n  }\n}\n",
+        "language": "java",
+        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/examples/testing/withprotectedfield/Question.java",
+        "complexity": 3,
+        "features": {
+          "featureMap": {
+            "ARITHMETIC_OPERATORS": 2,
+            "METHOD": 2,
+            "RETURN": 2,
+            "CONSTRUCTOR": 1,
+            "GETTER": 2,
+            "CLASS": 1,
+            "EXTENDS": 1,
+            "SUPER": 1,
+            "VISIBILITY_MODIFIERS": 4,
+            "DOT_NOTATION": 4,
+            "DOTTED_METHOD_CALL": 2,
+            "DOTTED_VARIABLE_ACCESS": 2
+          },
+          "featureList": [
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 1,
+                "column": 0
+              }
+            },
+            {
+              "feature": "CLASS",
+              "location": {
+                "line": 1,
+                "column": 7
+              }
+            },
+            {
+              "feature": "EXTENDS",
+              "location": {
+                "line": 1,
+                "column": 7
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 1,
+                "column": 37
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 2,
+                "column": 2
+              }
+            },
+            {
+              "feature": "CONSTRUCTOR",
+              "location": {
+                "line": 2,
+                "column": 9
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 2,
+                "column": 48
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 3,
+                "column": 4
+              }
+            },
+            {
+              "feature": "SUPER",
+              "location": {
+                "line": 3,
+                "column": 4
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 3,
+                "column": 31
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 4,
+                "column": 2
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 6,
+                "column": 2
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 6,
+                "column": 9
+              }
+            },
+            {
+              "feature": "GETTER",
+              "location": {
+                "line": 6,
+                "column": 9
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 6,
+                "column": 24
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 7,
+                "column": 4
+              }
+            },
+            {
+              "feature": "RETURN",
+              "location": {
+                "line": 7,
+                "column": 4
+              }
+            },
+            {
+              "feature": "ARITHMETIC_OPERATORS",
+              "location": {
+                "line": 7,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 7,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 7,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 7,
+                "column": 25
+              }
+            },
+            {
+              "feature": "DOTTED_METHOD_CALL",
+              "location": {
+                "line": 7,
+                "column": 25
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 7,
+                "column": 40
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 8,
+                "column": 2
+              }
+            },
+            {
+              "feature": "VISIBILITY_MODIFIERS",
+              "location": {
+                "line": 10,
+                "column": 2
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 10,
+                "column": 9
+              }
+            },
+            {
+              "feature": "GETTER",
+              "location": {
+                "line": 10,
+                "column": 9
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 10,
+                "column": 39
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 11,
+                "column": 4
+              }
+            },
+            {
+              "feature": "RETURN",
+              "location": {
+                "line": 11,
+                "column": 4
+              }
+            },
+            {
+              "feature": "ARITHMETIC_OPERATORS",
+              "location": {
+                "line": 11,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 11,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 11,
+                "column": 11
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 11,
+                "column": 28
+              }
+            },
+            {
+              "feature": "DOTTED_METHOD_CALL",
+              "location": {
+                "line": 11,
+                "column": 28
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 11,
+                "column": 48
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 12,
+                "column": 2
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 13,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [
+            "Parent",
+            "int"
+          ],
+          "identifierList": [],
+          "dottedMethodList": [
+            "testing",
+            "anotherTest"
+          ]
+        },
+        "lineCount": {
+          "source": 11,
+          "comment": 0,
+          "blank": 3
+        },
+        "expectedDeadCount": 0,
+        "suppressions": []
+      }
+    },
+    "alternativeSolutions": [],
+    "incorrectExamples": [],
+    "commonFiles": [
+      {
+        "klass": "Parent",
+        "contents": "import java.util.Objects;\n\npublic class Parent {\n  protected int value;\n  int another;\n\n  public Parent(int setValue, int setAnother) {\n    assert setValue > 0;\n    value = setValue;\n    another = setAnother;\n  }\n\n  @Override\n  public boolean equals(Object o) {\n    if (!(o instanceof Parent other)) {\n      return false;\n    }\n    return value == other.value && another == other.another;\n  }\n\n  @Override\n  public int hashCode() {\n    return Objects.hash(value, another);\n  }\n\n  protected int testing() {\n    return value * 2;\n  }\n\n  int anotherTest() {\n    return another * 2;\n  }\n}\n",
+        "language": "java"
+      }
+    ],
+    "importWhitelist": [],
+    "importBlacklist": [],
+    "checkstyleSuppressions": [],
+    "fauxStatic": false,
+    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/examples/testing/withprotectedfield/Question.java"
+  },
+  {
+    "published": {
+      "contentHash": "40b8dbdb965fef74c6bb394406889faf-v2024.4.0",
       "path": "with-template-imports",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -28835,7 +29518,7 @@
         "java.util.List",
         "java.util.ArrayList"
       ],
-      "questionerVersion": "2024.3.4",
+      "questionerVersion": "2024.4.0",
       "authorName": "",
       "tags": []
     },
@@ -29099,7 +29782,7 @@
     },
     "alternativeSolutions": [],
     "incorrectExamples": [],
-    "common": [],
+    "commonFiles": [],
     "templateByLanguage": {
       "java": "import java.util.Arrays;\nimport java.util.List;\nimport java.util.ArrayList;\n\npublic class Question {\n  {{{ contents }}}\n}"
     },

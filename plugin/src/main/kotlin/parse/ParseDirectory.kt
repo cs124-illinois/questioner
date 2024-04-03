@@ -68,7 +68,7 @@ fun Path.parseDirectory(
         usedFiles[path] = whatFor
     }
 
-    val commonFiles = parsedJavaFiles.filter { parsedJavaFile ->
+    val commonContent = parsedJavaFiles.filter { parsedJavaFile ->
         !parsedJavaFile.isCorrect && Path.of(parsedJavaFile.path).parent == parent
     }.also { files ->
         files.find { it.isQuestioner }?.also {
@@ -79,7 +79,7 @@ fun Path.parseDirectory(
         }
     }
     val commonImports =
-        commonFiles.map { parsedJavaFile -> "${parsedJavaFile.packageName}.${parsedJavaFile.className}" }.toSet()
+        commonContent.map { parsedJavaFile -> "${parsedJavaFile.packageName}.${parsedJavaFile.className}" }.toSet()
 
     val localImports = solution.importsToPackages().map {
         packageMap[it] ?: listOf()
@@ -167,11 +167,20 @@ fun Path.parseDirectory(
             )
         }.toList()
 
-    val common = localImports.getLocalImportPaths().map { path ->
-        addUsedFile(path.toString(), "Common")
-        ParsedJavaFile(path.toFile()).contents.stripPackage()
-    } + commonFiles.map { file ->
-        file.contents.stripPackage()
+    val commonFiles = (
+        localImports.getLocalImportPaths().map { path ->
+            addUsedFile(path.toString(), "Common")
+            ParsedJavaFile(path.toFile()).forCommon()
+        } + commonContent.map { file -> file.forCommon() }
+        ).also { commonFileList ->
+        val classNames = commonFileList.map { it.klass }
+        val duplicateClasses = classNames.groupingBy { it }.eachCount().filter { (_, v) -> v >= 2 }.keys
+        check(duplicateClasses.isEmpty()) {
+            "Found duplicate classes in common code: ${duplicateClasses.joinToString(",")}"
+        }
+        check(!classNames.contains(solution.className)) {
+            "Common code contains class with same name as solution: ${solution.className}"
+        }
     }
 
     val javaStarter = parsedJavaFiles
@@ -187,7 +196,8 @@ fun Path.parseDirectory(
     }
 
     val javaStarterFile = if (solution.autoStarter) {
-        solution.extractStarter() ?: error("""autoStarter enabled but starter generation failed: file://${solution.path}""")
+        solution.extractStarter()
+            ?: error("""autoStarter enabled but starter generation failed: file://${solution.path}""")
     } else {
         javaStarter?.toStarterFile(javaCleanSpec)?.also {
             addUsedFile(it.path!!, "Starter", setOf("Incorrect"))
@@ -356,7 +366,8 @@ fun Path.parseDirectory(
         solutionByLanguage = makeLanguageMap(javaSolution, kotlinSolution)!!,
         alternativeSolutions = alternativeSolutions,
         incorrectExamples = incorrectExamples,
-        common = common,
+        common = null,
+        commonFiles = commonFiles,
         templateByLanguage = makeLanguageMap(javaTemplate, kotlinTemplate),
         importWhitelist = solution.whitelist,
         importBlacklist = solution.blacklist,
