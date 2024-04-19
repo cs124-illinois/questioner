@@ -14,6 +14,7 @@ export const QualityStep = Literal("classSize")
   .Or(Literal("coverage"))
 export type QualityStep = Static<typeof QualityStep>
 export const QualitySteps: QualityStep[] = [
+  "classSize",
   "complexity",
   "features",
   "lineCount",
