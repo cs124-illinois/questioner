@@ -322,7 +322,7 @@ suspend fun Question.test(
             return results
         }
 
-        val testingResults = taskResults.returned!!.map { it.asTestResult(compiledSubmission.source) }
+        val testingResults = taskResults.returned!!.map { it.asTestResult(compiledSubmission.source, published.type) }
         val taskTestingResults = TestResults.TestingResult(
             testingResults,
             taskResults.returned!!.settings.testCount,
@@ -356,43 +356,6 @@ suspend fun Question.test(
 
         results.complete.recursion = checkRecursion(klassName, language, settings, isSolution, results)
         results.completedSteps.add(TestResults.Step.recursion)
-
-        /*
-    fun List<TestResults.TestingResult.TestResult>.recursiveMethods() = asSequence().filter {
-        it.submissionResourceUsage!!.invokedRecursiveFunctions.isNotEmpty()
-    }.map {
-        it.jenisol!!.solutionExecutable
-    }.filterIsInstance<Method>().map {
-        ResourceMonitoringResults.MethodInfo(klassName, it.name, Type.getMethodDescriptor(it))
-    }.toSet()
-
-    val expectedRecursiveMethods = if (isSolution) {
-        testingResults.recursiveMethods()
-    } else {
-        if (language == Language.java) {
-            validationResults?.solutionRecursiveMethods?.java
-                ?: settings.solutionRecursiveMethods?.java
-        } else {
-            validationResults?.solutionRecursiveMethods?.kotlin
-                ?: settings.solutionRecursiveMethods?.kotlin
-        }
-    }
-
-    check(expectedRecursiveMethods != null)
-
-    if (isSolution) {
-        results.foundRecursiveMethods = expectedRecursiveMethods
-    }
-
-    val missingRecursiveMethods = expectedRecursiveMethods - testingResults.recursiveMethods()
-    if (missingRecursiveMethods.isNotEmpty() && passedTestCount > 0) {
-        results.failed.checkExecutedSubmission =
-            "Method ${missingRecursiveMethods.first().methodName} was not implemented recursively"
-        results.failedSteps.add(TestResults.Step.checkExecutedSubmission)
-        return results
-    }
-    */
-
 
         // executioncount soft failure
         results.complete.executionCount = TestResults.ResourceUsageComparison(

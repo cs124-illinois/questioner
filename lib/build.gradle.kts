@@ -13,14 +13,14 @@ dependencies {
 
     testJavaagent("com.beyondgrader.resource-agent:agent:2023.9.0")
 
-    implementation("org.apache.commons:commons-text:1.11.0")
+    implementation("org.apache.commons:commons-text:1.12.0")
     implementation("io.github.java-diff-utils:java-diff-utils:4.12")
     implementation("org.ow2.asm:asm:9.7")
     implementation("org.mongodb:mongodb-driver:3.12.14")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.23")
 
-    implementation("org.slf4j:slf4j-api:2.0.12")
-    implementation("ch.qos.logback:logback-classic:1.5.3")
+    implementation("org.slf4j:slf4j-api:2.0.13")
+    implementation("ch.qos.logback:logback-classic:1.5.6")
     implementation("io.github.microutils:kotlin-logging:3.0.5")
 
     api("com.squareup.moshi:moshi-kotlin:1.15.1")
@@ -28,8 +28,8 @@ dependencies {
     api("com.beyondgrader.resource-agent:virtualfsplugin:2023.9.0") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2024.4.0")
-    api("org.cs124:jenisol:2024.4.0")
+    api("org.cs124.jeed:core:2024.4.1")
+    api("org.cs124:jenisol:2024.4.1")
     api("org.cs124:libcs1:2024.4.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.17.0")
 

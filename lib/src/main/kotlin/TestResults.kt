@@ -296,7 +296,7 @@ data class TestResults(
     val canCache = !(timeout && !lineCountTimeout)
 }
 
-fun TestResult<*, *>.asTestResult(source: Source) = TestResults.TestingResult.TestResult(
+fun TestResult<*, *>.asTestResult(source: Source, questionType: Question.Type) = TestResults.TestingResult.TestResult(
     solutionExecutable.name,
     succeeded,
     type,
@@ -310,7 +310,7 @@ fun TestResult<*, *>.asTestResult(source: Source) = TestResults.TestingResult.Te
     solution.returned?.safePrint(),
     submission.returned?.safePrint(),
     if (!succeeded) {
-        explain()
+        explain(omitMethodName = questionType == Question.Type.SNIPPET)
     } else {
         null
     },
