@@ -1,6 +1,6 @@
 {
   "name": "@cs124/questioner-mongodb",
-  "version": "2024.4.0",
+  "version": "2024.5.0",
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
@@ -18,21 +18,21 @@
   },
   "types": "dist/index.d.ts",
   "peerDependencies": {
-    "@cs124/questioner-types": "file:~/code/questioner/js/types/"
+    "@cs124/questioner-types": "2024.5.0"
   },
   "devDependencies": {
     "@cs124/jeed-types": "2024.2.0",
-    "@typescript-eslint/eslint-plugin": "7.7.0",
-    "@typescript-eslint/parser": "7.7.0",
+    "@typescript-eslint/eslint-plugin": "7.8.0",
+    "@typescript-eslint/parser": "7.8.0",
     "depcheck": "1.4.7",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
-    "mongodb": "6.3.0",
-    "npm-check-updates": "16.14.18",
+    "mongodb": "6.6.1",
+    "npm-check-updates": "16.14.20",
     "prettier": "3.2.5",
     "prettier-package-json": "gchallen/prettier-package-json#2023.8.0",
     "prettier-plugin-organize-imports": "3.2.4",
-    "rimraf": "5.0.5",
+    "rimraf": "5.0.7",
     "runtypes": "6.7.0",
     "typescript": "5.4.5"
   }
