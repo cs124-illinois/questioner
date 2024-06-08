@@ -41,6 +41,7 @@ annotation class Correct(
     val maxClassSizeMultiplier: Double = Question.TestingControl.DEFAULT_MAX_CLASSSIZE_MULTIPLIER,
     val initialTestingDelay: Int = Question.TestingControl.DEFAULT_INITIAL_TESTING_DELAY,
     val canTestTest: Boolean = Question.TestingControl.DEFAULT_CAN_TESTTEST,
+    val fullDesignErrors: Boolean = Question.TestingControl.DEFAULT_FULL_DESIGN_ERRORS
 )
 
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FILE)

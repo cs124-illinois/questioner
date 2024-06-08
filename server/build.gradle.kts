@@ -14,10 +14,10 @@ dependencies {
 
     implementation(project(":lib"))
 
-    implementation("io.ktor:ktor-server-netty:2.3.10")
-    implementation("io.ktor:ktor-server-content-negotiation:2.3.10")
-    implementation("io.ktor:ktor-server-call-logging:2.3.10")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+    implementation("io.ktor:ktor-server-netty:2.3.11")
+    implementation("io.ktor:ktor-server-content-negotiation:2.3.11")
+    implementation("io.ktor:ktor-server-call-logging:2.3.11")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
     implementation("org.cs124:ktor-moshi:2024.3.0")
     implementation("org.mongodb:mongodb-driver:3.12.14")
     implementation("org.slf4j:slf4j-api:2.0.13")
@@ -69,7 +69,7 @@ tasks.register<Exec>("dockerPush") {
 }
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 tasks.withType<FormatTask> {

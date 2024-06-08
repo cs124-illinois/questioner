@@ -104,7 +104,7 @@ int addOne(int value) {
   }
   return value+2;
 }""".trim().also { incorrect ->
-            question.test(incorrect, Language.java).also { results ->
+            question.test(incorrect, Language.java, question.testingSettings!!.copy(runAll = true)).also { results ->
                 results.complete.partial!!.passedSteps.also {
                     it.compiled shouldBe true
                     it.design shouldBe true

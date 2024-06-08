@@ -69,11 +69,6 @@ abstract class GenerateQuestionTests : DefaultTask() {
                         if (questionsForFile.isNotEmpty()) {
                             """    concurrency = $concurrency
                         |    threads = $concurrency
-                        |    beforeSpec {
-                        |        runBlocking {
-                        |            warm(failLint = false, quiet = true, useDocker = false)
-                        |        }
-                        |    }
                         |    """
                         } else {
                             ""

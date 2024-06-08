@@ -80,10 +80,7 @@ data class AnalyzeClass(val klass: Class<*>) {
     @Suppress("MemberVisibilityCanBePrivate")
     val isKotlin = klass.getAnnotation(Metadata::class.java) != null
     val hasInnerClasses = klass.declaredClasses.isNotEmpty()
-    val isLambda = when (isKotlin) {
-        true -> name.contains("\\$\\d+\$".toRegex())
-        false -> name.contains("""${"$"}${"$"}Lambda${"$"}""")
-    }
+    val isLambda = klass.isSynthetic && !(klass.isLocalClass || klass.isAnonymousClass) && name.contains("""${"$"}${"$"}Lambda/""")
 
     @Suppress("ReplaceCallWithBinaryOperator")
     companion object {

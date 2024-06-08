@@ -25,7 +25,11 @@ open class QuestionerConfigExtension {
     var maxMutationCount: Int = 256
     var concurrency: Double = 0.5
     var retries: Int = 4
-    var ignorePackages = listOf("com.github.cs124_illinois.questioner.examples.", "com.examples.")
+    var ignorePackages = listOf(
+        "com.github.cs124_illinois.questioner.examples.",
+        "com.github.cs124_illinois.questioner.testing.",
+        "com.examples.",
+    )
     var publishIncludes: BiPredicate<QuestionerConfig.EndPoint, Question> = BiPredicate { _, _ -> true }
     fun configPublishIncludes(method: BiPredicate<QuestionerConfig.EndPoint, Question>) {
         publishIncludes = method

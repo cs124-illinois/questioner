@@ -1,28 +1,29 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.9.23" apply false
+    kotlin("jvm") version "2.0.0" apply false
     id("org.jmailen.kotlinter") version "4.3.0" apply false
     id("com.github.ben-manes.versions") version "0.51.0"
-    id("com.google.devtools.ksp").version("1.9.23-1.0.20") apply false
+    id("com.google.devtools.ksp").version("2.0.0-1.0.22") apply false
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 allprojects {
     group = "org.cs124.questioner"
-    version = "2024.4.1"
+    version = "2024.6.0"
 }
 subprojects {
     tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_17.toString()
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_21
         }
     }
     tasks.withType<Test> {
         useJUnitPlatform()
+        environment["JEED_USE_CACHE"] = "true"
         jvmArgs(
-            "-ea", "-Xmx1G", "-Xss256k",
-            "-Dfile.encoding=UTF-8",
-            "-XX:-OmitStackTraceInFastThrow",
+            "-ea", "--enable-preview", "-Dfile.encoding=UTF-8", "-Djava.security.manager=allow",
+            "-XX:+UseZGC", "-XX:ZCollectionInterval=8", "-XX:-OmitStackTraceInFastThrow",
             "--add-opens", "java.base/java.lang=ALL-UNNAMED",
             "--add-opens", "java.base/java.util=ALL-UNNAMED",
             "--add-exports", "jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",

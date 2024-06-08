@@ -49,7 +49,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
                 throw SolutionFailed(file, failed.checkExecutedSubmission!!)
             }
             val percentLineCountCompleted =
-                resourceMonitoringResults!!.submissionLines.toDouble() / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
+                (resourceMonitoringResults?.submissionLines?.toDouble() ?: 0.0) / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
 
             val exception = when {
                 complete.testing?.passed == false -> SolutionFailed(file, summary)
@@ -199,7 +199,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
                 validate(file.reason)
             } catch (e: Exception) {
                 val percentLineCountCompleted =
-                    resourceMonitoringResults!!.submissionLines.toDouble() / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
+                    (resourceMonitoringResults?.submissionLines?.toDouble() ?: 0.0) / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
                 val exception = when (succeeded) {
                     true -> WrongReasonPassed(file, e.message!!)
                     else -> IncorrectWrongReason(file, e.message!!, summary)
@@ -270,7 +270,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         ),
         solutionDeadCode = solutionDeadCode,
         suppressions = javaSolution.suppressions,
-        kotlinSuppressions = kotlinSolution?.suppressions
+        kotlinSuppressions = kotlinSolution?.suppressions,
         // No execution count limit
         // No allocation limit
         // No known recursive methods yet
@@ -437,9 +437,6 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         .mapNotNull { it.results.tests()?.size }
         .maxOrNull() ?: error("No incorrect results")
 
-    val incorrectMaxRuntime = useTestingIncorrect.mapNotNull { it.results.taskResults?.interval?.length?.toInt() }.max()
-    val incorrectAllocation =
-        useTestingIncorrect.map { it.results }.setResourceUsage(bothJava = true) { it.memoryAllocation }
 
     val bootstrapRandomStartCount = firstCorrectResults.maxOfOrNull { results ->
         val maxComplexity = results.tests()!!.maxOf { it.complexity!! }
@@ -509,7 +506,18 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     val calibrationLength = Instant.now().toEpochMilli() - calibrationStart.toEpochMilli()
 
     val solutionMaxRuntime = calibrationResults.maxOf { it.results.taskResults!!.interval.length.toInt() }
-    // val solutionMaxOutputLines = calibrationResults.maxOf { it.results.taskResults!!.outputLines.size }
+    val solutionMaxWallTimeByLanguage = Question.LanguagesResourceUsage(
+        calibrationResults.filter { it.results.language == Language.java }
+            .maxOf { it.results.taskResults!!.interval.length },
+        calibrationResults.filter { it.results.language == Language.kotlin }
+            .maxOfOrNull { it.results.taskResults!!.interval.length }
+    )
+    val solutionMaxCpuTimeByLanguage = Question.LanguagesResourceUsage(
+        calibrationResults.filter { it.results.language == Language.java }
+            .maxOf { it.results.taskResults!!.cpuTime },
+        calibrationResults.filter { it.results.language == Language.kotlin }
+            .maxOfOrNull { it.results.taskResults!!.cpuTime }
+    )
     val solutionMaxPerTestOutputLines = calibrationResults.maxOf { results ->
         results.results.tests()!!.maxOf { it.output!!.lines().size }
     }
@@ -543,7 +551,27 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         solutionDeadCode = solutionDeadCode,
         solutionClassSize = bootstrapClassSize,
         suppressions = javaSolution.suppressions,
-        kotlinSuppressions = kotlinSolution?.suppressions
+        kotlinSuppressions = kotlinSolution?.suppressions,
+        wallTime = solutionMaxWallTimeByLanguage,
+        cpuTime = solutionMaxCpuTimeByLanguage,
+    )
+
+    val incorrectMaxRuntime = useTestingIncorrect.mapNotNull { it.results.taskResults?.interval?.length?.toInt() }.max()
+    val incorrectAllocation =
+        useTestingIncorrect.map { it.results }.setResourceUsage(bothJava = true) { it.memoryAllocation }
+
+    val incorrectMaxWallTimeByLanguage = Question.LanguagesResourceUsage(
+        useTestingIncorrect.filter { it.results.language == Language.java }
+            .mapNotNull { it.results.taskResults?.interval?.length }.max(),
+        calibrationResults.filter { it.results.language == Language.kotlin }
+            .mapNotNull { it.results.taskResults?.interval?.length }.maxOrNull()
+    )
+
+    val incorrectMaxCpuTimeByLanguage = Question.LanguagesResourceUsage(
+        useTestingIncorrect.filter { it.results.language == Language.java }
+            .mapNotNull { it.results.taskResults?.cpuTime }.max(),
+        calibrationResults.filter { it.results.language == Language.kotlin }
+            .mapNotNull { it.results.taskResults?.cpuTime }.maxOrNull()
     )
 
     testTestingLimits = Question.TestTestingLimits(
@@ -557,6 +585,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
             (incorrectAllocation.java.toDouble() * control.allocationLimitMultiplier!!).toLong(),
             (incorrectAllocation.kotlin?.toDouble()?.times(control.allocationLimitMultiplier!!))?.toLong()
         ),
+        wallTime = incorrectMaxWallTimeByLanguage,
+        cpuTime = incorrectMaxCpuTimeByLanguage
     )
 
     val canTestTest = control.canTestTest != false &&
@@ -740,12 +770,12 @@ class SolutionTestingThrew(val solution: Question.FlatFile, val threw: Throwable
         |Solution testing threw an exception $threw
         |${threw.stackTraceToString()}
         |${printContents(solution.contents, solution.path)}${
-            if (output.isNotEmpty()) {
-                "\n---\n${output.trim()}\n---"
-            } else {
-                ""
-            }
+        if (output.isNotEmpty()) {
+            "\n---\n${output.trim()}\n---"
+        } else {
+            ""
         }
+    }
     """.trimMargin()
 }
 

@@ -346,7 +346,7 @@ internal data class ParsedKotlinFile(val path: String, val contents: String) {
         return "$start{{{ contents }}}$end"
     }
 
-    fun extractStarter(wrappedClass: String?): Question.IncorrectFile? {
+    fun extractStarter(wrappedClass: String?): Question.IncorrectFile? = runBlocking {
         val correctSolution = clean(CleanSpec(false, null)).trimStart()
         val parsed = correctSolution.parseKotlin()
         val methodDeclaration = if (topLevelFile) {
@@ -354,10 +354,12 @@ internal data class ParsedKotlinFile(val path: String, val contents: String) {
         } else {
             parsed.tree.topLevelObject(0)?.classDeclaration()?.classBody()?.classMemberDeclaration(0)
                 ?.functionDeclaration()
-        } ?: return null
+        } ?: return@runBlocking null
 
         val start = methodDeclaration.functionBody().start.startIndex
         val end = methodDeclaration.functionBody().stop.stopIndex
+        val isExpression = methodDeclaration.functionBody().expression() != null
+
         val returnType = methodDeclaration.type().let {
             if (it.isEmpty()) {
                 "Unit"
@@ -405,15 +407,29 @@ internal data class ParsedKotlinFile(val path: String, val contents: String) {
             check(it != null) { "Couldn't find method contents" }
             it - 1
         }
-        val postfix = (end - 1 downTo start).find { i -> !correctSolution[i].isWhitespace() }.let {
+        val postfix = (
+            end - if (isExpression) {
+                0
+            } else {
+                1
+            } downTo start
+            ).find { i -> !correctSolution[i].isWhitespace() }.let {
             check(it != null) { "Couldn't find method contents" }
             it + 1
         }
-        return (
-            correctSolution.substring(0..prefix) +
-                "return$starterReturn // You may need to remove this starter code" +
-                correctSolution.substring(postfix until correctSolution.length)
-            )
+        val prefixContent = correctSolution.substring(0..prefix)
+        val postfixContent = correctSolution.substring(postfix until correctSolution.length)
+        val starterContent = if (isExpression) {
+            "$starterReturn // You may need to remove this starter code"
+        } else {
+            "return$starterReturn // You may need to remove this starter code"
+        }
+
+        val fullContent = "$prefixContent$starterContent$postfixContent"
+        println("-->$prefixContent<--")
+        println("-->$starterContent<--")
+        println("-->$postfixContent<--")
+        return@runBlocking Source.fromKotlin("$prefixContent$starterContent$postfixContent").ktFormat().contents
             .kotlinDeTemplate(false, wrappedClass).let {
                 Question.IncorrectFile(
                     className,
@@ -502,6 +518,7 @@ fun KotlinParser.FileAnnotationsContext.getAnnotation(vararg toFind: Class<*>): 
         annotation.identifier()?.text != null && toFind.map { it.simpleName }.contains(annotation.identifier().text)
     }
 
+@Suppress("unused")
 fun KotlinParser.FileAnnotationsContext.getAnnotation(vararg toFind: String): KotlinParser.UnescapedAnnotationContext? =
     fileAnnotation()?.flatMap { it.unescapedAnnotation() }?.find { annotation ->
         annotation.identifier()?.text != null && toFind.contains(annotation.identifier().text)
@@ -512,6 +529,7 @@ fun KotlinParser.ClassDeclarationContext.getAnnotation(annotation: Class<*>): Ko
         it.annotation()?.LabelReference()?.text == "@${annotation.simpleName}"
     }?.annotation()
 
+@Suppress("unused")
 fun KotlinParser.ClassDeclarationContext.getAnnotation(vararg toFind: String): KotlinParser.AnnotationContext? =
     modifierList()?.annotations()?.find { toFind.contains(it.annotation()?.LabelReference()?.text) }?.annotation()
 

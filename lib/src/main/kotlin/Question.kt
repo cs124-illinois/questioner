@@ -152,7 +152,8 @@ data class Question(
         val maxLineCountMultiplier: Double?,
         val maxClassSizeMultiplier: Double?,
         val initialTestingDelay: Int?,
-        val canTestTest: Boolean?
+        val canTestTest: Boolean?,
+        val fullDesignErrors: Boolean?
     ) {
         companion object {
             const val DEFAULT_SOLUTION_THROWS = false
@@ -181,6 +182,7 @@ data class Question(
             const val DEFAULT_MAX_EXECUTION_COUNT: Long = DEFAULT_MAX_TIMEOUT.toLong() * 1024 * 1024
             const val DEFAULT_INITIAL_TESTING_DELAY: Int = 0
             const val DEFAULT_CAN_TESTTEST: Boolean = true
+            const val DEFAULT_FULL_DESIGN_ERRORS: Boolean = false
 
             val DEFAULTS = TestingControl(
                 DEFAULT_SOLUTION_THROWS,
@@ -206,7 +208,8 @@ data class Question(
                 DEFAULT_MAX_LINECOUNT_MULTIPLIER,
                 DEFAULT_MAX_CLASSSIZE_MULTIPLIER,
                 DEFAULT_INITIAL_TESTING_DELAY,
-                DEFAULT_CAN_TESTTEST
+                DEFAULT_CAN_TESTTEST,
+                DEFAULT_FULL_DESIGN_ERRORS
             )
         }
     }
@@ -239,7 +242,10 @@ data class Question(
         val minTestCount: Int = -1,
         val maxTestCount: Int = -1,
         val suppressions: Set<String>? = null,
-        val kotlinSuppressions: Set<String>? = null
+        val kotlinSuppressions: Set<String>? = null,
+        val wallTime: LanguagesResourceUsage? = null,
+        val cpuTime: LanguagesResourceUsage? = null,
+        val runAll: Boolean = false
     )
 
     @JsonClass(generateAdapter = true)
@@ -264,6 +270,8 @@ data class Question(
         val outputLimit: Int,
         val executionCountLimit: LanguagesResourceUsage,
         val allocationLimit: LanguagesResourceUsage,
+        val wallTime: LanguagesResourceUsage? = null,
+        val cpuTime: LanguagesResourceUsage? = null
     )
 
     @JsonClass(generateAdapter = true)
@@ -537,6 +545,7 @@ ${question.contents}
         const val UNLIMITED_OUTPUT_LINES = 102400
         const val MIN_PER_TEST_LINES = 1024
         const val DEFAULT_MAX_OUTPUT_SIZE = 8 * 1024 * 1024
+        const val TESTING_PRIORITY = Thread.NORM_PRIORITY + 2
 
         @Transient
         val SAFE_PERMISSIONS =

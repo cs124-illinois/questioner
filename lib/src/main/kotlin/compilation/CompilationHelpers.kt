@@ -21,4 +21,9 @@ fun List<CompilationMessage>.filterSuppressions(suppressions: Set<String>) = let
         suppressions.contains("divzero") -> messages.filter { !(it.message.contains("division by zero")) }
         else -> messages
     }
+}.let { messages ->
+    when {
+        suppressions.contains("this-escape") -> messages.filter { !(it.message.contains("'this' escape")) }
+        else -> messages
+    }
 }

@@ -177,6 +177,7 @@ suspend fun Question.test(
             testCount = settings.testCount,
             minTestCount = settings.minTestCount,
             maxTestCount = settings.maxTestCount,
+            runAll = settings.runAll
         )
         val systemInStream = BumpingInputStream()
 
@@ -193,7 +194,9 @@ suspend fun Question.test(
             maxOutputLines = settings.outputLimit,
             permissions = Question.SAFE_PERMISSIONS,
             returnTimeout = Question.DEFAULT_RETURN_TIMEOUT,
-            systemInStream = systemInStream
+            systemInStream = systemInStream,
+            maxThreadPriority = Question.TESTING_PRIORITY,
+            defaultThreadPriority = Question.TESTING_PRIORITY
         )
 
         val lineCountLimit = when (language) {
@@ -273,7 +276,13 @@ suspend fun Question.test(
                     "Class design error:\n  Could not find class ${published.klass}"
 
                 is SubmissionDesignError -> results.failed.checkExecutedSubmission =
-                    "Class design error:\n  ${threw.message}"
+                    "Class design error:\n  ${
+                        if (control.fullDesignErrors == true) {
+                            threw.message
+                        } else {
+                            threw.hint.ifEmpty { threw.message }
+                        }
+                    }"
 
                 is NoClassDefFoundError -> results.failed.checkExecutedSubmission =
                     "Class design error:\n  Attempted to use unavailable class ${threw.message}"

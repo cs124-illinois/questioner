@@ -219,6 +219,7 @@ internal data class ParsedJavaFile(val path: String, val contents: String) {
                 val maxClassSizeMultiplier = parameters["maxClassSizeMultiplier"]?.toDouble()
                 val initialTestingDelay = parameters["initialTestingDelay"]?.toInt()
                 val canTestTest = parameters["canTestTest"]?.toBoolean()
+                val fullDesignErrors = parameters["fullDesignErrors"]?.toBoolean()
 
                 Question.CorrectData(
                     path,
@@ -254,6 +255,7 @@ internal data class ParsedJavaFile(val path: String, val contents: String) {
                         maxClassSizeMultiplier,
                         initialTestingDelay,
                         canTestTest,
+                        fullDesignErrors,
                     ),
                 )
             }

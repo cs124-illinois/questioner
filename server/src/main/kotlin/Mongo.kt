@@ -10,6 +10,18 @@ import java.security.cert.X509Certificate
 import javax.net.ssl.SSLContext
 import javax.net.ssl.X509TrustManager
 
+private val sslContext = SSLContext.getInstance("SSL").apply {
+    init(
+        null,
+        arrayOf(object : X509TrustManager {
+            override fun getAcceptedIssuers(): Array<X509Certificate>? = null
+            override fun checkClientTrusted(certs: Array<X509Certificate?>?, authType: String?) {}
+            override fun checkServerTrusted(certs: Array<X509Certificate?>?, authType: String?) {}
+        }),
+        SecureRandom(),
+    )
+}
+
 internal val questionerCollection: MongoCollection<BsonDocument> = run {
     require(System.getenv("MONGODB") != null) { "MONGODB environment variable not set" }
     val keystore = System.getenv("KEYSTORE_FILE")
@@ -35,16 +47,4 @@ internal val stumperSolutionCollection: MongoCollection<BsonDocument> = run {
     val mongoUri = MongoClientURI(System.getenv("STUMPERDB")!!, MongoClientOptions.builder().sslContext(sslContext))
     val database = mongoUri.database ?: error("STUMPERDB must specify database to use")
     MongoClient(mongoUri).getDatabase(database).getCollection("solutions", BsonDocument::class.java)
-}
-
-private val sslContext = SSLContext.getInstance("SSL").apply {
-    init(
-        null,
-        arrayOf(object : X509TrustManager {
-            override fun getAcceptedIssuers(): Array<X509Certificate>? = null
-            override fun checkClientTrusted(certs: Array<X509Certificate?>?, authType: String?) {}
-            override fun checkServerTrusted(certs: Array<X509Certificate?>?, authType: String?) {}
-        }),
-        SecureRandom(),
-    )
 }

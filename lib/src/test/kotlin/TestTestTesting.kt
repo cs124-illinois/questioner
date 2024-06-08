@@ -189,7 +189,7 @@ public class TestQuestion {
         question.testTests(JAVA_EMPTY_SUITE_METHOD, Language.java).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
-                it.total shouldBe 8
+                it.total shouldBe question.testTestingIncorrect!!.size + 1
                 it.shortCircuited shouldBe false
                 it.succeeded shouldBe false
             }
@@ -197,7 +197,7 @@ public class TestQuestion {
         question.testTests(KOTLIN_EMPTY_SUITE, Language.kotlin).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
-                it.total shouldBe 8
+                it.total shouldBe question.testTestingIncorrect!!.size + 1
                 it.shortCircuited shouldBe false
                 it.succeeded shouldBe false
             }

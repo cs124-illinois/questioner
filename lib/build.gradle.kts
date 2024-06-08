@@ -11,29 +11,29 @@ plugins {
 dependencies {
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.1")
 
-    testJavaagent("com.beyondgrader.resource-agent:agent:2023.9.0")
+    testJavaagent("com.beyondgrader.resource-agent:agent:2024.3.0")
 
     implementation("org.apache.commons:commons-text:1.12.0")
     implementation("io.github.java-diff-utils:java-diff-utils:4.12")
     implementation("org.ow2.asm:asm:9.7")
     implementation("org.mongodb:mongodb-driver:3.12.14")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.23")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.0")
 
     implementation("org.slf4j:slf4j-api:2.0.13")
     implementation("ch.qos.logback:logback-classic:1.5.6")
     implementation("io.github.microutils:kotlin-logging:3.0.5")
 
     api("com.squareup.moshi:moshi-kotlin:1.15.1")
-    api("com.beyondgrader.resource-agent:agent:2023.9.0")
-    api("com.beyondgrader.resource-agent:virtualfsplugin:2023.9.0") {
+    api("com.beyondgrader.resource-agent:agent:2024.3.0")
+    api("com.beyondgrader.resource-agent:virtualfsplugin:2024.3.0") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2024.4.1")
-    api("org.cs124:jenisol:2024.4.1")
-    api("org.cs124:libcs1:2024.4.0")
+    api("org.cs124.jeed:core:2024.6.0")
+    api("org.cs124:jenisol:2024.6.0")
+    api("org.cs124:libcs1:2024.5.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.17.0")
 
-    api("io.kotest:kotest-runner-junit5:5.8.1")
+    api("io.kotest:kotest-runner-junit5:5.9.1")
     api("com.google.truth:truth:1.4.2")
 }
 tasks {
@@ -44,22 +44,6 @@ tasks {
     artifacts {
         add("archives", sourcesJar)
     }
-}
-tasks.withType(Test::class.java) {
-    environment["JEED_USE_CACHE"] = "true"
-
-    jvmArgs(
-        "-ea", "--enable-preview", "-Dfile.encoding=UTF-8",
-        "-Xms512m", "-Xmx1G", "-Xss256k", "-XX:+UseZGC", "-XX:ZCollectionInterval=8",
-        "--add-opens", "java.base/java.lang=ALL-UNNAMED",
-        "--add-opens", "java.base/java.util=ALL-UNNAMED",
-        "--add-exports", "jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
-        "--add-exports", "jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
-        "--add-exports", "jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
-        "--add-exports", "jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
-        "--add-exports", "jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
-        "--add-exports", "java.management/sun.management=ALL-UNNAMED"
-    )
 }
 kotlin {
     kotlinDaemonJvmArgs = listOf("-Dfile.encoding=UTF-8")
@@ -86,7 +70,7 @@ java {
     withJavadocJar()
     withSourcesJar()
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 publishing {

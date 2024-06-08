@@ -50,9 +50,9 @@ import edu.illinois.cs.cs125.jeed.core.warm as warmJeed
 
 internal val logger = KotlinLogging.logger {}
 
-internal val questionerMaxConcurrency = System.getenv("QUESTIONER_MAX_CONCURRENCY")?.toInt() ?: 1024
+internal val questionerMaxConcurrency = System.getenv("QUESTIONER_MAX_CONCURRENCY")?.toInt() ?: 8
 internal val questionCacheSize = System.getenv("QUESTIONER_QUESTION_CACHE_SIZE")?.toLong() ?: 16L
-private val limiter = Semaphore(System.getenv("QUESTIONER_MAX_CONCURRENCY")?.toInt() ?: 1024)
+private val limiter = Semaphore(questionerMaxConcurrency)
 private val warmQuestion = System.getenv("QUESTIONER_WARM_QUESTION")?.toString() ?: "hello-world"
 
 @Suppress("LongMethod")
