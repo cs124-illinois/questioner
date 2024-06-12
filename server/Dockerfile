@@ -10,6 +10,7 @@ WORKDIR /
 COPY *.jar questioner.jar
 CMD java -ea --enable-preview -Dfile.encoding=UTF-8 \
     -Xss256k -XX:+UseZGC -XX:-OmitStackTraceInFastThrow \
+    -XX:+UnlockExperimentalVMOptions -XX:-VMContinuations \
     --add-opens java.base/java.lang=ALL-UNNAMED \
     --add-opens java.base/java.util=ALL-UNNAMED \
     --add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
