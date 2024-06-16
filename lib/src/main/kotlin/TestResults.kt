@@ -279,8 +279,10 @@ data class TestResults(
             "Checking submission features failed: ${failed.features}"
         } else if (failed.lineCount != null) {
             "Submission executed too many lines: ${failed.lineCount}"
-        } else if (timeout) {
-            "Testing timed out"
+        } else if (timeout && !taskResults!!.cpuTimeout) {
+            "Testing wall clock timeout after ${taskResults!!.executionNanoTime}ns"
+        } else if (timeout && taskResults!!.cpuTimeout) {
+            "Testing CPU timeout after ${taskResults!!.cpuTime}ns"
         } else if (complete.testing?.passed == false) {
             "Testing failed: ${complete.testing!!.tests.find { !it.passed }!!.explanation}"
         } else if (complete.testing?.failedReceiverGeneration == true) {
@@ -299,6 +301,7 @@ data class TestResults(
 
     data class Timings(val executionTimeNanos: Long, val totalTestTimeNanos: Long) {
         val testingTimePercent = totalTestTimeNanos.toDouble() / executionTimeNanos.toDouble()
+
         init {
             check(0.0 <= testingTimePercent && testingTimePercent < 1.0) { "Bad value for testingTimePercent: $testingTimePercent" }
         }
