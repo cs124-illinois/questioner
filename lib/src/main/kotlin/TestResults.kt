@@ -280,9 +280,9 @@ data class TestResults(
         } else if (failed.lineCount != null) {
             "Submission executed too many lines: ${failed.lineCount}"
         } else if (timeout && !taskResults!!.cpuTimeout) {
-            "Testing wall clock timeout after ${taskResults!!.executionNanoTime}ns"
+            "Testing wall clock timeout after ${taskResults!!.executionNanoTime / 1000 / 1000}ms"
         } else if (timeout && taskResults!!.cpuTimeout) {
-            "Testing CPU timeout after ${taskResults!!.cpuTime}ns"
+            "Testing CPU timeout after ${taskResults!!.cpuTime / 1000 / 1000}ms"
         } else if (complete.testing?.passed == false) {
             "Testing failed: ${complete.testing!!.tests.find { !it.passed }!!.explanation}"
         } else if (complete.testing?.failedReceiverGeneration == true) {
