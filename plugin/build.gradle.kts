@@ -20,7 +20,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.0")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.0")
-    implementation("com.github.slugify:slugify:3.0.6")
+    implementation("com.github.slugify:slugify:3.0.7")
 
     testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
 }

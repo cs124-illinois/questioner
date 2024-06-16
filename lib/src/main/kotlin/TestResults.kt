@@ -32,7 +32,9 @@ data class TestResults(
     @Transient
     var resourceMonitoringResults: ResourceMonitoringResults? = null,
     @Transient
-    var foundRecursiveMethods: Set<ResourceMonitoringResults.MethodInfo>? = null
+    var foundRecursiveMethods: Set<ResourceMonitoringResults.MethodInfo>? = null,
+    @Transient
+    var timings: Timings? = null
 ) {
     var completed: Boolean = false
     var succeeded: Boolean = false
@@ -294,6 +296,13 @@ data class TestResults(
 
     @Transient
     val canCache = !(timeout && !lineCountTimeout)
+
+    data class Timings(val executionTimeNanos: Long, val totalTestTimeNanos: Long) {
+        val testingTimePercent = totalTestTimeNanos.toDouble() / executionTimeNanos.toDouble()
+        init {
+            check(0.0 <= testingTimePercent && testingTimePercent < 1.0) { "Bad value for testingTimePercent: $testingTimePercent" }
+        }
+    }
 }
 
 fun TestResult<*, *>.asTestResult(source: Source, questionType: Question.Type) = TestResults.TestingResult.TestResult(

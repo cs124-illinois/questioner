@@ -220,6 +220,7 @@ internal data class ParsedJavaFile(val path: String, val contents: String) {
                 val initialTestingDelay = parameters["initialTestingDelay"]?.toInt()
                 val canTestTest = parameters["canTestTest"]?.toBoolean()
                 val fullDesignErrors = parameters["fullDesignErrors"]?.toBoolean()
+                val cpuTimeoutMultiplier = parameters["cpuTimeoutMultiplier"]?.toDouble()
 
                 Question.CorrectData(
                     path,
@@ -256,6 +257,7 @@ internal data class ParsedJavaFile(val path: String, val contents: String) {
                         initialTestingDelay,
                         canTestTest,
                         fullDesignErrors,
+                        cpuTimeoutMultiplier,
                     ),
                 )
             }

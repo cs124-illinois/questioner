@@ -181,15 +181,28 @@ suspend fun Question.test(
         )
         val systemInStream = BumpingInputStream()
 
-        // Allow giving questions a bit of extra time on first run
-        val adjustedTimeout = if (testingCount == 0) {
-            settings.timeout + control.initialTestingDelay!!
+
+        val cpuTimeout = settings.cpuTime?.let {
+            (settings.cpuTime[language] * control.cpuTimeoutMultiplier!!).toLong() * 1000L
+        }?.also { it ->
+            check(it > 0) { "Invalid CPU timeout" }
+        } ?: 0
+
+        val wallTimeout = if (cpuTimeout > 0) {
+            (cpuTimeout / 1000L).toDouble() * control.timeoutMultiplier!!
         } else {
-            settings.timeout
+            error("Shouldn't reach here")
+            // Allow giving questions a bit of extra time on first run
+            if (testingCount == 0) {
+                settings.timeout + control.initialTestingDelay!!
+            } else {
+                settings.timeout
+            }
         }.toLong()
 
         val executionArguments = Sandbox.ExecutionArguments(
-            timeout = adjustedTimeout,
+            timeout = wallTimeout,
+            cpuTimeout = cpuTimeout,
             classLoaderConfiguration = classLoaderConfiguration,
             maxOutputLines = settings.outputLimit,
             permissions = Question.SAFE_PERMISSIONS,
@@ -199,14 +212,10 @@ suspend fun Question.test(
             defaultThreadPriority = Question.TESTING_PRIORITY
         )
 
-        val lineCountLimit = when (language) {
-            Language.java -> settings.executionCountLimit.java
-            Language.kotlin -> settings.executionCountLimit.kotlin!!
-        }.takeIf { !settings.disableLineCountLimit }
-        val allocationLimit = when (language) {
-            Language.java -> settings.allocationLimit?.java
-            Language.kotlin -> settings.allocationLimit?.kotlin
-        }?.takeIf { !settings.disableAllocationLimit }?.coerceAtLeast(MIN_ALLOCATION_LIMIT_BYTES)
+        val lineCountLimit = settings.executionCountLimit[language].takeIf { !settings.disableLineCountLimit }
+        val allocationLimit = settings.allocationLimit?.get(language)
+            .takeIf { !settings.disableAllocationLimit }
+            ?.coerceAtLeast(MIN_ALLOCATION_LIMIT_BYTES)
 
         val plugins = listOf(
             ConfiguredSandboxPlugin(Jacoco, Unit),
@@ -233,6 +242,7 @@ suspend fun Question.test(
                 throw e.cause ?: e
             }
         }
+
         val failedClassInitializers = StaticFailureDetection.pollStaticInitializationFailures()
         if (failedClassInitializers.isNotEmpty()) {
             val missingPermissions = taskResults.permissionRequests
@@ -251,9 +261,13 @@ suspend fun Question.test(
 
         val threw = taskResults.returned?.threw ?: taskResults.threw
         val timeout = taskResults.timeout
+        @Suppress("removal", "DEPRECATION")
         if (!timeout && threw is ThreadDeath) {
             throw CachePoisonedException("ThreadDeath")
         }
+
+        results.timings =
+            TestResults.Timings(taskResults.executionNanoTime, taskResults.returned?.sumOf { it.timeNanos } ?: 0)
 
         results.taskResults = taskResults
         results.timeout = timeout
@@ -271,12 +285,17 @@ suspend fun Question.test(
         // checkExecutedSubmission
         if (!timeout && threw != null) {
             results.failedSteps.add(TestResults.Step.checkExecutedSubmission)
+            val designPrefix = if (published.type == Question.Type.KLASS) {
+                "Class design error:"
+            } else {
+                "Design error:"
+            }
             when (threw) {
                 is ClassNotFoundException -> results.failed.checkExecutedSubmission =
-                    "Class design error:\n  Could not find class ${published.klass}"
+                    "$designPrefix\n  Could not find class ${published.klass}"
 
                 is SubmissionDesignError -> results.failed.checkExecutedSubmission =
-                    "Class design error:\n  ${
+                    "$designPrefix\n  ${
                         if (control.fullDesignErrors == true) {
                             threw.message
                         } else {
@@ -285,7 +304,7 @@ suspend fun Question.test(
                     }"
 
                 is NoClassDefFoundError -> results.failed.checkExecutedSubmission =
-                    "Class design error:\n  Attempted to use unavailable class ${threw.message}"
+                    "$designPrefix\n  Attempted to use unavailable class ${threw.message}"
 
                 is OutOfMemoryError -> results.failed.checkExecutedSubmission =
                     "Allocated too much memory: ${threw.message}, already used ${resourceUsage.allocatedMemory} bytes.\nIf you are printing for debug purposes, consider less verbose output."

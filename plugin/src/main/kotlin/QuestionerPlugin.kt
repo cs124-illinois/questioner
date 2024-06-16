@@ -24,7 +24,9 @@ data class QuestionerConfig(val endpoints: List<EndPoint> = listOf()) {
 open class QuestionerConfigExtension {
     var maxMutationCount: Int = 256
     var concurrency: Double = 0.5
-    var retries: Int = 4
+    var retries: Int = 0
+    var quiet: Boolean = false
+    var shuffleTests: Boolean = false
     var ignorePackages = listOf(
         "com.github.cs124_illinois.questioner.examples.",
         "com.github.cs124_illinois.questioner.testing.",
@@ -171,6 +173,8 @@ class QuestionerPlugin : Plugin<Project> {
             generateQuestionTests.concurrency =
                 (Runtime.getRuntime().availableProcessors().toDouble() * config.concurrency).toInt().coerceAtLeast(1)
             generateQuestionTests.retries = config.retries
+            generateQuestionTests.quiet = config.quiet
+            generateQuestionTests.shuffleTests = config.shuffleTests
 
             publishingTasks.forEach { task ->
                 task.publishIncludes = config.publishIncludes

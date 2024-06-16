@@ -25,6 +25,36 @@ int addOne(int value) {
             results.complete.testing!!.passed shouldBe false
         }
     }
+    "it should test a question with timeout" {
+        val (question) = Validator.validate("Add One").also { (question, report) ->
+            question.validated shouldBe true
+            report shouldNotBe null
+            report!!.requiredTestCount shouldBeGreaterThan 0
+        }
+        val incorrect = """
+int addOne(int value) {
+  for (int i = 0; i < 1024; i++) {
+    i--;
+  }
+  return value + 1;
+}""".trim()
+
+        question.test(
+            incorrect,
+            Language.java,
+            settings = question.testingSettings!!.copy(
+                timeout = Int.MAX_VALUE,
+                executionCountLimit = Question.LanguagesResourceUsage(
+                    Long.MAX_VALUE,
+                    Long.MAX_VALUE
+                )
+            )
+        ).also { results ->
+            results.timeout shouldBe true
+            results.taskResults?.cpuTimeout shouldBe true
+            results.succeeded shouldBe false
+        }
+    }
     "it should test a question with partial credit" {
         val (question) = Validator.validate("Add One").also { (question, report) ->
             question.validated shouldBe true

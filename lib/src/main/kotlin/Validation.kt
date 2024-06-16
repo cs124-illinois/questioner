@@ -24,7 +24,7 @@ private val limiter = Semaphore(1)
 private const val RETRY_THRESHOLD = 0.5
 
 @Suppress("LongMethod", "ComplexMethod")
-suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): ValidationReport {
+suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int, retry: Int = 0): ValidationReport {
 
     val seed = if (control.seed!! != -1) {
         control.seed!!
@@ -46,14 +46,15 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         }
         if (!succeeded) {
             if (failed.checkExecutedSubmission != null) {
-                throw SolutionFailed(file, failed.checkExecutedSubmission!!)
+                throw SolutionFailed(file, failed.checkExecutedSubmission!!, retry)
             }
             val percentLineCountCompleted =
-                (resourceMonitoringResults?.submissionLines?.toDouble() ?: 0.0) / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
+                (resourceMonitoringResults?.submissionLines?.toDouble()
+                    ?: 0.0) / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
 
             val exception = when {
-                complete.testing?.passed == false -> SolutionFailed(file, summary)
-                complete.testing?.failedReceiverGeneration == true -> SolutionReceiverGeneration(file)
+                complete.testing?.passed == false -> SolutionFailed(file, summary, retry)
+                complete.testing?.failedReceiverGeneration == true -> SolutionReceiverGeneration(file, retry)
                 else -> {
                     val message = when {
                         failedSteps.contains(TestResults.Step.compileSubmission) -> {
@@ -88,7 +89,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
 
                         else -> summary
                     }
-                    SolutionFailed(file, message)
+                    SolutionFailed(file, message, retry)
                 }
             }
             if (timeout && !lineCountTimeout && percentLineCountCompleted < RETRY_THRESHOLD) {
@@ -199,7 +200,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
                 validate(file.reason)
             } catch (e: Exception) {
                 val percentLineCountCompleted =
-                    (resourceMonitoringResults?.submissionLines?.toDouble() ?: 0.0) / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
+                    (resourceMonitoringResults?.submissionLines?.toDouble()
+                        ?: 0.0) / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
                 val exception = when (succeeded) {
                     true -> WrongReasonPassed(file, e.message!!)
                     else -> IncorrectWrongReason(file, e.message!!, summary)
@@ -254,10 +256,12 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         }.maxOfOrNull { it.expectedDeadCount ?: 0 }?.toLong()
     )
 
+    val maxCPUTimeout = (control.maxTimeout!!.toDouble() * 1000.0 / control.cpuTimeoutMultiplier!!.toDouble()).toLong()
+    val maxCPU = Question.LanguagesResourceUsage(maxCPUTimeout, maxCPUTimeout)
     val bootstrapSettings = Question.TestingSettings(
         seed = seed,
         testCount = maxTestCount,
-        timeout = control.maxTimeout!!, // No timeout
+        timeout = 0, // Timeout set by maxCPU
         outputLimit = Question.UNLIMITED_OUTPUT_LINES, // No line limit
         perTestOutputLimit = Question.UNLIMITED_OUTPUT_LINES, // No per test line limit
         javaWhitelist = null,
@@ -271,6 +275,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         solutionDeadCode = solutionDeadCode,
         suppressions = javaSolution.suppressions,
         kotlinSuppressions = kotlinSolution?.suppressions,
+        cpuTime = maxCPU
         // No execution count limit
         // No allocation limit
         // No known recursive methods yet
@@ -343,7 +348,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     val incorrectSettings = Question.TestingSettings(
         seed = seed,
         testCount = maxTestCount,
-        timeout = control.maxTimeout!!,
+        timeout = 0, // Timeout set by maxCPU,
         outputLimit = Question.UNLIMITED_OUTPUT_LINES,
         perTestOutputLimit = Question.UNLIMITED_OUTPUT_LINES,
         javaWhitelist = javaClassWhitelist,
@@ -360,7 +365,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         solutionDeadCode = solutionDeadCode,
         solutionClassSize = bootstrapClassSize,
         suppressions = javaSolution.suppressions,
-        kotlinSuppressions = kotlinSolution?.suppressions
+        kotlinSuppressions = kotlinSolution?.suppressions,
+        cpuTime = maxCPU
     )
     val incorrectResults = allIncorrect.map { wrong ->
         val specificIncorrectSettings = if (wrong.reason == Question.IncorrectFile.Reason.MEMORYLIMIT) {
@@ -437,7 +443,6 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         .mapNotNull { it.results.tests()?.size }
         .maxOrNull() ?: error("No incorrect results")
 
-
     val bootstrapRandomStartCount = firstCorrectResults.maxOfOrNull { results ->
         val maxComplexity = results.tests()!!.maxOf { it.complexity!! }
         results.tests()!!.indexOfFirst { it.complexity!! == maxComplexity } + 1
@@ -453,7 +458,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     val calibrationSettings = Question.TestingSettings(
         seed = seed,
         testCount = testCount,
-        timeout = control.maxTimeout!!,
+        timeout = 0, // Timeout set by maxCPU
         outputLimit = Question.UNLIMITED_OUTPUT_LINES,
         perTestOutputLimit = Question.UNLIMITED_OUTPUT_LINES,
         javaWhitelist = javaClassWhitelist,
@@ -467,7 +472,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
         solutionDeadCode = solutionDeadCode,
         solutionClassSize = bootstrapClassSize,
         suppressions = javaSolution.suppressions,
-        kotlinSuppressions = kotlinSolution?.suppressions
+        kotlinSuppressions = kotlinSolution?.suppressions,
+        cpuTime = maxCPU
     )
     val calibrationResults = (setOf(javaSolution) + alternativeSolutions).map { right ->
         val results = limiter.withPermit {
@@ -514,10 +520,13 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     )
     val solutionMaxCpuTimeByLanguage = Question.LanguagesResourceUsage(
         calibrationResults.filter { it.results.language == Language.java }
-            .maxOf { it.results.taskResults!!.cpuTime },
+            .maxOf { (it.results.taskResults!!.cpuTime.toDouble() / 1000.0).toLong() },
         calibrationResults.filter { it.results.language == Language.kotlin }
-            .maxOfOrNull { it.results.taskResults!!.cpuTime }
-    )
+            .maxOfOrNull { (it.results.taskResults!!.cpuTime.toDouble() / 1000.0).toLong() }
+    ).also { maxCpuTime ->
+        check(maxCpuTime.java > 0) { "Invalid Java max solution CPU time" }
+        check(maxCpuTime.kotlin == null || maxCpuTime.kotlin > 0) { "Invalid Kotlin max solution CPU time" }
+    }
     val solutionMaxPerTestOutputLines = calibrationResults.maxOf { results ->
         results.results.tests()!!.maxOf { it.output!!.lines().size }
     }
@@ -532,7 +541,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int): Validati
     testingSettings = Question.TestingSettings(
         seed = seed,
         testCount = testCount,
-        timeout = (solutionMaxRuntime * control.timeoutMultiplier!!).toInt().coerceAtLeast(control.minTimeout!!),
+        timeout = (solutionMaxRuntime * control.timeoutMultiplier!!).toInt().coerceAtLeast(control.minTimeout!!).coerceAtMost(control.maxTimeout!!),
         outputLimit = 0, // solutionMaxOutputLines.coerceAtLeast(testCount * control.outputMultiplier!!),
         perTestOutputLimit = (solutionMaxPerTestOutputLines * control.outputMultiplier!!).toInt()
             .coerceAtLeast(Question.MIN_PER_TEST_LINES),
@@ -714,7 +723,7 @@ data class ValidationReport(
     val summary = Summary(incorrect.size, requiredTestCount, requiredTime, hasKotlin)
 }
 
-sealed class ValidationFailed(cause: Exception? = null) : Exception(cause) {
+sealed class ValidationFailed(cause: Exception? = null, val retries: Int = 0) : Exception(cause) {
     fun printContents(contents: String, path: String?) = """
 ${path?.let { "file://$path\n" } ?: ""}---
 $contents
@@ -723,22 +732,20 @@ $contents
 
 class RetryValidation(cause: Exception) : ValidationFailed(cause)
 
-class SolutionFailed(val solution: Question.FlatFile, val explanation: String) : ValidationFailed() {
+class SolutionFailed(val solution: Question.FlatFile, val explanation: String, retries: Int) : ValidationFailed(retries = retries) {
     override val message = """
-        |Solution failed the test suites:
+        |Solution failed the test suites after $retries retries: $explanation
         |${printContents(solution.contents, solution.path)}
-        |${explanation}
-    """.trimMargin()
+        """.trimMargin()
 }
 
-class SolutionReceiverGeneration(val solution: Question.FlatFile) : ValidationFailed() {
+class SolutionReceiverGeneration(val solution: Question.FlatFile, retries: Int) : ValidationFailed(retries = retries) {
     override val message = """
-        |Solution failed the test suites:
-        |${printContents(solution.contents, solution.path)}
-        |Couldn't generate enough receivers during testing.
+        |Solution failed the test suites after $retries retries: Couldn't generate enough receivers during testing.
         |Examine any @FilterParameters methods you might be using, or exceptions thrown in your constructor.
         |Consider adding parameter generation methods for your constructor.
-    """.trimMargin()
+        |${printContents(solution.contents, solution.path)}
+        """.trimMargin()
 }
 
 class SolutionFailedLinting(val solution: Question.FlatFile, val errors: String) : ValidationFailed() {
@@ -751,32 +758,32 @@ class SolutionFailedLinting(val solution: Question.FlatFile, val errors: String)
         }
     }
         |${printContents(solution.contents, solution.path)}
-    """.trimMargin()
+        """.trimMargin()
 }
 
 class SolutionThrew(val solution: Question.FlatFile, val threw: Throwable, val parameters: ParameterGroup) :
     ValidationFailed() {
     override val message = """
         |Solution was not expected to throw an unusual exception, but threw $threw on parameters $parameters
-        |${printContents(solution.contents, solution.path)}
         |If it should throw, allow it using @Correct(solutionThrows = true)
         |Otherwise filter the inputs using @FixedParameters, @RandomParameters, or @FilterParameters
-    """.trimMargin()
+        |${printContents(solution.contents, solution.path)}
+        """.trimMargin()
 }
 
 class SolutionTestingThrew(val solution: Question.FlatFile, val threw: Throwable, val output: String = "") :
     ValidationFailed() {
     override val message = """
         |Solution testing threw an exception $threw
-        |${threw.stackTraceToString()}
-        |${printContents(solution.contents, solution.path)}${
+        |${threw.stackTraceToString()}${
         if (output.isNotEmpty()) {
             "\n---\n${output.trim()}\n---"
         } else {
             ""
         }
     }
-    """.trimMargin()
+        |${printContents(solution.contents, solution.path)}${'$'}{
+        """.trimMargin()
 }
 
 class SolutionLacksEntropy(
@@ -797,8 +804,8 @@ class SolutionLacksEntropy(
             ""
         }
     }
-        |${printContents(solution.contents, solution.path)}
         |You may need to add or adjust the @RandomParameters method or @FixedParameters field
+        |${printContents(solution.contents, solution.path)}
         """.trimMargin()
 }
 
@@ -840,8 +847,8 @@ class TooMuchOutput(
 ) : ValidationFailed() {
     override val message = """
         |Submission generated too much output($size > $maxSize):
-        |${printContents(contents, path)}
         |Maybe reduce the number of tests using @Correct(minTestCount = NUM)
+        |${printContents(contents, path)}
         """.trimMargin()
 }
 
@@ -859,7 +866,8 @@ class IncorrectFailedLinting(
                     "checkstyle\n$errors"
                 }
             }
-        |${printContents(contents, incorrect.path ?: correct.path)}""".trimMargin()
+        |${printContents(contents, incorrect.path ?: correct.path)}
+        """.trimMargin()
         }
 }
 
@@ -871,7 +879,6 @@ class IncorrectPassed(
             val contents = incorrect.mutation?.marked()?.contents ?: incorrect.contents
             return """
         |Incorrect code passed the test suites :
-        |${printContents(contents, incorrect.path ?: correct.path)}
         |If the code is incorrect, add an input to @FixedParameters to handle this case
         |${
                 if (incorrect.mutation != null) {
@@ -880,7 +887,9 @@ class IncorrectPassed(
                 } else {
                     ""
                 }
-            }""".trimMargin()
+            }
+        |${printContents(contents, incorrect.path ?: correct.path)}
+        """.trimMargin()
         }
 }
 
@@ -894,7 +903,6 @@ class IncorrectTooManyTests(
             return """
         |Incorrect code eventually failed but required too many tests($testsRequired > $testsLimit)
         |${failingInput?.let { "We found failing inputs $failingInput" } ?: "We were unable to find a failing input"}
-        |${printContents(contents, incorrect.path ?: correct.path)}
         |If the code is incorrect, add an input to @FixedParameters to handle this case
         |${
                 if (incorrect.mutation != null) {
@@ -903,7 +911,9 @@ class IncorrectTooManyTests(
                 } else {
                     ""
                 }
-            } You may also need to increase the test count using @Correct(maxTestCount = NUM) """.trimMargin()
+            } You may also need to increase the test count using @Correct(maxTestCount = NUM)
+        |${printContents(contents, incorrect.path ?: correct.path)}
+        """.trimMargin()
         }
 }
 
@@ -916,8 +926,8 @@ class IncorrectWrongReason(val incorrect: Question.IncorrectFile, val expected: 
         |Incorrect code failed but not for the reason we expected :
         |Expected: $expected
         |But Found : $explanation
-        |${printContents(incorrect.contents, incorrect.path)}
         |Maybe check the argument to @Incorrect(reason = "reason")
+        |${printContents(incorrect.contents, incorrect.path)}
         """.trimMargin()
         }
 }
@@ -930,8 +940,8 @@ class WrongReasonPassed(val incorrect: Question.IncorrectFile, val expected: Str
             return """
         |Code expected to fail passed the test suite:
         |Expected: $expected
-        |${printContents(incorrect.contents, incorrect.path)}
         |Maybe check the argument to @Incorrect(reason = "reason")
+        |${printContents(incorrect.contents, incorrect.path)}
         """.trimMargin()
         }
 }

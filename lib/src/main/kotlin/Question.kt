@@ -153,7 +153,8 @@ data class Question(
         val maxClassSizeMultiplier: Double?,
         val initialTestingDelay: Int?,
         val canTestTest: Boolean?,
-        val fullDesignErrors: Boolean?
+        val fullDesignErrors: Boolean?,
+        val cpuTimeoutMultiplier: Double?
     ) {
         companion object {
             const val DEFAULT_SOLUTION_THROWS = false
@@ -161,7 +162,7 @@ data class Question(
             const val DEFAULT_MAX_TEST_COUNT = 1024
             const val DEFAULT_MIN_TIMEOUT = 128
             const val DEFAULT_MAX_TIMEOUT = 2048
-            const val DEFAULT_TIMEOUT_MULTIPLIER = 32.0
+            const val DEFAULT_TIMEOUT_MULTIPLIER = 8.0
             const val DEFAULT_MIN_MUTATION_COUNT = 0
             const val DEFAULT_OUTPUT_MULTIPLIER = 8.0
             const val DEFAULT_MAX_EXTRA_COMPLEXITY = 2
@@ -183,6 +184,7 @@ data class Question(
             const val DEFAULT_INITIAL_TESTING_DELAY: Int = 0
             const val DEFAULT_CAN_TESTTEST: Boolean = true
             const val DEFAULT_FULL_DESIGN_ERRORS: Boolean = false
+            const val DEFAULT_CPU_TIMEOUT_MULTIPLIER: Double = 8.0
 
             val DEFAULTS = TestingControl(
                 DEFAULT_SOLUTION_THROWS,
@@ -209,7 +211,8 @@ data class Question(
                 DEFAULT_MAX_CLASSSIZE_MULTIPLIER,
                 DEFAULT_INITIAL_TESTING_DELAY,
                 DEFAULT_CAN_TESTTEST,
-                DEFAULT_FULL_DESIGN_ERRORS
+                DEFAULT_FULL_DESIGN_ERRORS,
+                DEFAULT_CPU_TIMEOUT_MULTIPLIER
             )
         }
     }
@@ -292,7 +295,12 @@ data class Question(
     )
 
     @JsonClass(generateAdapter = true)
-    data class LanguagesResourceUsage(val java: Long, val kotlin: Long? = null)
+    data class LanguagesResourceUsage(val java: Long, val kotlin: Long? = null) {
+        operator fun get(language: Language): Long = when (language) {
+            Language.java -> java
+            Language.kotlin -> kotlin!!
+        }
+    }
 
     @JsonClass(generateAdapter = true)
     data class LanguagesSolutionClassSize(
@@ -401,7 +409,10 @@ data class Question(
                 Source(commonMap)
                     .compile(CompilationArguments(isolatedClassLoader = true, parameters = true))
                     .let { compiledSource ->
-                        CompiledCommon(compiledSource.classLoader.fixProtectedAndPackagePrivate(), compiledSource.fileManager)
+                        CompiledCommon(
+                            compiledSource.classLoader.fixProtectedAndPackagePrivate(),
+                            compiledSource.fileManager
+                        )
                     }
             } else {
                 null

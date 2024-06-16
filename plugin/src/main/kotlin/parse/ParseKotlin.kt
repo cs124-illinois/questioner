@@ -425,10 +425,6 @@ internal data class ParsedKotlinFile(val path: String, val contents: String) {
             "return$starterReturn // You may need to remove this starter code"
         }
 
-        val fullContent = "$prefixContent$starterContent$postfixContent"
-        println("-->$prefixContent<--")
-        println("-->$starterContent<--")
-        println("-->$postfixContent<--")
         return@runBlocking Source.fromKotlin("$prefixContent$starterContent$postfixContent").ktFormat().contents
             .kotlinDeTemplate(false, wrappedClass).let {
                 Question.IncorrectFile(

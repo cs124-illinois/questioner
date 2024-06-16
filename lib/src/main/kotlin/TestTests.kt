@@ -178,6 +178,7 @@ suspend fun Question.testTests(
         val timeout = taskResults.timeout
         val threw = taskResults.threw
 
+        @Suppress("DEPRECATION", "removal")
         if (!taskResults.timeout && threw is ThreadDeath) {
             throw CachePoisonedException("ThreadDeath")
         }

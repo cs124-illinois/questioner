@@ -8,8 +8,8 @@ ENTRYPOINT ["/tini", "--"]
 
 WORKDIR /
 COPY *.jar questioner.jar
-CMD java -ea --enable-preview -Dfile.encoding=UTF-8 \
-    -Xss256k -XX:+UseZGC -XX:-OmitStackTraceInFastThrow \
+CMD java -ea --enable-preview -Dfile.encoding=UTF-8 -Djava.security.manager=allow \
+    -Xss256k -XX:+UseZGC -XX:ZCollectionInterval=8 -XX:-OmitStackTraceInFastThrow \
     -XX:+UnlockExperimentalVMOptions -XX:-VMContinuations \
     --add-opens java.base/java.lang=ALL-UNNAMED \
     --add-opens java.base/java.util=ALL-UNNAMED \

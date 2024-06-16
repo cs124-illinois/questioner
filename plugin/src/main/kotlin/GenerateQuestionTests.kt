@@ -27,6 +27,12 @@ abstract class GenerateQuestionTests : DefaultTask() {
     @get:Input
     abstract var retries: Int
 
+    @get:Input
+    abstract var quiet: Boolean
+
+    @get:Input
+    abstract var shuffleTests: Boolean
+
     @InputFile
     val inputFile: File = project.layout.buildDirectory.dir("questioner/questions.json").get().asFile
 
@@ -37,7 +43,13 @@ abstract class GenerateQuestionTests : DefaultTask() {
 
     @TaskAction
     fun generate() = runBlocking {
-        val questions = inputFile.loadQuestionList().sortedBy { it.published.name }
+        val questions = inputFile.loadQuestionList().sortedBy { it.published.name }.let { questionList ->
+            if (shuffleTests) {
+                questionList.shuffled()
+            } else {
+                questionList
+            }
+        }
 
         outputs
             .filter { file ->
@@ -51,7 +63,7 @@ abstract class GenerateQuestionTests : DefaultTask() {
                 }
                 val klass = file.name.removeSuffix(".kt")
                 val contents = if (questionsForFile.isNotEmpty()) {
-                    questionsForFile.joinToString("\n") { question -> question.generateSpec(GENERATION_SEED, maxMutationCount, retries) }
+                    questionsForFile.joinToString("\n") { question -> question.generateSpec(GENERATION_SEED, maxMutationCount, retries, quiet) }
                 } else {
                     when (file.name) {
                         "TestAllQuestions.kt" -> "no questions found"
@@ -81,14 +93,14 @@ abstract class GenerateQuestionTests : DefaultTask() {
     }
 }
 
-fun Question.generateSpec(seed: Int, maxMutationCount: Int, retries: Int): String {
+fun Question.generateSpec(seed: Int, maxMutationCount: Int, retries: Int, quiet: Boolean): String {
     val correctPath = correctPath
     check(correctPath != null)
     val jsonPath = Path.of(correctPath).parent.resolve(".question.json")
     check(jsonPath.exists())
     return """
         |${"\"\"\""}${published.name} (${published.packageName}) should validate${"\"\"\""} {
-        |    ${"\"\"\""}$jsonPath${"\"\"\""}.validate(seed = $seed, maxMutationCount = $maxMutationCount, retries = $retries)
+        |    ${"\"\"\""}$jsonPath${"\"\"\""}.validate(seed = $seed, maxMutationCount = $maxMutationCount, retries = $retries, quiet = $quiet)
         |}
     """.trimMargin()
 }
