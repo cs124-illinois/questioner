@@ -300,6 +300,9 @@ data class Question(
             Language.java -> java
             Language.kotlin -> kotlin!!
         }
+        companion object {
+            fun both(both: Long) = LanguagesResourceUsage(both, both)
+        }
     }
 
     @JsonClass(generateAdapter = true)

@@ -247,31 +247,30 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int, retry: In
     val minTestCount = control.minTestCount!!.coerceAtMost(solution.maxCount)
     val maxTestCount = control.maxTestCount!!.coerceAtMost(solution.maxCount)
 
+    val allSolutions = setOf(javaSolution) + alternativeSolutions
+    val allJavaSolutions = allSolutions.filter { solution -> solution.language === Language.java }
+    val allKotlinSolutions = allSolutions.filter { solution -> solution.language === Language.kotlin }
+
     val solutionDeadCode = Question.LanguagesResourceUsage(
-        (setOf(javaSolution) + alternativeSolutions).filter {
-            it.language === Language.java
-        }.maxOf { it.expectedDeadCount ?: 0 }.toLong(),
-        (setOf(javaSolution) + alternativeSolutions).filter {
-            it.language === Language.kotlin
-        }.maxOfOrNull { it.expectedDeadCount ?: 0 }?.toLong()
+        allJavaSolutions.maxOf { solution -> solution.expectedDeadCount ?: 0 }.toLong(),
+        allKotlinSolutions.maxOfOrNull { solution -> solution.expectedDeadCount ?: 0 }?.toLong()
     )
 
-    val maxCPUTimeout = (control.maxTimeout!!.toDouble() * 1000.0 / control.cpuTimeoutMultiplier!!.toDouble()).toLong()
-    val maxCPU = Question.LanguagesResourceUsage(maxCPUTimeout, maxCPUTimeout)
+    val maxCPU = Question.LanguagesResourceUsage.both(
+        (control.maxTimeout!!.toDouble() * 1000.0 / control.cpuTimeoutMultiplier!!.toDouble()).toLong()
+    )
+
     val bootstrapSettings = Question.TestingSettings(
         seed = seed,
         testCount = maxTestCount,
-        timeout = 0, // Timeout set by maxCPU
+        timeout = 0, // Timeout set by cpuTime
         outputLimit = Question.UNLIMITED_OUTPUT_LINES, // No line limit
         perTestOutputLimit = Question.UNLIMITED_OUTPUT_LINES, // No per test line limit
         javaWhitelist = null,
         kotlinWhitelist = null,
         shrink = false,
         checkBlacklist = false,
-        executionCountLimit = Question.LanguagesResourceUsage(
-            Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT,
-            Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
-        ),
+        executionCountLimit = Question.LanguagesResourceUsage.both(Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT),
         solutionDeadCode = solutionDeadCode,
         suppressions = javaSolution.suppressions,
         kotlinSuppressions = kotlinSolution?.suppressions,
@@ -281,24 +280,12 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int, retry: In
         // No known recursive methods yet
     )
 
-    val firstCorrectResults = (setOf(javaSolution) + alternativeSolutions).map { right ->
-        test(right.contents, right.language, bootstrapSettings, isSolution = true).also { testResults ->
-            testResults.checkCorrect(right)
-        }
+    val firstCorrectResults = allSolutions.map { solution ->
+        test(solution.contents, solution.language, bootstrapSettings, isSolution = true)
+            .also { testResults ->
+                testResults.checkCorrect(solution)
+            }
     }
-
-    fun List<TestResults>.getRecursiveMethods(language: Language) =
-        filter { testResults -> testResults.language == language }
-            .let {
-                if (it.isEmpty()) {
-                    null
-                } else {
-                    it.map { testResults -> testResults.foundRecursiveMethods!! }
-                        .reduce { first, second ->
-                            first.intersect(second)
-                        }
-                }
-            }?.toSet()
 
     val solutionJavaRecursiveMethods = firstCorrectResults.getRecursiveMethods(Language.java)
     check(solutionJavaRecursiveMethods != null)
@@ -312,32 +299,32 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int, retry: In
             it.solution.covered / it.solution.total
         }!!.solution
 
-    val bootstrapSolutionExecutionCount = firstCorrectResults.setResourceUsage {
-        it.executionCount
+    val bootstrapSolutionExecutionCount = firstCorrectResults.setResourceUsage { solution ->
+        solution.executionCount
     }
 
-    val bootstrapSolutionAllocation = firstCorrectResults.setResourceUsage {
-        it.memoryAllocation
+    val bootstrapSolutionAllocation = firstCorrectResults.setResourceUsage { solution ->
+        solution.memoryAllocation
     }
 
-    val bootstrapClassSize = firstCorrectResults.setResourceUsage {
-        it.classSize
+    val bootstrapClassSize = firstCorrectResults.setResourceUsage { solution ->
+        solution.classSize
     }
 
     val bootstrapLength = Instant.now().toEpochMilli() - bootStrapStart.toEpochMilli()
 
     val mutationStart = Instant.now()
-    val mutations = mutations(seed, control.maxMutationCount ?: maxMutationCount).also {
-        if (it.size < control.minMutationCount!!) {
-            throw TooFewMutations(javaSolution, it.size, control.minMutationCount!!)
+    val mutations = mutations(seed, control.maxMutationCount ?: maxMutationCount).also { mutations ->
+        if (mutations.size < control.minMutationCount!!) {
+            throw TooFewMutations(javaSolution, mutations.size, control.minMutationCount!!)
         }
     }
     val allIncorrect = (incorrectExamples + mutations).also { allIncorrect ->
-        check(allIncorrect.all { it.contents != javaSolution.contents }) {
-            "Incorrect solution identical to correct solution"
-        }
         if (allIncorrect.isEmpty()) {
             throw NoIncorrect(javaSolution)
+        }
+        check(allIncorrect.all { incorrect -> incorrect.contents != javaSolution.contents }) {
+            "Incorrect solution identical to correct solution"
         }
     }
     val mutationLength = Instant.now().toEpochMilli() - mutationStart.toEpochMilli()
@@ -348,7 +335,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int, retry: In
     val incorrectSettings = Question.TestingSettings(
         seed = seed,
         testCount = maxTestCount,
-        timeout = 0, // Timeout set by maxCPU,
+        timeout = 0, // Timeout set by cpuTime
         outputLimit = Question.UNLIMITED_OUTPUT_LINES,
         perTestOutputLimit = Question.UNLIMITED_OUTPUT_LINES,
         javaWhitelist = javaClassWhitelist,
@@ -356,9 +343,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int, retry: In
         shrink = false,
         solutionCoverage = bootstrapSolutionCoverage,
         solutionExecutionCount = bootstrapSolutionExecutionCount,
-        executionCountLimit = Question.LanguagesResourceUsage(
+        executionCountLimit = Question.LanguagesResourceUsage.both(
             (control.maxTestCount!! * control.maxExecutionCountMultiplier!!).toLong() * 1024,
-            (control.maxTestCount!! * control.maxExecutionCountMultiplier!!).toLong() * 1024
         ),
         solutionAllocation = bootstrapSolutionAllocation,
         solutionRecursiveMethods = solutionRecursiveMethods,
@@ -374,19 +360,19 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int, retry: In
             incorrectSettings.copy(testCount = bootstrapSettings.testCount)
         } else {
             incorrectSettings
-        }.let {
+        }.let { settings ->
             when (wrong.mutation != null) {
-                true -> it
-                false -> it.copy(suppressions = wrong.suppressions)
+                true -> settings
+                false -> settings.copy(suppressions = wrong.suppressions)
             }
         }
         test(
             wrong.contents,
             wrong.language,
             specificIncorrectSettings
-        ).let {
-            it.checkIncorrect(wrong, wrong.mutation != null)
-            IncorrectResults(wrong, it)
+        ).let { testResults ->
+            testResults.checkIncorrect(wrong, wrong.mutation != null)
+            IncorrectResults(wrong, testResults)
         }
     }
     val incorrectLength = Instant.now().toEpochMilli() - incorrectStart.toEpochMilli()
@@ -458,7 +444,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int, retry: In
     val calibrationSettings = Question.TestingSettings(
         seed = seed,
         testCount = testCount,
-        timeout = 0, // Timeout set by maxCPU
+        timeout = 0, // Timeout set by cpuTime
         outputLimit = Question.UNLIMITED_OUTPUT_LINES,
         perTestOutputLimit = Question.UNLIMITED_OUTPUT_LINES,
         javaWhitelist = javaClassWhitelist,
@@ -541,7 +527,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int, retry: In
     testingSettings = Question.TestingSettings(
         seed = seed,
         testCount = testCount,
-        timeout = (solutionMaxRuntime * control.timeoutMultiplier!!).toInt().coerceAtLeast(control.minTimeout!!).coerceAtMost(control.maxTimeout!!),
+        timeout = (solutionMaxRuntime * control.timeoutMultiplier!!).toInt().coerceAtLeast(control.minTimeout!!)
+            .coerceAtMost(control.maxTimeout!!),
         outputLimit = 0, // solutionMaxOutputLines.coerceAtLeast(testCount * control.outputMultiplier!!),
         perTestOutputLimit = (solutionMaxPerTestOutputLines * control.outputMultiplier!!).toInt()
             .coerceAtLeast(Question.MIN_PER_TEST_LINES),
@@ -732,7 +719,8 @@ $contents
 
 class RetryValidation(cause: Exception) : ValidationFailed(cause)
 
-class SolutionFailed(val solution: Question.FlatFile, val explanation: String, retries: Int) : ValidationFailed(retries = retries) {
+class SolutionFailed(val solution: Question.FlatFile, val explanation: String, retries: Int) :
+    ValidationFailed(retries = retries) {
     override val message = """
         |Solution failed the test suites after $retries retries: $explanation
         |${printContents(solution.contents, solution.path)}
@@ -1029,3 +1017,17 @@ fun TestResults.printSolutionTestingSequence(): List<String> {
         fullString
     }
 }
+
+private fun List<TestResults>.getRecursiveMethods(language: Language) =
+    filter { testResults -> testResults.language == language }
+        .let {
+            if (it.isEmpty()) {
+                null
+            } else {
+                it.map { testResults -> testResults.foundRecursiveMethods!! }
+                    .reduce { first, second ->
+                        first.intersect(second)
+                    }
+            }
+        }?.toSet()
+
