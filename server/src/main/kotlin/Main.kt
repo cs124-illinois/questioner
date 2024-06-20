@@ -31,8 +31,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.sync.Semaphore
-import kotlinx.coroutines.sync.withPermit
 import mu.KotlinLogging
 import org.slf4j.LoggerFactory
 import java.lang.management.ManagementFactory
@@ -50,9 +48,7 @@ import edu.illinois.cs.cs125.jeed.core.warm as warmJeed
 
 internal val logger = KotlinLogging.logger {}
 
-internal val questionerMaxConcurrency = System.getenv("QUESTIONER_MAX_CONCURRENCY")?.toInt() ?: 8
 internal val questionCacheSize = System.getenv("QUESTIONER_QUESTION_CACHE_SIZE")?.toLong() ?: 16L
-private val limiter = Semaphore(questionerMaxConcurrency)
 private val warmQuestion = System.getenv("QUESTIONER_WARM_QUESTION")?.toString() ?: "hello-world"
 
 @Suppress("LongMethod")
@@ -113,7 +109,7 @@ fun Application.questioner() {
             @Suppress("TooGenericExceptionCaught")
             try {
                 val startMemory = getMemory()
-                val response = limiter.withPermit { submission.test(question) }
+                val response = submission.test(question)
                 call.respond(response)
                 val endMemory = getMemory()
                 logger.debug {

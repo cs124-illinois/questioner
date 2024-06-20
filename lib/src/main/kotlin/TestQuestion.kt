@@ -20,15 +20,23 @@ import edu.illinois.cs.cs125.jeed.core.adjustWithFeatures
 import edu.illinois.cs.cs125.jeed.core.features
 import edu.illinois.cs.cs125.jeed.core.processCoverage
 import edu.illinois.cs.cs125.jenisol.core.Settings
+import edu.illinois.cs.cs125.jenisol.core.StartTest
 import edu.illinois.cs.cs125.jenisol.core.SubmissionDesignError
 import edu.illinois.cs.cs125.jenisol.core.TestResult
+import edu.illinois.cs.cs125.jenisol.core.TestingEvent
+import kotlinx.coroutines.sync.Semaphore
 import java.lang.reflect.InvocationTargetException
+import java.util.concurrent.atomic.AtomicInteger
 
 class CachePoisonedException(message: String) : Error(message)
 
 const val MAX_INDIVIDUAL_ALLOCATION_BYTES: Long = 1024 * 1024
 private const val MIN_ALLOCATION_FAILURE_BYTES: Long = 2 * 1024 // Account for nondeterminism due to JIT
 const val MIN_ALLOCATION_LIMIT_BYTES: Long = 2 * 1024 * 1024 // Leave room for concat in println debugging
+
+val busyCount = AtomicInteger(0)
+val questionerMaxConcurrency = System.getenv("QUESTIONER_MAX_CONCURRENCY")?.toInt() ?: (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
+val testingLimiter = Semaphore(Int.MAX_VALUE)
 
 @Suppress("ReturnCount", "LongMethod", "ComplexMethod", "LongParameterList", "UNREACHABLE_CODE")
 suspend fun Question.test(
@@ -38,6 +46,8 @@ suspend fun Question.test(
     isSolution: Boolean = false
 ): TestResults {
     return try {
+        testingLimiter.acquire()
+
         warm()
 
         val results = TestResults(language)
@@ -181,11 +191,11 @@ suspend fun Question.test(
         )
         val systemInStream = BumpingInputStream()
 
-
+        /*
         val cpuTimeout = settings.cpuTime?.let {
             (settings.cpuTime[language] * control.cpuTimeoutMultiplier!!).toLong() * 1000L
-        }?.also { it ->
-            check(it > 0) { "Invalid CPU timeout" }
+        }?.also { timeout ->
+            check(timeout > 0) { "Invalid CPU timeout: $timeout ${settings.cpuTime}" }
         } ?: 0
 
         val wallTimeout = if (cpuTimeout > 0) {
@@ -199,17 +209,19 @@ suspend fun Question.test(
                 settings.timeout
             }
         }.toLong()
+        */
 
         val executionArguments = Sandbox.ExecutionArguments(
-            timeout = wallTimeout,
-            cpuTimeout = cpuTimeout,
+            timeout = Int.MAX_VALUE.toLong(), // wallTimeout,
+            cpuTimeoutNS = Int.MAX_VALUE.toLong(), // cpuTimeout,
             classLoaderConfiguration = classLoaderConfiguration,
             maxOutputLines = settings.outputLimit,
             permissions = Question.SAFE_PERMISSIONS,
             returnTimeout = Question.DEFAULT_RETURN_TIMEOUT,
             systemInStream = systemInStream,
             maxThreadPriority = Question.TESTING_PRIORITY,
-            defaultThreadPriority = Question.TESTING_PRIORITY
+            defaultThreadPriority = Question.TESTING_PRIORITY,
+            pollIntervalMS = 2
         )
 
         val lineCountLimit = settings.executionCountLimit[language].takeIf { !settings.disableLineCountLimit }
@@ -231,13 +243,28 @@ suspend fun Question.test(
         )
 
         val captureOutputControlInput = bindJeedCaptureOutputControlInput(systemInStream, settings.perTestOutputLimit)
+        val baseTimeout = 20L
         val taskResults = Sandbox.execute(
             compiledSubmission.classLoader,
             executionArguments,
             configuredPlugins = plugins
-        ) { (classLoader, _) ->
+        ) { (classLoader, _, sandboxControl) ->
+            val testingEventListener = { e: TestingEvent ->
+                if (e is StartTest) {
+                    var stepTimeout = baseTimeout
+                    if (e.stepCount == 0) {
+                        stepTimeout *= 10
+                    }
+                    if (testingCount == 0) {
+                        stepTimeout *= 10
+                    }
+                    sandboxControl.setCPUTimeoutNS(stepTimeout * 1000L * 1000L)
+                    // sandboxControl.setTimeouts((stepTimeout * 100).coerceAtMost(1000), stepTimeout * 1000L * 1000L)
+                }
+            }
             try {
-                solution.submission(classLoader.loadClass(klassName)).test(jenisolSettings, captureOutputControlInput)
+                solution.submission(classLoader.loadClass(klassName))
+                    .test(jenisolSettings, captureOutputControlInput, testingEventListener = testingEventListener)
             } catch (e: InvocationTargetException) {
                 throw e.cause ?: e
             }
@@ -457,6 +484,8 @@ suspend fun Question.test(
 
         return results
     } finally {
+        busyCount.decrementAndGet()
+        testingLimiter.release()
         testingCount++
     }
 }

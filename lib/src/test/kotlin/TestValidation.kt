@@ -13,6 +13,13 @@ class TestValidation : StringSpec({
             report!!.requiredTestCount shouldBeGreaterThan 0
         }
     }
+    "it should validate a class question" {
+        Validator.validate("Add One").also { (question, report) ->
+            question.validated shouldBe true
+            report shouldNotBe null
+            report!!.requiredTestCount shouldBeGreaterThan 0
+        }
+    }
     "it should validate a recursive question" {
         Validator.validate("Recursive Factorial").also { (question, report) ->
             question.validated shouldBe true

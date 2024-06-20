@@ -34,233 +34,239 @@ import java.time.Instant
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
+@Suppress("UNREACHABLE_CODE")
 suspend fun Question.testTests(
     contents: String,
     language: Language,
     passedSettings: Question.TestTestingSettings? = null,
     limits: Question.TestTestingLimits = testTestingLimits!!
 ): TestTestResults {
-    val settings = Question.TestTestingSettings.DEFAULTS merge passedSettings
+    return try {
+        testingLimiter.acquire()
 
-    check(published.type != Question.Type.SNIPPET) { "Test testing not supported for snippets" }
-    check(settings.limit!! >= 2) { "Limit must be at least 2" }
+        val settings = Question.TestTestingSettings.DEFAULTS merge passedSettings
 
-    warm()
+        check(published.type != Question.Type.SNIPPET) { "Test testing not supported for snippets" }
+        check(settings.limit!! >= 2) { "Limit must be at least 2" }
 
-    val testKlass = "Test${published.klass}"
-    val results = TestTestResults(language)
+        warm()
 
-    // checkInitialTestTestingSubmission
-    if (!(checkInitialTestTestingSubmission(contents, language, results))) {
-        return results
-    }
+        val testKlass = "Test${published.klass}"
+        val results = TestTestResults(language)
 
-    val compilationClassLoader = when (language) {
-        Language.java -> InvertingClassLoader(setOf(testKlass), compiledSolutionForTesting.classloader)
-        Language.kotlin -> InvertingClassLoader(
-            setOf(testKlass, "${testKlass}Kt"),
-            compiledSolutionForTesting.classloader
-        )
-    }
-    val compiledSubmission = try {
-        when (language) {
-            Language.java -> compileTestSuites(contents, compilationClassLoader, results)
-            Language.kotlin -> kompileTestSuites(contents, compilationClassLoader, results)
+        // checkInitialTestTestingSubmission
+        if (!(checkInitialTestTestingSubmission(contents, language, results))) {
+            return results
         }
-    } catch (e: TemplatingFailed) {
-        return results
-    } catch (e: CompilationFailed) {
-        return results
-    } catch (e: CheckstyleFailed) {
-        return results
-    } catch (e: KtLintFailed) {
-        return results
-    }
 
-    // checkCompiledTestSuite
-    val klassName = checkCompiledTestSuite(compiledSubmission, results) ?: return results
-    val testingIncorrect = testTestingIncorrect
-    check(!testingIncorrect.isNullOrEmpty()) {
-        "Value should not be null or empty"
-    }
-
-    val incorrectLimit = (settings.limit - 1).coerceAtMost(testingIncorrect.size)
-    val testingMutations = when (settings.selectionStrategy!!) {
-        Question.TestTestingSettings.SelectionStrategy.EASIEST -> testingIncorrect.take(incorrectLimit)
-        Question.TestTestingSettings.SelectionStrategy.HARDEST -> testingIncorrect.takeLast(incorrectLimit)
-        Question.TestTestingSettings.SelectionStrategy.EVENLY_SPACED -> {
-            linspace(testingIncorrect.size - 1, incorrectLimit).map { testingIncorrect[it] }
-        }
-    }
-
-    val testingLoaders = testingMutations.map { it.compiled(this) }.toMutableList()
-    val random = if (settings.seed != null) {
-        Random(settings.seed)
-    } else {
-        Random
-    }
-    testingLoaders.add(random.nextInt(testingLoaders.size + 1), compiledSolutionForTesting)
-
-    // Allow giving questions a bit of extra time on first run
-    val adjustedTimeout = if (testingCount == 0) {
-        limits.timeout + control.initialTestingDelay!!
-    } else {
-        limits.timeout
-    }.toLong()
-
-    val executionArguments = Sandbox.ExecutionArguments(
-        timeout = adjustedTimeout,
-        maxOutputLines = limits.outputLimit,
-        permissions = Question.SAFE_PERMISSIONS,
-        returnTimeout = Question.DEFAULT_RETURN_TIMEOUT
-    )
-
-    val lineCountLimit = when (language) {
-        Language.java -> limits.executionCountLimit.java
-        Language.kotlin -> limits.executionCountLimit.kotlin!!
-    }
-    val allocationLimit = when (language) {
-        Language.java -> limits.allocationLimit.java
-        Language.kotlin -> limits.allocationLimit.kotlin!!
-    }.coerceAtLeast(MIN_ALLOCATION_LIMIT_BYTES)
-
-    val plugins = listOf(
-        ConfiguredSandboxPlugin(
-            ResourceMonitoring,
-            ResourceMonitoringArguments(
-                submissionLineLimit = lineCountLimit,
-                allocatedMemoryLimit = allocationLimit,
-                individualAllocationLimit = MAX_INDIVIDUAL_ALLOCATION_BYTES
+        val compilationClassLoader = when (language) {
+            Language.java -> InvertingClassLoader(setOf(testKlass), compiledSolutionForTesting.classloader)
+            Language.kotlin -> InvertingClassLoader(
+                setOf(testKlass, "${testKlass}Kt"),
+                compiledSolutionForTesting.classloader
             )
-        ),
-    )
-
-    val testingClass = compiledSubmission.classLoader.loadClass(klassName)
-    val staticTestingMethod = testingClass.getTestingMethod()!!.isStatic()
-    if (!staticTestingMethod) {
-        check(testingClass.declaredConstructors.find { it.parameters.isEmpty() } != null) {
-            "Non-static testing method needs an empty constructor"
         }
-    }
+        val compiledSubmission = try {
+            when (language) {
+                Language.java -> compileTestSuites(contents, compilationClassLoader, results)
+                Language.kotlin -> kompileTestSuites(contents, compilationClassLoader, results)
+            }
+        } catch (e: TemplatingFailed) {
+            return results
+        } catch (e: CompilationFailed) {
+            return results
+        } catch (e: CheckstyleFailed) {
+            return results
+        } catch (e: KtLintFailed) {
+            return results
+        }
 
-    var correct = 0
-    var incorrect = 0
-    var identifiedSolution: Boolean? = null
+        // checkCompiledTestSuite
+        val klassName = checkCompiledTestSuite(compiledSubmission, results) ?: return results
+        val testingIncorrect = testTestingIncorrect
+        check(!testingIncorrect.isNullOrEmpty()) {
+            "Value should not be null or empty"
+        }
 
-    val testTestingStarted = Instant.now()
-    val output = mutableListOf<String>()
-    for (testingLoader in testingLoaders) {
-        val isSolution = testingLoader == compiledSolutionForTesting
-
-        val testingSuiteLoader = CopyableClassLoader.copy(compiledSubmission.classLoader, testingLoader.classloader)
-        val taskResults = Sandbox.execute(
-            testingSuiteLoader,
-            executionArguments,
-            configuredPlugins = plugins
-        ) { (classLoader, _) ->
-            return@execute try {
-                classLoader.loadClass(klassName).getTestingMethod()!!.also { method ->
-                    method.isAccessible = true
-                    if (staticTestingMethod) {
-                        method.invoke(null)
-                    } else {
-                        method.invoke(
-                            classLoader.loadClass(klassName).declaredConstructors.find { it.parameters.isEmpty() }!!
-                                .newInstance()
-                        )
-                    }
-                }
-            } catch (e: InvocationTargetException) {
-                throw e.cause ?: e
+        val incorrectLimit = (settings.limit - 1).coerceAtMost(testingIncorrect.size)
+        val testingMutations = when (settings.selectionStrategy!!) {
+            Question.TestTestingSettings.SelectionStrategy.EASIEST -> testingIncorrect.take(incorrectLimit)
+            Question.TestTestingSettings.SelectionStrategy.HARDEST -> testingIncorrect.takeLast(incorrectLimit)
+            Question.TestTestingSettings.SelectionStrategy.EVENLY_SPACED -> {
+                linspace(testingIncorrect.size - 1, incorrectLimit).map { testingIncorrect[it] }
             }
         }
 
-        val timeout = taskResults.timeout
-        val threw = taskResults.threw
-
-        @Suppress("DEPRECATION", "removal")
-        if (!taskResults.timeout && threw is ThreadDeath) {
-            throw CachePoisonedException("ThreadDeath")
+        val testingLoaders = testingMutations.map { it.compiled(this) }.toMutableList()
+        val random = if (settings.seed != null) {
+            Random(settings.seed)
+        } else {
+            Random
         }
-        results.timeout = timeout
+        testingLoaders.add(random.nextInt(testingLoaders.size + 1), compiledSolutionForTesting)
 
-        val resourceUsage = taskResults.pluginResult(ResourceMonitoring)
-        val submissionExecutionCount = resourceUsage.submissionLines
-        results.lineCountTimeout = submissionExecutionCount > lineCountLimit
+        // Allow giving questions a bit of extra time on first run
+        val adjustedTimeout = if (testingCount == 0) {
+            limits.timeout + control.initialTestingDelay!!
+        } else {
+            limits.timeout
+        }.toLong()
 
-        if (results.timeout) {
-            return results
+        val executionArguments = Sandbox.ExecutionArguments(
+            timeout = adjustedTimeout,
+            maxOutputLines = limits.outputLimit,
+            permissions = Question.SAFE_PERMISSIONS,
+            returnTimeout = Question.DEFAULT_RETURN_TIMEOUT
+        )
+
+        val lineCountLimit = when (language) {
+            Language.java -> limits.executionCountLimit.java
+            Language.kotlin -> limits.executionCountLimit.kotlin!!
+        }
+        val allocationLimit = when (language) {
+            Language.java -> limits.allocationLimit.java
+            Language.kotlin -> limits.allocationLimit.kotlin!!
+        }.coerceAtLeast(MIN_ALLOCATION_LIMIT_BYTES)
+
+        val plugins = listOf(
+            ConfiguredSandboxPlugin(
+                ResourceMonitoring,
+                ResourceMonitoringArguments(
+                    submissionLineLimit = lineCountLimit,
+                    allocatedMemoryLimit = allocationLimit,
+                    individualAllocationLimit = MAX_INDIVIDUAL_ALLOCATION_BYTES
+                )
+            ),
+        )
+
+        val testingClass = compiledSubmission.classLoader.loadClass(klassName)
+        val staticTestingMethod = testingClass.getTestingMethod()!!.isStatic()
+        if (!staticTestingMethod) {
+            check(testingClass.declaredConstructors.find { it.parameters.isEmpty() } != null) {
+                "Non-static testing method needs an empty constructor"
+            }
         }
 
-        if (results.lineCountTimeout) {
-            results.failedSteps.add(TestTestResults.Step.checkExecutedSubmission)
-            results.failed.checkExecutedSubmission =
-                "Executed too many lines: Already executed $lineCountLimit ${"line".pluralize(lineCountLimit.toInt())}, " +
-                    "greater than the limit of $lineCountLimit"
-            return results
-        }
+        var correct = 0
+        var incorrect = 0
+        var identifiedSolution: Boolean? = null
 
-        when (threw) {
-            is ClassNotFoundException -> results.failed.checkExecutedSubmission =
-                "Class design error:\n  Could not find class ${published.klass}"
+        val testTestingStarted = Instant.now()
+        val output = mutableListOf<String>()
+        for (testingLoader in testingLoaders) {
+            val isSolution = testingLoader == compiledSolutionForTesting
 
-            is NoClassDefFoundError -> results.failed.checkExecutedSubmission =
-                "Class design error:\n  Attempted to use unavailable class ${threw.message}"
+            val testingSuiteLoader = CopyableClassLoader.copy(compiledSubmission.classLoader, testingLoader.classloader)
+            val taskResults = Sandbox.execute(
+                testingSuiteLoader,
+                executionArguments,
+                configuredPlugins = plugins
+            ) { (classLoader, _) ->
+                return@execute try {
+                    classLoader.loadClass(klassName).getTestingMethod()!!.also { method ->
+                        method.isAccessible = true
+                        if (staticTestingMethod) {
+                            method.invoke(null)
+                        } else {
+                            method.invoke(
+                                classLoader.loadClass(klassName).declaredConstructors.find { it.parameters.isEmpty() }!!
+                                    .newInstance()
+                            )
+                        }
+                    }
+                } catch (e: InvocationTargetException) {
+                    throw e.cause ?: e
+                }
+            }
 
-            is OutOfMemoryError -> results.failed.checkExecutedSubmission =
-                "Allocated too much memory: ${threw.message}, already used ${resourceUsage.allocatedMemory} bytes.\nIf you are printing for debug purposes, consider less verbose output."
+            val timeout = taskResults.timeout
+            val threw = taskResults.threw
 
-            is LineLimitExceeded -> {
+            @Suppress("DEPRECATION", "removal")
+            if (!taskResults.timeout && threw is ThreadDeath) {
+                throw CachePoisonedException("ThreadDeath")
+            }
+            results.timeout = timeout
+
+            val resourceUsage = taskResults.pluginResult(ResourceMonitoring)
+            val submissionExecutionCount = resourceUsage.submissionLines
+            results.lineCountTimeout = submissionExecutionCount > lineCountLimit
+
+            if (results.timeout) {
+                return results
+            }
+
+            if (results.lineCountTimeout) {
+                results.failedSteps.add(TestTestResults.Step.checkExecutedSubmission)
                 results.failed.checkExecutedSubmission =
                     "Executed too many lines: Already executed $lineCountLimit ${"line".pluralize(lineCountLimit.toInt())}, " +
                         "greater than the limit of $lineCountLimit"
+                return results
+            }
+
+            when (threw) {
+                is ClassNotFoundException -> results.failed.checkExecutedSubmission =
+                    "Class design error:\n  Could not find class ${published.klass}"
+
+                is NoClassDefFoundError -> results.failed.checkExecutedSubmission =
+                    "Class design error:\n  Attempted to use unavailable class ${threw.message}"
+
+                is OutOfMemoryError -> results.failed.checkExecutedSubmission =
+                    "Allocated too much memory: ${threw.message}, already used ${resourceUsage.allocatedMemory} bytes.\nIf you are printing for debug purposes, consider less verbose output."
+
+                is LineLimitExceeded -> {
+                    results.failed.checkExecutedSubmission =
+                        "Executed too many lines: Already executed $lineCountLimit ${"line".pluralize(lineCountLimit.toInt())}, " +
+                            "greater than the limit of $lineCountLimit"
+                }
+            }
+
+            if (results.failed.checkExecutedSubmission != null) {
+                results.failedSteps.add(TestTestResults.Step.checkExecutedSubmission)
+                return results
+            }
+
+            val isCorrect = if (isSolution) {
+                taskResults.threw == null
+            } else {
+                taskResults.threw != null
+            }
+            if (isSolution) {
+                identifiedSolution = isCorrect
+            }
+            if (isCorrect) {
+                correct++
+            } else {
+                incorrect++
+            }
+            output += taskResults.stdout.trim() + if (taskResults.truncatedLines > 0) {
+                "\n(${taskResults.truncatedLines} lines truncated)\n"
+            } else {
+                "\n"
+            }
+            if (incorrect > 0 && settings.shortCircuit!!) {
+                break
             }
         }
 
-        if (results.failed.checkExecutedSubmission != null) {
-            results.failedSteps.add(TestTestResults.Step.checkExecutedSubmission)
-            return results
+        if (identifiedSolution != null) {
+            identifiedSolution = identifiedSolution == true && correct > 1
         }
 
-        val isCorrect = if (isSolution) {
-            taskResults.threw == null
-        } else {
-            taskResults.threw != null
-        }
-        if (isSolution) {
-            identifiedSolution = isCorrect
-        }
-        if (isCorrect) {
-            correct++
-        } else {
-            incorrect++
-        }
-        output += taskResults.stdout.trim() + if (taskResults.truncatedLines > 0) {
-            "\n(${taskResults.truncatedLines} lines truncated)\n"
-        } else {
-            "\n"
-        }
-        if (incorrect > 0 && settings.shortCircuit!!) {
-            break
-        }
-    }
-
-    if (identifiedSolution != null) {
-        identifiedSolution = identifiedSolution == true && correct > 1
-    }
-
-    results.addTestTestingResults(
-        TestTestResults.TestTestingResults(
-            correct,
-            incorrect,
-            identifiedSolution,
-            testingLoaders.size,
-            Instant.now().toEpochMilli() - testTestingStarted.toEpochMilli(),
-            output
+        results.addTestTestingResults(
+            TestTestResults.TestTestingResults(
+                correct,
+                incorrect,
+                identifiedSolution,
+                testingLoaders.size,
+                Instant.now().toEpochMilli() - testTestingStarted.toEpochMilli(),
+                output
+            )
         )
-    )
-
-    return results
+        return results
+    } finally {
+        testingLimiter.release()
+    }
 }
 
 fun Question.templateTestSuites(

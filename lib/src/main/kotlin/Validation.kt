@@ -19,12 +19,17 @@ import java.time.Instant
 data class CorrectResults(val incorrect: Question.FlatFile, val results: TestResults)
 data class IncorrectResults(val incorrect: Question.IncorrectFile, val results: TestResults)
 
-private val limiter = Semaphore(1)
+private val calibrationLimiter = Semaphore(1)
 
 private const val RETRY_THRESHOLD = 0.5
 
 @Suppress("LongMethod", "ComplexMethod")
-suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int, retry: Int = 0): ValidationReport {
+suspend fun Question.validate(
+    defaultSeed: Int,
+    maxMutationCount: Int,
+    retry: Int = 0,
+    timeoutAdjustment: Double = 1.0
+): ValidationReport {
 
     val seed = if (control.seed!! != -1) {
         control.seed!!
@@ -247,7 +252,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int, retry: In
     val minTestCount = control.minTestCount!!.coerceAtMost(solution.maxCount)
     val maxTestCount = control.maxTestCount!!.coerceAtMost(solution.maxCount)
 
-    val allSolutions = setOf(javaSolution) + alternativeSolutions
+    val allSolutions = listOf(javaSolution) + alternativeSolutions
     val allJavaSolutions = allSolutions.filter { solution -> solution.language === Language.java }
     val allKotlinSolutions = allSolutions.filter { solution -> solution.language === Language.kotlin }
 
@@ -257,7 +262,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int, retry: In
     )
 
     val maxCPU = Question.LanguagesResourceUsage.both(
-        (control.maxTimeout!!.toDouble() * 1000.0 / control.cpuTimeoutMultiplier!!.toDouble()).toLong()
+        (control.maxTimeout!!.toDouble() * timeoutAdjustment * 1000.0 / control.cpuTimeoutMultiplier!!.toDouble()).toLong()
     )
 
     val bootstrapSettings = Question.TestingSettings(
@@ -311,6 +316,13 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int, retry: In
         solution.classSize
     }
 
+    val bootstrapCpuTime = Question.LanguagesResourceUsage(
+        firstCorrectResults.filter { solution -> solution.language == Language.java }
+            .maxOf { solution -> solution.taskResults!!.cpuTime / 1000L },
+        firstCorrectResults.filter { solution -> solution.language == Language.kotlin }
+            .maxOfOrNull { solution -> solution.taskResults!!.cpuTime / 1000L }
+    )
+
     val bootstrapLength = Instant.now().toEpochMilli() - bootStrapStart.toEpochMilli()
 
     val mutationStart = Instant.now()
@@ -352,7 +364,7 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int, retry: In
         solutionClassSize = bootstrapClassSize,
         suppressions = javaSolution.suppressions,
         kotlinSuppressions = kotlinSolution?.suppressions,
-        cpuTime = maxCPU
+        cpuTime = bootstrapCpuTime
     )
     val incorrectResults = allIncorrect.map { wrong ->
         val specificIncorrectSettings = if (wrong.reason == Question.IncorrectFile.Reason.MEMORYLIMIT) {
@@ -461,14 +473,12 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int, retry: In
         kotlinSuppressions = kotlinSolution?.suppressions,
         cpuTime = maxCPU
     )
-    val calibrationResults = (setOf(javaSolution) + alternativeSolutions).map { right ->
-        val results = limiter.withPermit {
+    val calibrationResults = allSolutions.map { right ->
+        val results = calibrationLimiter.withPermit {
             test(right.contents, right.language, calibrationSettings)
         }
-        results.let {
-            it.checkCorrect(right, true)
-            CorrectResults(right, it)
-        }
+        results.checkCorrect(right, true)
+        CorrectResults(right, results)
     }
 
     fun String.filterLoadedClass() = !startsWith("java.lang.invoke.") &&
@@ -605,7 +615,8 @@ suspend fun Question.validate(defaultSeed: Int, maxMutationCount: Int, retry: In
         solutionCoverage = solutionCoverage,
         executionCounts = solutionExecutionCounts,
         memoryAllocation = solutionAllocation,
-        canTestTest = canTestTest
+        canTestTest = canTestTest,
+        javaSolutionBootstrapCPUTimeMS = firstCorrectResults.first().taskResults!!.cpuTime.toDouble() / 1000.0 / 1000.0
     )
 
     classification.recursiveMethodsByLanguage = solutionRecursiveMethods!!
@@ -770,7 +781,7 @@ class SolutionTestingThrew(val solution: Question.FlatFile, val threw: Throwable
             ""
         }
     }
-        |${printContents(solution.contents, solution.path)}${'$'}{
+        |${printContents(solution.contents, solution.path)}
         """.trimMargin()
 }
 

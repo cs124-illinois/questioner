@@ -33,6 +33,9 @@ abstract class GenerateQuestionTests : DefaultTask() {
     @get:Input
     abstract var shuffleTests: Boolean
 
+    @get:Input
+    abstract var timeoutAdjustment: Double
+
     @InputFile
     val inputFile: File = project.layout.buildDirectory.dir("questioner/questions.json").get().asFile
 
@@ -63,7 +66,15 @@ abstract class GenerateQuestionTests : DefaultTask() {
                 }
                 val klass = file.name.removeSuffix(".kt")
                 val contents = if (questionsForFile.isNotEmpty()) {
-                    questionsForFile.joinToString("\n") { question -> question.generateSpec(GENERATION_SEED, maxMutationCount, retries, quiet) }
+                    questionsForFile.joinToString("\n") { question ->
+                        question.generateSpec(
+                            GENERATION_SEED,
+                            maxMutationCount,
+                            retries,
+                            quiet,
+                            timeoutAdjustment,
+                        )
+                    }
                 } else {
                     when (file.name) {
                         "TestAllQuestions.kt" -> "no questions found"
@@ -84,23 +95,32 @@ abstract class GenerateQuestionTests : DefaultTask() {
                         |    """
                         } else {
                             ""
-                        }}${ inner.lines().joinToString("\n") { "    $it" } }
+                        }
+                    }${inner.lines().joinToString("\n") { "    $it" }}
                     })
                     """.trimMargin()
                 }
-                file.writeText(contents.wrapForFile(questionsForFile.isNotEmpty()).ktFormat(KtLintArguments(indent = 4)))
+                file.writeText(
+                    contents.wrapForFile(questionsForFile.isNotEmpty()).ktFormat(KtLintArguments(indent = 4)),
+                )
             }
     }
 }
 
-fun Question.generateSpec(seed: Int, maxMutationCount: Int, retries: Int, quiet: Boolean): String {
+fun Question.generateSpec(
+    seed: Int,
+    maxMutationCount: Int,
+    retries: Int,
+    quiet: Boolean,
+    timeoutAdjustment: Double,
+): String {
     val correctPath = correctPath
     check(correctPath != null)
     val jsonPath = Path.of(correctPath).parent.resolve(".question.json")
     check(jsonPath.exists())
     return """
         |${"\"\"\""}${published.name} (${published.packageName}) should validate${"\"\"\""} {
-        |    ${"\"\"\""}$jsonPath${"\"\"\""}.validate(seed = $seed, maxMutationCount = $maxMutationCount, retries = $retries, quiet = $quiet)
+        |    ${"\"\"\""}$jsonPath${"\"\"\""}.validate(seed = $seed, maxMutationCount = $maxMutationCount, retries = $retries, quiet = $quiet, timeoutAdjustment = $timeoutAdjustment)
         |}
     """.trimMargin()
 }

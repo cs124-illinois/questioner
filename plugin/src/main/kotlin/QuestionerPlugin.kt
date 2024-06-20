@@ -13,6 +13,10 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.testing.Test
+import java.io.File
+import java.io.FileInputStream
+import java.io.InputStreamReader
+import java.util.Properties
 import java.util.function.BiPredicate
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -23,7 +27,7 @@ data class QuestionerConfig(val endpoints: List<EndPoint> = listOf()) {
 @Suppress("UNUSED")
 open class QuestionerConfigExtension {
     var maxMutationCount: Int = 256
-    var concurrency: Double = 0.5
+    var concurrency: Double = 0.0
     var retries: Int = 0
     var quiet: Boolean = false
     var shuffleTests: Boolean = false
@@ -175,6 +179,7 @@ class QuestionerPlugin : Plugin<Project> {
             generateQuestionTests.retries = config.retries
             generateQuestionTests.quiet = config.quiet
             generateQuestionTests.shuffleTests = config.shuffleTests
+            generateQuestionTests.timeoutAdjustment = project.getLocalProperty("questioner.timeoutAdjustment")?.toDouble() ?: 1.0
 
             publishingTasks.forEach { task ->
                 task.publishIncludes = config.publishIncludes
@@ -200,5 +205,17 @@ class QuestionerPlugin : Plugin<Project> {
                 testTask.jvmArgs("-javaagent:$agentJarPath")
             }
         }
+    }
+}
+
+fun Project.getLocalProperty(key: String): String? {
+    return try {
+        val properties = Properties()
+        InputStreamReader(FileInputStream(File(rootDir, "local.properties")), Charsets.UTF_8).use { reader ->
+            properties.load(reader)
+        }
+        properties.getProperty(key)
+    } catch (e: Exception) {
+        null
     }
 }
