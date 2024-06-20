@@ -35,6 +35,8 @@ dependencies {
 
     api("io.kotest:kotest-runner-junit5:5.9.1")
     api("com.google.truth:truth:1.4.2")
+
+    api("io.github.cdimascio:dotenv-kotlin:6.4.1")
 }
 tasks {
     val sourcesJar by creating(Jar::class) {

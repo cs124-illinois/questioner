@@ -22,9 +22,6 @@ abstract class GenerateQuestionTests : DefaultTask() {
     abstract var maxMutationCount: Int
 
     @get:Input
-    abstract var concurrency: Int
-
-    @get:Input
     abstract var retries: Int
 
     @get:Input
@@ -43,6 +40,8 @@ abstract class GenerateQuestionTests : DefaultTask() {
 
     @TaskAction
     fun generate() = runBlocking {
+        val concurrency = dotenv.get("QUESTIONER_VALIDATION_CONCURRENCY")?.toInt() ?: 1
+
         val questions = inputFile.loadQuestionList().sortedBy { it.published.name }.let { questionList ->
             if (shuffleTests) {
                 questionList.shuffled()

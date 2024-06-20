@@ -7,6 +7,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.VERSION
+import io.github.cdimascio.dotenv.Dotenv
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
@@ -20,10 +21,11 @@ data class QuestionerConfig(val endpoints: List<EndPoint> = listOf()) {
     data class EndPoint(val name: String, val token: String, val url: String, val label: String? = null)
 }
 
+val dotenv: Dotenv = Dotenv.configure().ignoreIfMissing().load()
+
 @Suppress("UNUSED")
 open class QuestionerConfigExtension {
     var maxMutationCount: Int = 256
-    var concurrency: Double = 0.0
     var retries: Int = 0
     var quiet: Boolean = false
     var shuffleTests: Boolean = false
@@ -170,8 +172,6 @@ class QuestionerPlugin : Plugin<Project> {
             project.dependencies.add("implementation", project.dependencies.create("org.cs124.questioner:lib:$VERSION"))
 
             generateQuestionTests.maxMutationCount = config.maxMutationCount
-            generateQuestionTests.concurrency =
-                (Runtime.getRuntime().availableProcessors().toDouble() * config.concurrency).toInt().coerceAtLeast(1)
             generateQuestionTests.retries = config.retries
             generateQuestionTests.quiet = config.quiet
             generateQuestionTests.shuffleTests = config.shuffleTests
