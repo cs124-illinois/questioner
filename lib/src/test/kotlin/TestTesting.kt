@@ -43,7 +43,6 @@ int addOne(int value) {
             incorrect,
             Language.java,
             settings = question.testingSettings!!.copy(
-                timeout = Int.MAX_VALUE,
                 executionCountLimit = Question.LanguagesResourceUsage(
                     Long.MAX_VALUE,
                     Long.MAX_VALUE

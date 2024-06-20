@@ -18,7 +18,7 @@ private inline fun retryOn(retries: Int, method: (retries: Int) -> ValidationRep
 }
 
 @Suppress("unused")
-suspend fun String.validate(seed: Int, maxMutationCount: Int, retries: Int, quiet: Boolean = false, timeoutAdjustment: Double = 1.0) {
+suspend fun String.validate(seed: Int, maxMutationCount: Int, retries: Int, quiet: Boolean = false) {
     val file = Path.of(this).toFile()
     check(file.exists())
 
@@ -27,7 +27,7 @@ suspend fun String.validate(seed: Int, maxMutationCount: Int, retries: Int, quie
 
     val reportPath = Path.of(this).parent.resolve("report.html")
     val (report, retried) = try {
-        retryOn(retries) { retry -> question.validate(seed, maxMutationCount, retry, timeoutAdjustment) }
+        retryOn(retries) { retry -> question.validate(seed, maxMutationCount, retry) }
     } catch (wrap: RetryValidation) {
         val e = wrap.cause as ValidationFailed
         reportPath.toFile().writeText(e.report(question))

@@ -19,6 +19,7 @@ import edu.illinois.cs.cs125.jeed.core.UnitFeatures
 import edu.illinois.cs.cs125.jeed.core.adjustWithFeatures
 import edu.illinois.cs.cs125.jeed.core.features
 import edu.illinois.cs.cs125.jeed.core.processCoverage
+import edu.illinois.cs.cs125.jenisol.core.EndTest
 import edu.illinois.cs.cs125.jenisol.core.Settings
 import edu.illinois.cs.cs125.jenisol.core.StartTest
 import edu.illinois.cs.cs125.jenisol.core.SubmissionDesignError
@@ -35,8 +36,12 @@ private const val MIN_ALLOCATION_FAILURE_BYTES: Long = 2 * 1024 // Account for n
 const val MIN_ALLOCATION_LIMIT_BYTES: Long = 2 * 1024 * 1024 // Leave room for concat in println debugging
 
 val busyCount = AtomicInteger(0)
-val questionerMaxConcurrency = System.getenv("QUESTIONER_MAX_CONCURRENCY")?.toInt() ?: (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
-val testingLimiter = Semaphore(Int.MAX_VALUE)
+
+val questionerMaxConcurrency = System.getenv("QUESTIONER_MAX_CONCURRENCY")?.toInt() ?: Int.MAX_VALUE
+val testingLimiter = Semaphore(questionerMaxConcurrency)
+
+const val QUESTIONER_DEFAULT_TEST_TIMEOUT_MS = 20L
+val questionerTestTimeoutMS = System.getenv("QUESTIONER_TEST_TIMEOUT_MS")?.toLong() ?: QUESTIONER_DEFAULT_TEST_TIMEOUT_MS
 
 @Suppress("ReturnCount", "LongMethod", "ComplexMethod", "LongParameterList", "UNREACHABLE_CODE")
 suspend fun Question.test(
@@ -191,29 +196,10 @@ suspend fun Question.test(
         )
         val systemInStream = BumpingInputStream()
 
-        /*
-        val cpuTimeout = settings.cpuTime?.let {
-            (settings.cpuTime[language] * control.cpuTimeoutMultiplier!!).toLong() * 1000L
-        }?.also { timeout ->
-            check(timeout > 0) { "Invalid CPU timeout: $timeout ${settings.cpuTime}" }
-        } ?: 0
-
-        val wallTimeout = if (cpuTimeout > 0) {
-            (cpuTimeout / 1000L).toDouble() * control.timeoutMultiplier!!
-        } else {
-            error("Shouldn't reach here")
-            // Allow giving questions a bit of extra time on first run
-            if (testingCount == 0) {
-                settings.timeout + control.initialTestingDelay!!
-            } else {
-                settings.timeout
-            }
-        }.toLong()
-        */
+        val baseTimeout = (questionerTestTimeoutMS.toDouble() * control.timeoutMultiplier!!).toLong()
 
         val executionArguments = Sandbox.ExecutionArguments(
-            timeout = Int.MAX_VALUE.toLong(), // wallTimeout,
-            cpuTimeoutNS = Int.MAX_VALUE.toLong(), // cpuTimeout,
+            timeout = settings.testCount * baseTimeout * 32,
             classLoaderConfiguration = classLoaderConfiguration,
             maxOutputLines = settings.outputLimit,
             permissions = Question.SAFE_PERMISSIONS,
@@ -221,7 +207,7 @@ suspend fun Question.test(
             systemInStream = systemInStream,
             maxThreadPriority = Question.TESTING_PRIORITY,
             defaultThreadPriority = Question.TESTING_PRIORITY,
-            pollIntervalMS = 2
+            pollIntervalMS = (baseTimeout / 2).coerceAtLeast(1)
         )
 
         val lineCountLimit = settings.executionCountLimit[language].takeIf { !settings.disableLineCountLimit }
@@ -243,7 +229,7 @@ suspend fun Question.test(
         )
 
         val captureOutputControlInput = bindJeedCaptureOutputControlInput(systemInStream, settings.perTestOutputLimit)
-        val baseTimeout = 20L
+
         val taskResults = Sandbox.execute(
             compiledSubmission.classLoader,
             executionArguments,
@@ -259,7 +245,8 @@ suspend fun Question.test(
                         stepTimeout *= 10
                     }
                     sandboxControl.setCPUTimeoutNS(stepTimeout * 1000L * 1000L)
-                    // sandboxControl.setTimeouts((stepTimeout * 100).coerceAtMost(1000), stepTimeout * 1000L * 1000L)
+                } else if (e is EndTest) {
+                    sandboxControl.clearCPUTimeout()
                 }
             }
             try {
@@ -297,7 +284,9 @@ suspend fun Question.test(
             TestResults.Timings(taskResults.executionNanoTime, taskResults.returned?.sumOf { it.timeNanos } ?: 0)
 
         results.taskResults = taskResults
+        results.jenisolResults = taskResults.returned
         results.timeout = timeout
+
         val resourceUsage = taskResults.pluginResult(ResourceMonitoring)
         results.resourceMonitoringResults = resourceUsage
 

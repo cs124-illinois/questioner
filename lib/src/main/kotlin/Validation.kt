@@ -27,8 +27,7 @@ private const val RETRY_THRESHOLD = 0.5
 suspend fun Question.validate(
     defaultSeed: Int,
     maxMutationCount: Int,
-    retry: Int = 0,
-    timeoutAdjustment: Double = 1.0
+    retry: Int = 0
 ): ValidationReport {
 
     val seed = if (control.seed!! != -1) {
@@ -142,7 +141,6 @@ suspend fun Question.validate(
                         return@forEach
                     }
                     if (values.distinct().size == 1) {
-                        // (taskResults!!.returned!! as edu.illinois.cs.cs125.jenisol.core.TestResults).printTrace()
                         throw SolutionLacksEntropy(
                             file,
                             values.size,
@@ -198,7 +196,7 @@ suspend fun Question.validate(
         }
         if (mutated) {
             if (succeeded) {
-                throw IncorrectPassed(file, javaSolution)
+                throw IncorrectPassed(file, javaSolution, this)
             }
         } else {
             try {
@@ -261,14 +259,9 @@ suspend fun Question.validate(
         allKotlinSolutions.maxOfOrNull { solution -> solution.expectedDeadCount ?: 0 }?.toLong()
     )
 
-    val maxCPU = Question.LanguagesResourceUsage.both(
-        (control.maxTimeout!!.toDouble() * timeoutAdjustment * 1000.0 / control.cpuTimeoutMultiplier!!.toDouble()).toLong()
-    )
-
     val bootstrapSettings = Question.TestingSettings(
         seed = seed,
         testCount = maxTestCount,
-        timeout = 0, // Timeout set by cpuTime
         outputLimit = Question.UNLIMITED_OUTPUT_LINES, // No line limit
         perTestOutputLimit = Question.UNLIMITED_OUTPUT_LINES, // No per test line limit
         javaWhitelist = null,
@@ -279,7 +272,6 @@ suspend fun Question.validate(
         solutionDeadCode = solutionDeadCode,
         suppressions = javaSolution.suppressions,
         kotlinSuppressions = kotlinSolution?.suppressions,
-        cpuTime = maxCPU
         // No execution count limit
         // No allocation limit
         // No known recursive methods yet
@@ -316,13 +308,6 @@ suspend fun Question.validate(
         solution.classSize
     }
 
-    val bootstrapCpuTime = Question.LanguagesResourceUsage(
-        firstCorrectResults.filter { solution -> solution.language == Language.java }
-            .maxOf { solution -> solution.taskResults!!.cpuTime / 1000L },
-        firstCorrectResults.filter { solution -> solution.language == Language.kotlin }
-            .maxOfOrNull { solution -> solution.taskResults!!.cpuTime / 1000L }
-    )
-
     val bootstrapLength = Instant.now().toEpochMilli() - bootStrapStart.toEpochMilli()
 
     val mutationStart = Instant.now()
@@ -347,7 +332,6 @@ suspend fun Question.validate(
     val incorrectSettings = Question.TestingSettings(
         seed = seed,
         testCount = maxTestCount,
-        timeout = 0, // Timeout set by cpuTime
         outputLimit = Question.UNLIMITED_OUTPUT_LINES,
         perTestOutputLimit = Question.UNLIMITED_OUTPUT_LINES,
         javaWhitelist = javaClassWhitelist,
@@ -364,7 +348,6 @@ suspend fun Question.validate(
         solutionClassSize = bootstrapClassSize,
         suppressions = javaSolution.suppressions,
         kotlinSuppressions = kotlinSolution?.suppressions,
-        cpuTime = bootstrapCpuTime
     )
     val incorrectResults = allIncorrect.map { wrong ->
         val specificIncorrectSettings = if (wrong.reason == Question.IncorrectFile.Reason.MEMORYLIMIT) {
@@ -456,7 +439,6 @@ suspend fun Question.validate(
     val calibrationSettings = Question.TestingSettings(
         seed = seed,
         testCount = testCount,
-        timeout = 0, // Timeout set by cpuTime
         outputLimit = Question.UNLIMITED_OUTPUT_LINES,
         perTestOutputLimit = Question.UNLIMITED_OUTPUT_LINES,
         javaWhitelist = javaClassWhitelist,
@@ -471,7 +453,6 @@ suspend fun Question.validate(
         solutionClassSize = bootstrapClassSize,
         suppressions = javaSolution.suppressions,
         kotlinSuppressions = kotlinSolution?.suppressions,
-        cpuTime = maxCPU
     )
     val calibrationResults = allSolutions.map { right ->
         val results = calibrationLimiter.withPermit {
@@ -508,21 +489,7 @@ suspend fun Question.validate(
     val calibrationLength = Instant.now().toEpochMilli() - calibrationStart.toEpochMilli()
 
     val solutionMaxRuntime = calibrationResults.maxOf { it.results.taskResults!!.interval.length.toInt() }
-    val solutionMaxWallTimeByLanguage = Question.LanguagesResourceUsage(
-        calibrationResults.filter { it.results.language == Language.java }
-            .maxOf { it.results.taskResults!!.interval.length },
-        calibrationResults.filter { it.results.language == Language.kotlin }
-            .maxOfOrNull { it.results.taskResults!!.interval.length }
-    )
-    val solutionMaxCpuTimeByLanguage = Question.LanguagesResourceUsage(
-        calibrationResults.filter { it.results.language == Language.java }
-            .maxOf { (it.results.taskResults!!.cpuTime.toDouble() / 1000.0).toLong() },
-        calibrationResults.filter { it.results.language == Language.kotlin }
-            .maxOfOrNull { (it.results.taskResults!!.cpuTime.toDouble() / 1000.0).toLong() }
-    ).also { maxCpuTime ->
-        check(maxCpuTime.java > 0) { "Invalid Java max solution CPU time" }
-        check(maxCpuTime.kotlin == null || maxCpuTime.kotlin > 0) { "Invalid Kotlin max solution CPU time" }
-    }
+
     val solutionMaxPerTestOutputLines = calibrationResults.maxOf { results ->
         results.results.tests()!!.maxOf { it.output!!.lines().size }
     }
@@ -537,8 +504,6 @@ suspend fun Question.validate(
     testingSettings = Question.TestingSettings(
         seed = seed,
         testCount = testCount,
-        timeout = (solutionMaxRuntime * control.timeoutMultiplier!!).toInt().coerceAtLeast(control.minTimeout!!)
-            .coerceAtMost(control.maxTimeout!!),
         outputLimit = 0, // solutionMaxOutputLines.coerceAtLeast(testCount * control.outputMultiplier!!),
         perTestOutputLimit = (solutionMaxPerTestOutputLines * control.outputMultiplier!!).toInt()
             .coerceAtLeast(Question.MIN_PER_TEST_LINES),
@@ -558,8 +523,6 @@ suspend fun Question.validate(
         solutionClassSize = bootstrapClassSize,
         suppressions = javaSolution.suppressions,
         kotlinSuppressions = kotlinSolution?.suppressions,
-        wallTime = solutionMaxWallTimeByLanguage,
-        cpuTime = solutionMaxCpuTimeByLanguage,
     )
 
     val incorrectMaxRuntime = useTestingIncorrect.mapNotNull { it.results.taskResults?.interval?.length?.toInt() }.max()
@@ -581,7 +544,8 @@ suspend fun Question.validate(
     )
 
     testTestingLimits = Question.TestTestingLimits(
-        timeout = (incorrectMaxRuntime * control.timeoutMultiplier!!).toInt().coerceAtLeast(control.minTimeout!!),
+        // FIXME
+        timeout = (incorrectMaxRuntime * control.timeoutMultiplier!!).toInt().coerceAtLeast(128),
         outputLimit = (testCount * control.outputMultiplier!!).toInt(),
         executionCountLimit = Question.LanguagesResourceUsage(
             (testCount * control.executionTimeoutMultiplier!!).toLong(),
@@ -871,13 +835,13 @@ class IncorrectFailedLinting(
 }
 
 class IncorrectPassed(
-    val incorrect: Question.IncorrectFile, val correct: Question.FlatFile
+    val incorrect: Question.IncorrectFile, val correct: Question.FlatFile, val results: TestResults
 ) : ValidationFailed() {
     override val message: String
         get() {
             val contents = incorrect.mutation?.marked()?.contents ?: incorrect.contents
             return """
-        |Incorrect code passed the test suites :
+        |Incorrect code passed the test suites:
         |If the code is incorrect, add an input to @FixedParameters to handle this case
         |${
                 if (incorrect.mutation != null) {
@@ -888,7 +852,8 @@ class IncorrectPassed(
                 }
             }
         |${printContents(contents, incorrect.path ?: correct.path)}
-        """.trimMargin()
+        |${results.jenisolResults ?: ""}
+        """.trimMargin().trimEnd()
         }
 }
 

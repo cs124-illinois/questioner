@@ -33,9 +33,6 @@ abstract class GenerateQuestionTests : DefaultTask() {
     @get:Input
     abstract var shuffleTests: Boolean
 
-    @get:Input
-    abstract var timeoutAdjustment: Double
-
     @InputFile
     val inputFile: File = project.layout.buildDirectory.dir("questioner/questions.json").get().asFile
 
@@ -72,7 +69,6 @@ abstract class GenerateQuestionTests : DefaultTask() {
                             maxMutationCount,
                             retries,
                             quiet,
-                            timeoutAdjustment,
                         )
                     }
                 } else {
@@ -112,7 +108,6 @@ fun Question.generateSpec(
     maxMutationCount: Int,
     retries: Int,
     quiet: Boolean,
-    timeoutAdjustment: Double,
 ): String {
     val correctPath = correctPath
     check(correctPath != null)
@@ -120,7 +115,7 @@ fun Question.generateSpec(
     check(jsonPath.exists())
     return """
         |${"\"\"\""}${published.name} (${published.packageName}) should validate${"\"\"\""} {
-        |    ${"\"\"\""}$jsonPath${"\"\"\""}.validate(seed = $seed, maxMutationCount = $maxMutationCount, retries = $retries, quiet = $quiet, timeoutAdjustment = $timeoutAdjustment)
+        |    ${"\"\"\""}$jsonPath${"\"\"\""}.validate(seed = $seed, maxMutationCount = $maxMutationCount, retries = $retries, quiet = $quiet)
         |}
     """.trimMargin()
 }

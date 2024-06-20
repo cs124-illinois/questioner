@@ -20,8 +20,6 @@ annotation class Correct(
     val publish: Boolean = Question.Metadata.DEFAULT_PUBLISH,
     val minTestCount: Int = Question.TestingControl.DEFAULT_MIN_TEST_COUNT,
     val maxTestCount: Int = Question.TestingControl.DEFAULT_MAX_TEST_COUNT,
-    val minTimeout: Int = Question.TestingControl.DEFAULT_MIN_TIMEOUT,
-    val maxTimeout: Int = Question.TestingControl.DEFAULT_MAX_TIMEOUT,
     val timeoutMultiplier: Double = Question.TestingControl.DEFAULT_TIMEOUT_MULTIPLIER,
     val minMutationCount: Int = Question.TestingControl.DEFAULT_MIN_MUTATION_COUNT,
     val maxMutationCount: Int = -1,

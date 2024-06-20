@@ -198,8 +198,6 @@ internal data class ParsedJavaFile(val path: String, val contents: String) {
                 val solutionThrows = parameters["solutionThrows"]?.toBoolean()
                 val minTestCount = parameters["minTestCount"]?.toInt()
                 val maxTestCount = parameters["maxTestCount"]?.toInt()
-                val minTimeout = parameters["minTimeout"]?.toInt()
-                val maxTimeout = parameters["maxTimeout"]?.toInt()
                 val timeoutMultiplier = parameters["timeoutMultiplier"]?.toDouble()
                 val minMutationCount = parameters["minMutationCount"]?.toInt()
                 val maxMutationCount = parameters["maxMutationCount"]?.toInt()
@@ -220,7 +218,6 @@ internal data class ParsedJavaFile(val path: String, val contents: String) {
                 val initialTestingDelay = parameters["initialTestingDelay"]?.toInt()
                 val canTestTest = parameters["canTestTest"]?.toBoolean()
                 val fullDesignErrors = parameters["fullDesignErrors"]?.toBoolean()
-                val cpuTimeoutMultiplier = parameters["cpuTimeoutMultiplier"]?.toDouble()
 
                 Question.CorrectData(
                     path,
@@ -235,8 +232,6 @@ internal data class ParsedJavaFile(val path: String, val contents: String) {
                         solutionThrows,
                         minTestCount,
                         maxTestCount,
-                        minTimeout,
-                        maxTimeout,
                         timeoutMultiplier,
                         minMutationCount,
                         maxMutationCount,
@@ -257,7 +252,6 @@ internal data class ParsedJavaFile(val path: String, val contents: String) {
                         initialTestingDelay,
                         canTestTest,
                         fullDesignErrors,
-                        cpuTimeoutMultiplier,
                     ),
                 )
             }

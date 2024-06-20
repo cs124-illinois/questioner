@@ -34,7 +34,9 @@ data class TestResults(
     @Transient
     var foundRecursiveMethods: Set<ResourceMonitoringResults.MethodInfo>? = null,
     @Transient
-    var timings: Timings? = null
+    var timings: Timings? = null,
+    @Transient
+    var jenisolResults: edu.illinois.cs.cs125.jenisol.core.TestResults? = null
 ) {
     var completed: Boolean = false
     var succeeded: Boolean = false
