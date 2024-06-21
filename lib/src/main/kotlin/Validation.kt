@@ -282,6 +282,8 @@ suspend fun Question.validate(
             .also { testResults ->
                 testResults.checkCorrect(solution)
             }
+    }.also {
+        it.first().jenisolResults!!.printTrace()
     }
 
     val solutionJavaRecursiveMethods = firstCorrectResults.getRecursiveMethods(Language.java)
