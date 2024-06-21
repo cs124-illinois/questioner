@@ -283,7 +283,9 @@ suspend fun Question.validate(
                 testResults.checkCorrect(solution)
             }
     }.also {
+        println("-".repeat(80))
         it.first().jenisolResults!!.printTrace()
+        println("-".repeat(80))
     }
 
     val solutionJavaRecursiveMethods = firstCorrectResults.getRecursiveMethods(Language.java)
@@ -370,6 +372,12 @@ suspend fun Question.validate(
         ).let { testResults ->
             testResults.checkIncorrect(wrong, wrong.mutation != null)
             IncorrectResults(wrong, testResults)
+        }
+    }.also {
+        it.maxByOrNull { it.results.jenisolResults?.size ?: 0 }?.also {
+            println("-".repeat(80))
+            it.results.jenisolResults!!.printTrace()
+            println("-".repeat(80))
         }
     }
     val incorrectLength = Instant.now().toEpochMilli() - incorrectStart.toEpochMilli()
