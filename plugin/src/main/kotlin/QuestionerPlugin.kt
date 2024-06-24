@@ -55,13 +55,15 @@ class QuestionerPlugin : Plugin<Project> {
         project.extensions.getByType(JavaPluginExtension::class.java)
             .sourceSets.getByName("test").java.srcDirs(project.layout.buildDirectory.dir("questioner").get().asFile)
 
-        project.tasks.register("cleanQuestions", Delete::class.java) {
+        val cleanQuestions = project.tasks.register("cleanQuestions", Delete::class.java) {
             it.delete(
                 project.extensions.getByType(JavaPluginExtension::class.java)
                     .sourceSets.getByName("main").allSource
                     .filter { file -> file.name == ".validation.json" || file.name == "report.html" || file.name == ".question.json" },
             )
-        }
+        }.get()
+        saveQuestions.mustRunAfter(cleanQuestions)
+        project.tasks.getByName("clean").dependsOn(cleanQuestions)
 
         project.tasks.withType(SourceTask::class.java) { sourceTask ->
             sourceTask.exclude("**/.question.json")
@@ -78,26 +80,31 @@ class QuestionerPlugin : Plugin<Project> {
         project.tasks.getByName("compileKotlin").mustRunAfter(reconfigureForTesting)
         project.tasks.getByName("jar").mustRunAfter(reconfigureForTesting)
 
+        val recollectQuestions = project.tasks.register("recollectQuestions", CollectQuestions::class.java).get()
         project.tasks.create("testAllQuestions", Test::class.java) { testTask ->
             testTask.setTestNameIncludePatterns(listOf("TestAllQuestions"))
             testTask.outputs.upToDateWhen { false }
             testTask.dependsOn(reconfigureForTesting)
+            testTask.finalizedBy(recollectQuestions)
         }
         project.tasks.create("testUnvalidatedQuestions", Test::class.java) { testTask ->
             testTask.setTestNameIncludePatterns(listOf("TestUnvalidatedQuestions"))
             testTask.outputs.upToDateWhen { false }
             testTask.dependsOn(reconfigureForTesting)
+            testTask.finalizedBy(recollectQuestions)
         }
         project.tasks.create("testFocusedQuestions", Test::class.java) { testTask ->
             testTask.setTestNameIncludePatterns(listOf("TestFocusedQuestions"))
             testTask.outputs.upToDateWhen { false }
             testTask.dependsOn(reconfigureForTesting)
+            testTask.finalizedBy(recollectQuestions)
         }
         project.tasks.getByName("test") { testTask ->
             testTask as Test
             testTask.setTestNameIncludePatterns(listOf("TestUnvalidatedQuestions"))
             testTask.outputs.upToDateWhen { false }
             testTask.dependsOn(reconfigureForTesting)
+            testTask.finalizedBy(recollectQuestions)
         }
 
         val collectQuestions = project.tasks.register("collectQuestions", CollectQuestions::class.java).get()
