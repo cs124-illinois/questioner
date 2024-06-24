@@ -25,17 +25,20 @@ fun Path.parseDirectory(
     inputPackageMap: Map<String, List<String>>?,
     force: Boolean = false,
     questionerVersion: String = VERSION,
+    rootDirectory: Path = Path.of("/"),
 ): Question {
     val packageMap = inputPackageMap ?: baseDirectory.buildPackageMap()
 
     val outputFile = parent.resolve(".question.json")
     val existingQuestion = outputFile.toFile().loadQuestion()
 
+    fun Set<String>.relativize() = map { Path.of(it).relativeTo(rootDirectory).toString() }
+
     val allFiles = allFiles()
     if (!force &&
         existingQuestion != null &&
         existingQuestion.published.questionerVersion == questionerVersion &&
-        existingQuestion.metadata?.allFiles == allFiles.map { file -> file.path }.toSet() &&
+        existingQuestion.metadata?.allFiles == allFiles.map { file -> file.path }.toSet().relativize() &&
         outputFile.toFile().lastModified() > newestFile().lastModified()
     ) {
         return existingQuestion
@@ -290,11 +293,11 @@ fun Path.parseDirectory(
     val kotlinDescription = parsedKotlinSolution?.description
 
     val metadata = Question.Metadata(
-        allFiles.map { file -> file.path }.toSet(),
+        allFiles.map { file -> file.path }.toSet().relativize().toSet(),
         allFiles
             .map { file -> file.path }
             .filter { path -> !usedFiles.containsKey(path) }
-            .toSet(),
+            .toSet().relativize().toSet(),
         solution.correct.focused,
         solution.correct.publish,
     )
@@ -353,7 +356,7 @@ fun Path.parseDirectory(
         klass = solution.className,
         contents = solution.removeImports(importNames).stripPackage(),
         language = Language.java,
-        path = solution.path,
+        path = Path.of(solution.path).relativeTo(rootDirectory).toString(),
         suppressions = solution.suppressions,
     )
 
@@ -363,9 +366,20 @@ fun Path.parseDirectory(
         metadata = metadata,
         annotatedControls = solution.correct.control,
         question = question,
-        solutionByLanguage = makeLanguageMap(javaSolution, kotlinSolution)!!,
-        alternativeSolutions = alternativeSolutions,
-        incorrectExamples = incorrectExamples,
+        solutionByLanguage = makeLanguageMap(
+            javaSolution.copy(
+                path = javaSolution.path?.let { Path.of(it).relativeTo(rootDirectory).toString() },
+            ),
+            kotlinSolution?.copy(
+                path = kotlinSolution.path?.let { Path.of(it).relativeTo(rootDirectory).toString() },
+            ),
+        )!!,
+        alternativeSolutions = alternativeSolutions.map { correct ->
+            correct.copy(path = correct.path?.let { path -> Path.of(path).relativeTo(rootDirectory).toString() })
+        },
+        incorrectExamples = incorrectExamples.map { incorrect ->
+            incorrect.copy(path = incorrect.path?.let { path -> Path.of(path).relativeTo(rootDirectory).toString() })
+        },
         common = null,
         commonFiles = commonFiles,
         templateByLanguage = makeLanguageMap(javaTemplate, kotlinTemplate),

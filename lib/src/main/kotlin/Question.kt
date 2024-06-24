@@ -331,7 +331,7 @@ data class Question(
         val contents: String,
         val reason: Reason,
         val language: Language,
-        val path: String?,
+        var path: String?,
         val starter: Boolean,
         var needed: Boolean = true,
         var testCount: Int = -1,

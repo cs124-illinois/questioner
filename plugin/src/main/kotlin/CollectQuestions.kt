@@ -16,6 +16,7 @@ import org.gradle.api.tasks.TaskAction
 import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.exists
+import kotlin.io.path.relativeTo
 
 abstract class CollectQuestions : DefaultTask() {
     @OutputFile
@@ -39,7 +40,7 @@ abstract class CollectQuestions : DefaultTask() {
                     return@map null
                 }
                 question.apply {
-                    this.correctPath = correctPath.toString()
+                    this.correctPath = correctPath.relativeTo(project.rootProject.projectDir.toPath()).toString()
                 }
             }.filterNotNull()
             .sortedBy { it.published.name }

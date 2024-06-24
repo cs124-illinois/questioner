@@ -57,6 +57,7 @@ abstract class SaveQuestions : DefaultTask() {
         correctFiles.forEach { path ->
             workQueue.submit(ParseDirectory::class.java) { parameters ->
                 parameters.getBaseDirectory().set(sourceDirectoryPath.toFile())
+                parameters.getRootDirectory().set(project.rootProject.projectDir)
                 parameters.getCorrectDirectory().set(path.toFile())
                 parameters.getPackageMap()
                     .set(project.layout.buildDirectory.dir("questioner/packageMap.json").get().asFile)
@@ -86,6 +87,8 @@ interface ParseDirectoryWorkParameters : WorkParameters {
 
     fun getBaseDirectory(): RegularFileProperty
 
+    fun getRootDirectory(): RegularFileProperty
+
     fun getPackageMap(): RegularFileProperty
 }
 
@@ -93,13 +96,14 @@ abstract class ParseDirectory : WorkAction<ParseDirectoryWorkParameters> {
     override fun execute() {
         val correctDirectory = parameters.getCorrectDirectory().get().asFile.toPath()
         val baseDirectory = parameters.getBaseDirectory().get().asFile.toPath()
+        val rootDirectory = parameters.getRootDirectory().get().asFile.toPath()
         val questionPath = correctDirectory.parent.resolve(".question.json")
         val packageMap = parameters.getPackageMap().get().asFile.readFromFile()
 
         val repeatCount = 2
         repeat(repeatCount) { i ->
             try {
-                correctDirectory.parseDirectory(baseDirectory, packageMap).writeToFile(questionPath.toFile())
+                correctDirectory.parseDirectory(baseDirectory, packageMap, rootDirectory = rootDirectory).writeToFile(questionPath.toFile())
                 return
             } catch (e: Exception) {
                 if (i == repeatCount - 1) {

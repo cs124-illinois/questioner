@@ -68,6 +68,7 @@ abstract class GenerateQuestionTests : DefaultTask() {
                             maxMutationCount,
                             retries,
                             quiet,
+                            project.rootProject.projectDir.toPath(),
                         )
                     }
                 } else {
@@ -110,10 +111,11 @@ fun Question.generateSpec(
     maxMutationCount: Int,
     retries: Int,
     quiet: Boolean,
+    rootDirectory: Path,
 ): String {
     val correctPath = correctPath
     check(correctPath != null)
-    val jsonPath = Path.of(correctPath).parent.resolve(".question.json")
+    val jsonPath = rootDirectory.resolve(Path.of(correctPath)).parent.resolve(".question.json")
     check(jsonPath.exists())
     return """
         |${"\"\"\""}${published.name} (${published.packageName}) should validate${"\"\"\""} {
