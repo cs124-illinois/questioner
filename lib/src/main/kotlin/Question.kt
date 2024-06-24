@@ -236,7 +236,9 @@ data class Question(
         val maxTestCount: Int = -1,
         val suppressions: Set<String>? = null,
         val kotlinSuppressions: Set<String>? = null,
-        val runAll: Boolean = false
+        val runAll: Boolean = false,
+        val recordTrace: Boolean = false,
+        val followTrace: List<Int>? = null
     )
 
     @JsonClass(generateAdapter = true)

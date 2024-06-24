@@ -1,5 +1,6 @@
 package edu.illinois.cs.cs125.questioner.lib
 
+import edu.illinois.cs.cs125.jenisol.core.formatSolutionTestingSequence
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.ints.shouldBeGreaterThan
@@ -54,7 +55,7 @@ int addOne(int value) {
             results.succeeded shouldBe false
         }
     }
-    "it should test a question with partial credit" {
+    "f: it should test a question with partial credit" {
         val (question) = Validator.validate("Add One").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
@@ -69,9 +70,12 @@ int addOne(int value) {
   }
   return value + 2;
 }""".trim().also { incorrect ->
-            question.test(incorrect, Language.java).also { results ->
+            question.test(incorrect, Language.java, settings = question.testingSettings!!.copy(runAll = true)).also { results ->
                 results.failedSteps.size shouldBe 0
                 results.complete.testing!!.passed shouldBe false
+
+                println(results.jenisolResults!!.settings)
+                println(results.jenisolResults!!.formatSolutionTestingSequence())
 
                 results.complete.partial!!.passedTestCount!!.passed shouldBeGreaterThan 0
                 results.complete.partial!!.passedMutantCount!!.passed shouldBe results.complete.partial!!.passedMutantCount!!.total

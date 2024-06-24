@@ -194,7 +194,8 @@ suspend fun Question.test(
             testCount = settings.testCount,
             minTestCount = settings.minTestCount,
             maxTestCount = settings.maxTestCount,
-            runAll = settings.runAll
+            runAll = settings.runAll,
+            recordTrace = settings.recordTrace
         )
         val systemInStream = BumpingInputStream()
 
@@ -235,7 +236,7 @@ suspend fun Question.test(
         val taskResults = Sandbox.execute(
             compiledSubmission.classLoader,
             executionArguments,
-            configuredPlugins = plugins
+            configuredPlugins = plugins,
         ) { (classLoader, _, sandboxControl) ->
             val testingEventListener = { e: TestingEvent ->
                 if (e is StartTest) {
@@ -253,7 +254,12 @@ suspend fun Question.test(
             }
             try {
                 solution.submission(classLoader.loadClass(klassName))
-                    .test(jenisolSettings, captureOutputControlInput, testingEventListener = testingEventListener)
+                    .test(
+                        jenisolSettings,
+                        captureOutputControlInput,
+                        testingEventListener = testingEventListener,
+                        followTrace = settings.followTrace
+                    )
             } catch (e: InvocationTargetException) {
                 throw e.cause ?: e
             }

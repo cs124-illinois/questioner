@@ -672,35 +672,33 @@ $cleanContent
 
     var usedImports: List<String> = listOf()
 
-    private fun String.javaDeTemplate(hasTemplate: Boolean, wrappedClass: String?): String {
-        return when {
-            wrappedClass != null -> {
-                parseJava().tree.also { context ->
-                    usedImports = context.importDeclaration().map { it.toFullName() }
-                }.topLevelClass().let { context ->
-                    val start = context.classDeclaration().start.line
-                    val end = context.classDeclaration().stop.line
-                    split("\n").subList(start, end - 1).also { lines ->
-                        require(
-                            lines.find {
-                                it.contains("TEMPLATE_START") || it.contains("TEMPLATE_END")
-                            } == null,
-                        ) {
-                            "@Wrap should not use template delimiters"
-                        }
-                    }.joinToString("\n").trimIndent().trim()
-                }
+    private fun String.javaDeTemplate(hasTemplate: Boolean, wrappedClass: String?): String = when {
+        wrappedClass != null -> {
+            parseJava().tree.also { context ->
+                usedImports = context.importDeclaration().map { it.toFullName() }
+            }.topLevelClass().let { context ->
+                val start = context.classDeclaration().start.line
+                val end = context.classDeclaration().stop.line
+                split("\n").subList(start, end - 1).also { lines ->
+                    require(
+                        lines.find {
+                            it.contains("TEMPLATE_START") || it.contains("TEMPLATE_END")
+                        } == null,
+                    ) {
+                        "@Wrap should not use template delimiters"
+                    }
+                }.joinToString("\n").trimIndent().trim()
             }
+        }
 
-            !hasTemplate -> this
-            else -> {
-                val lines = split("\n")
-                val start = lines.indexOfFirst { it.contains("TEMPLATE_START") }
-                val end = lines.indexOfFirst { it.contains("TEMPLATE_END") }
-                require(start != -1) { "Couldn't locate TEMPLATE_START during extraction" }
-                require(end != -1) { "Couldn't locate TEMPLATE_END during extraction" }
-                lines.slice((start + 1) until end).joinToString("\n").trimIndent()
-            }
+        !hasTemplate -> this
+        else -> {
+            val lines = split("\n")
+            val start = lines.indexOfFirst { it.contains("TEMPLATE_START") }
+            val end = lines.indexOfFirst { it.contains("TEMPLATE_END") }
+            require(start != -1) { "Couldn't locate TEMPLATE_START during extraction" }
+            require(end != -1) { "Couldn't locate TEMPLATE_END during extraction" }
+            lines.slice((start + 1) until end).joinToString("\n").trimIndent()
         }
     }
 }
@@ -782,30 +780,28 @@ fun JavaParser.AnnotationContext.parameterMap(): Map<String, String> =
         mapOf("value" to it.getValue())
     } ?: mapOf()
 
-fun JavaParser.AnnotationContext.comment(): String {
-    return when {
-        parent.parent is JavaParser.TypeDeclarationContext ->
-            (parent.parent as JavaParser.TypeDeclarationContext).COMMENT()
+fun JavaParser.AnnotationContext.comment(): String = when {
+    parent.parent is JavaParser.TypeDeclarationContext ->
+        (parent.parent as JavaParser.TypeDeclarationContext).COMMENT()
 
-        parent.parent.parent is JavaParser.ClassBodyDeclarationContext ->
-            (parent.parent.parent as JavaParser.ClassBodyDeclarationContext).COMMENT()
+    parent.parent.parent is JavaParser.ClassBodyDeclarationContext ->
+        (parent.parent.parent as JavaParser.ClassBodyDeclarationContext).COMMENT()
 
-        else -> error("Error retrieving comment")
-    }?.toString()?.split("\n")?.joinToString(separator = "\n") { line ->
-        line.trim()
-            .removePrefix("""/*""")
-            .removePrefix("""*/""")
-            .removePrefix("""* """)
-            .removeSuffix("""*//*""")
-            .let {
-                if (it == "*") {
-                    ""
-                } else {
-                    it
-                }
+    else -> error("Error retrieving comment")
+}?.toString()?.split("\n")?.joinToString(separator = "\n") { line ->
+    line.trim()
+        .removePrefix("""/*""")
+        .removePrefix("""*/""")
+        .removePrefix("""* """)
+        .removeSuffix("""*//*""")
+        .let {
+            if (it == "*") {
+                ""
+            } else {
+                it
             }
-    }?.trim() ?: error("Error retrieving comment")
-}
+        }
+}?.trim() ?: error("Error retrieving comment")
 
 fun JavaParser.QualifiedNameContext.asString() = identifier().joinToString(".") { it.text }
 
@@ -846,19 +842,23 @@ fun String.methodIsMarkedPublicOrStatic(): Boolean {
             .typeDeclaration(0)
             .classDeclaration()
             .classBody().classBodyDeclaration().any { declaration ->
-                declaration.memberDeclaration()?.methodDeclaration() != null && declaration.modifier().any {
-                    it.classOrInterfaceModifier()?.PUBLIC() != null
+                declaration.memberDeclaration()?.methodDeclaration() != null &&
+                    declaration.modifier().any {
+                        it.classOrInterfaceModifier()?.PUBLIC() != null
+                    }
+            } ||
+            parsed.tree
+                .typeDeclaration(0)
+                .classDeclaration()
+                .classBody().classBodyDeclaration().any { declaration ->
+                    declaration.memberDeclaration()?.methodDeclaration() != null &&
+                        declaration.modifier().all {
+                            it.classOrInterfaceModifier()?.PRIVATE() == null
+                        } &&
+                        declaration.modifier().any {
+                            it.classOrInterfaceModifier()?.STATIC() != null
+                        }
                 }
-            } || parsed.tree
-            .typeDeclaration(0)
-            .classDeclaration()
-            .classBody().classBodyDeclaration().any { declaration ->
-                declaration.memberDeclaration()?.methodDeclaration() != null && declaration.modifier().all {
-                    it.classOrInterfaceModifier()?.PRIVATE() == null
-                } && declaration.modifier().any {
-                    it.classOrInterfaceModifier()?.STATIC() != null
-                }
-            }
     }
 }
 

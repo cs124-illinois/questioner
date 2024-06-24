@@ -312,9 +312,10 @@ internal data class ParsedKotlinFile(val path: String, val contents: String) {
                 }
             topLevelClass.modifierList().annotations()
                 ?.filter {
-                    it.annotation().LabelReference()?.text != null && annotationsToRemove.contains(
-                        it.annotation().LabelReference().text.removePrefix("@"),
-                    )
+                    it.annotation().LabelReference()?.text != null &&
+                        annotationsToRemove.contains(
+                            it.annotation().LabelReference().text.removePrefix("@"),
+                        )
                 }?.forEach { context ->
                     (context.start.startIndex.toLine()..context.stop.stopIndex.toLine()).forEach {
                         toRemove.add(it)

@@ -7,12 +7,13 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
-class TestSaveQuestions : StringSpec(
-    {
-        "should parse a question file" {
-            ParsedJavaFile(
-                "Second.java",
-                """
+class TestSaveQuestions :
+    StringSpec(
+        {
+            "should parse a question file" {
+                ParsedJavaFile(
+                    "Second.java",
+                    """
 package examples;
 
 import edu.illinois.cs.cs125.questioner.lib.Correct;
@@ -35,29 +36,29 @@ public class Second {
   public void also(@NotNull String input) { }
 }
 """.trim(),
-            ).also { parsedFile ->
-                parsedFile.packageName shouldBe "examples"
-                parsedFile.className shouldBe "Second"
-                parsedFile.fullName shouldBe "examples.Second"
+                ).also { parsedFile ->
+                    parsedFile.packageName shouldBe "examples"
+                    parsedFile.className shouldBe "Second"
+                    parsedFile.fullName shouldBe "examples.Second"
 
-                parsedFile.correct shouldNotBe null
-                parsedFile.type shouldBe "Correct"
-                parsedFile.wrapWith shouldBe "Second"
+                    parsedFile.correct shouldNotBe null
+                    parsedFile.type shouldBe "Correct"
+                    parsedFile.wrapWith shouldBe "Second"
 
-                parsedFile.correct!!.also {
-                    it.name shouldBe "Test"
-                    it.version shouldBe "2020.6.0"
-                    it.author shouldBe "challen@illinois.edu"
-                    it.description shouldBe "<p>Here is a <em>description</em>.</p>"
+                    parsedFile.correct!!.also {
+                        it.name shouldBe "Test"
+                        it.version shouldBe "2020.6.0"
+                        it.author shouldBe "challen@illinois.edu"
+                        it.description shouldBe "<p>Here is a <em>description</em>.</p>"
+                    }
+                    parsedFile.suppressions shouldBe listOf("rawtypes", "unchecked")
+                    parsedFile.tags shouldBe listOf("here", "we", "go")
                 }
-                parsedFile.suppressions shouldBe listOf("rawtypes", "unchecked")
-                parsedFile.tags shouldBe listOf("here", "we", "go")
             }
-        }
-        "should parse a question file with multiple suppressions" {
-            ParsedJavaFile(
-                "Second.java",
-                """
+            "should parse a question file with multiple suppressions" {
+                ParsedJavaFile(
+                    "Second.java",
+                    """
 package examples;
 
 import edu.illinois.cs.cs125.questioner.lib.Correct;
@@ -79,28 +80,28 @@ public class Second {
   public void also(@NotNull String input) { }
 }
 """.trim(),
-            ).also { parsedFile ->
-                parsedFile.packageName shouldBe "examples"
-                parsedFile.className shouldBe "Second"
-                parsedFile.fullName shouldBe "examples.Second"
+                ).also { parsedFile ->
+                    parsedFile.packageName shouldBe "examples"
+                    parsedFile.className shouldBe "Second"
+                    parsedFile.fullName shouldBe "examples.Second"
 
-                parsedFile.correct shouldNotBe null
-                parsedFile.type shouldBe "Correct"
-                parsedFile.wrapWith shouldBe "Second"
+                    parsedFile.correct shouldNotBe null
+                    parsedFile.type shouldBe "Correct"
+                    parsedFile.wrapWith shouldBe "Second"
 
-                parsedFile.correct!!.also {
-                    it.name shouldBe "Test"
-                    it.version shouldBe "2020.6.0"
-                    it.author shouldBe "challen@illinois.edu"
-                    it.description shouldBe "<p>Here is a <em>description</em>.</p>"
+                    parsedFile.correct!!.also {
+                        it.name shouldBe "Test"
+                        it.version shouldBe "2020.6.0"
+                        it.author shouldBe "challen@illinois.edu"
+                        it.description shouldBe "<p>Here is a <em>description</em>.</p>"
+                    }
+                    parsedFile.suppressions shouldBe listOf("rawtypes", "unchecked")
                 }
-                parsedFile.suppressions shouldBe listOf("rawtypes", "unchecked")
             }
-        }
-        "should parse a Kotlin alternate static solution" {
-            ParsedKotlinFile(
-                "Second.kt",
-                """
+            "should parse a Kotlin alternate static solution" {
+                ParsedKotlinFile(
+                    "Second.kt",
+                    """
 @file:AlsoCorrect
 @file:Suppress("test", "me")
 package examples
@@ -113,21 +114,21 @@ import edu.illinois.cs.cs125.questioner.AlsoCorrect
 
 fun correct() { }
 """.trim(),
-            ).also { parsedFile ->
-                parsedFile.className shouldBe "SecondKt"
-                parsedFile.isAlternateSolution shouldBe true
-                parsedFile.toAlternateFile(CleanSpec()).also {
-                    it.klass shouldBe "SecondKt"
+                ).also { parsedFile ->
+                    parsedFile.className shouldBe "SecondKt"
+                    parsedFile.isAlternateSolution shouldBe true
+                    parsedFile.toAlternateFile(CleanSpec()).also {
+                        it.klass shouldBe "SecondKt"
+                    }
+                    parsedFile.comment shouldBe "Test me _markdown_."
+                    parsedFile.description shouldBe "<p>Test me <em>markdown</em>.</p>"
+                    parsedFile.suppressions shouldBe listOf("test", "me")
                 }
-                parsedFile.comment shouldBe "Test me _markdown_."
-                parsedFile.description shouldBe "<p>Test me <em>markdown</em>.</p>"
-                parsedFile.suppressions shouldBe listOf("test", "me")
             }
-        }
-        "should parse a Kotlin alternate class solution" {
-            ParsedKotlinFile(
-                "Second.kt",
-                """
+            "should parse a Kotlin alternate class solution" {
+                ParsedKotlinFile(
+                    "Second.kt",
+                    """
 package examples
 
 import edu.illinois.cs.cs125.questioner.lib.AlsoCorrect
@@ -140,20 +141,20 @@ class Second {
   fun correct() { }
 }
 """.trim(),
-            ).also { parsedFile ->
-                parsedFile.className shouldBe "Second"
-                parsedFile.isAlternateSolution shouldBe true
-                parsedFile.toAlternateFile(CleanSpec()).also {
-                    it.klass shouldBe "Second"
+                ).also { parsedFile ->
+                    parsedFile.className shouldBe "Second"
+                    parsedFile.isAlternateSolution shouldBe true
+                    parsedFile.toAlternateFile(CleanSpec()).also {
+                        it.klass shouldBe "Second"
+                    }
+                    parsedFile.comment shouldBe "Test me _markdown_."
+                    parsedFile.description shouldBe "<p>Test me <em>markdown</em>.</p>"
                 }
-                parsedFile.comment shouldBe "Test me _markdown_."
-                parsedFile.description shouldBe "<p>Test me <em>markdown</em>.</p>"
             }
-        }
-        "should parse a Kotlin incorrect static submission" {
-            ParsedKotlinFile(
-                "Second.kt",
-                """
+            "should parse a Kotlin incorrect static submission" {
+                ParsedKotlinFile(
+                    "Second.kt",
+                    """
 @file:Incorrect(reason="test")
 
 package examples
@@ -166,11 +167,11 @@ import edu.illinois.cs.cs125.questioner.lib.Starter
  */
 fun incorrect() { }
 """.trim(),
-            ).also { parsedFile ->
-                parsedFile.className shouldBe "SecondKt"
-                parsedFile.incorrect shouldBe "test"
+                ).also { parsedFile ->
+                    parsedFile.className shouldBe "SecondKt"
+                    parsedFile.incorrect shouldBe "test"
+                }
             }
-        }
         /*
         "should reject duplicate questions" {
             shouldThrow<IllegalStateException> {
@@ -237,5 +238,5 @@ public class Another {
             }
         }
          */
-    },
-)
+        },
+    )

@@ -241,6 +241,9 @@ suspend fun Question.validate(
         if (toJson().length > Question.DEFAULT_MAX_OUTPUT_SIZE) {
             throw TooMuchOutput(file.contents, file.path, size, Question.DEFAULT_MAX_OUTPUT_SIZE, file.language)
         }
+        if (failed.checkCompiledSubmission == null && failed.checkExecutedSubmission == null && taskResults?.threw != null) {
+            throw IncorrectTestingThrew(file, taskResults!!.threw!!, taskResults!!.output)
+        }
     }
 
     val bootStrapStart = Instant.now()
@@ -272,6 +275,7 @@ suspend fun Question.validate(
         solutionDeadCode = solutionDeadCode,
         suppressions = javaSolution.suppressions,
         kotlinSuppressions = kotlinSolution?.suppressions,
+        recordTrace = true
         // No execution count limit
         // No allocation limit
         // No known recursive methods yet
@@ -282,11 +286,9 @@ suspend fun Question.validate(
             .also { testResults ->
                 testResults.checkCorrect(solution)
             }
-    }.also {
-        println("-".repeat(80))
-        it.first().jenisolResults!!.printTrace()
-        println("-".repeat(80))
     }
+
+    val bootstrapTrace = firstCorrectResults.first().jenisolResults!!.randomTrace!!
 
     val solutionJavaRecursiveMethods = firstCorrectResults.getRecursiveMethods(Language.java)
     check(solutionJavaRecursiveMethods != null)
@@ -352,6 +354,7 @@ suspend fun Question.validate(
         solutionClassSize = bootstrapClassSize,
         suppressions = javaSolution.suppressions,
         kotlinSuppressions = kotlinSolution?.suppressions,
+        followTrace = bootstrapTrace
     )
     val incorrectResults = allIncorrect.map { wrong ->
         val specificIncorrectSettings = if (wrong.reason == Question.IncorrectFile.Reason.MEMORYLIMIT) {
@@ -372,12 +375,6 @@ suspend fun Question.validate(
         ).let { testResults ->
             testResults.checkIncorrect(wrong, wrong.mutation != null)
             IncorrectResults(wrong, testResults)
-        }
-    }.also {
-        it.maxByOrNull { it.results.jenisolResults?.size ?: 0 }?.also {
-            println("-".repeat(80))
-            it.results.jenisolResults!!.printTrace()
-            println("-".repeat(80))
         }
     }
     val incorrectLength = Instant.now().toEpochMilli() - incorrectStart.toEpochMilli()
@@ -756,6 +753,21 @@ class SolutionTestingThrew(val solution: Question.FlatFile, val threw: Throwable
         }
     }
         |${printContents(solution.contents, solution.path)}
+        """.trimMargin()
+}
+
+class IncorrectTestingThrew(val incorrect: Question.IncorrectFile, val threw: Throwable, val output: String = "") :
+    ValidationFailed() {
+    override val message = """
+        |Testing threw an unexpected exception $threw
+        |${threw.stackTraceToString()}${
+        if (output.isNotEmpty()) {
+            "\n---\n${output.trim()}\n---"
+        } else {
+            ""
+        }
+    }
+        |${printContents(incorrect.contents, incorrect.path)}
         """.trimMargin()
 }
 
