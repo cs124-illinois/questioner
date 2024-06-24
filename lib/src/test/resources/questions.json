@@ -156,6 +156,28 @@
       "complexity": {
         "java": 1,
         "kotlin": 1
+      },
+      "recursiveMethodsByLanguage": {
+        "java": [],
+        "kotlin": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "java.lang.Integer",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ],
+        "kotlin": [
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -397,7 +419,228 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
-    "fauxStatic": false,
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "java.lang.Integer",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin.",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 3072,
+        "kotlin": 3072
+      },
+      "allocationLimit": {
+        "java": 5632,
+        "kotlin": 5632
+      },
+      "solutionClassSize": {
+        "java": 104,
+        "kotlin": 260
+      },
+      "solutionDeadCode": {
+        "java": 0,
+        "kotlin": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": [],
+        "kotlin": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "kotlinSuppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 5632,
+        "kotlin": 5632
+      },
+      "wallTime": {
+        "java": 5,
+        "kotlin": 15
+      },
+      "cpuTime": {
+        "java": 2493000,
+        "kotlin": 13358000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 12,
+      "mutationCount": 6,
+      "solutionMaxRuntime": 15,
+      "bootstrapLength": 8422,
+      "mutationLength": 13,
+      "incorrectLength": 708,
+      "calibrationLength": 171,
+      "solutionCoverage": {
+        "covered": 1,
+        "total": 1,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 192,
+        "kotlin": 192
+      },
+      "memoryAllocation": {
+        "java": 352,
+        "kotlin": 352
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 318.89
+    },
+    "fauxStatic": true,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return value + 1;",
+          "+  return value + 0;"
+        ],
+        "language": "java",
+        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return value + 1;",
+          "+  return value + 2;"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return value + 1;",
+          "+  return value - 1;"
+        ],
+        "language": "java",
+        "mutation": "PLUS_TO_MINUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return value + 1;",
+          "+  return value;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return value + 1;",
+          "+  return 1;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun addOne(value: Int): Int = value + 1",
+          "+fun addOne(value: Int): Int = 0 // You may need to remove this starter code"
+        ],
+        "language": "kotlin",
+        "incorrectIndex": 1,
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return value + 1;",
+          "+  return 0;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return value + 1;",
+          "+  return 0; // You may need to remove this starter code"
+        ],
+        "language": "java",
+        "incorrectIndex": 0,
+        "testCount": 1,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/addone/Question.java"
   },
   {
@@ -576,6 +819,28 @@
       "complexity": {
         "java": 1,
         "kotlin": 1
+      },
+      "recursiveMethodsByLanguage": {
+        "java": [],
+        "kotlin": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "java.lang.Integer",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ],
+        "kotlin": [
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -807,7 +1072,202 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "java.lang.Integer",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin.",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "java.lang.Object",
+        "java.lang.Class",
+        "QuestionKt",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 3072,
+        "kotlin": 3072
+      },
+      "allocationLimit": {
+        "java": 5632,
+        "kotlin": 5632
+      },
+      "solutionClassSize": {
+        "java": 104,
+        "kotlin": 108
+      },
+      "solutionDeadCode": {
+        "java": 0,
+        "kotlin": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": [],
+        "kotlin": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "kotlinSuppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 5632,
+        "kotlin": 5632
+      },
+      "wallTime": {
+        "java": 8,
+        "kotlin": 14
+      },
+      "cpuTime": {
+        "java": 1642000,
+        "kotlin": 12980000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 11,
+      "mutationCount": 6,
+      "solutionMaxRuntime": 14,
+      "bootstrapLength": 8422,
+      "mutationLength": 11,
+      "incorrectLength": 311,
+      "calibrationLength": 80,
+      "solutionCoverage": {
+        "covered": 2,
+        "total": 2,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 192,
+        "kotlin": 192
+      },
+      "memoryAllocation": {
+        "java": 352,
+        "kotlin": 352
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 301.121
+    },
     "fauxStatic": false,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    return value + 1;",
+          "+    return value + 2;"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    return value + 1;",
+          "+    return value;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    return value + 1;",
+          "+    return value - 1;"
+        ],
+        "language": "java",
+        "mutation": "PLUS_TO_MINUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    return value + 1;",
+          "+    return 1;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    return value + 1;",
+          "+    return value + 0;"
+        ],
+        "language": "java",
+        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    return value + 1;",
+          "+    return 0;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 1,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/addoneclass/Question.java"
   },
   {
@@ -1181,6 +1641,30 @@
       "complexity": {
         "java": 2,
         "kotlin": 2
+      },
+      "recursiveMethodsByLanguage": {
+        "java": [],
+        "kotlin": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "Parent",
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ],
+        "kotlin": [
+          "Parent",
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -1701,7 +2185,258 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 123,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "Parent",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "java.lang.invoke.StringConcatFactory",
+        "Child",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin.",
+        "Parent",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "java.lang.invoke.StringConcatFactory",
+        "Child",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 7248,
+        "kotlin": 4176
+      },
+      "allocationLimit": {
+        "java": 170240,
+        "kotlin": 170240
+      },
+      "solutionClassSize": {
+        "java": 757,
+        "kotlin": 1008
+      },
+      "solutionDeadCode": {
+        "java": 0,
+        "kotlin": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": [],
+        "kotlin": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "kotlinSuppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 984,
+      "executionCountLimit": {
+        "java": 1968,
+        "kotlin": 1968
+      },
+      "allocationLimit": {
+        "java": 1383808,
+        "kotlin": 1383808
+      },
+      "wallTime": {
+        "java": 35,
+        "kotlin": 19
+      },
+      "cpuTime": {
+        "java": 4155000,
+        "kotlin": 15582000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 123,
+      "mutationCount": 14,
+      "solutionMaxRuntime": 19,
+      "bootstrapLength": 8642,
+      "mutationLength": 40,
+      "incorrectLength": 1142,
+      "calibrationLength": 425,
+      "solutionCoverage": {
+        "covered": 4,
+        "total": 4,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 453,
+        "kotlin": 261
+      },
+      "memoryAllocation": {
+        "java": 10640,
+        "kotlin": 10640
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 302.987
+    },
     "fauxStatic": false,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    return firstName + \" \" + getLastName();",
+          "+    return firstName + \"i\" + getLastName();"
+        ],
+        "language": "java",
+        "incorrectIndex": 1,
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    return firstName + \" \" + getLastName();",
+          "+    return \"\";"
+        ],
+        "language": "java",
+        "incorrectIndex": 0,
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    return firstName + \" \" + getLastName();",
+          "+    return getLastName();"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    return firstName + \" \" + getLastName();",
+          "+    return firstName + \"6\" + getLastName();"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    return firstName + \" \" + getLastName();",
+          "+    return \" \" + getLastName();"
+        ],
+        "language": "java",
+        "mutation": "NULL_RETURN",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    return firstName + \" \" + getLastName();",
+          "+    return firstName + \"B\" + getLastName();"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    return firstName + \" \" + getLastName();",
+          "+    return firstName + \"S\" + getLastName();"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    return firstName + \" \" + getLastName();",
+          "+    return firstName + getLastName();"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    return firstName + \" \" + getLastName();",
+          "+    return null;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    return firstName + \" \" + getLastName();",
+          "+    return firstName + \" \";"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 7,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/Child.java"
   },
   {
@@ -2185,6 +2920,21 @@
       },
       "complexity": {
         "java": 7
+      },
+      "recursiveMethodsByLanguage": {
+        "java": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Throwable",
+          "java.lang.AssertionError",
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -2673,7 +3423,312 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 75,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.lang.Throwable",
+        "java.lang.AssertionError",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Classroom",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin."
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 6880
+      },
+      "allocationLimit": {
+        "java": 2165632
+      },
+      "solutionClassSize": {
+        "java": 769
+      },
+      "solutionDeadCode": {
+        "java": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 600,
+      "executionCountLimit": {
+        "java": 1200,
+        "kotlin": 1200
+      },
+      "allocationLimit": {
+        "java": 22124032,
+        "kotlin": 22124032
+      },
+      "wallTime": {
+        "java": 15
+      },
+      "cpuTime": {
+        "java": 14493000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 75,
+      "mutationCount": 17,
+      "solutionMaxRuntime": 9,
+      "bootstrapLength": 3703,
+      "mutationLength": 215,
+      "incorrectLength": 2158,
+      "calibrationLength": 36,
+      "solutionCoverage": {
+        "covered": 12,
+        "total": 12,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 430
+      },
+      "memoryAllocation": {
+        "java": 135352
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 270.514
+    },
     "fauxStatic": false,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    assert setEnrollment >= 0;",
+          "+    assert setEnrollment < 0;"
+        ],
+        "language": "java",
+        "mutation": "NEGATE_CONDITIONAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -7,1 +7,1 @@",
+          "-    assert setName != null;",
+          "+    assert setName == null;"
+        ],
+        "language": "java",
+        "mutation": "CONDITIONAL_BOUNDARY",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -17,1 +17,1 @@",
+          "-    assert setEnrollment >= 0;",
+          "+    assert setEnrollment < 0;"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -22,1 +22,1 @@",
+          "-    return name;",
+          "+    return null;"
+        ],
+        "language": "java",
+        "mutation": "NULL_RETURN",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -13,1 +13,1 @@",
+          "-    return capacity;",
+          "+    return 0;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -17,1 +17,1 @@",
+          "-    assert setEnrollment >= 0;",
+          "+    assert setEnrollment > 0;"
+        ],
+        "language": "java",
+        "mutation": "CONDITIONAL_BOUNDARY",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -17,1 +17,1 @@",
+          "-    assert setEnrollment >= 0;",
+          "+    assert setEnrollment >= 1;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    assert setEnrollment >= 0;",
+          "+    assert setEnrollment >= 1;"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 6,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    assert setEnrollment >= 0;",
+          "+    assert setEnrollment > 0;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 6,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -17,1 +17,0 @@",
+          "-    assert setEnrollment >= 0;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_RUNTIME_CHECK",
+        "testCount": 8,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -17,2 +17,1 @@",
+          "-    assert setEnrollment >= 0;",
+          "-    capacity = setEnrollment;",
+          "+    return;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_RUNTIME_CHECK",
+        "testCount": 8,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -18,1 +18,0 @@",
+          "-    capacity = setEnrollment;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 12,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -22,1 +22,1 @@",
+          "-    return name;",
+          "+    return \"\";"
+        ],
+        "language": "java",
+        "mutation": "NEGATE_CONDITIONAL",
+        "testCount": 22,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,0 @@",
+          "-    capacity = setEnrollment;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_RUNTIME_CHECK",
+        "testCount": 30,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,0 @@",
+          "-    assert setEnrollment >= 0;"
+        ],
+        "language": "java",
+        "mutation": "NEGATE_CONDITIONAL",
+        "testCount": 39,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -7,1 +7,0 @@",
+          "-    assert setName != null;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 74,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withgettersandsetters/Classroom.java"
   },
   {
@@ -3163,6 +4218,20 @@
       },
       "complexity": {
         "java": 5
+      },
+      "recursiveMethodsByLanguage": {
+        "java": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "Feliform",
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -3664,7 +4733,383 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 117,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "Cougar",
+        "Feliform",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin."
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 10800
+      },
+      "allocationLimit": {
+        "java": 5632
+      },
+      "solutionClassSize": {
+        "java": 415
+      },
+      "solutionDeadCode": {
+        "java": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 936,
+      "executionCountLimit": {
+        "java": 1872,
+        "kotlin": 1872
+      },
+      "allocationLimit": {
+        "java": 5632,
+        "kotlin": 5632
+      },
+      "wallTime": {
+        "java": 53
+      },
+      "cpuTime": {
+        "java": 15959000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 117,
+      "mutationCount": 28,
+      "solutionMaxRuntime": 15,
+      "bootstrapLength": 2419,
+      "mutationLength": 1218,
+      "incorrectLength": 2839,
+      "calibrationLength": 32,
+      "solutionCoverage": {
+        "covered": 8,
+        "total": 8,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 675
+      },
+      "memoryAllocation": {
+        "java": 352
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 434.361
+    },
     "fauxStatic": false,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    super(\"cougar\");",
+          "+    super(\"c0ugar\");"
+        ],
+        "language": "java",
+        "mutation": "SWAP_AND_OR",
+        "testCount": 18,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    super(\"cougar\");",
+          "+    super(\"coigar\");"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 18,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    super(\"cougar\");",
+          "+    super(\"coTgar\");"
+        ],
+        "language": "java",
+        "mutation": "NEGATE_CONDITIONAL",
+        "testCount": 18,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    super(\"cougar\");",
+          "+    super(\"Cougar\");"
+        ],
+        "language": "java",
+        "mutation": "NEGATE_CONDITIONAL",
+        "testCount": 18,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    super(\"cougar\");",
+          "+    super(\"co7gar\");"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 18,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    super(\"cougar\");",
+          "+    super(\"coCgar\");"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_AND_OR",
+        "testCount": 18,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    super(\"cougar\");",
+          "+    super(\"ougar\");"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 18,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    super(\"cougar\");",
+          "+    super(\"couga\");"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 18,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -19,1 +19,1 @@",
+          "-    return speed == housecat.speed && weight == housecat.weight;",
+          "+    return true;"
+        ],
+        "language": "java",
+        "mutation": "CHANGE_EQUALS",
+        "testCount": 19,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -12,1 +12,1 @@",
+          "-    return speed * weight;",
+          "+    return 0;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_IF",
+        "testCount": 20,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -12,1 +12,1 @@",
+          "-    return speed * weight;",
+          "+    return weight;"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 20,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -17,1 +17,1 @@",
+          "-      return false;",
+          "+      return true;"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 21,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -19,1 +19,1 @@",
+          "-    return speed == housecat.speed && weight == housecat.weight;",
+          "+    return speed == housecat.speed || weight == housecat.weight;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_BINARY",
+        "testCount": 27,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -19,1 +19,1 @@",
+          "-    return speed == housecat.speed && weight == housecat.weight;",
+          "+    return speed == housecat.speed && weight != housecat.weight;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 27,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -19,1 +19,1 @@",
+          "-    return speed == housecat.speed && weight == housecat.weight;",
+          "+    return speed == housecat.speed;"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 27,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -19,1 +19,1 @@",
+          "-    return speed == housecat.speed && weight == housecat.weight;",
+          "+    return false;"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "testCount": 30,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -19,1 +19,1 @@",
+          "-    return speed == housecat.speed && weight == housecat.weight;",
+          "+    return speed != housecat.speed && weight == housecat.weight;"
+        ],
+        "language": "java",
+        "mutation": "TRUE_RETURN",
+        "testCount": 30,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -16,4 +16,1 @@",
+          "-    if (!(o instanceof Cougar housecat)) {",
+          "-      return false;",
+          "-    }",
+          "-    return speed == housecat.speed && weight == housecat.weight;",
+          "+    return false;"
+        ],
+        "language": "java",
+        "mutation": "NEGATE_IF",
+        "testCount": 30,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -19,1 +19,1 @@",
+          "-    return speed == housecat.speed && weight == housecat.weight;",
+          "+    return weight == housecat.weight;"
+        ],
+        "language": "java",
+        "mutation": "CHANGE_EQUALS",
+        "testCount": 34,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -12,1 +12,1 @@",
+          "-    return speed * weight;",
+          "+    return speed;"
+        ],
+        "language": "java",
+        "mutation": "MATH",
+        "testCount": 116,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -12,1 +12,1 @@",
+          "-    return speed * weight;",
+          "+    return speed / weight;"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 116,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/cougarfeliform/Cougar.java"
   },
   {
@@ -3787,6 +5232,19 @@
       },
       "complexity": {
         "java": 1
+      },
+      "recursiveMethodsByLanguage": {
+        "java": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "java.lang.Integer",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -3917,7 +5375,184 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
-    "fauxStatic": false,
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "java.lang.Integer",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin."
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 3072
+      },
+      "allocationLimit": {
+        "java": 5632
+      },
+      "solutionClassSize": {
+        "java": 141
+      },
+      "solutionDeadCode": {
+        "java": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 5632,
+        "kotlin": 5632
+      },
+      "wallTime": {
+        "java": 83
+      },
+      "cpuTime": {
+        "java": 3192000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 6,
+      "mutationCount": 7,
+      "solutionMaxRuntime": 17,
+      "bootstrapLength": 840,
+      "mutationLength": 130,
+      "incorrectLength": 611,
+      "calibrationLength": 78,
+      "solutionCoverage": {
+        "covered": 1,
+        "total": 1,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 192
+      },
+      "memoryAllocation": {
+        "java": 352
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 292.43
+    },
+    "fauxStatic": true,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return value == 88;",
+          "+  return false;"
+        ],
+        "language": "java",
+        "mutation": "CHANGE_EQUALS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return value == 88;",
+          "+  return value != 88;"
+        ],
+        "language": "java",
+        "mutation": "NEGATE_CONDITIONAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return value == 88;",
+          "+  return value == 8;"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL_TRIM",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return value == 88;",
+          "+  return value == 89;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return value == 88;",
+          "+  return value == 98;"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return value == 88;",
+          "+  return true;"
+        ],
+        "language": "java",
+        "mutation": "TRUE_RETURN",
+        "testCount": 1,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/equals88/Question.java"
   },
   {
@@ -4554,6 +6189,34 @@
       "complexity": {
         "java": 1,
         "kotlin": 1
+      },
+      "recursiveMethodsByLanguage": {
+        "java": [],
+        "kotlin": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.io.PrintStream",
+          "java.lang.System",
+          "java.util.Scanner",
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ],
+        "kotlin": [
+          "java.io.PrintStream",
+          "java.lang.System",
+          "java.util.Scanner",
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -5526,7 +7189,563 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 1,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.lang.System",
+        "java.util.Scanner",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "java.lang.invoke.StringConcatFactory",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin.",
+        "java.lang.System",
+        "java.util.Scanner",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "java.lang.Object",
+        "java.lang.Class",
+        "QuestionKt",
+        "java.lang.String",
+        "java.lang.invoke.StringConcatFactory",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 336,
+        "kotlin": 336
+      },
+      "allocationLimit": {
+        "java": 884736,
+        "kotlin": 884736
+      },
+      "solutionClassSize": {
+        "java": 897,
+        "kotlin": 872
+      },
+      "solutionDeadCode": {
+        "java": 0,
+        "kotlin": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": [],
+        "kotlin": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [
+        "StringOperationCanBeSimplified"
+      ],
+      "kotlinSuppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 8,
+      "executionCountLimit": {
+        "java": 16,
+        "kotlin": 16
+      },
+      "allocationLimit": {
+        "java": 887808,
+        "kotlin": 887808
+      },
+      "wallTime": {
+        "java": 18,
+        "kotlin": 5
+      },
+      "cpuTime": {
+        "java": 6720000,
+        "kotlin": 5155000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 1,
+      "mutationCount": 35,
+      "solutionMaxRuntime": 5,
+      "bootstrapLength": 4296,
+      "mutationLength": 90,
+      "incorrectLength": 1895,
+      "calibrationLength": 417,
+      "solutionCoverage": {
+        "covered": 8,
+        "total": 8,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 21,
+        "kotlin": 21
+      },
+      "memoryAllocation": {
+        "java": 55296,
+        "kotlin": 55296
+      },
+      "canTestTest": false,
+      "javaSolutionBootstrapCPUTimeMS": 6.952
+    },
     "fauxStatic": false,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    System.out.println(\"Hello!\");",
+          "+    System.out.println(\"Hello?\");"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    System.out.println(\"Hello!\");",
+          "+    System.out.println(\"HeTlo!\");"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    System.out.println(\"Second: \" + second);",
+          "+    System.out.println(\"3econd: \" + second);"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    System.out.println(\"Hello!\");",
+          "+    System.out.println(\"Hel1o!\");"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    System.out.println(\"Second: \" + second);",
+          "+    System.out.println(second);"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,1 @@",
+          "-    System.out.println(\"First: \" + first);",
+          "+    System.out.println(\"FirWt: \" + first);"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    System.out.println(\"Second: \" + second);",
+          "+    System.out.println(\"Sec0nd: \" + second);"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,1 @@",
+          "-    System.out.println(\"First: \" + first);",
+          "+    System.out.println(\"First; \" + first);"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    System.out.println(\"Second: \" + second);",
+          "+    System.out.println(\"Second; \" + second);"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,1 @@",
+          "-    System.out.println(\"First: \" + first);",
+          "+    System.out.println(\"first: \" + first);"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    System.out.println(\"Second: \" + second);",
+          "+    System.out.println(\"Segond: \" + second);"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,0 @@",
+          "-    System.out.println(\"Hello!\");"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,1 @@",
+          "-    System.out.println(\"First: \" + first);",
+          "+    System.out.println(\"First:L\" + first);"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    System.out.println(\"Hello!\");",
+          "+    System.out.println(\"HeClo!\");"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    System.out.println(\"Second: \" + second);",
+          "+    System.out.println(\"second: \" + second);"
+        ],
+        "language": "java",
+        "mutation": "PLUS_TO_MINUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,6 +5,1 @@",
+          "-    System.out.println(\"Hello!\");",
+          "-    Scanner scanner = new Scanner(System.in);",
+          "-    String first = scanner.nextLine();",
+          "-    System.out.println(\"First: \" + first);",
+          "-    String second = scanner.nextLine();",
+          "-    System.out.println(\"Second: \" + second);",
+          "+    return;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    System.out.println(\"Hello!\");",
+          "+    System.out.println(\"He1lo!\");"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    System.out.println(\"Second: \" + second);",
+          "+    System.out.println(\"econd: \" + second);"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,1 @@",
+          "-    System.out.println(\"First: \" + first);",
+          "+    System.out.println(\"cirst: \" + first);"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    System.out.println(\"Hello!\");",
+          "+    System.out.println(\"Heilo!\");"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,1 @@",
+          "-    System.out.println(\"First: \" + first);",
+          "+    System.out.println(first);"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,0 @@",
+          "-    System.out.println(\"Second: \" + second);"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,1 @@",
+          "-    System.out.println(\"First: \" + first);",
+          "+    System.out.println(\"FUrst: \" + first);"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    System.out.println(\"Second: \" + second);",
+          "+    System.out.println(\"Second: \");"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,1 @@",
+          "-    System.out.println(\"First: \" + first);",
+          "+    System.out.println(\"First: \");"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    System.out.println(\"Second: \" + second);",
+          "+    System.out.println(\"Secone: \" + second);"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    System.out.println(\"Hello!\");",
+          "+    System.out.println(\"ello!\");"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    System.out.println(\"Hello!\");",
+          "+    System.out.println(\"He7lo!\");"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    System.out.println(\"Hello!\");",
+          "+    System.out.println(\"hello!\");"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,1 @@",
+          "-    System.out.println(\"First: \" + first);",
+          "+    System.out.println(\"irst: \" + first);"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    System.out.println(\"Hello!\");",
+          "+    System.out.println(\"Hello\");"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,0 @@",
+          "-    System.out.println(\"First: \" + first);"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    System.out.println(\"Second: \" + second);",
+          "+    System.out.println(\"Secondq \" + second);"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/inputinterleavingtest/Question.java"
   },
   {
@@ -5838,6 +8057,28 @@
       "complexity": {
         "java": 2,
         "kotlin": 0
+      },
+      "recursiveMethodsByLanguage": {
+        "java": [],
+        "kotlin": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "java.lang.Integer",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ],
+        "kotlin": [
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -6261,7 +8502,178 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Book",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "java.lang.Integer",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin.",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Book",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 4944,
+        "kotlin": 3072
+      },
+      "allocationLimit": {
+        "java": 5632,
+        "kotlin": 5632
+      },
+      "solutionClassSize": {
+        "java": 234,
+        "kotlin": 578
+      },
+      "solutionDeadCode": {
+        "java": 0,
+        "kotlin": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": [],
+        "kotlin": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "kotlinSuppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 5632,
+        "kotlin": 5632
+      },
+      "wallTime": {
+        "java": 3,
+        "kotlin": 13
+      },
+      "cpuTime": {
+        "java": 2403000,
+        "kotlin": 10807000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 21,
+      "mutationCount": 4,
+      "solutionMaxRuntime": 13,
+      "bootstrapLength": 8358,
+      "mutationLength": 12,
+      "incorrectLength": 756,
+      "calibrationLength": 112,
+      "solutionCoverage": {
+        "covered": 4,
+        "total": 4,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 309,
+        "kotlin": 192
+      },
+      "memoryAllocation": {
+        "java": 352,
+        "kotlin": 352
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 394.466
+    },
     "fauxStatic": false,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    return name;",
+          "+    return \"\";"
+        ],
+        "language": "java",
+        "incorrectIndex": 0,
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    name = setName;",
+          "+    return;"
+        ],
+        "language": "java",
+        "mutation": "NULL_RETURN",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    return name;",
+          "+    return null;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -4,3 +4,1 @@",
+          "-  public void setName(String setName) {",
+          "-    name = setName;",
+          "-  }",
+          "+  public void setName(String setName) {}"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 2,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/Book.java"
   },
   {
@@ -6642,6 +9054,27 @@
       },
       "complexity": {
         "java": 5
+      },
+      "recursiveMethodsByLanguage": {
+        "java": [
+          {
+            "className": "Question",
+            "methodName": "rangeSum",
+            "descriptor": "(I)I"
+          }
+        ]
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Throwable",
+          "java.lang.IllegalArgumentException",
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -7040,7 +9473,329 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.lang.Throwable",
+        "java.lang.IllegalArgumentException",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin."
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 26688
+      },
+      "allocationLimit": {
+        "java": 5103232
+      },
+      "solutionClassSize": {
+        "java": 305
+      },
+      "solutionDeadCode": {
+        "java": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": [
+          {
+            "className": "Question",
+            "methodName": "rangeSum",
+            "descriptor": "(I)I"
+          }
+        ]
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 88056192,
+        "kotlin": 88056192
+      },
+      "wallTime": {
+        "java": 20
+      },
+      "cpuTime": {
+        "java": 19116000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 11,
+      "mutationCount": 23,
+      "solutionMaxRuntime": 12,
+      "bootstrapLength": 3672,
+      "mutationLength": 608,
+      "incorrectLength": 2572,
+      "calibrationLength": 25,
+      "solutionCoverage": {
+        "covered": 7,
+        "total": 7,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 1668
+      },
+      "memoryAllocation": {
+        "java": 318952
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 440.797
+    },
     "fauxStatic": false,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,3 +10,0 @@",
+          "-    if (range < 0) {",
+          "-      throw new IllegalArgumentException();",
+          "-    }"
+        ],
+        "language": "java",
+        "mutation": "PRIMITIVE_RETURN",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,4 +10,1 @@",
+          "-    if (range < 0) {",
+          "-      throw new IllegalArgumentException();",
+          "-    }",
+          "-    return rangeSumHelper(range);",
+          "+    return 0;"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    if (range < 0) {",
+          "+    if (!(range < 0)) {"
+        ],
+        "language": "java",
+        "mutation": "NEGATE_CONDITIONAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    if (range < 0) {",
+          "+    if (range >= 0) {"
+        ],
+        "language": "java",
+        "mutation": "PLUS_TO_MINUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -4,1 +4,1 @@",
+          "-      return 0;",
+          "+      return 1;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    return range + rangeSumHelper(range - 1);",
+          "+    return rangeSumHelper(range - 1);"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_IF",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -13,1 +13,1 @@",
+          "-    return rangeSumHelper(range);",
+          "+    return 0;"
+        ],
+        "language": "java",
+        "mutation": "CHANGE_EQUALS",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    return range + rangeSumHelper(range - 1);",
+          "+    return 0;"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,4 +3,1 @@",
+          "-    if (range == 0) {",
+          "-      return 0;",
+          "-    }",
+          "-    return range + rangeSumHelper(range - 1);",
+          "+    return 0;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_BINARY",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    if (range == 0) {",
+          "+    if (range == 1) {"
+        ],
+        "language": "java",
+        "mutation": "NEGATE_IF",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    if (range == 0) {",
+          "+    if (!(range == 0)) {"
+        ],
+        "language": "java",
+        "mutation": "NEGATE_IF",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    if (range == 0) {",
+          "+    if (range != 0) {"
+        ],
+        "language": "java",
+        "incorrectIndex": 0,
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    if (range < 0) {",
+          "+    if (range <= 0) {"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -10,1 +10,1 @@",
+          "-    if (range < 0) {",
+          "+    if (range < 1) {"
+        ],
+        "language": "java",
+        "mutation": "CONDITIONAL_BOUNDARY",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    return range + rangeSumHelper(range - 1);",
+          "+    return range - rangeSumHelper(range - 1);"
+        ],
+        "language": "java",
+        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    return range + rangeSumHelper(range - 1);",
+          "+    return range;"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/privaterecursivehelper/Question.java"
   },
   {
@@ -7271,6 +10026,23 @@
       },
       "complexity": {
         "java": 2
+      },
+      "recursiveMethodsByLanguage": {
+        "java": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.io.PrintStream",
+          "java.lang.System",
+          "java.util.Scanner",
+          "java.io.IOException",
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -7506,7 +10278,162 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.lang.System",
+        "java.util.Scanner",
+        "java.io.IOException",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "java.lang.Object",
+        "Question",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin."
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 9216
+      },
+      "allocationLimit": {
+        "java": 24732416
+      },
+      "solutionClassSize": {
+        "java": 431
+      },
+      "solutionDeadCode": {
+        "java": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 395584256,
+        "kotlin": 395584256
+      },
+      "wallTime": {
+        "java": 17
+      },
+      "cpuTime": {
+        "java": 4744000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 1,
+      "mutationCount": 4,
+      "solutionMaxRuntime": 25,
+      "bootstrapLength": 4953,
+      "mutationLength": 59,
+      "incorrectLength": 376,
+      "calibrationLength": 40,
+      "solutionCoverage": {
+        "covered": 4,
+        "total": 4,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 576
+      },
+      "memoryAllocation": {
+        "java": 1545776
+      },
+      "canTestTest": false,
+      "javaSolutionBootstrapCPUTimeMS": 780.336
+    },
     "fauxStatic": false,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,0 @@",
+          "-    System.out.println(greeter);"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -7,1 +7,1 @@",
+          "-    String greeter = new Scanner(\"testing.txt\").useDelimiter(\"\\\\A\").next();",
+          "+    String greeter = new Scanner(\"testing,txt\").useDelimiter(\"\\\\A\").next();"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -7,1 +7,1 @@",
+          "-    String greeter = new Scanner(\"testing.txt\").useDelimiter(\"\\\\A\").next();",
+          "+    String greeter = new Scanner(\"Testing.txt\").useDelimiter(\"\\\\A\").next();"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,3 +6,1 @@",
+          "-    // mutate-disable-string-literal-trim mutate-disable-string-literal",
+          "-    String greeter = new Scanner(\"testing.txt\").useDelimiter(\"\\\\A\").next();",
+          "-    System.out.println(greeter);",
+          "+    return;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 0,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/readhelloworld/Question.java"
   },
   {
@@ -8003,6 +10930,44 @@
       "complexity": {
         "java": 4,
         "kotlin": 3
+      },
+      "recursiveMethodsByLanguage": {
+        "java": [
+          {
+            "className": "Question",
+            "methodName": "factorial",
+            "descriptor": "(J)J"
+          }
+        ],
+        "kotlin": [
+          {
+            "className": "QuestionKt",
+            "methodName": "factorial",
+            "descriptor": "(J)J"
+          }
+        ]
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Throwable",
+          "java.lang.IllegalArgumentException",
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ],
+        "kotlin": [
+          "java.lang.Throwable",
+          "java.lang.IllegalArgumentException",
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -8703,7 +11668,382 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.lang.Throwable",
+        "java.lang.IllegalArgumentException",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin.",
+        "java.lang.Throwable",
+        "java.lang.IllegalArgumentException",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "java.lang.Object",
+        "java.lang.Class",
+        "QuestionKt",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 147264,
+        "kotlin": 147072
+      },
+      "allocationLimit": {
+        "java": 351232,
+        "kotlin": 351232
+      },
+      "solutionClassSize": {
+        "java": 231,
+        "kotlin": 356
+      },
+      "solutionDeadCode": {
+        "java": 0,
+        "kotlin": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": [
+          {
+            "className": "Question",
+            "methodName": "factorial",
+            "descriptor": "(J)J"
+          }
+        ],
+        "kotlin": [
+          {
+            "className": "QuestionKt",
+            "methodName": "factorial",
+            "descriptor": "(J)J"
+          }
+        ]
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "kotlinSuppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 2857728,
+        "kotlin": 2857728
+      },
+      "wallTime": {
+        "java": 35,
+        "kotlin": 12
+      },
+      "cpuTime": {
+        "java": 31386000,
+        "kotlin": 11214000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 6,
+      "mutationCount": 22,
+      "solutionMaxRuntime": 30,
+      "bootstrapLength": 8686,
+      "mutationLength": 42,
+      "incorrectLength": 1316,
+      "calibrationLength": 490,
+      "solutionCoverage": {
+        "covered": 6,
+        "total": 6,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 9204,
+        "kotlin": 9192
+      },
+      "memoryAllocation": {
+        "java": 21952,
+        "kotlin": 21952
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 452.125
+    },
     "fauxStatic": false,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,7 +3,1 @@",
+          "-    if (input <= 0) { // mutate-disable-conditional-boundary",
+          "-      throw new IllegalArgumentException();",
+          "-    }",
+          "-    if (input == 1) {",
+          "-      return 1;",
+          "-    }",
+          "-    return input * factorial(input - 1);",
+          "+    return 0L;"
+        ],
+        "language": "java",
+        "incorrectIndex": 0,
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,3 +3,0 @@",
+          "-    if (input <= 0) { // mutate-disable-conditional-boundary",
+          "-      throw new IllegalArgumentException();",
+          "-    }"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_BINARY",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    if (input <= 0) { // mutate-disable-conditional-boundary",
+          "+    if (!(input <= 0)) { // mutate-disable-conditional-boundary"
+        ],
+        "language": "java",
+        "mutation": "PRIMITIVE_RETURN",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    if (input <= 0) { // mutate-disable-conditional-boundary",
+          "+    if (input > 0) { // mutate-disable-conditional-boundary"
+        ],
+        "language": "java",
+        "mutation": "NEGATE_IF",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,3 +6,0 @@",
+          "-    if (input == 1) {",
+          "-      return 1;",
+          "-    }"
+        ],
+        "language": "java",
+        "mutation": "NEGATE_CONDITIONAL",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    if (input <= 0) { // mutate-disable-conditional-boundary",
+          "+    if (input <= 1) { // mutate-disable-conditional-boundary"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_IF",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    if (input == 1) {",
+          "+    if (input == 0) {"
+        ],
+        "language": "java",
+        "mutation": "PRIMITIVE_RETURN",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    if (input == 1) {",
+          "+    if (input != 1) {"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -7,1 +7,1 @@",
+          "-      return 1;",
+          "+      return 0;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_BINARY",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -7,1 +7,1 @@",
+          "-      return 1;",
+          "+      return 2;"
+        ],
+        "language": "java",
+        "mutation": "MATH",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    if (input == 1) {",
+          "+    if (!(input == 1)) {"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    if (input == 1) {",
+          "+    if (input == 2) {"
+        ],
+        "language": "java",
+        "mutation": "MATH",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    return input * factorial(input - 1);",
+          "+    return 0;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    return input * factorial(input - 1);",
+          "+    return input * factorial(input - 2);"
+        ],
+        "language": "java",
+        "mutation": "NEGATE_CONDITIONAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    return input * factorial(input - 1);",
+          "+    return factorial(input - 1);"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_IF",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    return input * factorial(input - 1);",
+          "+    return input * factorial(1);"
+        ],
+        "language": "java",
+        "mutation": "NEGATE_IF",
+        "testCount": 5,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    return input * factorial(input - 1);",
+          "+    return input;"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 5,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    return input * factorial(input - 1);",
+          "+    return input / factorial(input - 1);"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 5,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/Question.java"
   },
   {
@@ -9034,6 +12374,28 @@
       "complexity": {
         "java": 3,
         "kotlin": 1
+      },
+      "recursiveMethodsByLanguage": {
+        "java": [],
+        "kotlin": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "java.lang.Integer",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ],
+        "kotlin": [
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -9454,7 +12816,193 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Example",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "java.lang.Integer",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin.",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Example",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 5616,
+        "kotlin": 3072
+      },
+      "allocationLimit": {
+        "java": 5632,
+        "kotlin": 5632
+      },
+      "solutionClassSize": {
+        "java": 264,
+        "kotlin": 632
+      },
+      "solutionDeadCode": {
+        "java": 0,
+        "kotlin": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": [],
+        "kotlin": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "kotlinSuppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 5632,
+        "kotlin": 5632
+      },
+      "wallTime": {
+        "java": 4,
+        "kotlin": 12
+      },
+      "cpuTime": {
+        "java": 2133000,
+        "kotlin": 9050000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 27,
+      "mutationCount": 5,
+      "solutionMaxRuntime": 12,
+      "bootstrapLength": 8396,
+      "mutationLength": 10,
+      "incorrectLength": 1210,
+      "calibrationLength": 474,
+      "solutionCoverage": {
+        "covered": 6,
+        "total": 6,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 351,
+        "kotlin": 192
+      },
+      "memoryAllocation": {
+        "java": 352,
+        "kotlin": 352
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 300.34
+    },
     "fauxStatic": false,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    return name;",
+          "+    return \"\";"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    return name;",
+          "+    return null;"
+        ],
+        "language": "java",
+        "incorrectIndex": 1,
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -4,3 +4,1 @@",
+          "-  public Example(String setName) {",
+          "-    name = setName;",
+          "-  }",
+          "+  public Example(String setName) {}"
+        ],
+        "language": "java",
+        "incorrectIndex": 0,
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -13,1 +13,1 @@",
+          "-    name = setName;",
+          "+    return;"
+        ],
+        "language": "java",
+        "mutation": "NULL_RETURN",
+        "testCount": 6,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -12,3 +12,1 @@",
+          "-  public void setName(String setName) {",
+          "-    name = setName;",
+          "-  }",
+          "+  public void setName(String setName) {}"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 6,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/Example.java"
   },
   {
@@ -9692,6 +13240,19 @@
       },
       "complexity": {
         "java": 2
+      },
+      "recursiveMethodsByLanguage": {
+        "java": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "java.lang.Integer",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -9934,7 +13495,145 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "java.lang.Integer",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin."
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 5856
+      },
+      "allocationLimit": {
+        "java": 5632
+      },
+      "solutionClassSize": {
+        "java": 231
+      },
+      "solutionDeadCode": {
+        "java": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 5632,
+        "kotlin": 5632
+      },
+      "wallTime": {
+        "java": 4
+      },
+      "cpuTime": {
+        "java": 2611000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 27,
+      "mutationCount": 4,
+      "solutionMaxRuntime": 15,
+      "bootstrapLength": 3554,
+      "mutationLength": 27,
+      "incorrectLength": 598,
+      "calibrationLength": 58,
+      "solutionCoverage": {
+        "covered": 4,
+        "total": 4,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 366
+      },
+      "memoryAllocation": {
+        "java": 352
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 271.041
+    },
     "fauxStatic": false,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    stringLength = value.length();",
+          "+    stringLength = value.length() - 1;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    return stringLength;",
+          "+    return 0;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    stringLength = value.length();",
+          "+    stringLength = value.length() + 1;"
+        ],
+        "language": "java",
+        "mutation": "MODIFY_LENGTH_AND_SIZE",
+        "testCount": 1,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withconstructornotnull/Question.java"
   },
   {
@@ -10087,6 +13786,19 @@
       },
       "complexity": {
         "java": 1
+      },
+      "recursiveMethodsByLanguage": {
+        "java": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "java.lang.Integer",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -10427,7 +14139,145 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "java.lang.Integer",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin."
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 6144
+      },
+      "allocationLimit": {
+        "java": 5632
+      },
+      "solutionClassSize": {
+        "java": 114
+      },
+      "solutionDeadCode": {
+        "java": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 6016,
+        "kotlin": 6016
+      },
+      "wallTime": {
+        "java": 7
+      },
+      "cpuTime": {
+        "java": 5499000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 8,
+      "mutationCount": 3,
+      "solutionMaxRuntime": 32,
+      "bootstrapLength": 3782,
+      "mutationLength": 39,
+      "incorrectLength": 373,
+      "calibrationLength": 122,
+      "solutionCoverage": {
+        "covered": 3,
+        "total": 3,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 384
+      },
+      "memoryAllocation": {
+        "java": 352
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 420.957
+    },
     "fauxStatic": false,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  private int value = 0;",
+          "+  private int value = 1;"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    return value++;",
+          "+    return 0;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 7,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    return value++;",
+          "+    return value--;"
+        ],
+        "language": "java",
+        "mutation": "INCREMENT_DECREMENT",
+        "testCount": 7,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withemptyconstructor/Question.java"
   },
   {
@@ -10533,6 +14383,19 @@
       },
       "complexity": {
         "java": 1
+      },
+      "recursiveMethodsByLanguage": {
+        "java": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "java.lang.Integer",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -10659,7 +14522,119 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
-    "fauxStatic": false,
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "java.lang.Integer",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin."
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 3072
+      },
+      "allocationLimit": {
+        "java": 5632
+      },
+      "solutionClassSize": {
+        "java": 107
+      },
+      "solutionDeadCode": {
+        "java": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 6656,
+        "kotlin": 6656
+      },
+      "wallTime": {
+        "java": 4
+      },
+      "cpuTime": {
+        "java": 3443000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 12,
+      "mutationCount": 1,
+      "solutionMaxRuntime": 49,
+      "bootstrapLength": 2556,
+      "mutationLength": 441,
+      "incorrectLength": 765,
+      "calibrationLength": 62,
+      "solutionCoverage": {
+        "covered": 1,
+        "total": 1,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 192
+      },
+      "memoryAllocation": {
+        "java": 352
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 469.568
+    },
+    "fauxStatic": true,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return value;",
+          "+  return 0;"
+        ],
+        "language": "java",
+        "incorrectIndex": 0,
+        "testCount": 0,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/testmemoizationdefense/Question.java"
   },
   {
@@ -10822,6 +14797,21 @@
       },
       "complexity": {
         "java": 1
+      },
+      "recursiveMethodsByLanguage": {
+        "java": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Integer",
+          "java.util.ArrayList",
+          "java.util.List",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -10993,7 +14983,123 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.lang.Integer",
+        "java.util.ArrayList",
+        "java.util.List",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin."
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 3072
+      },
+      "allocationLimit": {
+        "java": 105088
+      },
+      "solutionClassSize": {
+        "java": 115
+      },
+      "solutionDeadCode": {
+        "java": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [
+        "rawtypes"
+      ],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 1579648,
+        "kotlin": 1579648
+      },
+      "wallTime": {
+        "java": 3
+      },
+      "cpuTime": {
+        "java": 1789000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 1,
+      "mutationCount": 1,
+      "solutionMaxRuntime": 23,
+      "bootstrapLength": 2471,
+      "mutationLength": 529,
+      "incorrectLength": 541,
+      "calibrationLength": 42,
+      "solutionCoverage": {
+        "covered": 2,
+        "total": 2,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 192
+      },
+      "memoryAllocation": {
+        "java": 6568
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 385.26
+    },
     "fauxStatic": false,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    return new ArrayList();",
+          "+    return null;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 0,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withrawtypes/Question.java"
   },
   {
@@ -11139,6 +15245,20 @@
       },
       "complexity": {
         "java": 1
+      },
+      "recursiveMethodsByLanguage": {
+        "java": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Integer",
+          "java.lang.Long",
+          "Value",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -11295,7 +15415,120 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Value",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin."
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 3072
+      },
+      "allocationLimit": {
+        "java": 54784
+      },
+      "solutionClassSize": {
+        "java": 148
+      },
+      "solutionDeadCode": {
+        "java": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 792064,
+        "kotlin": 792064
+      },
+      "wallTime": {
+        "java": 1
+      },
+      "cpuTime": {
+        "java": 1072000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 11,
+      "mutationCount": 1,
+      "solutionMaxRuntime": 27,
+      "bootstrapLength": 1132,
+      "mutationLength": 7,
+      "incorrectLength": 43,
+      "calibrationLength": 78,
+      "solutionCoverage": {
+        "covered": 2,
+        "total": 2,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 192
+      },
+      "memoryAllocation": {
+        "java": 3424
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 198.651
+    },
     "fauxStatic": false,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    return new Value(value);",
+          "+    return null;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 0,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withcommoncode/Question.java"
   },
   {
@@ -11720,6 +15953,33 @@
       "complexity": {
         "java": 3,
         "kotlin": 3
+      },
+      "recursiveMethodsByLanguage": {
+        "java": [],
+        "kotlin": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Throwable",
+          "java.lang.AssertionError",
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ],
+        "kotlin": [
+          "java.lang.Throwable",
+          "java.lang.AssertionError",
+          "java.lang.Integer",
+          "java.lang.Long",
+          "kotlin._Assertions",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -12327,7 +16587,337 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.lang.Throwable",
+        "java.lang.AssertionError",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin.",
+        "java.lang.Throwable",
+        "java.lang.AssertionError",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "kotlin._Assertions",
+        "java.lang.Object",
+        "java.lang.Class",
+        "QuestionKt",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 6160,
+        "kotlin": 6144
+      },
+      "allocationLimit": {
+        "java": 2568832,
+        "kotlin": 2598784
+      },
+      "solutionClassSize": {
+        "java": 384,
+        "kotlin": 317
+      },
+      "solutionDeadCode": {
+        "java": 1,
+        "kotlin": 1
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": [],
+        "kotlin": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "kotlinSuppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 43781632,
+        "kotlin": 43781632
+      },
+      "wallTime": {
+        "java": 51,
+        "kotlin": 18
+      },
+      "cpuTime": {
+        "java": 3684000,
+        "kotlin": 12418000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 11,
+      "mutationCount": 17,
+      "solutionMaxRuntime": 18,
+      "bootstrapLength": 8686,
+      "mutationLength": 100,
+      "incorrectLength": 750,
+      "calibrationLength": 510,
+      "solutionCoverage": {
+        "covered": 4,
+        "total": 5,
+        "missed": 1
+      },
+      "executionCounts": {
+        "java": 385,
+        "kotlin": 384
+      },
+      "memoryAllocation": {
+        "java": 160552,
+        "kotlin": 162424
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 288.151
+    },
     "fauxStatic": false,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    if (value % 2 == 0) {",
+          "+    if (!(value % 2 == 0)) {"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_BINARY",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    assert false;",
+          "+    assert true;"
+        ],
+        "language": "java",
+        "mutation": "CHANGE_EQUALS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    if (value % 2 == 0) {",
+          "+    if (value % 2 != 0) {"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_BINARY",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    if (value % 2 == 0) {",
+          "+    if (value % 1 == 0) {"
+        ],
+        "language": "java",
+        "mutation": "MATH",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,0 @@",
+          "-    assert false;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_BINARY",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    if (value % 2 == 0) {",
+          "+    if (value % 2 == 1) {"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_IF",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -4,1 +4,1 @@",
+          "-      return value * 2;",
+          "+      return 2;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_BINARY",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    if (value % 2 == 0) {",
+          "+    if (2 == 0) {"
+        ],
+        "language": "java",
+        "mutation": "NEGATE_IF",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,3 +3,0 @@",
+          "-    if (value % 2 == 0) {",
+          "-      return value * 2;",
+          "-    }"
+        ],
+        "language": "java",
+        "mutation": "NEGATE_CONDITIONAL",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -4,1 +4,1 @@",
+          "-      return value * 2;",
+          "+      return value * 3;"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    if (value % 2 == 0) {",
+          "+    if (value * 2 == 0) {"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    if (value % 2 == 0) {",
+          "+    if (value % 3 == 0) {"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -4,1 +4,1 @@",
+          "-      return value * 2;",
+          "+      return value / 2;"
+        ],
+        "language": "java",
+        "mutation": "PRIMITIVE_RETURN",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -4,1 +4,1 @@",
+          "-      return value * 2;",
+          "+      return value;"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    if (value % 2 == 0) {",
+          "+    if (value == 0) {"
+        ],
+        "language": "java",
+        "mutation": "MATH",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -4,1 +4,1 @@",
+          "-      return value * 2;",
+          "+      return 0;"
+        ],
+        "language": "java",
+        "mutation": "BOOLEAN_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withdeadcodeannotation/Question.java"
   },
   {
@@ -12511,6 +17101,28 @@
       "complexity": {
         "java": 1,
         "kotlin": 1
+      },
+      "recursiveMethodsByLanguage": {
+        "java": [],
+        "kotlin": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "java.lang.Integer",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ],
+        "kotlin": [
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -12800,7 +17412,293 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
-    "fauxStatic": false,
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 475,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "java.lang.Integer",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin.",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 22800,
+        "kotlin": 22800
+      },
+      "allocationLimit": {
+        "java": 5632,
+        "kotlin": 5632
+      },
+      "solutionClassSize": {
+        "java": 107,
+        "kotlin": 263
+      },
+      "solutionDeadCode": {
+        "java": 0,
+        "kotlin": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": [],
+        "kotlin": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "kotlinSuppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 3800,
+      "executionCountLimit": {
+        "java": 7600,
+        "kotlin": 7600
+      },
+      "allocationLimit": {
+        "java": 5632,
+        "kotlin": 5632
+      },
+      "wallTime": {
+        "java": 5,
+        "kotlin": 43
+      },
+      "cpuTime": {
+        "java": 1988000,
+        "kotlin": 42081000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 475,
+      "mutationCount": 13,
+      "solutionMaxRuntime": 43,
+      "bootstrapLength": 8623,
+      "mutationLength": 25,
+      "incorrectLength": 1290,
+      "calibrationLength": 433,
+      "solutionCoverage": {
+        "covered": 1,
+        "total": 1,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 1425,
+        "kotlin": 1425
+      },
+      "memoryAllocation": {
+        "java": 352,
+        "kotlin": 352
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 627.736
+    },
+    "fauxStatic": true,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return (range * (range + 1)) / 2;",
+          "+  return (range * (range + 0)) / 2;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return (range * (range + 1)) / 2;",
+          "+  return (range * (range - 1)) / 2;"
+        ],
+        "language": "java",
+        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return (range * (range + 1)) / 2;",
+          "+  return (range * (range)) / 2;"
+        ],
+        "language": "java",
+        "incorrectIndex": 0,
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return (range * (range + 1)) / 2;",
+          "+  return (range / (range + 1)) / 2;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return (range * (range + 1)) / 2;",
+          "+  return (range) / 2;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_BINARY",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return (range * (range + 1)) / 2;",
+          "+  return (range * (range + 1));"
+        ],
+        "language": "java",
+        "mutation": "MATH",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return (range * (range + 1)) / 2;",
+          "+  return 0;"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return (range * (range + 1)) / 2;",
+          "+  return 2;"
+        ],
+        "language": "java",
+        "mutation": "MATH",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return (range * (range + 1)) / 2;",
+          "+  return (range * (1)) / 2;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_BINARY",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return (range * (range + 1)) / 2;",
+          "+  return (range * (range + 1)) * 2;"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return (range * (range + 1)) / 2;",
+          "+  return (range * (range + 1)) / 3;"
+        ],
+        "language": "java",
+        "incorrectIndex": 1,
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return (range * (range + 1)) / 2;",
+          "+  return ((range + 1)) / 2;"
+        ],
+        "language": "java",
+        "mutation": "PLUS_TO_MINUS",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return (range * (range + 1)) / 2;",
+          "+  return (range * (range + 2)) / 2;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_BINARY",
+        "testCount": 3,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/Question.java"
   },
   {
@@ -13302,6 +18200,34 @@
       "complexity": {
         "java": 2,
         "kotlin": 2
+      },
+      "recursiveMethodsByLanguage": {
+        "java": [],
+        "kotlin": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Integer",
+          "java.util.ArrayList",
+          "java.util.List",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ],
+        "kotlin": [
+          "kotlin.ranges.RangesKt",
+          "java.lang.Integer",
+          "java.util.ArrayList",
+          "java.util.List",
+          "java.lang.Long",
+          "kotlin.ranges.IntProgression",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -14037,7 +18963,253 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
-    "fauxStatic": false,
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.lang.Integer",
+        "java.util.ArrayList",
+        "java.util.List",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin.",
+        "kotlin.ranges.RangesKt",
+        "java.lang.Integer",
+        "java.util.ArrayList",
+        "java.util.List",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "kotlin.ranges.IntProgression",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 53088,
+        "kotlin": 56112
+      },
+      "allocationLimit": {
+        "java": 517888,
+        "kotlin": 665472
+      },
+      "solutionClassSize": {
+        "java": 425,
+        "kotlin": 1066
+      },
+      "solutionDeadCode": {
+        "java": 0,
+        "kotlin": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": [],
+        "kotlin": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "kotlinSuppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 8554624,
+        "kotlin": 8554624
+      },
+      "wallTime": {
+        "java": 7,
+        "kotlin": 13
+      },
+      "cpuTime": {
+        "java": 2822000,
+        "kotlin": 11938000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 4,
+      "mutationCount": 10,
+      "solutionMaxRuntime": 14,
+      "bootstrapLength": 8702,
+      "mutationLength": 32,
+      "incorrectLength": 690,
+      "calibrationLength": 380,
+      "solutionCoverage": {
+        "covered": 4,
+        "total": 4,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 3318,
+        "kotlin": 3507
+      },
+      "memoryAllocation": {
+        "java": 32368,
+        "kotlin": 41592
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 325.345
+    },
+    "fauxStatic": true,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-  return values;",
+          "+  return null;"
+        ],
+        "language": "java",
+        "mutation": "NULL_RETURN",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,5 +2,1 @@",
+          "-  List<Integer> values = new ArrayList<>();",
+          "-  for (int i = 0; i < value; i += 2) {",
+          "-    values.add(i);",
+          "-  }",
+          "-  return values;",
+          "+  return null;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-  for (int i = 0; i < value; i += 2) {",
+          "+  for (int i = 0; i <= value; i += 2) {"
+        ],
+        "language": "java",
+        "mutation": "CONDITIONAL_BOUNDARY",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-  for (int i = 0; i < value; i += 2) {",
+          "+  for (int i = 0; i < value; i += 3) {"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,3 +3,0 @@",
+          "-  for (int i = 0; i < value; i += 2) {",
+          "-    values.add(i);",
+          "-  }"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_LOOP",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,0 +5,1 @@",
+          "+    break;"
+        ],
+        "language": "java",
+        "mutation": "ADD_BREAK",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,3 +3,1 @@",
+          "-  for (int i = 0; i < value; i += 2) {",
+          "-    values.add(i);",
+          "-  }",
+          "+  for (int i = 0; i < value; i += 2) {}"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-  for (int i = 0; i < value; i += 2) {",
+          "+  for (int i = 0; i < value; i += 1) {"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-  for (int i = 0; i < value; i += 2) {",
+          "+  for (int i = 1; i < value; i += 2) {"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturedeadcode/Question.java"
   },
   {
@@ -14609,6 +19781,32 @@
       "complexity": {
         "java": 9,
         "kotlin": 9
+      },
+      "recursiveMethodsByLanguage": {
+        "java": [],
+        "kotlin": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Throwable",
+          "java.lang.IllegalArgumentException",
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ],
+        "kotlin": [
+          "java.lang.Throwable",
+          "java.lang.IllegalArgumentException",
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -15523,7 +20721,809 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
-    "fauxStatic": false,
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.lang.Throwable",
+        "java.lang.IllegalArgumentException",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin.",
+        "java.lang.Throwable",
+        "java.lang.IllegalArgumentException",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 7488,
+        "kotlin": 7488
+      },
+      "allocationLimit": {
+        "java": 2943232,
+        "kotlin": 2943232
+      },
+      "solutionClassSize": {
+        "java": 435,
+        "kotlin": 678
+      },
+      "solutionDeadCode": {
+        "java": 0,
+        "kotlin": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": [],
+        "kotlin": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "kotlinSuppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 49773056,
+        "kotlin": 49773056
+      },
+      "wallTime": {
+        "java": 17,
+        "kotlin": 9
+      },
+      "cpuTime": {
+        "java": 6225000,
+        "kotlin": 8049000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 27,
+      "mutationCount": 61,
+      "solutionMaxRuntime": 9,
+      "bootstrapLength": 8435,
+      "mutationLength": 324,
+      "incorrectLength": 2309,
+      "calibrationLength": 92,
+      "solutionCoverage": {
+        "covered": 9,
+        "total": 9,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 468,
+        "kotlin": 468
+      },
+      "memoryAllocation": {
+        "java": 183952,
+        "kotlin": 183952
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 486.632
+    },
+    "fauxStatic": true,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,10 +2,1 @@",
+          "-  return switch (day) {",
+          "-    case 0 -> \"Monday\"; // mutate-disable-remove-statement",
+          "-    case 1 -> \"Tuesday\"; // mutate-disable-remove-statement",
+          "-    case 2 -> \"Wednesday\"; // mutate-disable-remove-statement",
+          "-    case 3 -> \"Thursday\"; // mutate-disable-remove-statement",
+          "-    case 4 -> \"Friday\"; // mutate-disable-remove-statement",
+          "-    case 5 -> \"Saturday\"; // mutate-disable-remove-statement",
+          "-    case 6 -> \"Sunday\"; // mutate-disable-remove-statement",
+          "-    default -> throw new IllegalArgumentException(); // mutate-disable-remove-statement",
+          "-  };",
+          "+  return \"\";"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,10 +2,1 @@",
+          "-  return switch (day) {",
+          "-    case 0 -> \"Monday\"; // mutate-disable-remove-statement",
+          "-    case 1 -> \"Tuesday\"; // mutate-disable-remove-statement",
+          "-    case 2 -> \"Wednesday\"; // mutate-disable-remove-statement",
+          "-    case 3 -> \"Thursday\"; // mutate-disable-remove-statement",
+          "-    case 4 -> \"Friday\"; // mutate-disable-remove-statement",
+          "-    case 5 -> \"Saturday\"; // mutate-disable-remove-statement",
+          "-    case 6 -> \"Sunday\"; // mutate-disable-remove-statement",
+          "-    default -> throw new IllegalArgumentException(); // mutate-disable-remove-statement",
+          "-  };",
+          "+  return null;"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    case 0 -> \"Monday\"; // mutate-disable-remove-statement",
+          "+    case 0 -> \"monday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    case 0 -> \"Monday\"; // mutate-disable-remove-statement",
+          "+    case 0 -> \"Moiday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    case 0 -> \"Monday\"; // mutate-disable-remove-statement",
+          "+    case 0 -> \"Mo7day\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    case 0 -> \"Monday\"; // mutate-disable-remove-statement",
+          "+    case 0 -> \"onday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    case 0 -> \"Monday\"; // mutate-disable-remove-statement",
+          "+    case 0 -> \"MoTday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    case 0 -> \"Monday\"; // mutate-disable-remove-statement",
+          "+    case 0 -> \"Monda\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    case 0 -> \"Monday\"; // mutate-disable-remove-statement",
+          "+    case 0 -> \"M0nday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-    case 0 -> \"Monday\"; // mutate-disable-remove-statement",
+          "+    case 0 -> \"MoCday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    case 6 -> \"Sunday\"; // mutate-disable-remove-statement",
+          "+    case 6 -> \"SuSday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    case 6 -> \"Sunday\"; // mutate-disable-remove-statement",
+          "+    case 6 -> \"Sunda\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    case 6 -> \"Sunday\"; // mutate-disable-remove-statement",
+          "+    case 6 -> \"Sutday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    case 6 -> \"Sunday\"; // mutate-disable-remove-statement",
+          "+    case 6 -> \"Suntay\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    case 6 -> \"Sunday\"; // mutate-disable-remove-statement",
+          "+    case 6 -> \"Sunhay\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    case 6 -> \"Sunday\"; // mutate-disable-remove-statement",
+          "+    case 7 -> \"Sunday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    case 6 -> \"Sunday\"; // mutate-disable-remove-statement",
+          "+    case 6 -> \"sunday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -9,1 +9,1 @@",
+          "-    case 6 -> \"Sunday\"; // mutate-disable-remove-statement",
+          "+    case 6 -> \"unday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -7,1 +7,1 @@",
+          "-    case 4 -> \"Friday\"; // mutate-disable-remove-statement",
+          "+    case 4 -> \"FriXay\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -7,1 +7,1 @@",
+          "-    case 4 -> \"Friday\"; // mutate-disable-remove-statement",
+          "+    case 4 -> \"Uriday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -7,1 +7,1 @@",
+          "-    case 4 -> \"Friday\"; // mutate-disable-remove-statement",
+          "+    case 4 -> \"FrGday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -7,1 +7,1 @@",
+          "-    case 4 -> \"Friday\"; // mutate-disable-remove-statement",
+          "+    case 4 -> \"friday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -7,1 +7,1 @@",
+          "-    case 4 -> \"Friday\"; // mutate-disable-remove-statement",
+          "+    case 4 -> \"Frida\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -7,1 +7,1 @@",
+          "-    case 4 -> \"Friday\"; // mutate-disable-remove-statement",
+          "+    case 4 -> \"zriday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    case 2 -> \"Wednesday\"; // mutate-disable-remove-statement",
+          "+    case 2 -> \"ednesday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "incorrectIndex": 0,
+        "testCount": 9,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    case 2 -> \"Wednesday\"; // mutate-disable-remove-statement",
+          "+    case 2 -> \"WednesMay\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 9,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    case 2 -> \"Wednesday\"; // mutate-disable-remove-statement",
+          "+    case 2 -> \"Wednesdgy\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 9,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    case 2 -> \"Wednesday\"; // mutate-disable-remove-statement",
+          "+    case 2 -> \"Wednesda3\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 9,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    case 2 -> \"Wednesday\"; // mutate-disable-remove-statement",
+          "+    case 2 -> \"Wednesda\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 9,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    case 2 -> \"Wednesday\"; // mutate-disable-remove-statement",
+          "+    case 2 -> \"wednesday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 9,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -5,1 +5,1 @@",
+          "-    case 2 -> \"Wednesday\"; // mutate-disable-remove-statement",
+          "+    case 2 -> \"Wednesdey\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "testCount": 9,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,1 @@",
+          "-    case 5 -> \"Saturday\"; // mutate-disable-remove-statement",
+          "+    case 5 -> \"SaturdaK\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 12,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,1 @@",
+          "-    case 5 -> \"Saturday\"; // mutate-disable-remove-statement",
+          "+    case 5 -> \"Caturday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "NULL_RETURN",
+        "testCount": 12,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,1 @@",
+          "-    case 5 -> \"Saturday\"; // mutate-disable-remove-statement",
+          "+    case 5 -> \"Saturda\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 12,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,1 @@",
+          "-    case 5 -> \"Saturday\"; // mutate-disable-remove-statement",
+          "+    case 5 -> \"SKturday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 12,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,1 @@",
+          "-    case 5 -> \"Saturday\"; // mutate-disable-remove-statement",
+          "+    case 5 -> \"aturday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 12,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,1 @@",
+          "-    case 5 -> \"Saturday\"; // mutate-disable-remove-statement",
+          "+    case 5 -> \"saturday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 12,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -8,1 +8,1 @@",
+          "-    case 5 -> \"Saturday\"; // mutate-disable-remove-statement",
+          "+    case 5 -> \"Sa5urday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 12,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -4,1 +4,1 @@",
+          "-    case 1 -> \"Tuesday\"; // mutate-disable-remove-statement",
+          "+    case 1 -> \"Tuesdar\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 20,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -4,1 +4,1 @@",
+          "-    case 1 -> \"Tuesday\"; // mutate-disable-remove-statement",
+          "+    case 1 -> \"uesday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 20,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -4,1 +4,1 @@",
+          "-    case 1 -> \"Tuesday\"; // mutate-disable-remove-statement",
+          "+    case 1 -> \"Tudsday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 20,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -4,1 +4,1 @@",
+          "-    case 1 -> \"Tuesday\"; // mutate-disable-remove-statement",
+          "+    case 1 -> \"tuesday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 20,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -4,1 +4,1 @@",
+          "-    case 1 -> \"Tuesday\"; // mutate-disable-remove-statement",
+          "+    case 1 -> \"T2esday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 20,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -4,1 +4,1 @@",
+          "-    case 1 -> \"Tuesday\"; // mutate-disable-remove-statement",
+          "+    case 1 -> \"Thesday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 20,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    case 3 -> \"Thursday\"; // mutate-disable-remove-statement",
+          "+    case 3 -> \"thursday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 25,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    case 3 -> \"Thursday\"; // mutate-disable-remove-statement",
+          "+    case 3 -> \"Thursda\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 25,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    case 3 -> \"Thursday\"; // mutate-disable-remove-statement",
+          "+    case 3 -> \"whursday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 25,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    case 3 -> \"Thursday\"; // mutate-disable-remove-statement",
+          "+    case 3 -> \"Thursdak\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 25,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    case 3 -> \"Thursday\"; // mutate-disable-remove-statement",
+          "+    case 3 -> \"ThuIsday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 25,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    case 3 -> \"Thursday\"; // mutate-disable-remove-statement",
+          "+    case 3 -> \"Txursday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 25,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -6,1 +6,1 @@",
+          "-    case 3 -> \"Thursday\"; // mutate-disable-remove-statement",
+          "+    case 3 -> \"hursday\"; // mutate-disable-remove-statement"
+        ],
+        "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 25,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/Question.java"
   },
   {
@@ -15677,6 +21677,20 @@
       },
       "complexity": {
         "java": 1
+      },
+      "recursiveMethodsByLanguage": {
+        "java": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.util.Map",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -15835,7 +21849,147 @@
     "importWhitelist": [],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
-    "fauxStatic": false,
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "java.util.Map",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink",
+        "java.util.Set"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin."
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 3072
+      },
+      "allocationLimit": {
+        "java": 5632
+      },
+      "solutionClassSize": {
+        "java": 242
+      },
+      "solutionDeadCode": {
+        "java": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 5632,
+        "kotlin": 5632
+      },
+      "wallTime": {
+        "java": 14
+      },
+      "cpuTime": {
+        "java": 4040000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 13,
+      "mutationCount": 3,
+      "solutionMaxRuntime": 11,
+      "bootstrapLength": 4337,
+      "mutationLength": 19,
+      "incorrectLength": 354,
+      "calibrationLength": 60,
+      "solutionCoverage": {
+        "covered": 1,
+        "total": 1,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 192
+      },
+      "memoryAllocation": {
+        "java": 352
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 427.306
+    },
+    "fauxStatic": true,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return map.size();",
+          "+  return map.size() + 1;"
+        ],
+        "language": "java",
+        "mutation": "MODIFY_LENGTH_AND_SIZE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return map.size();",
+          "+  return map.size() - 1;"
+        ],
+        "language": "java",
+        "mutation": "MODIFY_LENGTH_AND_SIZE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return map.size();",
+          "+  return 0;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 0,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withmapextras/Question.java"
   },
   {
@@ -15981,6 +22135,22 @@
       },
       "complexity": {
         "java": 1
+      },
+      "recursiveMethodsByLanguage": {
+        "java": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.util.Arrays",
+          "java.lang.Integer",
+          "java.util.List",
+          "java.lang.Long",
+          "java.lang.ResourceUsageSink",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
       }
     },
     "metadata": {
@@ -16134,7 +22304,126 @@
     ],
     "importBlacklist": [],
     "checkstyleSuppressions": [],
-    "fauxStatic": false,
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.util.List",
+        "java.util.ArrayList",
+        "java.util.Arrays",
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "java.lang.ResourceUsageSink",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.util.List",
+        "java.util.ArrayList",
+        "java.util.Arrays",
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin."
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 3072
+      },
+      "allocationLimit": {
+        "java": 256384
+      },
+      "solutionClassSize": {
+        "java": 361
+      },
+      "solutionDeadCode": {
+        "java": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "timeout": 128,
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 4311424,
+        "kotlin": 4311424
+      },
+      "wallTime": {
+        "java": 3
+      },
+      "cpuTime": {
+        "java": 2190000
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 18,
+      "mutationCount": 1,
+      "solutionMaxRuntime": 13,
+      "bootstrapLength": 2592,
+      "mutationLength": 409,
+      "incorrectLength": 572,
+      "calibrationLength": 52,
+      "solutionCoverage": {
+        "covered": 1,
+        "total": 1,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 192
+      },
+      "memoryAllocation": {
+        "java": 16024
+      },
+      "canTestTest": true,
+      "javaSolutionBootstrapCPUTimeMS": 475.949
+    },
+    "fauxStatic": true,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  return Arrays.asList(first, second);",
+          "+  return null;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 0,
+        "suppressions": []
+      }
+    ],
     "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withtemplateimports/Question.java"
   }
 ]

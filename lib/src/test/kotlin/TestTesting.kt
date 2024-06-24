@@ -55,7 +55,7 @@ int addOne(int value) {
             results.succeeded shouldBe false
         }
     }
-    "f: it should test a question with partial credit" {
+    "it should test a question with partial credit" {
         val (question) = Validator.validate("Add One").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
