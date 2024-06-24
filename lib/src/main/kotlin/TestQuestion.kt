@@ -244,7 +244,7 @@ suspend fun Question.test(
                     if (e.stepCount == 0) {
                         stepTimeout *= 10
                     }
-                    if (testingCount == 0) {
+                    if (solveCount == 0) {
                         stepTimeout *= 10
                     }
                     sandboxControl.setCPUTimeoutNS(stepTimeout * 1000L * 1000L)
@@ -483,6 +483,6 @@ suspend fun Question.test(
     } finally {
         busyCount.decrementAndGet()
         testingLimiter.release()
-        testingCount++
+        solveCount++
     }
 }

@@ -577,11 +577,11 @@ ${question.contents}
     var correctPath: String? = null
 
     @Transient
-    var testingCount: Int = 0
+    var solveCount: Int = 0
 
     fun cleanForUpload() {
         correctPath = null
-        testingCount = 0
+        solveCount = 0
         metadata = null
     }
 
