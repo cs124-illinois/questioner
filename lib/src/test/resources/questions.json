@@ -182,8 +182,8 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/addone/Question.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/addone/correct/kotlin/Question.kt"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/addone/Question.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/addone/correct/kotlin/Question.kt"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -194,7 +194,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\n\n/*\n * Write a method `addOne` that returns its `int` argument plus one.\n */\n\n@Correct(name = \"Add One\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\n@Wrap(autoStarter = true)\npublic class Question {\n  int addOne(int value) {\n    return value + 1;\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/addone/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/addone/Question.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -202,7 +202,7 @@
         "klass": "Question",
         "contents": "int addOne(int value) {\n  return value + 1;\n}",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/addone/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/addone/Question.java",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -294,7 +294,7 @@
         "klass": "Question",
         "contents": "fun addOne(value: Int): Int = value + 1",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/addone/correct/kotlin/Question.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/addone/correct/kotlin/Question.kt",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -344,7 +344,7 @@
         "klass": "Question",
         "contents": "fun addOne(value: Int): Int = value + 1",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/addone/correct/kotlin/Question.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/addone/correct/kotlin/Question.kt",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -497,27 +497,27 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 5632,
-        "kotlin": 5632
+        "java": 6016,
+        "kotlin": 6016
       },
       "wallTime": {
-        "java": 11,
-        "kotlin": 10
+        "java": 5,
+        "kotlin": 17
       },
       "cpuTime": {
-        "java": 2586000,
-        "kotlin": 8077000
+        "java": 2627000,
+        "kotlin": 15062000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 12,
       "mutationCount": 6,
-      "solutionMaxRuntime": 10,
-      "bootstrapLength": 6308,
-      "mutationLength": 25,
-      "incorrectLength": 773,
-      "calibrationLength": 69,
+      "solutionMaxRuntime": 17,
+      "bootstrapLength": 6649,
+      "mutationLength": 37,
+      "incorrectLength": 715,
+      "calibrationLength": 182,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -532,7 +532,7 @@
         "kotlin": 352
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 325.9
+      "javaSolutionBootstrapCPUTimeMS": 454.192
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
@@ -641,7 +641,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/addone/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/addone/Question.java"
   },
   {
     "published": {
@@ -845,8 +845,8 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/addoneclass/Question.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/addoneclass/correct/kotlin/Question.kt"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/addoneclass/Question.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/addoneclass/correct/kotlin/Question.kt"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -857,7 +857,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Write a class named `Question` with a single `static` method `addOne` that returns its `int`\n * argument plus one.\n */\n\n@Correct(name = \"Add One Class\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\npublic class Question {\n  public static int addOne(int value) {\n    return value + 1;\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/addoneclass/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/addoneclass/Question.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -865,7 +865,7 @@
         "klass": "Question",
         "contents": "public class Question {\n  public static int addOne(int value) {\n    return value + 1;\n  }\n}\n",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/addoneclass/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/addoneclass/Question.java",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -988,7 +988,7 @@
         "klass": "QuestionKt",
         "contents": "fun addOne(value: Int): Int = value + 1",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/addoneclass/correct/kotlin/Question.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/addoneclass/correct/kotlin/Question.kt",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -1030,7 +1030,7 @@
         "klass": "QuestionKt",
         "contents": "fun addOne(value: Int): Int = value + 1",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/addoneclass/correct/kotlin/Question.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/addoneclass/correct/kotlin/Question.kt",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -1154,23 +1154,23 @@
         "kotlin": 5632
       },
       "wallTime": {
-        "java": 6,
-        "kotlin": 17
+        "java": 20,
+        "kotlin": 22
       },
       "cpuTime": {
-        "java": 1656000,
-        "kotlin": 14060000
+        "java": 2739000,
+        "kotlin": 17880000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 6,
-      "solutionMaxRuntime": 17,
-      "bootstrapLength": 6250,
-      "mutationLength": 14,
-      "incorrectLength": 230,
-      "calibrationLength": 88,
+      "solutionMaxRuntime": 22,
+      "bootstrapLength": 6631,
+      "mutationLength": 18,
+      "incorrectLength": 323,
+      "calibrationLength": 108,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -1185,7 +1185,7 @@
         "kotlin": 352
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 316.73
+      "javaSolutionBootstrapCPUTimeMS": 261.572
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -1268,7 +1268,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/addoneclass/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/addoneclass/Question.java"
   },
   {
     "published": {
@@ -1669,11 +1669,11 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/Child.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/Parent.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/correct/kotlin/Child.kt",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/incorrect/java/extraprivatefield/Child.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/incorrect/kotlin/extraprivatefield/Child.kt"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/Child.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/Parent.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/correct/kotlin/Child.kt",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/incorrect/java/extraprivatefield/Child.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/incorrect/kotlin/extraprivatefield/Child.kt"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -1684,7 +1684,7 @@
       "klass": "Child",
       "contents": "import edu.illinois.cs.cs125.jeed.core.FeatureName;\nimport edu.illinois.cs.cs125.jeed.core.Features;\nimport edu.illinois.cs.cs125.jenisol.core.Both;\nimport edu.illinois.cs.cs125.questioner.lib.CheckFeatures;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.FeatureCheckException;\nimport java.util.ArrayList;\nimport java.util.List;\n\n/*\n * Test bad use of superclass method.\n */\n\n@Correct(\n    name = \"Bad Extra Private Variable\",\n    version = \"2023.10.0\",\n    author = \"challen@illinois.edu\")\npublic class Child extends Parent {\n  private final String firstName;\n\n  public Child(String setFirstName, String setLastName) {\n    super(setLastName);\n    firstName = setFirstName;\n  }\n\n  @Override\n  public String toString() {\n    return firstName + \" \" + getLastName();\n  }\n\n  @CheckFeatures\n  private static List<String> checkFeatures(Features solution, Features submission) {\n    int solutionVariableCount = solution.getFeatureMap().getOrDefault(FeatureName.CLASS_FIELD, 0);\n    int submissionVariableCount =\n        submission.getFeatureMap().getOrDefault(FeatureName.CLASS_FIELD, 0);\n    if (submissionVariableCount > solutionVariableCount) {\n      throw new FeatureCheckException(\"Submission declares too many fields\");\n    }\n    return new ArrayList<>();\n  }\n\n  @Both\n  private static String checkName(Parent parent) {\n    return parent.getLastName();\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/Child.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/Child.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -1692,7 +1692,7 @@
         "klass": "Child",
         "contents": "public class Child extends Parent {\n  private final String firstName;\n\n  public Child(String setFirstName, String setLastName) {\n    super(setLastName);\n    firstName = setFirstName;\n  }\n\n  public String toString() {\n    return firstName + \" \" + getLastName();\n  }\n}\n",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/Child.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/Child.java",
         "complexity": 2,
         "features": {
           "featureMap": {
@@ -1948,7 +1948,7 @@
         "klass": "Child",
         "contents": "class Child(private val firstName: String?, lastName: String?) : Parent(lastName) {\n  override fun toString() = \"$firstName $lastName\"\n}",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/correct/kotlin/Child.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/correct/kotlin/Child.kt",
         "complexity": 2,
         "features": {
           "featureMap": {
@@ -2052,7 +2052,7 @@
         "klass": "Child",
         "contents": "class Child(private val firstName: String?, lastName: String?) : Parent(lastName) {\n  override fun toString() = \"$firstName $lastName\"\n}",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/correct/kotlin/Child.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/correct/kotlin/Child.kt",
         "complexity": 2,
         "features": {
           "featureMap": {
@@ -2157,7 +2157,7 @@
         "contents": "public class Child extends Parent {\n  private final String firstName;\n  private final String lastName;\n\n  public Child(String setFirstName, String setLastName) {\n    super(setLastName);\n    lastName = setLastName;\n    firstName = setFirstName;\n  }\n\n  public String toString() {\n    return firstName + \" \" + lastName;\n  }\n}\n",
         "reason": "FEATURES",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/incorrect/java/extraprivatefield/Child.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/incorrect/java/extraprivatefield/Child.java",
         "starter": false,
         "needed": true,
         "testCount": -1,
@@ -2168,7 +2168,7 @@
         "contents": "class Child(private val firstName: String?, private val lastName: String?) : Parent(lastName) {\n  override fun toString() = \"$firstName $lastName\"\n}",
         "reason": "FEATURES",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/incorrect/kotlin/extraprivatefield/Child.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/incorrect/kotlin/extraprivatefield/Child.kt",
         "starter": false,
         "needed": true,
         "testCount": -1,
@@ -2271,23 +2271,23 @@
         "kotlin": 1383808
       },
       "wallTime": {
-        "java": 11,
-        "kotlin": 22
+        "java": 18,
+        "kotlin": 16
       },
       "cpuTime": {
-        "java": 7943000,
-        "kotlin": 15844000
+        "java": 3785000,
+        "kotlin": 12916000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 123,
       "mutationCount": 14,
-      "solutionMaxRuntime": 22,
-      "bootstrapLength": 3278,
-      "mutationLength": 29,
-      "incorrectLength": 982,
-      "calibrationLength": 490,
+      "solutionMaxRuntime": 16,
+      "bootstrapLength": 6735,
+      "mutationLength": 38,
+      "incorrectLength": 1036,
+      "calibrationLength": 346,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -2302,7 +2302,7 @@
         "kotlin": 10640
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 183.056
+      "javaSolutionBootstrapCPUTimeMS": 275.412
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -2437,7 +2437,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/Child.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/badextraprivatevariable/Child.java"
   },
   {
     "published": {
@@ -2939,7 +2939,7 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withgettersandsetters/Classroom.java"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withgettersandsetters/Classroom.java"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -2950,7 +2950,7 @@
       "klass": "Classroom",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Getter and setter testing.\n */\n\n@Correct(\n    name = \"Classroom Getters and Setters\",\n    version = \"2022.9.0\",\n    author = \"challen@illinois.edu\")\npublic class Classroom {\n  private final String name;\n  private int capacity;\n\n  public Classroom(String setName, int setEnrollment) {\n    assert setEnrollment >= 0;\n    assert setName != null;\n    name = setName;\n    capacity = setEnrollment;\n  }\n\n  public int getCapacity() {\n    return capacity;\n  }\n\n  public void setCapacity(int setEnrollment) {\n    assert setEnrollment >= 0;\n    capacity = setEnrollment;\n  }\n\n  public String getName() {\n    return name;\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withgettersandsetters/Classroom.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withgettersandsetters/Classroom.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -2958,7 +2958,7 @@
         "klass": "Classroom",
         "contents": "public class Classroom {\n  private final String name;\n  private int capacity;\n\n  public Classroom(String setName, int setEnrollment) {\n    assert setEnrollment >= 0;\n    assert setName != null;\n    name = setName;\n    capacity = setEnrollment;\n  }\n\n  public int getCapacity() {\n    return capacity;\n  }\n\n  public void setCapacity(int setEnrollment) {\n    assert setEnrollment >= 0;\n    capacity = setEnrollment;\n  }\n\n  public String getName() {\n    return name;\n  }\n}\n",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withgettersandsetters/Classroom.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withgettersandsetters/Classroom.java",
         "complexity": 7,
         "features": {
           "featureMap": {
@@ -3489,25 +3489,25 @@
         "kotlin": 1200
       },
       "allocationLimit": {
-        "java": 22124032,
-        "kotlin": 22124032
+        "java": 22125056,
+        "kotlin": 22125056
       },
       "wallTime": {
-        "java": 42
+        "java": 40
       },
       "cpuTime": {
-        "java": 12920000
+        "java": 18053000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 75,
       "mutationCount": 17,
-      "solutionMaxRuntime": 12,
-      "bootstrapLength": 2209,
-      "mutationLength": 153,
-      "incorrectLength": 1435,
-      "calibrationLength": 24,
+      "solutionMaxRuntime": 23,
+      "bootstrapLength": 1933,
+      "mutationLength": 470,
+      "incorrectLength": 1301,
+      "calibrationLength": 36,
       "solutionCoverage": {
         "covered": 12,
         "total": 12,
@@ -3520,7 +3520,7 @@
         "java": 135352
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 486.57
+      "javaSolutionBootstrapCPUTimeMS": 453.653
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -3729,7 +3729,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withgettersandsetters/Classroom.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/withgettersandsetters/Classroom.java"
   },
   {
     "published": {
@@ -4236,8 +4236,8 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/cougarfeliform/Cougar.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/cougarfeliform/Feliform.java"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/cougarfeliform/Cougar.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/cougarfeliform/Feliform.java"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -4248,7 +4248,7 @@
       "klass": "Cougar",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.Both;\nimport edu.illinois.cs.cs125.jenisol.core.Limit;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Create and complete the implementation of the `Cougar` class.\n * Your class should be public, not final and not abstract, inherit from the `Feliform` class,\n * and provide the following methods:\n *\n * 1. Constructor that takes a `int` parameter `speed` and a second `weight`.\n * Creates a new `Cougar` with the passed speed and weight.\n * You should call the `Feliform` constructor and pass it the `String` \"cougar\" to identify the type\n * of this feliform.\n * 1. Public instance method `dangerousness` that takes no arguments and returns an `int`.\n * Return the dangerousness of this cougar which equals its speed times its weight.\n * 1. Override `public boolean equals(Object other)`.\n * Return `true` if `other` is a `Cougar` with the same speed and weight, and `false` otherwise.\n * Note that `other` may be `null` or not a `Housecat`.\n *\n * Finally, note that your class should not expose any of its internal state publicly.\n */\n@Correct(name = \"Cougar Feliform\", version = \"2021.7.0\", author = \"challen@illinois.edu\")\npublic class Cougar extends Feliform {\n  private final int speed;\n  private final int weight;\n\n  public Cougar(int setSpeed, int setWeight) {\n    super(\"cougar\");\n    speed = setSpeed;\n    weight = setWeight;\n  }\n\n  @Override\n  public int dangerousness() {\n    return speed * weight;\n  }\n\n  @Override\n  public boolean equals(Object o) {\n    if (!(o instanceof Cougar housecat)) {\n      return false;\n    }\n    return speed == housecat.speed && weight == housecat.weight;\n  }\n\n  @Both\n  @Limit(1)\n  public static String getType(Feliform feliform) {\n    return feliform.getType();\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/cougarfeliform/Cougar.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/cougarfeliform/Cougar.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -4256,7 +4256,7 @@
         "klass": "Cougar",
         "contents": "public class Cougar extends Feliform {\n  private final int speed;\n  private final int weight;\n\n  public Cougar(int setSpeed, int setWeight) {\n    super(\"cougar\");\n    speed = setSpeed;\n    weight = setWeight;\n  }\n\n  public int dangerousness() {\n    return speed * weight;\n  }\n\n  public boolean equals(Object o) {\n    if (!(o instanceof Cougar housecat)) {\n      return false;\n    }\n    return speed == housecat.speed && weight == housecat.weight;\n  }\n}\n",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/cougarfeliform/Cougar.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/cougarfeliform/Cougar.java",
         "complexity": 5,
         "features": {
           "featureMap": {
@@ -4802,21 +4802,21 @@
         "kotlin": 5632
       },
       "wallTime": {
-        "java": 31
+        "java": 36
       },
       "cpuTime": {
-        "java": 14263000
+        "java": 17075000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 117,
       "mutationCount": 28,
-      "solutionMaxRuntime": 16,
-      "bootstrapLength": 1989,
-      "mutationLength": 439,
-      "incorrectLength": 1934,
-      "calibrationLength": 29,
+      "solutionMaxRuntime": 18,
+      "bootstrapLength": 1905,
+      "mutationLength": 730,
+      "incorrectLength": 1706,
+      "calibrationLength": 34,
       "solutionCoverage": {
         "covered": 8,
         "total": 8,
@@ -4829,7 +4829,7 @@
         "java": 352
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 506.276
+      "javaSolutionBootstrapCPUTimeMS": 433.244
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -5110,7 +5110,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/cougarfeliform/Cougar.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/cougarfeliform/Cougar.java"
   },
   {
     "published": {
@@ -5249,7 +5249,7 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/equals88/Question.java"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/equals88/Question.java"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -5260,7 +5260,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Write a method named `equals88` that returns `true` if its `int` argument is equal to 88,\n * our magic number.\n */\n\n@Correct(name = \"Equals 88\", author = \"challen@illinois.edu\", version = \"2021.6.0\")\n@Wrap\npublic class Question {\n  boolean equals88(int value) {\n    return value == 88;\n  }\n\n  @FixedParameters private static final List<Integer> FIXED = Arrays.asList(88, 188, 888, 8);\n\n  @RandomParameters\n  private static int randomInts(Random random) {\n    if (random.nextBoolean()) {\n      return 88;\n    } else {\n      return random.nextInt();\n    }\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/equals88/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/equals88/Question.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -5268,7 +5268,7 @@
         "klass": "Question",
         "contents": "boolean equals88(int value) {\n  return value == 88;\n}",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/equals88/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/equals88/Question.java",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -5443,21 +5443,21 @@
         "kotlin": 5632
       },
       "wallTime": {
-        "java": 5
+        "java": 6
       },
       "cpuTime": {
-        "java": 2266000
+        "java": 5497000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 6,
       "mutationCount": 7,
-      "solutionMaxRuntime": 65,
-      "bootstrapLength": 3103,
-      "mutationLength": 16,
-      "incorrectLength": 306,
-      "calibrationLength": 121,
+      "solutionMaxRuntime": 33,
+      "bootstrapLength": 1922,
+      "mutationLength": 372,
+      "incorrectLength": 449,
+      "calibrationLength": 41,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -5470,7 +5470,7 @@
         "java": 352
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 363.753
+      "javaSolutionBootstrapCPUTimeMS": 458.473
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
@@ -5553,7 +5553,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/equals88/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/equals88/Question.java"
   },
   {
     "published": {
@@ -6221,8 +6221,8 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/inputinterleavingtest/Question.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/inputinterleavingtest/correct/kotlin/Question.kt"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/inputinterleavingtest/Question.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/inputinterleavingtest/correct/kotlin/Question.kt"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -6233,7 +6233,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.EdgeType;\nimport edu.illinois.cs.cs125.jenisol.core.Limit;\nimport edu.illinois.cs.cs125.jenisol.core.ProvideSystemIn;\nimport edu.illinois.cs.cs125.jenisol.core.RandomType;\nimport edu.illinois.cs.cs125.jenisol.core.SimpleType;\nimport edu.illinois.cs.cs125.jenisol.core.generators.SystemIn;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.util.Arrays;\nimport java.util.Random;\nimport java.util.Scanner;\n\n/*\n * Testing STDIN generation and interleaving.\n */\n\n@SuppressWarnings(\"StringOperationCanBeSimplified\")\n@Correct(name = \"Input Interleaving Test\", version = \"2022.9.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  @ProvideSystemIn\n  @Limit(1)\n  public static void echo() {\n    System.out.println(\"Hello!\");\n    Scanner scanner = new Scanner(System.in);\n    String first = scanner.nextLine();\n    System.out.println(\"First: \" + first);\n    String second = scanner.nextLine();\n    System.out.println(\"Second: \" + second);\n  }\n\n  @SimpleType\n  private static final SystemIn[] SIMPLE =\n      new SystemIn[] {new SystemIn(Arrays.asList(\"Test\", \"Me\"))};\n\n  @EdgeType private static final SystemIn[] EDGE = new SystemIn[] {};\n\n  @RandomType\n  private static SystemIn randomInput(Random random) {\n    return new SystemIn(\n        Arrays.asList(new String(\"\" + random.nextInt()), new String(\"\" + random.nextInt())));\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/inputinterleavingtest/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/inputinterleavingtest/Question.java",
       "suppressions": [
         "StringOperationCanBeSimplified"
       ]
@@ -6243,7 +6243,7 @@
         "klass": "Question",
         "contents": "import java.util.Scanner;\n\npublic class Question {\n  public static void echo() {\n    System.out.println(\"Hello!\");\n    Scanner scanner = new Scanner(System.in);\n    String first = scanner.nextLine();\n    System.out.println(\"First: \" + first);\n    String second = scanner.nextLine();\n    System.out.println(\"Second: \" + second);\n  }\n}\n",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/inputinterleavingtest/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/inputinterleavingtest/Question.java",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -6547,7 +6547,7 @@
         "klass": "QuestionKt",
         "contents": "import java.util.Scanner\n\nfun echo() {\n  println(\"Hello!\")\n  val scanner = Scanner(System.`in`)\n  val first = scanner.nextLine()\n  println(\"First: $first\")\n  val second = scanner.nextLine()\n  println(\"Second: $second\")\n}",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/inputinterleavingtest/correct/kotlin/Question.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/inputinterleavingtest/correct/kotlin/Question.kt",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -6868,7 +6868,7 @@
         "klass": "QuestionKt",
         "contents": "import java.util.Scanner\n\nfun echo() {\n  println(\"Hello!\")\n  val scanner = Scanner(System.`in`)\n  val first = scanner.nextLine()\n  println(\"First: $first\")\n  val second = scanner.nextLine()\n  println(\"Second: $second\")\n}",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/inputinterleavingtest/correct/kotlin/Question.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/inputinterleavingtest/correct/kotlin/Question.kt",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -7240,7 +7240,7 @@
         "kotlin": 336
       },
       "allocationLimit": {
-        "java": 884736,
+        "java": 890368,
         "kotlin": 884736
       },
       "solutionClassSize": {
@@ -7279,23 +7279,23 @@
         "kotlin": 887808
       },
       "wallTime": {
-        "java": 39,
-        "kotlin": 5
+        "java": 25,
+        "kotlin": 7
       },
       "cpuTime": {
-        "java": 4907000,
-        "kotlin": 4510000
+        "java": 4328000,
+        "kotlin": 5424000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 35,
-      "solutionMaxRuntime": 5,
-      "bootstrapLength": 5950,
-      "mutationLength": 102,
-      "incorrectLength": 1980,
-      "calibrationLength": 183,
+      "solutionMaxRuntime": 7,
+      "bootstrapLength": 6319,
+      "mutationLength": 266,
+      "incorrectLength": 1831,
+      "calibrationLength": 168,
       "solutionCoverage": {
         "covered": 8,
         "total": 8,
@@ -7306,11 +7306,11 @@
         "kotlin": 21
       },
       "memoryAllocation": {
-        "java": 55296,
+        "java": 55648,
         "kotlin": 55296
       },
       "canTestTest": false,
-      "javaSolutionBootstrapCPUTimeMS": 27.141
+      "javaSolutionBootstrapCPUTimeMS": 9.368
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -7746,7 +7746,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/inputinterleavingtest/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/inputinterleavingtest/Question.java"
   },
   {
     "published": {
@@ -8083,9 +8083,9 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/Book.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/correct/kotlin/Book.kt",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/incorrect/withfauxproperty/Book.kt"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/Book.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/correct/kotlin/Book.kt",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/incorrect/withfauxproperty/Book.kt"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -8096,7 +8096,7 @@
       "klass": "Book",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Question to test detection of Kotlin faux properties in Jenisol 2023.7.0.\n */\n@Correct(\n    name = \"Kotlin Faux Property Testing\",\n    version = \"2023.7.0\",\n    author = \"challen@illinois.edu\")\npublic class Book {\n  private String name;\n\n  public void setName(String setName) {\n    name = setName;\n  }\n\n  public String getName() {\n    return name;\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/Book.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/Book.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -8104,7 +8104,7 @@
         "klass": "Book",
         "contents": "public class Book {\n  private String name;\n\n  public void setName(String setName) {\n    name = setName;\n  }\n\n  public String getName() {\n    return name;\n  }\n}\n",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/Book.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/Book.java",
         "complexity": 2,
         "features": {
           "featureMap": {
@@ -8314,7 +8314,7 @@
         "klass": "Book",
         "contents": "class Book {\n  var name: String? = null\n}",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/correct/kotlin/Book.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/correct/kotlin/Book.kt",
         "complexity": 0,
         "features": {
           "featureMap": {
@@ -8402,7 +8402,7 @@
         "klass": "Book",
         "contents": "class Book {\n  var name: String? = null\n}",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/correct/kotlin/Book.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/correct/kotlin/Book.kt",
         "complexity": 0,
         "features": {
           "featureMap": {
@@ -8491,7 +8491,7 @@
         "contents": "class Book {\n  private var name: String? = null\n  fun getName(): String? = name\n  fun setName(setName: String?) {\n    name = setName\n  }\n}",
         "reason": "DESIGN",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/incorrect/withfauxproperty/Book.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/incorrect/withfauxproperty/Book.kt",
         "starter": false,
         "needed": true,
         "testCount": -1,
@@ -8584,23 +8584,23 @@
         "kotlin": 5632
       },
       "wallTime": {
-        "java": 4,
-        "kotlin": 14
+        "java": 26,
+        "kotlin": 15
       },
       "cpuTime": {
-        "java": 2815000,
-        "kotlin": 12431000
+        "java": 2312000,
+        "kotlin": 11505000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 21,
       "mutationCount": 4,
-      "solutionMaxRuntime": 14,
-      "bootstrapLength": 6276,
-      "mutationLength": 22,
-      "incorrectLength": 697,
-      "calibrationLength": 86,
+      "solutionMaxRuntime": 15,
+      "bootstrapLength": 6660,
+      "mutationLength": 8,
+      "incorrectLength": 728,
+      "calibrationLength": 119,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -8615,7 +8615,7 @@
         "kotlin": 352
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 320.042
+      "javaSolutionBootstrapCPUTimeMS": 226.082
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -8674,7 +8674,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/Book.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/withkotlinfauxproperty/Book.java"
   },
   {
     "published": {
@@ -9079,8 +9079,8 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/privaterecursivehelper/Question.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/privaterecursivehelper/incorrect/java/iterative/Question.java"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/privaterecursivehelper/Question.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/privaterecursivehelper/incorrect/java/iterative/Question.java"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -9091,7 +9091,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.FilterParameters;\nimport edu.illinois.cs.cs125.jenisol.core.SkipTest;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Testing question for recursion checks on private methods.\n */\n\n@Correct(name = \"Private Recursive Helper\", version = \"2022.7.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  private static int rangeSumHelper(int range) {\n    if (range == 0) {\n      return 0;\n    }\n    return range + rangeSumHelper(range - 1);\n  }\n\n  @FilterParameters\n  private static void filterRangeSum(int range) {\n    if (range > 1024) {\n      throw new SkipTest();\n    }\n  }\n\n  public static int rangeSum(int range) {\n    if (range < 0) {\n      throw new IllegalArgumentException();\n    }\n    return rangeSumHelper(range);\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/privaterecursivehelper/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/privaterecursivehelper/Question.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -9099,7 +9099,7 @@
         "klass": "Question",
         "contents": "public class Question {\n  private static int rangeSumHelper(int range) {\n    if (range == 0) {\n      return 0;\n    }\n    return range + rangeSumHelper(range - 1);\n  }\n\n  public static int rangeSum(int range) {\n    if (range < 0) {\n      throw new IllegalArgumentException();\n    }\n    return rangeSumHelper(range);\n  }\n}\n",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/privaterecursivehelper/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/privaterecursivehelper/Question.java",
         "complexity": 5,
         "features": {
           "featureMap": {
@@ -9462,7 +9462,7 @@
         "contents": "public class Question {\n  private static int rangeSumHelper(int range) {\n    int sum = 0;\n    for (int i = 0; i <= range; i++) {\n      sum += i;\n    }\n    return sum;\n  }\n\n  public static int rangeSum(int range) {\n    if (range < 0) {\n      throw new IllegalArgumentException();\n    }\n    return rangeSumHelper(range);\n  }\n}\n",
         "reason": "RECURSION",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/privaterecursivehelper/incorrect/java/iterative/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/privaterecursivehelper/incorrect/java/iterative/Question.java",
         "starter": false,
         "needed": true,
         "testCount": -1,
@@ -9549,21 +9549,21 @@
         "kotlin": 88047232
       },
       "wallTime": {
-        "java": 28
+        "java": 23
       },
       "cpuTime": {
-        "java": 24087000
+        "java": 20696000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 23,
-      "solutionMaxRuntime": 10,
-      "bootstrapLength": 2463,
-      "mutationLength": 106,
-      "incorrectLength": 2192,
-      "calibrationLength": 21,
+      "solutionMaxRuntime": 8,
+      "bootstrapLength": 2085,
+      "mutationLength": 345,
+      "incorrectLength": 2196,
+      "calibrationLength": 20,
       "solutionCoverage": {
         "covered": 7,
         "total": 7,
@@ -9576,7 +9576,7 @@
         "java": 318952
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 578.424
+      "javaSolutionBootstrapCPUTimeMS": 490.995
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -9809,7 +9809,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/privaterecursivehelper/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/privaterecursivehelper/Question.java"
   },
   {
     "published": {
@@ -10060,7 +10060,7 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/readhelloworld/Question.java"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/readhelloworld/Question.java"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -10071,7 +10071,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.EdgeType;\nimport edu.illinois.cs.cs125.jenisol.core.ProvideFileSystem;\nimport edu.illinois.cs.cs125.jenisol.core.RandomType;\nimport edu.illinois.cs.cs125.jenisol.core.SimpleType;\nimport edu.illinois.cs.cs125.jenisol.core.generators.JenisolFileSystem;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.io.IOException;\nimport java.nio.charset.StandardCharsets;\nimport java.util.Map;\nimport java.util.Random;\nimport java.util.Scanner;\n\n/*\n * Question to test filesystem generation.\n */\n\n@Correct(name = \"Read Hello World!\", version = \"2023.11.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  @ProvideFileSystem\n  public static void test() throws IOException {\n    // mutate-disable-string-literal-trim mutate-disable-string-literal\n    String greeter = new Scanner(\"testing.txt\").useDelimiter(\"\\\\A\").next();\n    System.out.println(greeter);\n  }\n\n  @SimpleType\n  private static final JenisolFileSystem[] SIMPLE =\n      new JenisolFileSystem[] {\n        new JenisolFileSystem(\n            Map.of(\"testing.txt\", \"Hello, world!\".getBytes(StandardCharsets.UTF_8)))\n      };\n\n  @EdgeType private static final JenisolFileSystem[] EDGE = new JenisolFileSystem[] {};\n\n  @RandomType\n  private static JenisolFileSystem randomInput(Random random) {\n    return new JenisolFileSystem(\n        Map.of(\"testing.txt\", (\"\" + random.nextInt()).getBytes(StandardCharsets.UTF_8)));\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/readhelloworld/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/readhelloworld/Question.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -10079,7 +10079,7 @@
         "klass": "Question",
         "contents": "import java.io.IOException;\nimport java.util.Scanner;\n\npublic class Question {\n  public static void test() throws IOException {\n    // mutate-disable-string-literal-trim mutate-disable-string-literal\n    String greeter = new Scanner(\"testing.txt\").useDelimiter(\"\\\\A\").next();\n    System.out.println(greeter);\n  }\n}\n",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/readhelloworld/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/readhelloworld/Question.java",
         "complexity": 2,
         "features": {
           "featureMap": {
@@ -10358,25 +10358,25 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 395625856,
-        "kotlin": 395625856
+        "java": 395584256,
+        "kotlin": 395584256
       },
       "wallTime": {
-        "java": 11
+        "java": 5
       },
       "cpuTime": {
-        "java": 5829000
+        "java": 4516000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 4,
-      "solutionMaxRuntime": 22,
-      "bootstrapLength": 3777,
-      "mutationLength": 12,
-      "incorrectLength": 170,
-      "calibrationLength": 31,
+      "solutionMaxRuntime": 19,
+      "bootstrapLength": 3751,
+      "mutationLength": 16,
+      "incorrectLength": 154,
+      "calibrationLength": 29,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -10389,7 +10389,7 @@
         "java": 1545776
       },
       "canTestTest": false,
-      "javaSolutionBootstrapCPUTimeMS": 610.274
+      "javaSolutionBootstrapCPUTimeMS": 613.286
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -10447,7 +10447,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/readhelloworld/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/readhelloworld/Question.java"
   },
   {
     "published": {
@@ -10985,9 +10985,9 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/Question.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/correct/kotlin/Question.kt",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/incorrect/java/iterative/Question.java"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/Question.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/correct/kotlin/Question.kt",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/incorrect/java/iterative/Question.java"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -10998,7 +10998,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Write a class method that provides a recursive implementation of factorial,\n * accepting and returning `long` arguments.\n * Throw an `IllegalArgumentException` on invalid inputs.\n */\n\n@Correct(name = \"Recursive Factorial\", version = \"2022.7.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  public static long factorial(long input) {\n    if (input <= 0) { // mutate-disable-conditional-boundary\n      throw new IllegalArgumentException();\n    }\n    if (input == 1) {\n      return 1;\n    }\n    return input * factorial(input - 1);\n  }\n\n  @FixedParameters private static final List<Long> FIXED = Arrays.asList(-10L, -1L, 0L, 1L, 2L);\n\n  @RandomParameters\n  private static long randomParameters(Random random) {\n    return random.nextInt(32);\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/Question.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -11006,7 +11006,7 @@
         "klass": "Question",
         "contents": "public class Question {\n  public static long factorial(long input) {\n    if (input <= 0) { // mutate-disable-conditional-boundary\n      throw new IllegalArgumentException();\n    }\n    if (input == 1) {\n      return 1;\n    }\n    return input * factorial(input - 1);\n  }\n}\n",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/Question.java",
         "complexity": 4,
         "features": {
           "featureMap": {
@@ -11309,7 +11309,7 @@
         "klass": "QuestionKt",
         "contents": "fun factorial(input: Long): Long {\n  require(input > 0)\n  if (input == 1L) {\n    return 1\n  }\n  return input * factorial(input - 1)\n}",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/correct/kotlin/Question.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/correct/kotlin/Question.kt",
         "complexity": 3,
         "features": {
           "featureMap": {
@@ -11489,7 +11489,7 @@
         "klass": "QuestionKt",
         "contents": "fun factorial(input: Long): Long {\n  require(input > 0)\n  if (input == 1L) {\n    return 1\n  }\n  return input * factorial(input - 1)\n}",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/correct/kotlin/Question.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/correct/kotlin/Question.kt",
         "complexity": 3,
         "features": {
           "featureMap": {
@@ -11670,7 +11670,7 @@
         "contents": "public class Question {\n  public static long factorial(long input) {\n    if (input <= 0) {\n      throw new IllegalArgumentException();\n    }\n    long result = 1;\n    for (long multiplier = 2; multiplier <= input; multiplier++) {\n      result *= multiplier;\n    }\n    return result;\n  }\n}\n",
         "reason": "RECURSION",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/incorrect/java/iterative/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/incorrect/java/iterative/Question.java",
         "starter": false,
         "needed": true,
         "testCount": -1,
@@ -11775,27 +11775,27 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 2856832,
-        "kotlin": 2856832
+        "java": 2857856,
+        "kotlin": 2857856
       },
       "wallTime": {
-        "java": 34,
-        "kotlin": 14
+        "java": 43,
+        "kotlin": 12
       },
       "cpuTime": {
-        "java": 28538000,
-        "kotlin": 12749000
+        "java": 26848000,
+        "kotlin": 11702000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 6,
       "mutationCount": 22,
-      "solutionMaxRuntime": 14,
-      "bootstrapLength": 6472,
-      "mutationLength": 46,
-      "incorrectLength": 1261,
-      "calibrationLength": 262,
+      "solutionMaxRuntime": 12,
+      "bootstrapLength": 6859,
+      "mutationLength": 41,
+      "incorrectLength": 1275,
+      "calibrationLength": 320,
       "solutionCoverage": {
         "covered": 6,
         "total": 6,
@@ -11810,7 +11810,7 @@
         "kotlin": 21952
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 592.3
+      "javaSolutionBootstrapCPUTimeMS": 516.647
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -12057,7 +12057,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/recursivefactorial/Question.java"
   },
   {
     "published": {
@@ -12413,10 +12413,10 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/Example.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/correct/kotlin/Example.kt",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/incorrect/kotlin/badgetter/Example.kt",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/incorrect/kotlin/badsetter/Example.kt"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/Example.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/correct/kotlin/Example.kt",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/incorrect/kotlin/badgetter/Example.kt",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/incorrect/kotlin/badsetter/Example.kt"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -12427,7 +12427,7 @@
       "klass": "Example",
       "contents": "import edu.illinois.cs.cs125.jeed.core.FeatureName;\nimport edu.illinois.cs.cs125.jeed.core.Features;\nimport edu.illinois.cs.cs125.questioner.lib.CheckFeatures;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.FeatureCheckException;\nimport edu.illinois.cs.cs125.questioner.lib.Language;\nimport java.util.ArrayList;\nimport java.util.List;\n\n/*\n * Test to ensure that we can detect unnecessary Kotlin setter or getter overrides.\n */\n\n@Correct(\n    name = \"Test Bad Kotlin Getter Setter\",\n    version = \"2023.10.0\",\n    author = \"challen@illinois.edu\")\npublic class Example {\n  private String name;\n\n  public Example(String setName) {\n    name = setName;\n  }\n\n  public String getName() {\n    return name;\n  }\n\n  public void setName(String setName) {\n    name = setName;\n  }\n\n  @CheckFeatures\n  private static List<String> checkFeatures(\n      Language language, Features solution, Features submission) {\n    if (language == Language.kotlin) {\n      if (submission.getFeatureMap().containsKey(FeatureName.GETTER)) {\n        throw new FeatureCheckException(\"Solution overrides a getter unnecessarily\");\n      }\n      if (submission.getFeatureMap().containsKey(FeatureName.SETTER)) {\n        throw new FeatureCheckException(\"Solution overrides a setter unnecessarily\");\n      }\n    }\n    return new ArrayList<>();\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/Example.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/Example.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -12435,7 +12435,7 @@
         "klass": "Example",
         "contents": "public class Example {\n  private String name;\n\n  public Example(String setName) {\n    name = setName;\n  }\n\n  public String getName() {\n    return name;\n  }\n\n  public void setName(String setName) {\n    name = setName;\n  }\n}\n",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/Example.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/Example.java",
         "complexity": 3,
         "features": {
           "featureMap": {
@@ -12702,7 +12702,7 @@
         "klass": "Example",
         "contents": "class Example(var name: String?)",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/correct/kotlin/Example.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/correct/kotlin/Example.kt",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -12752,7 +12752,7 @@
         "klass": "Example",
         "contents": "class Example(var name: String?)",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/correct/kotlin/Example.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/correct/kotlin/Example.kt",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -12803,7 +12803,7 @@
         "contents": "class Example(name: String?) {\n  var name = name\n    get() {\n      return field\n    }\n}",
         "reason": "FEATURES",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/incorrect/kotlin/badgetter/Example.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/incorrect/kotlin/badgetter/Example.kt",
         "starter": false,
         "needed": true,
         "testCount": -1,
@@ -12816,7 +12816,7 @@
         "contents": "class Example(name: String?) {\n  var name = name\n    set(value) {\n      field = value\n    }\n}",
         "reason": "FEATURES",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/incorrect/kotlin/badsetter/Example.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/incorrect/kotlin/badsetter/Example.kt",
         "starter": false,
         "needed": true,
         "testCount": -1,
@@ -12907,27 +12907,27 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 6656,
-        "kotlin": 6656
+        "java": 5632,
+        "kotlin": 5632
       },
       "wallTime": {
         "java": 6,
-        "kotlin": 10
+        "kotlin": 11
       },
       "cpuTime": {
-        "java": 3539000,
-        "kotlin": 9782000
+        "java": 3003000,
+        "kotlin": 10571000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 5,
-      "solutionMaxRuntime": 10,
-      "bootstrapLength": 6193,
-      "mutationLength": 29,
-      "incorrectLength": 1024,
-      "calibrationLength": 67,
+      "solutionMaxRuntime": 11,
+      "bootstrapLength": 4120,
+      "mutationLength": 8,
+      "incorrectLength": 1180,
+      "calibrationLength": 372,
       "solutionCoverage": {
         "covered": 6,
         "total": 6,
@@ -12942,7 +12942,7 @@
         "kotlin": 352
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 505.314
+      "javaSolutionBootstrapCPUTimeMS": 198.467
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -13016,7 +13016,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/Example.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/badkotlingettersetter/Example.java"
   },
   {
     "published": {
@@ -13270,7 +13270,7 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withconstructornotnull/Question.java"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withconstructornotnull/Question.java"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -13281,7 +13281,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.NotNull;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Testing @NotNull annotation on constructor parameters.\n */\n\n@Correct(name = \"Test Constructor NotNull\", version = \"2022.10.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  private final int stringLength;\n\n  public Question(@NotNull String value) {\n    stringLength = value.length();\n  }\n\n  public int getStringLength() {\n    return stringLength;\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withconstructornotnull/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withconstructornotnull/Question.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -13289,7 +13289,7 @@
         "klass": "Question",
         "contents": "public class Question {\n  private final int stringLength;\n\n  public Question(String value) {\n    stringLength = value.length();\n  }\n\n  public int getStringLength() {\n    return stringLength;\n  }\n}\n",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withconstructornotnull/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withconstructornotnull/Question.java",
         "complexity": 2,
         "features": {
           "featureMap": {
@@ -13572,25 +13572,25 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 6016,
-        "kotlin": 6016
+        "java": 5632,
+        "kotlin": 5632
       },
       "wallTime": {
-        "java": 3
+        "java": 4
       },
       "cpuTime": {
-        "java": 1720000
+        "java": 2434000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 4,
-      "solutionMaxRuntime": 14,
-      "bootstrapLength": 2199,
-      "mutationLength": 46,
-      "incorrectLength": 757,
-      "calibrationLength": 25,
+      "solutionMaxRuntime": 37,
+      "bootstrapLength": 2723,
+      "mutationLength": 15,
+      "incorrectLength": 155,
+      "calibrationLength": 47,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -13603,7 +13603,7 @@
         "java": 352
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 535.552
+      "javaSolutionBootstrapCPUTimeMS": 270.296
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -13647,7 +13647,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withconstructornotnull/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/withconstructornotnull/Question.java"
   },
   {
     "published": {
@@ -13816,8 +13816,8 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withemptyconstructor/Question.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withemptyconstructor/correct/java/emptyconstructor/Question.java"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withemptyconstructor/Question.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withemptyconstructor/correct/java/emptyconstructor/Question.java"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -13828,7 +13828,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Test to make sure we can parse the empty constructor.\n */\n\n@Correct(name = \"Test Empty Constructor\", version = \"2022.9.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  private int value = 0;\n\n  int next() {\n    return value++;\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withemptyconstructor/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withemptyconstructor/Question.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -13836,7 +13836,7 @@
         "klass": "Question",
         "contents": "public class Question {\n  private int value = 0;\n\n  int next() {\n    return value++;\n  }\n}\n",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withemptyconstructor/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withemptyconstructor/Question.java",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -13969,7 +13969,7 @@
         "klass": "Question",
         "contents": "public class Question {\n  private int value;\n\n  public Question() {\n    value = 0;\n  }\n\n  int next() {\n    return value++;\n  }\n}\n",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withemptyconstructor/correct/java/emptyconstructor/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withemptyconstructor/correct/java/emptyconstructor/Question.java",
         "complexity": 2,
         "features": {
           "featureMap": {
@@ -14220,21 +14220,21 @@
         "kotlin": 5632
       },
       "wallTime": {
-        "java": 9
+        "java": 4
       },
       "cpuTime": {
-        "java": 3575000
+        "java": 3684000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 8,
       "mutationCount": 3,
-      "solutionMaxRuntime": 24,
-      "bootstrapLength": 3163,
-      "mutationLength": 17,
-      "incorrectLength": 142,
-      "calibrationLength": 109,
+      "solutionMaxRuntime": 38,
+      "bootstrapLength": 3340,
+      "mutationLength": 7,
+      "incorrectLength": 95,
+      "calibrationLength": 82,
       "solutionCoverage": {
         "covered": 3,
         "total": 3,
@@ -14247,7 +14247,7 @@
         "java": 352
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 518.994
+      "javaSolutionBootstrapCPUTimeMS": 266.643
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -14291,7 +14291,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withemptyconstructor/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/withemptyconstructor/Question.java"
   },
   {
     "published": {
@@ -14413,8 +14413,8 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/testmemoizationdefense/Question.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/testmemoizationdefense/incorrect/java/memoized/Question.java"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/testmemoizationdefense/Question.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/testmemoizationdefense/incorrect/java/memoized/Question.java"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -14425,7 +14425,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\n\n/*\n * Testing class size based memoization defense.\n */\n\n@Correct(name = \"Test Memoization Defense\", version = \"2023.10.0\", author = \"challen@illinois.edu\")\n@Wrap\npublic class Question {\n  int returnValue(int value) {\n    return value;\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/testmemoizationdefense/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/testmemoizationdefense/Question.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -14433,7 +14433,7 @@
         "klass": "Question",
         "contents": "int returnValue(int value) {\n  return value;\n}",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/testmemoizationdefense/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/testmemoizationdefense/Question.java",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -14521,7 +14521,7 @@
         "contents": "int returnValue(int value) {\n  int[] values = {\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n    1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9,\n  };\n  return value;\n}",
         "reason": "CLASSSIZE",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/testmemoizationdefense/incorrect/java/memoized/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/testmemoizationdefense/incorrect/java/memoized/Question.java",
         "starter": false,
         "needed": true,
         "testCount": -1,
@@ -14599,25 +14599,25 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 6528,
-        "kotlin": 6528
+        "java": 5632,
+        "kotlin": 5632
       },
       "wallTime": {
-        "java": 4
+        "java": 3
       },
       "cpuTime": {
-        "java": 1554000
+        "java": 2516000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 12,
       "mutationCount": 1,
-      "solutionMaxRuntime": 23,
-      "bootstrapLength": 2084,
-      "mutationLength": 159,
-      "incorrectLength": 621,
-      "calibrationLength": 96,
+      "solutionMaxRuntime": 28,
+      "bootstrapLength": 684,
+      "mutationLength": 20,
+      "incorrectLength": 74,
+      "calibrationLength": 43,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -14630,7 +14630,7 @@
         "java": 352
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 493.393
+      "javaSolutionBootstrapCPUTimeMS": 198.643
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
@@ -14648,7 +14648,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/testmemoizationdefense/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/testmemoizationdefense/Question.java"
   },
   {
     "published": {
@@ -14829,7 +14829,7 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withrawtypes/Question.java"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withrawtypes/Question.java"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -14840,7 +14840,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\nimport java.util.ArrayList;\nimport java.util.List;\n\n/*\n * Test support for raw type error filtering.\n */\n@SuppressWarnings(\"rawtypes\")\n@Correct(name = \"Test Raw Types\", version = \"2023.11.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  public static List testing() {\n    return new ArrayList();\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withrawtypes/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withrawtypes/Question.java",
       "suppressions": [
         "rawtypes"
       ]
@@ -14850,7 +14850,7 @@
         "klass": "Question",
         "contents": "import java.util.ArrayList;\nimport java.util.List;\n\npublic class Question {\n  public static List testing() {\n    return new ArrayList();\n  }\n}\n",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withrawtypes/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withrawtypes/Question.java",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -15068,10 +15068,10 @@
         "kotlin": 1579648
       },
       "wallTime": {
-        "java": 2
+        "java": 25
       },
       "cpuTime": {
-        "java": 790000
+        "java": 896000
       }
     },
     "validationResults": {
@@ -15079,10 +15079,10 @@
       "requiredTestCount": 1,
       "mutationCount": 1,
       "solutionMaxRuntime": 13,
-      "bootstrapLength": 2880,
-      "mutationLength": 9,
-      "incorrectLength": 52,
-      "calibrationLength": 49,
+      "bootstrapLength": 646,
+      "mutationLength": 5,
+      "incorrectLength": 51,
+      "calibrationLength": 20,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -15095,7 +15095,7 @@
         "java": 6568
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 325.292
+      "javaSolutionBootstrapCPUTimeMS": 192.901
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -15113,7 +15113,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withrawtypes/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/withrawtypes/Question.java"
   },
   {
     "published": {
@@ -15276,7 +15276,7 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withcommoncode/Question.java"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withcommoncode/Question.java"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -15287,7 +15287,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Test loading common code.\n */\n\n@Correct(name = \"With Common Code\", version = \"2023.12.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  public static Value createValue(int value) {\n    return new Value(value);\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withcommoncode/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withcommoncode/Question.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -15295,7 +15295,7 @@
         "klass": "Question",
         "contents": "public class Question {\n  public static Value createValue(int value) {\n    return new Value(value);\n  }\n}\n",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withcommoncode/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withcommoncode/Question.java",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -15493,25 +15493,25 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 801024,
-        "kotlin": 801024
+        "java": 793088,
+        "kotlin": 793088
       },
       "wallTime": {
-        "java": 2
+        "java": 3
       },
       "cpuTime": {
-        "java": 1710000
+        "java": 1147000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 1,
-      "solutionMaxRuntime": 21,
-      "bootstrapLength": 2152,
-      "mutationLength": 53,
-      "incorrectLength": 595,
-      "calibrationLength": 99,
+      "solutionMaxRuntime": 34,
+      "bootstrapLength": 1902,
+      "mutationLength": 361,
+      "incorrectLength": 132,
+      "calibrationLength": 81,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -15524,7 +15524,7 @@
         "java": 3424
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 514.186
+      "javaSolutionBootstrapCPUTimeMS": 427.951
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -15542,7 +15542,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withcommoncode/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/withcommoncode/Question.java"
   },
   {
     "published": {
@@ -15997,8 +15997,8 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withdeadcodeannotation/Question.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withdeadcodeannotation/correct/kotlin/Question.kt"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withdeadcodeannotation/Question.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withdeadcodeannotation/correct/kotlin/Question.kt"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -16009,7 +16009,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\n\n/*\n * Testing dead code comments.\n */\n@Correct(name = \"With Dead Code Annotation\", version = \"2023.2.0\", author = \"challen@illinois.edu\")\npublic class Question {\n  public static int whatever(int value) {\n    if (value % 2 == 0) {\n      return value * 2;\n    }\n    assert false;\n    // mutate-disable\n    return -1; // dead code\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withdeadcodeannotation/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withdeadcodeannotation/Question.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -16017,7 +16017,7 @@
         "klass": "Question",
         "contents": "public class Question {\n  public static int whatever(int value) {\n    if (value % 2 == 0) {\n      return value * 2;\n    }\n    assert false;\n    // mutate-disable\n    return -1;\n  }\n}\n",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withdeadcodeannotation/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withdeadcodeannotation/Question.java",
         "complexity": 3,
         "features": {
           "featureMap": {
@@ -16256,7 +16256,7 @@
         "klass": "QuestionKt",
         "contents": "fun whatever(value: Int): Int {\n  if (value % 2 == 0) {\n    return value * 2\n  }\n  assert(false)\n\n  return -1\n}",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withdeadcodeannotation/correct/kotlin/Question.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withdeadcodeannotation/correct/kotlin/Question.kt",
         "complexity": 3,
         "features": {
           "featureMap": {
@@ -16428,7 +16428,7 @@
         "klass": "QuestionKt",
         "contents": "fun whatever(value: Int): Int {\n  if (value % 2 == 0) {\n    return value * 2\n  }\n  assert(false)\n\n  return -1\n}",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withdeadcodeannotation/correct/kotlin/Question.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withdeadcodeannotation/correct/kotlin/Question.kt",
         "complexity": 3,
         "features": {
           "featureMap": {
@@ -16687,23 +16687,23 @@
         "kotlin": 43781632
       },
       "wallTime": {
-        "java": 22,
-        "kotlin": 11
+        "java": 12,
+        "kotlin": 14
       },
       "cpuTime": {
-        "java": 4149000,
-        "kotlin": 11123000
+        "java": 2468000,
+        "kotlin": 12762000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 17,
-      "solutionMaxRuntime": 11,
-      "bootstrapLength": 6428,
-      "mutationLength": 47,
-      "incorrectLength": 798,
-      "calibrationLength": 264,
+      "solutionMaxRuntime": 14,
+      "bootstrapLength": 6825,
+      "mutationLength": 45,
+      "incorrectLength": 818,
+      "calibrationLength": 412,
       "solutionCoverage": {
         "covered": 4,
         "total": 5,
@@ -16718,7 +16718,7 @@
         "kotlin": 162424
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 366.583
+      "javaSolutionBootstrapCPUTimeMS": 295.336
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -16931,7 +16931,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withdeadcodeannotation/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/withdeadcodeannotation/Question.java"
   },
   {
     "published": {
@@ -17140,10 +17140,10 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/Question.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/correct/kotlin/Question.kt",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/incorrect/java/usesloop/Question.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/incorrect/kotlin/usesloop/Question.kt"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/Question.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/correct/kotlin/Question.kt",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/incorrect/java/usesloop/Question.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/incorrect/kotlin/usesloop/Question.kt"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -17154,7 +17154,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jeed.core.Features;\nimport edu.illinois.cs.cs125.jenisol.core.BoundComplexity;\nimport edu.illinois.cs.cs125.jenisol.core.FilterParameters;\nimport edu.illinois.cs.cs125.jenisol.core.SkipTest;\nimport edu.illinois.cs.cs125.questioner.lib.CheckFeatures;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.FeatureCheckException;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport edu.illinois.cs.cs125.questioner.lib.features.FeatureHelpers;\nimport java.util.ArrayList;\nimport java.util.List;\n\n/*\n * Test whether feature checking works.\n */\n\n@Correct(name = \"With Feature Check\", author = \"challen@illinois.edu\", version = \"2022.7.0\")\n@Wrap\npublic class Question {\n  @FilterParameters\n  private static void filterParameters(int range) {\n    if (range < 0) {\n      throw new SkipTest();\n    }\n    if (range > 1024) {\n      throw new BoundComplexity();\n    }\n  }\n\n  int sumTo(int range) {\n    return (range * (range + 1)) / 2;\n  }\n\n  @CheckFeatures\n  private static List<String> checkFeatures(Features solution, Features submission) {\n    if (FeatureHelpers.usesLoop(submission)) {\n      throw new FeatureCheckException(\"Submission uses a loop\");\n    }\n    return new ArrayList<>();\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/Question.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -17162,7 +17162,7 @@
         "klass": "Question",
         "contents": "int sumTo(int range) {\n  return (range * (range + 1)) / 2;\n}",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/Question.java",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -17268,7 +17268,7 @@
         "klass": "Question",
         "contents": "fun sumTo(range: Int): Int = range * (range + 1) / 2",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/correct/kotlin/Question.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/correct/kotlin/Question.kt",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -17332,7 +17332,7 @@
         "klass": "Question",
         "contents": "fun sumTo(range: Int): Int = range * (range + 1) / 2",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/correct/kotlin/Question.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/correct/kotlin/Question.kt",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -17397,7 +17397,7 @@
         "contents": "int sumTo(int range) {\n  int sum = 0;\n  for (int i = 0; i <= range; i++) {\n    sum += i;\n  }\n  return sum;\n}",
         "reason": "FEATURES",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/incorrect/java/usesloop/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/incorrect/java/usesloop/Question.java",
         "starter": false,
         "needed": true,
         "testCount": -1,
@@ -17408,7 +17408,7 @@
         "contents": "fun sumTo(range: Int): Int {\n  var sum = 0\n  (0..range).forEach { i ->\n    sum += i\n  }\n  return sum\n}",
         "reason": "FEATURES",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/incorrect/kotlin/usesloop/Question.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/incorrect/kotlin/usesloop/Question.kt",
         "starter": false,
         "needed": true,
         "testCount": -1,
@@ -17503,27 +17503,27 @@
         "kotlin": 7600
       },
       "allocationLimit": {
-        "java": 6016,
-        "kotlin": 6016
+        "java": 14976,
+        "kotlin": 14976
       },
       "wallTime": {
-        "java": 16,
-        "kotlin": 39
+        "java": 9,
+        "kotlin": 38
       },
       "cpuTime": {
-        "java": 4399000,
-        "kotlin": 38128000
+        "java": 3459000,
+        "kotlin": 36571000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 475,
       "mutationCount": 13,
-      "solutionMaxRuntime": 44,
-      "bootstrapLength": 6402,
-      "mutationLength": 26,
-      "incorrectLength": 1371,
-      "calibrationLength": 313,
+      "solutionMaxRuntime": 38,
+      "bootstrapLength": 6724,
+      "mutationLength": 28,
+      "incorrectLength": 1351,
+      "calibrationLength": 257,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -17538,7 +17538,7 @@
         "kotlin": 352
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 594.276
+      "javaSolutionBootstrapCPUTimeMS": 514.274
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
@@ -17712,7 +17712,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturecheck/Question.java"
   },
   {
     "published": {
@@ -18245,8 +18245,8 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturedeadcode/Question.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturedeadcode/correct/kotlin/Question.kt"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturedeadcode/Question.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturedeadcode/correct/kotlin/Question.kt"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -18257,7 +18257,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.ArrayList;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Test feature-based dead code correction.\n */\n@Correct(name = \"With Feature Dead Code\", author = \"challen@illinois.edu\", version = \"2023.2.0\")\n@Wrap\npublic class Question {\n  List<Integer> rangeToList(int value) {\n    List<Integer> values = new ArrayList<>();\n    for (int i = 0; i < value; i += 2) {\n      values.add(i);\n    }\n    return values;\n  }\n\n  @FixedParameters private static final List<Integer> FIXED = Arrays.asList(0, 8);\n\n  @RandomParameters\n  private static int randomParameters(Random random) {\n    return random.nextInt(32);\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturedeadcode/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturedeadcode/Question.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -18265,7 +18265,7 @@
         "klass": "Question",
         "contents": "List<Integer> rangeToList(int value) {\n  List<Integer> values = new ArrayList<>();\n  for (int i = 0; i < value; i += 2) {\n    values.add(i);\n  }\n  return values;\n}",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturedeadcode/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturedeadcode/Question.java",
         "complexity": 2,
         "features": {
           "featureMap": {
@@ -18528,7 +18528,7 @@
         "klass": "Question",
         "contents": "fun rangeToList(value: Int): List<Int> {\n  val values = mutableListOf<Int>()\n  for (i in 0 until value step 2) {\n    values.add(i)\n  }\n  return values\n}",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturedeadcode/correct/kotlin/Question.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturedeadcode/correct/kotlin/Question.kt",
         "complexity": 2,
         "features": {
           "featureMap": {
@@ -18750,7 +18750,7 @@
         "klass": "Question",
         "contents": "fun rangeToList(value: Int): List<Int> {\n  val values = mutableListOf<Int>()\n  for (i in 0 until value step 2) {\n    values.add(i)\n  }\n  return values\n}",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturedeadcode/correct/kotlin/Question.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturedeadcode/correct/kotlin/Question.kt",
         "complexity": 2,
         "features": {
           "featureMap": {
@@ -19064,23 +19064,23 @@
         "kotlin": 8554624
       },
       "wallTime": {
-        "java": 20,
-        "kotlin": 17
+        "java": 11,
+        "kotlin": 16
       },
       "cpuTime": {
-        "java": 2871000,
-        "kotlin": 13448000
+        "java": 2581000,
+        "kotlin": 15000000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 4,
       "mutationCount": 10,
-      "solutionMaxRuntime": 17,
-      "bootstrapLength": 3465,
-      "mutationLength": 27,
-      "incorrectLength": 798,
-      "calibrationLength": 470,
+      "solutionMaxRuntime": 31,
+      "bootstrapLength": 6799,
+      "mutationLength": 34,
+      "incorrectLength": 739,
+      "calibrationLength": 333,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -19095,7 +19095,7 @@
         "kotlin": 41592
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 205.146
+      "javaSolutionBootstrapCPUTimeMS": 310.51
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
@@ -19223,7 +19223,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturedeadcode/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturedeadcode/Question.java"
   },
   {
     "published": {
@@ -19824,9 +19824,9 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/Question.java",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/correct/kotlin/Question.kt",
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/incorrect/java/withifelse/Question.java"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/Question.java",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/correct/kotlin/Question.kt",
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/incorrect/java/withifelse/Question.java"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -19837,7 +19837,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jeed.core.FeatureName;\nimport edu.illinois.cs.cs125.jeed.core.Features;\nimport edu.illinois.cs.cs125.jenisol.core.FixedParameters;\nimport edu.illinois.cs.cs125.jenisol.core.RandomParameters;\nimport edu.illinois.cs.cs125.questioner.lib.CheckFeatures;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.FeatureCheckException;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.ArrayList;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.Random;\n\n/*\n * Test feature check using Java 14 switch expression.\n */\n\n@Correct(name = \"With Java Switch\", version = \"2023.12.0\", author = \"challen@illinois.edu\")\n@Wrap\npublic class Question {\n  String fromDay(int day) {\n    return switch (day) {\n      case 0 -> \"Monday\"; // mutate-disable-remove-statement\n      case 1 -> \"Tuesday\"; // mutate-disable-remove-statement\n      case 2 -> \"Wednesday\"; // mutate-disable-remove-statement\n      case 3 -> \"Thursday\"; // mutate-disable-remove-statement\n      case 4 -> \"Friday\"; // mutate-disable-remove-statement\n      case 5 -> \"Saturday\"; // mutate-disable-remove-statement\n      case 6 -> \"Sunday\"; // mutate-disable-remove-statement\n      default -> throw new IllegalArgumentException(); // mutate-disable-remove-statement\n    };\n  }\n\n  @FixedParameters private static final List<Integer> FIXED = Arrays.asList(-1, 0, 6, 7);\n\n  @RandomParameters\n  private static int randomParameters(Random random) {\n    return random.nextInt(16) - 6;\n  }\n\n  @CheckFeatures\n  private static List<String> checkFeatures(Features solution, Features submission) {\n    if (submission.getFeatureMap().containsKey(FeatureName.IF_STATEMENTS)) {\n      throw new FeatureCheckException(\"Submission uses an if-else statement\");\n    }\n    return new ArrayList<>();\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/Question.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -19845,7 +19845,7 @@
         "klass": "Question",
         "contents": "String fromDay(int day) {\n  return switch (day) {\n    case 0 -> \"Monday\"; // mutate-disable-remove-statement\n    case 1 -> \"Tuesday\"; // mutate-disable-remove-statement\n    case 2 -> \"Wednesday\"; // mutate-disable-remove-statement\n    case 3 -> \"Thursday\"; // mutate-disable-remove-statement\n    case 4 -> \"Friday\"; // mutate-disable-remove-statement\n    case 5 -> \"Saturday\"; // mutate-disable-remove-statement\n    case 6 -> \"Sunday\"; // mutate-disable-remove-statement\n    default -> throw new IllegalArgumentException(); // mutate-disable-remove-statement\n  };\n}",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/Question.java",
         "complexity": 9,
         "features": {
           "featureMap": {
@@ -20088,7 +20088,7 @@
         "klass": "Question",
         "contents": "fun fromDay(day: Int): String = when (day) {\n  0 -> \"Monday\"\n  1 -> \"Tuesday\"\n  2 -> \"Wednesday\"\n  3 -> \"Thursday\"\n  4 -> \"Friday\"\n  5 -> \"Saturday\"\n  6 -> \"Sunday\"\n  else -> throw IllegalArgumentException()\n}",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/correct/kotlin/Question.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/correct/kotlin/Question.kt",
         "complexity": 9,
         "features": {
           "featureMap": {
@@ -20403,7 +20403,7 @@
         "klass": "Question",
         "contents": "fun fromDay(day: Int): String = when (day) {\n  0 -> \"Monday\"\n  1 -> \"Tuesday\"\n  2 -> \"Wednesday\"\n  3 -> \"Thursday\"\n  4 -> \"Friday\"\n  5 -> \"Saturday\"\n  6 -> \"Sunday\"\n  else -> throw IllegalArgumentException()\n}",
         "language": "kotlin",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/correct/kotlin/Question.kt",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/correct/kotlin/Question.kt",
         "complexity": 9,
         "features": {
           "featureMap": {
@@ -20719,7 +20719,7 @@
         "contents": "String fromDay(int day) {\n  if (day == 0) {\n    return \"Monday\";\n  } else if (day == 1) {\n    return \"Tuesday\";\n  } else if (day == 2) {\n    return \"Wednesday\";\n  } else if (day == 3) {\n    return \"Thursday\";\n  } else if (day == 4) {\n    return \"Friday\";\n  } else if (day == 5) {\n    return \"Saturday\";\n  } else if (day == 6) {\n    return \"Sunday\";\n  } else {\n    throw new IllegalArgumentException();\n  }\n}",
         "reason": "FEATURES",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/incorrect/java/withifelse/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/incorrect/java/withifelse/Question.java",
         "starter": false,
         "needed": true,
         "testCount": -1,
@@ -20820,23 +20820,23 @@
         "kotlin": 49772032
       },
       "wallTime": {
-        "java": 16,
-        "kotlin": 10
+        "java": 20,
+        "kotlin": 11
       },
       "cpuTime": {
-        "java": 5599000,
-        "kotlin": 9308000
+        "java": 5012000,
+        "kotlin": 11068000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 61,
-      "solutionMaxRuntime": 10,
-      "bootstrapLength": 3296,
-      "mutationLength": 161,
-      "incorrectLength": 2266,
-      "calibrationLength": 75,
+      "solutionMaxRuntime": 11,
+      "bootstrapLength": 6822,
+      "mutationLength": 300,
+      "incorrectLength": 2093,
+      "calibrationLength": 69,
       "solutionCoverage": {
         "covered": 9,
         "total": 9,
@@ -20851,7 +20851,7 @@
         "kotlin": 183952
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 213.463
+      "javaSolutionBootstrapCPUTimeMS": 458.493
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
@@ -21537,7 +21537,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/withjavaswitch/Question.java"
   },
   {
     "published": {
@@ -21708,7 +21708,7 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withmapextras/Question.java"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withmapextras/Question.java"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -21719,7 +21719,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.jenisol.core.NotNull;\nimport edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Map;\n\n/*\n * Test whether Map automatic whitelisting works.\n * Note that tests are in Questioner.\n */\n\n@Correct(name = \"With Map Extras\", author = \"challen@illinois.edu\", version = \"2023.9.0\")\n@Wrap\npublic class Question {\n  int mapSize(@NotNull Map<String, Integer> map) {\n    return map.size();\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withmapextras/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withmapextras/Question.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -21727,7 +21727,7 @@
         "klass": "Question",
         "contents": "int mapSize(Map<String, Integer> map) {\n  return map.size();\n}",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withmapextras/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withmapextras/Question.java",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -21932,21 +21932,21 @@
         "kotlin": 5632
       },
       "wallTime": {
-        "java": 23
+        "java": 10
       },
       "cpuTime": {
-        "java": 4010000
+        "java": 2472000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 13,
       "mutationCount": 3,
-      "solutionMaxRuntime": 17,
-      "bootstrapLength": 3146,
-      "mutationLength": 18,
-      "incorrectLength": 241,
-      "calibrationLength": 50,
+      "solutionMaxRuntime": 47,
+      "bootstrapLength": 2918,
+      "mutationLength": 21,
+      "incorrectLength": 218,
+      "calibrationLength": 77,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -21959,7 +21959,7 @@
         "java": 352
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 403.293
+      "javaSolutionBootstrapCPUTimeMS": 308.052
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
@@ -22003,7 +22003,7 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withmapextras/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/withmapextras/Question.java"
   },
   {
     "published": {
@@ -22168,7 +22168,7 @@
     },
     "metadata": {
       "allFiles": [
-        "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withtemplateimports/Question.java"
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withtemplateimports/Question.java"
       ],
       "unusedFiles": [],
       "focused": false,
@@ -22179,7 +22179,7 @@
       "klass": "Question",
       "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.TemplateImports;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\nimport java.util.Arrays;\nimport java.util.List;\n\n/*\n * Example to test use of import statements in method templates.\n */\n\n@Correct(name = \"With Template Imports\", version = \"2022.7.0\", author = \"challen@illinois.edu\")\n@Wrap\n@TemplateImports(paths = \"java.util.List,java.util.ArrayList,java.util.Arrays\")\npublic class Question {\n  List<Integer> max(int first, int second) {\n    return Arrays.asList(first, second);\n  }\n}",
       "language": "java",
-      "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withtemplateimports/Question.java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withtemplateimports/Question.java",
       "suppressions": []
     },
     "solutionByLanguage": {
@@ -22187,7 +22187,7 @@
         "klass": "Question",
         "contents": "List<Integer> max(int first, int second) {\n  return Arrays.asList(first, second);\n}",
         "language": "java",
-        "path": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withtemplateimports/Question.java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withtemplateimports/Question.java",
         "complexity": 1,
         "features": {
           "featureMap": {
@@ -22392,21 +22392,21 @@
         "kotlin": 4311424
       },
       "wallTime": {
-        "java": 2
+        "java": 7
       },
       "cpuTime": {
-        "java": 1799000
+        "java": 3248000
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 18,
       "mutationCount": 1,
-      "solutionMaxRuntime": 16,
-      "bootstrapLength": 3336,
-      "mutationLength": 12,
-      "incorrectLength": 76,
-      "calibrationLength": 141,
+      "solutionMaxRuntime": 31,
+      "bootstrapLength": 1924,
+      "mutationLength": 362,
+      "incorrectLength": 110,
+      "calibrationLength": 48,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -22419,7 +22419,7 @@
         "java": 16024
       },
       "canTestTest": true,
-      "javaSolutionBootstrapCPUTimeMS": 318.294
+      "javaSolutionBootstrapCPUTimeMS": 447.495
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
@@ -22437,6 +22437,6 @@
         "suppressions": []
       }
     ],
-    "correctPath": "/Users/challen/code/questioner-testing/src/main/java/com/github/cs124_illinois/questioner/testing/withtemplateimports/Question.java"
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/withtemplateimports/Question.java"
   }
 ]
