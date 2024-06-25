@@ -8,10 +8,10 @@ import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 
-open class PrintSlowQuestions : DefaultTask() {
+open class ShowUpdatedSeeds : DefaultTask() {
     init {
         group = "Verification"
-        description = "Print slow questions."
+        description = "Show questions with updated seeds."
     }
 
     @InputFile
@@ -22,11 +22,10 @@ open class PrintSlowQuestions : DefaultTask() {
         val questions = inputFile.loadQuestionList()
         questions
             .filter { it.validated }
-            .filter { it.validationResults!!.requiredTestCount > it.control.minTestCount!! }
-            .sortedBy { -1 * it.validationResults!!.requiredTestCount }
+            .filter { it.testingSettings!!.seed != it.control.seed }
             .forEach {
                 val fullPath = project.rootProject.projectDir.resolve(it.correctPath!!)
-                project.logger.warn("${it.published.path}: ${it.validationResults!!.requiredTestCount} ${it.question.path} (file://$fullPath)")
+                project.logger.warn("${it.published.path}: update seed to ${it.testingSettings!!.seed} (file://$fullPath)")
             }
     }
 }

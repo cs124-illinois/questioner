@@ -169,7 +169,7 @@ data class Question(
             const val DEFAULT_ALLOCATION_LIMIT_MULTIPLIER = 16.0
             const val DEFAULT_MIN_EXTRA_SOURCE_LINES = 2
             const val DEFAULT_SOURCE_LINES_MULTIPLIER = 1.5
-            const val DEFAULT_SEED = -1
+            const val DEFAULT_SEED = 124
             const val DEFAULT_MAX_COMPLEXITY_MULTIPLIER = 8.0
             const val DEFAULT_MAX_LINECOUNT_MULTIPLIER = 8.0
             const val DEFAULT_MAX_CLASSSIZE_MULTIPLIER = 8.0
@@ -253,7 +253,12 @@ data class Question(
         }
 
         companion object {
-            val DEFAULTS = TestTestingSettings(false, Int.MAX_VALUE, SelectionStrategy.EVENLY_SPACED, null)
+            val DEFAULTS = TestTestingSettings(
+                false,
+                Int.MAX_VALUE,
+                SelectionStrategy.EVENLY_SPACED,
+                TestingControl.DEFAULT_SEED.toLong()
+            )
         }
     }
 
@@ -291,6 +296,7 @@ data class Question(
             Language.java -> java
             Language.kotlin -> kotlin!!
         }
+
         companion object {
             fun both(both: Long) = LanguagesResourceUsage(both, both)
         }

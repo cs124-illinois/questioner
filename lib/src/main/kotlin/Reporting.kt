@@ -374,21 +374,6 @@ fun ValidationFailed.report(question: Question): String {
                 |<p>Check the arguments to <code>@Incorrect(reason = REASON)</code></p>""".trimMargin()
         }
 
-        is WrongReasonPassed -> {
-            """
-                |<h2>Code Expected to Fail Passed</h2>
-                |<p>Code expected to fail passed the test suite: Expected: $expected.</p>
-                |</p>
-                |<pre><code class=${
-                if (incorrect.language == Language.java) {
-                    "java"
-                } else {
-                    "kotlin"
-                }
-            }"> ${StringEscapeUtils.escapeHtml4(incorrect.contents)}</code></pre>
-                |<p>Check the arguments to <code>@Incorrect(reason = REASON)</code></p>""".trimMargin()
-        }
-
         is SolutionDeadCode -> {
             """
                |<h2>Solution Contains Dead Code</h2>

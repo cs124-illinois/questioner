@@ -27,7 +27,7 @@ val dotenv: Dotenv = Dotenv.configure().ignoreIfMissing().load()
 open class QuestionerConfigExtension {
     var maxMutationCount: Int = 256
     var retries: Int = 0
-    var quiet: Boolean = false
+    var verbose: Boolean = false
     var shuffleTests: Boolean = false
     var ignorePackages = listOf(
         "com.github.cs124_illinois.questioner.examples.",
@@ -170,6 +170,11 @@ class QuestionerPlugin : Plugin<Project> {
             printSlowQuestions.outputs.upToDateWhen { false }
         }
 
+        project.tasks.register("showUpdatedSeeds", ShowUpdatedSeeds::class.java) { showUpdatedSeeds ->
+            showUpdatedSeeds.dependsOn("collectQuestions")
+            showUpdatedSeeds.outputs.upToDateWhen { false }
+        }
+
         project.afterEvaluate {
             project.configurations.getByName("implementation").dependencies.find { dependency ->
                 (dependency.group == "org.cs124" && dependency.name == "questioner") || (dependency.group == "org.cs124.questioner")
@@ -180,7 +185,7 @@ class QuestionerPlugin : Plugin<Project> {
 
             generateQuestionTests.maxMutationCount = config.maxMutationCount
             generateQuestionTests.retries = config.retries
-            generateQuestionTests.quiet = config.quiet
+            generateQuestionTests.verbose = config.verbose
             generateQuestionTests.shuffleTests = config.shuffleTests
 
             publishingTasks.forEach { task ->
@@ -196,6 +201,10 @@ class QuestionerPlugin : Plugin<Project> {
                 testTask.dependsOn(generateQuestionTests)
                 testTask.mustRunAfter(generateQuestionTests)
             }
+
+            project.tasks.getByName("check")
+                .dependsOn("detekt", "checkstyleMain", "googleJavaFormat", "lintKotlinMain", "formatKotlinMain")
+            project.tasks.getByName("checkstyleMain").mustRunAfter("googleJavaFormat")
 
             val agentJarPath = project.configurations.getByName("runtimeClasspath")
                 .resolvedConfiguration.resolvedArtifacts

@@ -30,7 +30,7 @@ dependencies {
     }
     api("org.cs124.jeed:core:2024.6.1")
     api("org.cs124:jenisol:2024.6.1")
-    api("org.cs124:libcs1:2024.5.0")
+    api("org.cs124:libcs1:2024.6.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.17.0")
 
     api("io.kotest:kotest-runner-junit5:5.9.1")

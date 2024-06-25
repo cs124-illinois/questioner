@@ -14,8 +14,6 @@ import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.exists
 
-const val GENERATION_SEED = 124
-
 @Suppress("unused")
 abstract class GenerateQuestionTests : DefaultTask() {
     @get:Input
@@ -25,7 +23,7 @@ abstract class GenerateQuestionTests : DefaultTask() {
     abstract var retries: Int
 
     @get:Input
-    abstract var quiet: Boolean
+    abstract var verbose: Boolean
 
     @get:Input
     abstract var shuffleTests: Boolean
@@ -63,13 +61,7 @@ abstract class GenerateQuestionTests : DefaultTask() {
                 val klass = file.name.removeSuffix(".kt")
                 val contents = if (questionsForFile.isNotEmpty()) {
                     questionsForFile.joinToString("\n") { question ->
-                        question.generateSpec(
-                            GENERATION_SEED,
-                            maxMutationCount,
-                            retries,
-                            quiet,
-                            project.rootProject.projectDir.toPath(),
-                        )
+                        question.generateSpec(project.rootProject.projectDir.toPath())
                     }
                 } else {
                     when (file.name) {
@@ -90,6 +82,7 @@ abstract class GenerateQuestionTests : DefaultTask() {
                         |  init {${
                         if (questionsForFile.isNotEmpty()) {
                             """
+                        |    val options = ValidatorOptions($maxMutationCount, $retries, $verbose, "${project.rootProject.projectDir.toPath()}")    
                         |    concurrency = $concurrency
                         |    threads = $concurrency
                         |    """
@@ -107,10 +100,6 @@ abstract class GenerateQuestionTests : DefaultTask() {
 }
 
 fun Question.generateSpec(
-    seed: Int,
-    maxMutationCount: Int,
-    retries: Int,
-    quiet: Boolean,
     rootDirectory: Path,
 ): String {
     val correctPath = correctPath
@@ -119,13 +108,14 @@ fun Question.generateSpec(
     check(jsonPath.exists())
     return """
         |${"\"\"\""}${published.name} (${published.packageName}) should validate${"\"\"\""} {
-        |    ${"\"\"\""}$jsonPath${"\"\"\""}.validate(seed = $seed, maxMutationCount = $maxMutationCount, retries = $retries, quiet = $quiet)
+        |    ${"\"\"\""}$jsonPath${"\"\"\""}.validate(options)
         |}
     """.trimMargin()
 }
 
 fun String.wrapForFile(): String = """
         |import edu.illinois.cs.cs125.questioner.lib.validate
+        |import edu.illinois.cs.cs125.questioner.lib.ValidatorOptions
         |import edu.illinois.cs.cs125.questioner.lib.warm
         |import io.kotest.core.spec.style.StringSpec
         |import io.kotest.core.spec.Spec

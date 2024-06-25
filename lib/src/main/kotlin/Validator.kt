@@ -3,12 +3,20 @@ package edu.illinois.cs.cs125.questioner.lib
 import java.nio.file.Path
 import kotlin.io.path.deleteIfExists
 
-private inline fun retryOn(retries: Int, method: (retries: Int) -> ValidationReport): Pair<ValidationReport, Int> {
+private inline fun retryOn(
+    retries: Int,
+    startSeed: Int,
+    method: (retries: Int, currentSeed: Int) -> ValidationReport
+): Pair<ValidationReport, Int> {
+    var currentSeed = startSeed
     for (retry in 0..retries) {
         try {
-            return Pair(method(retry), retry)
+            return Pair(method(retry, currentSeed), retry)
         } catch (e: Exception) {
             if (e is RetryValidation && retry != retries) {
+                if (!e.timeout) {
+                    currentSeed++
+                }
                 continue
             }
             throw e
@@ -17,8 +25,14 @@ private inline fun retryOn(retries: Int, method: (retries: Int) -> ValidationRep
     error("Shouldn't get here")
 }
 
+data class ValidatorOptions(val maxMutationCount: Int, val retries: Int, val verbose: Boolean, val rootDirectory: String)
+
 @Suppress("unused")
-suspend fun String.validate(seed: Int, maxMutationCount: Int, retries: Int, quiet: Boolean = false) {
+suspend fun String.validate(options: ValidatorOptions) {
+    val (maxMutationCount, retries, verbose, rootDirectory) = options
+
+    gradleRootDirectory = rootDirectory
+
     val file = Path.of(this).toFile()
     check(file.exists())
 
@@ -26,8 +40,15 @@ suspend fun String.validate(seed: Int, maxMutationCount: Int, retries: Int, quie
     check(question != null)
 
     val reportPath = Path.of(this).parent.resolve("report.html")
+
+    val startSeed = if (question.control.seed!! != -1) {
+        question.control.seed!!
+    } else {
+        Question.TestingControl.DEFAULT_SEED
+    }
+
     val (report, retried) = try {
-        retryOn(retries) { retry -> question.validate(seed, maxMutationCount, retry) }
+        retryOn(retries, startSeed) { retry, seed -> question.validate(seed, maxMutationCount, retry, verbose) }
     } catch (wrap: RetryValidation) {
         val e = wrap.cause as ValidationFailed
         reportPath.toFile().writeText(e.report(question))
@@ -46,7 +67,5 @@ suspend fun String.validate(seed: Int, maxMutationCount: Int, retries: Int, quie
 
     check(question.validated) { "Question should be validated" }
     reportPath.toFile().writeText(report.report())
-    if (!quiet) {
-        println("${question.published.name}: ${report.summary} ($retried retries)")
-    }
+    println("${question.published.name}: ${report.summary} ($retried retries)")
 }

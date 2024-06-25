@@ -9,12 +9,14 @@ import edu.illinois.cs.cs125.jenisol.core.ParameterGroup
 import edu.illinois.cs.cs125.jenisol.core.TestResult
 import edu.illinois.cs.cs125.jenisol.core.fullName
 import edu.illinois.cs.cs125.jenisol.core.isBoth
+import edu.illinois.cs.cs125.jenisol.core.solutionTestingSequence
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import java.lang.reflect.Constructor
 import java.lang.reflect.Executable
 import java.lang.reflect.Method
 import java.time.Instant
+import kotlin.io.path.Path
 
 data class CorrectResults(val incorrect: Question.FlatFile, val results: TestResults)
 data class IncorrectResults(val incorrect: Question.IncorrectFile, val results: TestResults)
@@ -22,20 +24,15 @@ data class IncorrectResults(val incorrect: Question.IncorrectFile, val results: 
 private val calibrationLimiter = Semaphore(1)
 
 private const val RETRY_THRESHOLD = 0.5
+var gradleRootDirectory: String? = null
 
 @Suppress("LongMethod", "ComplexMethod")
 suspend fun Question.validate(
-    defaultSeed: Int,
+    seed: Int,
     maxMutationCount: Int,
-    retry: Int = 0
+    retry: Int = 0,
+    verbose: Boolean = false
 ): ValidationReport {
-
-    val seed = if (control.seed!! != -1) {
-        control.seed!!
-    } else {
-        defaultSeed
-    }
-
     fauxStatic = solution.fauxStatic
 
     val javaClassWhitelist = mutableSetOf<String>().apply { addAll(defaultJavaClassWhitelist) }
@@ -43,6 +40,10 @@ suspend fun Question.validate(
 
     val javaSolution = getSolution(Language.java)!!
     val kotlinSolution = getSolution(Language.kotlin)
+
+    fun TestResults.badTimeout() = timeout && !lineCountTimeout &&
+        ((resourceMonitoringResults?.submissionLines?.toDouble()
+            ?: 0.0) / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT < RETRY_THRESHOLD)
 
     fun TestResults.checkCorrect(file: Question.FlatFile, finalChecks: Boolean = false) {
         if (taskResults?.threw != null) {
@@ -52,9 +53,6 @@ suspend fun Question.validate(
             if (failed.checkExecutedSubmission != null) {
                 throw SolutionFailed(file, failed.checkExecutedSubmission!!, retry)
             }
-            val percentLineCountCompleted =
-                (resourceMonitoringResults?.submissionLines?.toDouble()
-                    ?: 0.0) / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
 
             val exception = when {
                 complete.testing?.passed == false -> SolutionFailed(file, summary, retry)
@@ -96,8 +94,8 @@ suspend fun Question.validate(
                     SolutionFailed(file, message, retry)
                 }
             }
-            if (timeout && !lineCountTimeout && percentLineCountCompleted < RETRY_THRESHOLD) {
-                throw RetryValidation(exception)
+            if (badTimeout()) {
+                throw RetryValidation(exception, true)
             } else {
                 throw exception
             }
@@ -194,23 +192,21 @@ suspend fun Question.validate(
             }
             throw IncorrectFailedLinting(file, javaSolution, errors)
         }
+
         if (mutated) {
             if (succeeded) {
-                throw IncorrectPassed(file, javaSolution, this)
+                throw RetryValidation(IncorrectPassed(file, javaSolution, this, verbose), badTimeout())
             }
         } else {
             try {
                 validate(file.reason)
             } catch (e: Exception) {
-                val percentLineCountCompleted =
-                    (resourceMonitoringResults?.submissionLines?.toDouble()
-                        ?: 0.0) / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT
                 val exception = when (succeeded) {
-                    true -> WrongReasonPassed(file, e.message!!)
+                    true -> RetryValidation(IncorrectPassed(file, javaSolution, this, verbose), badTimeout())
                     else -> IncorrectWrongReason(file, e.message!!, summary)
                 }
-                if (timeout && !lineCountTimeout && percentLineCountCompleted < RETRY_THRESHOLD) {
-                    throw RetryValidation(exception)
+                if (badTimeout()) {
+                    throw RetryValidation(exception, true)
                 } else {
                     throw exception
                 }
@@ -594,7 +590,7 @@ suspend fun Question.validate(
     classification.loadedClassesByLanguage = makeLanguageMap(solutionLoadedClassesJava, solutionLoadedClassesKotlin)!!
 
     val solutionTestingSequence = try {
-        calibrationResults.first().results.printSolutionTestingSequence()
+        calibrationResults.first().results.jenisolResults!!.solutionTestingSequence()
     } catch (e: Exception) {
         null
     }
@@ -694,12 +690,12 @@ data class ValidationReport(
 
 sealed class ValidationFailed(cause: Exception? = null, val retries: Int = 0) : Exception(cause) {
     fun printContents(contents: String, path: String?) = """
-${path?.let { "file://$path\n" } ?: ""}---
+${path?.let { "file://${Path(gradleRootDirectory ?: "/").resolve(path)}\n" } ?: ""}---
 $contents
 ---""".trimStart()
 }
 
-class RetryValidation(cause: Exception) : ValidationFailed(cause)
+class RetryValidation(cause: Exception, val timeout: Boolean) : ValidationFailed(cause)
 
 class SolutionFailed(val solution: Question.FlatFile, val explanation: String, retries: Int) :
     ValidationFailed(retries = retries) {
@@ -857,13 +853,22 @@ class IncorrectFailedLinting(
 }
 
 class IncorrectPassed(
-    val incorrect: Question.IncorrectFile, val correct: Question.FlatFile, val results: TestResults
+    val incorrect: Question.IncorrectFile,
+    val correct: Question.FlatFile,
+    val results: TestResults,
+    val verbose: Boolean
 ) : ValidationFailed() {
     override val message: String
         get() {
             val contents = incorrect.mutation?.marked()?.contents ?: incorrect.contents
             return """
-        |Incorrect code passed the test suites:
+        |Incorrect code${
+                if (incorrect.mutation != null) {
+                    " (mutated) "
+                } else {
+                    ""
+                }
+            }passed the test suites:
         |If the code is incorrect, add an input to @FixedParameters to handle this case
         |${
                 if (incorrect.mutation != null) {
@@ -874,8 +879,13 @@ class IncorrectPassed(
                 }
             }
         |${printContents(contents, incorrect.path ?: correct.path)}
-        |${results.jenisolResults ?: ""}
-        """.trimMargin().trimEnd()
+        |${
+                if (verbose) {
+                    results.jenisolResults ?: ""
+                } else {
+                    ""
+                }
+            }""".trimMargin().trimEnd()
         }
 }
 
@@ -918,20 +928,6 @@ class IncorrectWrongReason(val incorrect: Question.IncorrectFile, val expected: 
         }
 }
 
-class WrongReasonPassed(val incorrect: Question.IncorrectFile, val expected: String) :
-    ValidationFailed() {
-    override val message: String
-        get() {
-            check(incorrect.mutation == null) { "Mutated sources failed for the wrong reason" }
-            return """
-        |Code expected to fail passed the test suite:
-        |Expected: $expected
-        |Maybe check the argument to @Incorrect(reason = "reason")
-        |${printContents(incorrect.contents, incorrect.path)}
-        """.trimMargin()
-        }
-}
-
 fun List<TestResults>.setResourceUsage(
     multiplier: Double = 1.0,
     bothJava: Boolean = false,
@@ -952,68 +948,6 @@ fun List<TestResults>.setResourceUsage(
             }?.solution?.times(multiplier)?.toLong()
     }
     return Question.LanguagesResourceUsage(javaValue, kotlinValue)
-}
-
-private val hashCodeRegex = Regex("@[0-9a-fA-F]+$")
-fun TestResults.printSolutionTestingSequence(): List<String> {
-    val jenisolResults = taskResults!!.returned as edu.illinois.cs.cs125.jenisol.core.TestResults
-
-    val orderedReceivers = mutableMapOf<String, MutableList<String>>()
-    jenisolResults.forEach { result ->
-        val namesToCheck = listOf(result.solutionReceiver.toString(), result.solution.returned.toString())
-        for (checkingName in namesToCheck) {
-            if (checkingName == "null") {
-                continue
-            }
-            val regexMatch = hashCodeRegex.find(checkingName)
-            if (regexMatch !== null) {
-                val solutionClass = checkingName.replace(hashCodeRegex, "")
-                if (!orderedReceivers.contains(solutionClass)) {
-                    orderedReceivers[solutionClass] = mutableListOf()
-                }
-                if (!orderedReceivers[solutionClass]!!.contains(checkingName)) {
-                    orderedReceivers[solutionClass]!! += checkingName
-                }
-            }
-        }
-    }
-
-    val outputRemaps = mutableMapOf<String, String>()
-    for ((klass, receiverList) in orderedReceivers) {
-        if (receiverList.size == 1) {
-            outputRemaps[receiverList.first()] = klass
-        } else {
-            for ((i, receiver) in receiverList.withIndex()) {
-                outputRemaps[receiver] = "$klass#$i"
-            }
-        }
-    }
-
-    return jenisolResults.mapIndexed { i, result ->
-        val receiverName = result.solutionReceiver.toString()
-        val resultName = result.solution.returned.toString()
-
-        val callString = if (receiverName != "null") {
-            "${receiverName}.${result.solutionMethodString}"
-        } else {
-            result.solutionMethodString
-        }
-        val resultString = if (result.solution.threw != null) {
-            "threw ${result.solution.threw}"
-        } else {
-            if (resultName != "null") {
-                "-> $resultName"
-            } else {
-                ""
-            }
-        }
-
-        var fullString = "${i.toString().padStart(3, ' ')}: $callString $resultString"
-        for ((to, from) in outputRemaps) {
-            fullString = fullString.replace(to, from)
-        }
-        fullString
-    }
 }
 
 private fun List<TestResults>.getRecursiveMethods(language: Language) =
