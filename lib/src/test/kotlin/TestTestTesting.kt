@@ -106,7 +106,7 @@ fun test() {
                 """
 public class TestQuestion {
   public static void test() throws InterruptedException {
-    Thread.sleep(1000);
+    Thread.sleep(100000);
   }
 }""", Language.java
             ).also { results ->
@@ -114,7 +114,7 @@ public class TestQuestion {
                 results.completedSteps shouldNotContain TestTestResults.Step.testTesting
             }
         }
-        sleepTime shouldBeLessThan question.testTestingLimits!!.timeout.toLong() * 2
+        sleepTime shouldBeLessThan questionerTestTestTimeoutMS * questionerWallClockTimeoutMultiplier * 2
 
         val lineCountTime = measureTimeMillis {
             question.testTests(
@@ -134,7 +134,7 @@ public class TestQuestion {
                 results.completedSteps shouldNotContain TestTestResults.Step.testTesting
             }
         }
-        lineCountTime shouldBeLessThan question.testTestingLimits!!.timeout.toLong()
+        lineCountTime shouldBeLessThan questionerTestTestTimeoutMS * questionerWallClockTimeoutMultiplier
     }
     "should fail fields" {
         val (question) = Validator.validate("Add One Class").also { (question, report) ->

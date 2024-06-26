@@ -199,6 +199,7 @@ internal data class ParsedJavaFile(val path: String, val contents: String) {
                 val minTestCount = parameters["minTestCount"]?.toInt()
                 val maxTestCount = parameters["maxTestCount"]?.toInt()
                 val timeoutMultiplier = parameters["timeoutMultiplier"]?.toDouble()
+                val testTestingTimeoutMultiplier = parameters["testTestingTimeoutMultiplier"]?.toDouble()
                 val minMutationCount = parameters["minMutationCount"]?.toInt()
                 val maxMutationCount = parameters["maxMutationCount"]?.toInt()
                 val outputMultiplier = parameters["outputMultiplier"]?.toDouble()
@@ -233,6 +234,7 @@ internal data class ParsedJavaFile(val path: String, val contents: String) {
                         minTestCount,
                         maxTestCount,
                         timeoutMultiplier,
+                        testTestingTimeoutMultiplier,
                         minMutationCount,
                         maxMutationCount,
                         outputMultiplier,

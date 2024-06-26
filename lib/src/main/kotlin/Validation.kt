@@ -528,27 +528,10 @@ suspend fun Question.validate(
         kotlinSuppressions = kotlinSolution?.suppressions,
     )
 
-    val incorrectMaxRuntime = useTestingIncorrect.mapNotNull { it.results.taskResults?.interval?.length?.toInt() }.max()
     val incorrectAllocation =
         useTestingIncorrect.map { it.results }.setResourceUsage(bothJava = true) { it.memoryAllocation }
 
-    val incorrectMaxWallTimeByLanguage = Question.LanguagesResourceUsage(
-        useTestingIncorrect.filter { it.results.language == Language.java }
-            .mapNotNull { it.results.taskResults?.interval?.length }.max(),
-        calibrationResults.filter { it.results.language == Language.kotlin }
-            .mapNotNull { it.results.taskResults?.interval?.length }.maxOrNull()
-    )
-
-    val incorrectMaxCpuTimeByLanguage = Question.LanguagesResourceUsage(
-        useTestingIncorrect.filter { it.results.language == Language.java }
-            .mapNotNull { it.results.taskResults?.cpuTime }.max(),
-        calibrationResults.filter { it.results.language == Language.kotlin }
-            .mapNotNull { it.results.taskResults?.cpuTime }.maxOrNull()
-    )
-
     testTestingLimits = Question.TestTestingLimits(
-        // FIXME
-        timeout = (incorrectMaxRuntime * control.timeoutMultiplier!!).toInt().coerceAtLeast(128),
         outputLimit = (testCount * control.outputMultiplier!!).toInt(),
         executionCountLimit = Question.LanguagesResourceUsage(
             (testCount * control.executionTimeoutMultiplier!!).toLong(),
@@ -557,9 +540,7 @@ suspend fun Question.validate(
         allocationLimit = Question.LanguagesResourceUsage(
             (incorrectAllocation.java.toDouble() * control.allocationLimitMultiplier!!).toLong(),
             (incorrectAllocation.kotlin?.toDouble()?.times(control.allocationLimitMultiplier!!))?.toLong()
-        ),
-        wallTime = incorrectMaxWallTimeByLanguage,
-        cpuTime = incorrectMaxCpuTimeByLanguage
+        )
     )
 
     val canTestTest = control.canTestTest != false &&

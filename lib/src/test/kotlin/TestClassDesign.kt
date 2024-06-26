@@ -5,7 +5,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 class TestClassDesign : StringSpec({
-    "it should detecte lambdas" {
+    "it should detect lambdas" {
         val javaLambda = ClassDesignTester.generateAddOne()
         AnalyzeClass(javaLambda::class.java).also { analyzed ->
             analyzed.isLambda shouldBe true

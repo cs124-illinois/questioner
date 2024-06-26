@@ -34,14 +34,16 @@ import java.time.Instant
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-@Suppress("UNREACHABLE_CODE")
+const val QUESTIONER_DEFAULT_TESTTEST_TIMEOUT_MS = 80L
+val questionerTestTestTimeoutMS = dotenv.get("QUESTIONER_TESTTEST_TIMEOUT_MS")?.toLong() ?: QUESTIONER_DEFAULT_TESTTEST_TIMEOUT_MS
+
 suspend fun Question.testTests(
     contents: String,
     language: Language,
     passedSettings: Question.TestTestingSettings? = null,
     limits: Question.TestTestingLimits = testTestingLimits!!
 ): TestTestResults {
-    return try {
+    try {
         testingLimiter.acquire()
 
         val settings = Question.TestTestingSettings.DEFAULTS merge passedSettings
@@ -105,11 +107,15 @@ suspend fun Question.testTests(
         }
         testingLoaders.add(random.nextInt(testingLoaders.size + 1), compiledSolutionForTesting)
 
+        val baseTimeout = (questionerTestTestTimeoutMS.toDouble() * control.timeoutMultiplier!!).toLong()
+
         val executionArguments = Sandbox.ExecutionArguments(
-            timeout = limits.timeout.toLong(),
+            timeout = baseTimeout * questionerWallClockTimeoutMultiplier,
+            cpuTimeoutNS = baseTimeout * 1000L * 1000L,
             maxOutputLines = limits.outputLimit,
             permissions = Question.SAFE_PERMISSIONS,
-            returnTimeout = Question.DEFAULT_RETURN_TIMEOUT
+            returnTimeout = Question.DEFAULT_RETURN_TIMEOUT,
+            pollIntervalMS = (baseTimeout / 2).coerceAtLeast(1)
         )
 
         val lineCountLimit = when (language) {

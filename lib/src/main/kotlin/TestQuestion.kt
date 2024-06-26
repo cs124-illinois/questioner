@@ -42,17 +42,20 @@ val dotenv: Dotenv = Dotenv.configure().ignoreIfMissing().load()
 val questionerMaxConcurrency = dotenv.get("QUESTIONER_MAX_CONCURRENCY")?.toInt() ?: Int.MAX_VALUE
 val testingLimiter = Semaphore(questionerMaxConcurrency)
 
-const val QUESTIONER_DEFAULT_TEST_TIMEOUT_MS = 32L
+const val QUESTIONER_DEFAULT_TEST_TIMEOUT_MS = 40L
 val questionerTestTimeoutMS = dotenv.get("QUESTIONER_TEST_TIMEOUT_MS")?.toLong() ?: QUESTIONER_DEFAULT_TEST_TIMEOUT_MS
 
-@Suppress("ReturnCount", "LongMethod", "ComplexMethod", "LongParameterList", "UNREACHABLE_CODE")
+const val QUESTIONER_DEFAULT_WALL_CLOCK_TIMEOUT_MULTIPLIER = 32
+val questionerWallClockTimeoutMultiplier = dotenv.get("QUESTIONER_WALL_CLOCK_TIMEOUT_MULTIPLIER")?.toInt() ?: QUESTIONER_DEFAULT_WALL_CLOCK_TIMEOUT_MULTIPLIER
+
+@Suppress("ReturnCount", "LongMethod", "ComplexMethod", "LongParameterList")
 suspend fun Question.test(
     contents: String,
     language: Language,
     settings: Question.TestingSettings = testingSettings!!,
     isSolution: Boolean = false
 ): TestResults {
-    return try {
+    try {
         testingLimiter.acquire()
 
         warm()
@@ -202,7 +205,7 @@ suspend fun Question.test(
         val baseTimeout = (questionerTestTimeoutMS.toDouble() * control.timeoutMultiplier!!).toLong()
 
         val executionArguments = Sandbox.ExecutionArguments(
-            timeout = settings.testCount * baseTimeout * 32,
+            timeout = settings.testCount * baseTimeout * questionerWallClockTimeoutMultiplier,
             classLoaderConfiguration = classLoaderConfiguration,
             maxOutputLines = settings.outputLimit,
             permissions = Question.SAFE_PERMISSIONS,

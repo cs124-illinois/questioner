@@ -133,6 +133,7 @@ data class Question(
         val minTestCount: Int?,
         val maxTestCount: Int?,
         val timeoutMultiplier: Double?,
+        val testTestingtimeoutMultiplier: Double?,
         val minMutationCount: Int?,
         val maxMutationCount: Int?,
         val outputMultiplier: Double?,
@@ -158,6 +159,7 @@ data class Question(
             const val DEFAULT_MIN_TEST_COUNT = 64
             const val DEFAULT_MAX_TEST_COUNT = 1024
             const val DEFAULT_TIMEOUT_MULTIPLIER = 1.0
+            const val DEFAULT_TESTTESTING_TIMEOUT_MULTIPLIER = 1.0
             const val DEFAULT_MIN_MUTATION_COUNT = 0
             const val DEFAULT_OUTPUT_MULTIPLIER = 8.0
             const val DEFAULT_MAX_EXTRA_COMPLEXITY = 2
@@ -185,6 +187,7 @@ data class Question(
                 DEFAULT_MIN_TEST_COUNT,
                 DEFAULT_MAX_TEST_COUNT,
                 DEFAULT_TIMEOUT_MULTIPLIER,
+                DEFAULT_TESTTESTING_TIMEOUT_MULTIPLIER,
                 DEFAULT_MIN_MUTATION_COUNT,
                 null,
                 DEFAULT_OUTPUT_MULTIPLIER,
@@ -257,19 +260,16 @@ data class Question(
                 false,
                 Int.MAX_VALUE,
                 SelectionStrategy.EVENLY_SPACED,
-                TestingControl.DEFAULT_SEED.toLong()
+                null
             )
         }
     }
 
     @JsonClass(generateAdapter = true)
     data class TestTestingLimits(
-        val timeout: Int,
         val outputLimit: Int,
         val executionCountLimit: LanguagesResourceUsage,
-        val allocationLimit: LanguagesResourceUsage,
-        val wallTime: LanguagesResourceUsage? = null,
-        val cpuTime: LanguagesResourceUsage? = null
+        val allocationLimit: LanguagesResourceUsage
     )
 
     @JsonClass(generateAdapter = true)
