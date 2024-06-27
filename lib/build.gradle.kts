@@ -1,3 +1,5 @@
+@file:Suppress("PackageUpdate")
+
 import java.io.StringWriter
 import java.util.Properties
 
@@ -34,7 +36,7 @@ dependencies {
     api("com.fasterxml.jackson.core:jackson-databind:2.17.0")
 
     api("io.kotest:kotest-runner-junit5:5.9.1")
-    api("com.google.truth:truth:1.4.2")
+    api("com.google.truth:truth:1.4.3")
 
     api("io.github.cdimascio:dotenv-kotlin:6.4.1")
 }
@@ -107,8 +109,5 @@ publishing {
     }
 }
 signing {
-    setRequired {
-        gradle.taskGraph.allTasks.any { it is PublishToMavenRepository }
-    }
     sign(publishing.publications["questioner"])
 }

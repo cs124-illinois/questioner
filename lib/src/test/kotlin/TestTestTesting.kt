@@ -40,7 +40,7 @@ class TestTestTesting : StringSpec({
                 it.succeeded shouldBe false
             }
         }
-        question.testTests(JAVA_EMPTY_SUITE_CLASS, Language.java, Question.TestTestingSettings(true))
+        question.testTests(JAVA_EMPTY_SUITE_CLASS, Language.java, Question.TestTestingSettings(true, seed = 124))
             .also { results ->
                 results.failedSteps.size shouldBe 0
                 results.complete.testTesting!!.also {

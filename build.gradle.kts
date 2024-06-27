@@ -18,6 +18,12 @@ subprojects {
             jvmTarget = JvmTarget.JVM_21
         }
     }
+    tasks.withType<Sign> {
+        onlyIf {
+            gradle.taskGraph.allTasks.any { it is PublishToMavenRepository }
+        }
+        isRequired = gradle.taskGraph.allTasks.any { it is PublishToMavenRepository }
+    }
     tasks.withType<Test> {
         useJUnitPlatform()
         environment["JEED_USE_CACHE"] = "true"
