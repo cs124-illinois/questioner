@@ -15,3 +15,6 @@ data class Submission(
 ) {
     enum class SubmissionType { SOLVE, TESTTESTING }
 }
+
+fun Question.toSubmission(type: Submission.SubmissionType, language: Language, contents: String) =
+    Submission(type, published.contentHash, language, contents)

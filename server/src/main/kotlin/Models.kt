@@ -3,20 +3,15 @@ package edu.illinois.cs.cs125.questioner.server
 import com.squareup.moshi.JsonClass
 import edu.illinois.cs.cs125.jeed.core.compilationCacheSizeMB
 import edu.illinois.cs.cs125.jeed.core.useCompilationCache
-import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.TestResults
 import edu.illinois.cs.cs125.questioner.lib.TestTestResults
 import edu.illinois.cs.cs125.questioner.lib.VERSION
 import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
-import edu.illinois.cs.cs125.questioner.lib.questionerMaxConcurrency
 import edu.illinois.cs.cs125.questioner.lib.server.Submission
 import edu.illinois.cs.cs125.questioner.lib.test
 import edu.illinois.cs.cs125.questioner.lib.testTests
 import java.time.Instant
-
-internal fun Question.toSubmission(type: Submission.SubmissionType, language: Language, contents: String) =
-    Submission(type, published.contentHash, language, contents)
 
 internal suspend fun Submission.test(question: Question): ServerResponse {
     val start = Instant.now()
@@ -67,7 +62,7 @@ internal data class Status(
         val useJeedCache: Boolean = useCompilationCache,
         val jeedCacheSize: Long = compilationCacheSizeMB,
         val cacheSize: Long = questionCacheSize,
-        val maxConcurrency: Int = questionerMaxConcurrency,
+        val maxConcurrency: Int = System.getenv("QUESTIONER_MAX_CONCURRENCY").toInt(),
     )
 
     @JsonClass(generateAdapter = true)

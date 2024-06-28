@@ -9,6 +9,7 @@ import edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring
 import edu.illinois.cs.cs125.questioner.lib.VERSION
 import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
 import edu.illinois.cs.cs125.questioner.lib.server.Submission
+import edu.illinois.cs.cs125.questioner.lib.server.toSubmission
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCallPipeline
@@ -169,6 +170,18 @@ suspend fun warm() {
 
 fun main(): Unit = runBlocking {
     ResourceMonitoring.ensureAgentActivated()
+
+    check(System.getenv("QUESTIONER_MAX_CONCURRENCY") != null) {
+        "Please set the QUESTIONER_MAX_CONCURRENCY environment variable"
+    }
+
+    check(System.getenv("QUESTIONER_TEST_TIMEOUT_MS") != null) {
+        "Please set the QUESTIONER_TEST_TIMEOUT_MS environment variable"
+    }
+
+    check(System.getenv("QUESTIONER_TESTTEST_TIMEOUT_MS") != null) {
+        "Please set the QUESTIONER_TESTTEST_TIMEOUT_MS environment variable"
+    }
 
     if (System.getenv("LOG_LEVEL_DEBUG") != null) {
         (LoggerFactory.getILoggerFactory() as LoggerContext).getLogger(logger.name).level = Level.DEBUG

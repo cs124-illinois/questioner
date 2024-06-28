@@ -34,9 +34,6 @@ import java.time.Instant
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-const val QUESTIONER_DEFAULT_TESTTEST_TIMEOUT_MS = 80L
-val questionerTestTestTimeoutMS = dotenv.get("QUESTIONER_TESTTEST_TIMEOUT_MS")?.toLong() ?: QUESTIONER_DEFAULT_TESTTEST_TIMEOUT_MS
-
 suspend fun Question.testTests(
     contents: String,
     language: Language,

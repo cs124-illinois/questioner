@@ -25,28 +25,12 @@ import edu.illinois.cs.cs125.jenisol.core.StartTest
 import edu.illinois.cs.cs125.jenisol.core.SubmissionDesignError
 import edu.illinois.cs.cs125.jenisol.core.TestResult
 import edu.illinois.cs.cs125.jenisol.core.TestingEvent
-import io.github.cdimascio.dotenv.Dotenv
-import kotlinx.coroutines.sync.Semaphore
 import java.lang.reflect.InvocationTargetException
 import java.util.concurrent.atomic.AtomicInteger
 
 class CachePoisonedException(message: String) : Error(message)
 
-const val MAX_INDIVIDUAL_ALLOCATION_BYTES: Long = 1024 * 1024
-private const val MIN_ALLOCATION_FAILURE_BYTES: Long = 2 * 1024 // Account for nondeterminism due to JIT
-const val MIN_ALLOCATION_LIMIT_BYTES: Long = 2 * 1024 * 1024 // Leave room for concat in println debugging
-
 val busyCount = AtomicInteger(0)
-val dotenv: Dotenv = Dotenv.configure().ignoreIfMissing().load()
-
-val questionerMaxConcurrency = dotenv.get("QUESTIONER_MAX_CONCURRENCY")?.toInt() ?: Int.MAX_VALUE
-val testingLimiter = Semaphore(questionerMaxConcurrency)
-
-const val QUESTIONER_DEFAULT_TEST_TIMEOUT_MS = 40L
-val questionerTestTimeoutMS = dotenv.get("QUESTIONER_TEST_TIMEOUT_MS")?.toLong() ?: QUESTIONER_DEFAULT_TEST_TIMEOUT_MS
-
-const val QUESTIONER_DEFAULT_WALL_CLOCK_TIMEOUT_MULTIPLIER = 32
-val questionerWallClockTimeoutMultiplier = dotenv.get("QUESTIONER_WALL_CLOCK_TIMEOUT_MULTIPLIER")?.toInt() ?: QUESTIONER_DEFAULT_WALL_CLOCK_TIMEOUT_MULTIPLIER
 
 @Suppress("ReturnCount", "LongMethod", "ComplexMethod", "LongParameterList")
 suspend fun Question.test(
