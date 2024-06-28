@@ -8,7 +8,7 @@ import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring
 import edu.illinois.cs.cs125.questioner.lib.VERSION
 import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
-import edu.illinois.cs.cs125.questioner.lib.stumpers.createInsertionIndices
+import edu.illinois.cs.cs125.questioner.lib.server.Submission
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCallPipeline
@@ -27,9 +27,6 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import io.ktor.util.AttributeKey
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import org.slf4j.LoggerFactory
@@ -118,13 +115,6 @@ fun Application.questioner() {
                     }, ${response.duration})"
                 }
                 logger.debug { "Cache hit rate: ${questionCache.stats().hitRate()} (Size $questionCacheSize)" }
-                if (submission.type == Submission.SubmissionType.SOLVE && response.solveResults != null) {
-                    try {
-                        addStumperSolution(submitted, submission, response.solveResults, question)
-                    } catch (e: Exception) {
-                        logger.warn { e }
-                    }
-                }
             } catch (e: StackOverflowError) {
                 e.printStackTrace()
                 call.respond(HttpStatusCode.BadRequest)
@@ -202,10 +192,6 @@ fun main(): Unit = runBlocking {
     } ?: logger.warn { "Memory management interface not found" }
 
     logger.debug { Status().toJson() }
-
-    CoroutineScope(Dispatchers.IO).launch {
-        stumperSolutionCollection.createInsertionIndices()
-    }
 
     logger.info { "Warming Jeed" }
     try {

@@ -1,15 +1,15 @@
-package edu.illinois.cs.cs125.questioner.server
+package edu.illinois.cs.cs125.questioner.lib.stumpers
 
+import com.mongodb.client.MongoCollection
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.TestResults
 import edu.illinois.cs.cs125.questioner.lib.VERSION
-import edu.illinois.cs.cs125.questioner.lib.stumpers.Candidate
-import edu.illinois.cs.cs125.questioner.lib.stumpers.Solution
-import edu.illinois.cs.cs125.questioner.lib.stumpers.clean
-import edu.illinois.cs.cs125.questioner.lib.stumpers.validated
+import edu.illinois.cs.cs125.questioner.lib.logger
+import edu.illinois.cs.cs125.questioner.lib.server.Submission
+import org.bson.BsonDocument
 import java.time.Instant
 
-internal suspend fun addStumperSolution(
+suspend fun MongoCollection<BsonDocument>.addStumperSolution(
     submitted: Instant,
     submission: Submission,
     testResults: TestResults,
@@ -25,7 +25,7 @@ internal suspend fun addStumperSolution(
         question,
         submission.language,
     )
-    if (candidate.exists(stumperSolutionCollection)) {
+    if (candidate.exists(this)) {
         return
     }
     val solution = try {
@@ -42,11 +42,11 @@ internal suspend fun addStumperSolution(
         logger.warn { e }
         return
     }
-    if (solution.exists(stumperSolutionCollection)) {
+    if (solution.exists(this)) {
         return
     }
     try {
-        solution.save(stumperSolutionCollection)
+        solution.save(this)
     } catch (e: Exception) {
         logger.warn { e }
     }

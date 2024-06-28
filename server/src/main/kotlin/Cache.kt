@@ -8,6 +8,7 @@ import com.mongodb.client.model.Sorts
 import com.squareup.moshi.JsonClass
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
+import edu.illinois.cs.cs125.questioner.lib.server.Submission
 
 @JsonClass(generateAdapter = true)
 data class CacheStats(val hits: Long, val misses: Long) {

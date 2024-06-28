@@ -10,22 +10,10 @@ import edu.illinois.cs.cs125.questioner.lib.TestTestResults
 import edu.illinois.cs.cs125.questioner.lib.VERSION
 import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
 import edu.illinois.cs.cs125.questioner.lib.questionerMaxConcurrency
+import edu.illinois.cs.cs125.questioner.lib.server.Submission
 import edu.illinois.cs.cs125.questioner.lib.test
 import edu.illinois.cs.cs125.questioner.lib.testTests
 import java.time.Instant
-
-// TODO: Add stumper stuff
-@JsonClass(generateAdapter = true)
-internal data class Submission(
-    val type: SubmissionType,
-    val contentHash: String,
-    val language: Language,
-    val contents: String,
-    val originalID: String? = null,
-    val testTestingSettings: Question.TestTestingSettings? = null,
-) {
-    enum class SubmissionType { SOLVE, TESTTESTING }
-}
 
 internal fun Question.toSubmission(type: Submission.SubmissionType, language: Language, contents: String) =
     Submission(type, published.contentHash, language, contents)
