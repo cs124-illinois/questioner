@@ -242,15 +242,17 @@ class QuestionerPlugin : Plugin<Project> {
             }.get()
         }
 
-        project.tasks.register("printSlowQuestions", PrintSlowQuestions::class.java) { printSlowQuestions ->
-            printSlowQuestions.dependsOn("collectQuestions")
-            printSlowQuestions.outputs.upToDateWhen { false }
-        }
+        val printSlowQuestions =
+            project.tasks.register("printSlowQuestions", PrintSlowQuestions::class.java) { printSlowQuestions ->
+                printSlowQuestions.dependsOn("collectQuestions")
+                printSlowQuestions.outputs.upToDateWhen { false }
+            }.get()
 
-        project.tasks.register("showUpdatedSeeds", ShowUpdatedSeeds::class.java) { showUpdatedSeeds ->
-            showUpdatedSeeds.dependsOn("collectQuestions")
-            showUpdatedSeeds.outputs.upToDateWhen { false }
-        }
+        val showUpdatedSeeds =
+            project.tasks.register("showUpdatedSeeds", ShowUpdatedSeeds::class.java) { showUpdatedSeeds ->
+                showUpdatedSeeds.dependsOn("collectQuestions")
+                showUpdatedSeeds.outputs.upToDateWhen { false }
+            }.get()
 
         project.afterEvaluate {
             project.finalizeConfiguration()
@@ -270,6 +272,9 @@ class QuestionerPlugin : Plugin<Project> {
                 task.publishIncludes = config.publishIncludes
                 task.ignorePackages = config.ignorePackages
             }
+
+            printSlowQuestions.ignorePackages = config.ignorePackages
+            showUpdatedSeeds.ignorePackages = config.ignorePackages
         }
     }
 }

@@ -6,7 +6,7 @@ import java.util.function.BiPredicate
 @Suppress("UNUSED")
 open class QuestionerConfigExtension {
     var maxMutationCount: Int = 256
-    var retries: Int = 0
+    var retries: Int = 4
     var verbose: Boolean = false
     var shuffleTests: Boolean = false
     var ignorePackages = listOf(

@@ -5,6 +5,7 @@ package edu.illinois.cs.cs125.questioner.plugin
 import edu.illinois.cs.cs125.questioner.lib.loadQuestionList
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 
@@ -17,10 +18,13 @@ open class ShowUpdatedSeeds : DefaultTask() {
     @InputFile
     val inputFile: File = project.layout.buildDirectory.dir("questioner/questions.json").get().asFile
 
+    @Internal
+    lateinit var ignorePackages: List<String>
+
     @TaskAction
     fun print() {
-        val questions = inputFile.loadQuestionList()
-        questions
+        inputFile.loadQuestionList()
+            .filter { !ignorePackages.any { prefix -> it.published.packageName.startsWith(prefix) } }
             .filter { it.validated }
             .filter { it.testingSettings!!.seed != it.control.seed }
             .forEach {
