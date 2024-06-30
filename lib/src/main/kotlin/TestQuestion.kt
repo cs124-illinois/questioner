@@ -21,7 +21,7 @@ import edu.illinois.cs.cs125.jeed.core.features
 import edu.illinois.cs.cs125.jeed.core.processCoverage
 import edu.illinois.cs.cs125.jenisol.core.EndTest
 import edu.illinois.cs.cs125.jenisol.core.Settings
-import edu.illinois.cs.cs125.jenisol.core.StartTest
+import edu.illinois.cs.cs125.jenisol.core.StartLoop
 import edu.illinois.cs.cs125.jenisol.core.SubmissionDesignError
 import edu.illinois.cs.cs125.jenisol.core.TestResult
 import edu.illinois.cs.cs125.jenisol.core.TestingEvent
@@ -226,13 +226,11 @@ suspend fun Question.test(
             configuredPlugins = plugins,
         ) { (classLoader, _, sandboxControl) ->
             val testingEventListener = { e: TestingEvent ->
-                if (e is StartTest) {
-                    var stepTimeout = baseTimeout
-                    if (e.stepCount == 0) {
-                        stepTimeout *= 10
-                    }
-                    if (solveCount == 0) {
-                        stepTimeout *= 10
+                if (e is StartLoop) {
+                    val stepTimeout = if (solveCount == 0) {
+                        baseTimeout * 10
+                    } else {
+                        baseTimeout
                     }
                     sandboxControl.setCPUTimeoutNS(stepTimeout * 1000L * 1000L)
                 } else if (e is EndTest) {
@@ -343,8 +341,8 @@ suspend fun Question.test(
         if (lineCountLimit != null && submissionExecutionCount > lineCountLimit) {
             results.failedSteps.add(TestResults.Step.checkExecutedSubmission)
             results.failed.checkExecutedSubmission =
-                "Executed too many lines: Already executed $lineCountLimit ${"line".pluralize(lineCountLimit.toInt())}, " +
-                    "solution needed only $solutionExecutionCount total"
+                "Executed too many lines: Already executed $submissionExecutionCount ${"line".pluralize(lineCountLimit.toInt())}, " +
+                    "limit was set to $lineCountLimit"
             return results
         }
 
@@ -366,7 +364,8 @@ suspend fun Question.test(
             testingResults,
             taskResults.returned!!.settings.testCount,
             taskResults.completed && !timeout,
-            !taskResults.returned!!.finishedReceivers
+            !taskResults.returned!!.finishedReceivers,
+            jenisolResults = taskResults.returned!!
         )
         results.addTestingResults(taskTestingResults)
 

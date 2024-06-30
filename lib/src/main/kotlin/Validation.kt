@@ -422,7 +422,7 @@ suspend fun Question.validate(
             { (_, content) -> content.hashCode() })
     ).map { (validationMutation, _) -> validationMutation }
 
-    var requiredTestCount = incorrectResults
+    val incorrectRequiredTestCount = incorrectResults
         .filter { !it.results.timeout && !it.results.succeeded }
         .mapNotNull { it.results.tests()?.size }
         .maxOrNull() ?: error("No incorrect results")
@@ -432,9 +432,12 @@ suspend fun Question.validate(
         results.tests()!!.indexOfFirst { it.complexity!! == maxComplexity } + 1
     }!!.coerceAtLeast(0)
 
-    requiredTestCount = requiredTestCount.coerceAtLeast(bootstrapRandomStartCount)
+    val requiredTestCount = incorrectRequiredTestCount.coerceAtLeast(bootstrapRandomStartCount)
 
     val testCount = requiredTestCount.coerceAtLeast(minTestCount)
+    check(testCount <= control.maxTestCount!!) {
+        "Testing requires $testCount tests ($incorrectRequiredTestCount, $bootstrapRandomStartCount) but control class limits to ${control.maxTestCount!!}. Please adjust this limit."
+    }
 
     // Rerun solutions to set timeouts and output limits
     // sets solution runtime, output lines, executed lines, and allocation
@@ -563,8 +566,7 @@ suspend fun Question.validate(
         solutionCoverage = solutionCoverage,
         executionCounts = solutionExecutionCounts,
         memoryAllocation = solutionAllocation,
-        canTestTest = canTestTest,
-        javaSolutionBootstrapCPUTimeMS = firstCorrectResults.first().taskResults!!.cpuTime.toDouble() / 1000.0 / 1000.0
+        canTestTest = canTestTest
     )
 
     classification.recursiveMethodsByLanguage = solutionRecursiveMethods!!

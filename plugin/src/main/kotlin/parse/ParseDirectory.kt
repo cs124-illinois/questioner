@@ -190,7 +190,7 @@ fun Path.parseDirectory(
         .filter { it.isStarter }
         .also {
             check(it.size <= 1) {
-                """Solution ${solution.correct.name} provided multiple files marked as starter code: file://${solution.path}"""
+                """Solution ${solution.correct.name} provided multiple files marked as starter code"""
             }
         }.firstOrNull()
 
@@ -200,7 +200,7 @@ fun Path.parseDirectory(
 
     val javaStarterFile = if (solution.autoStarter) {
         solution.extractStarter()
-            ?: error("""autoStarter enabled but starter generation failed: file://${solution.path}""")
+            ?: error("""autoStarter enabled but starter generation failed""")
     } else {
         javaStarter?.toStarterFile(javaCleanSpec)?.also {
             addUsedFile(it.path!!, "Starter", setOf("Incorrect"))
@@ -208,7 +208,7 @@ fun Path.parseDirectory(
     }
 
     var kotlinStarterFile = parsedKotlinFiles.filter { it.isStarter }.also {
-        check(it.size <= 1) { """Provided multiple file with Kotlin starter code: file://${solution.path}""" }
+        check(it.size <= 1) { """Provided multiple file with Kotlin starter code""" }
     }.firstOrNull()?.let {
         addUsedFile(it.path, "Starter", setOf("Incorrect"))
         it.toStarterFile(kotlinCleanSpec)
@@ -237,7 +237,7 @@ fun Path.parseDirectory(
         .filter { it != NotNull::class.java.name }
         .also {
             check(it.isEmpty()) {
-                """Please use the Questioner @NotNull annotation from ${NotNull::class.java.name}: file://${solution.path}"""
+                """Please use the Questioner @NotNull annotation from ${NotNull::class.java.name}"""
             }
         }
 
@@ -245,13 +245,13 @@ fun Path.parseDirectory(
         .filter { it.endsWith(".NotNull") || it.endsWith(".NonNull") }
         .also {
             check(it.isEmpty()) {
-                """@NotNull or @NonNull annotations will not be applied when used in Kotlin solutions: file://${solution.path}"""
+                """@NotNull or @NonNull annotations will not be applied when used in Kotlin solutions"""
             }
         }
 
     if (solution.wrapWith != null) {
         check(javaTemplate == null && kotlinTemplate == null) {
-            """Can't use both a template and @Wrap: file://${solution.path}"""
+            """Can't use both a template and @Wrap"""
         }
 
         javaTemplate = """public class ${solution.wrapWith} {
@@ -285,7 +285,7 @@ fun Path.parseDirectory(
 
     if (type == Question.Type.METHOD) {
         check(!javaSolution.contents.methodIsMarkedPublicOrStatic()) {
-            """Do not use public modifiers on method-only problems, and use static only on private helpers: file://${solution.path}"""
+            """Do not use public modifiers on method-only problems, and use static only on private helpers"""
         }
     }
 
@@ -306,7 +306,7 @@ fun Path.parseDirectory(
         val hasJavaStarter = incorrectExamples.any { it.language == Language.java && it.starter }
         val hasKotlinStarter = incorrectExamples.any { it.language == Language.kotlin && it.starter }
         if (hasJavaStarter) {
-            check(hasKotlinStarter) { """Kotlin starter code is missing for file://${solution.path}""" }
+            check(hasKotlinStarter) { """Kotlin starter code is missing""" }
         }
     }
 
@@ -385,7 +385,16 @@ fun Path.parseDirectory(
         templateByLanguage = makeLanguageMap(javaTemplate, kotlinTemplate),
         importWhitelist = solution.whitelist,
         importBlacklist = solution.blacklist,
-    )
+    ).also { loadedQuestion ->
+        check(loadedQuestion.control.minTestCount!! <= loadedQuestion.control.maxTestCount!!) {
+            "Question minTestCount (${loadedQuestion.control.minTestCount}) > maxTestCount (${loadedQuestion.control.maxTestCount})"
+        }
+        if (loadedQuestion.control.maxMutationCount != null) {
+            check(loadedQuestion.control.minMutationCount!! <= loadedQuestion.control.maxMutationCount!!) {
+                "Question minMutationCount (${loadedQuestion.control.minMutationCount}) > maxMutationCount (${loadedQuestion.control.maxMutationCount})"
+            }
+        }
+    }
 }
 
 fun Path.allFiles() = Files.walk(parent)

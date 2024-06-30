@@ -214,6 +214,8 @@ data class TestResults(
         val testCount: Int,
         val completed: Boolean,
         val failedReceiverGeneration: Boolean,
+        @Transient
+        val jenisolResults: edu.illinois.cs.cs125.jenisol.core.TestResults? = null,
         val passed: Boolean = completed && tests.none { !it.passed },
     ) {
         @JsonClass(generateAdapter = true)
@@ -283,9 +285,9 @@ data class TestResults(
             "Submission executed too many lines: ${failed.lineCount}"
         } else if (timeout && !taskResults!!.cpuTimeout) {
             "Testing wall clock timeout after ${taskResults!!.executionNanoTime / 1000 / 1000}ms " +
-                "(${complete.testing?.tests?.size ?: 0 } / ${complete.testing?.testCount ?: 0} tests completed)"
+                "(${complete.testing?.tests?.size ?: 0 } / ${complete.testing?.testCount ?: 0} tests completed, ${jenisolResults?.loopCount ?: 0} loop count)"
         } else if (timeout && taskResults!!.cpuTimeout) {
-            "Testing CPU timeout after ${taskResults!!.cpuTime / 1000 / 1000}ms (${complete.testing?.tests?.size ?: 0} tests completed)"
+            "Testing CPU timeout after ${taskResults!!.cpuTime / 1000 / 1000}ms (${complete.testing?.tests?.size ?: 0} tests completed, ${jenisolResults?.loopCount ?: 0} loop count)"
         } else if (complete.testing?.passed == false) {
             "Testing failed: ${complete.testing!!.tests.find { !it.passed }!!.explanation}"
         } else if (complete.testing?.failedReceiverGeneration == true) {

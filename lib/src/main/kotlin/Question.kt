@@ -286,8 +286,7 @@ data class Question(
         val executionCounts: LanguagesResourceUsage,
         val memoryAllocation: LanguagesResourceUsage,
         val solutionMaxClassSize: LanguagesResourceUsage? = null,
-        val canTestTest: Boolean = false,
-        val javaSolutionBootstrapCPUTimeMS: Double
+        val canTestTest: Boolean = false
     )
 
     @JsonClass(generateAdapter = true)

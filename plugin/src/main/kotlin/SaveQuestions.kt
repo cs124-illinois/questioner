@@ -58,7 +58,7 @@ abstract class SaveQuestions : DefaultTask() {
             workQueue.submit(ParseDirectory::class.java) { parameters ->
                 parameters.getBaseDirectory().set(sourceDirectoryPath.toFile())
                 parameters.getRootDirectory().set(project.rootProject.projectDir)
-                parameters.getCorrectDirectory().set(path.toFile())
+                parameters.getCorrectPath().set(path.toFile())
                 parameters.getPackageMap()
                     .set(project.layout.buildDirectory.dir("questioner/packageMap.json").get().asFile)
             }
@@ -83,7 +83,7 @@ fun Path.getCorrectFiles() = Files.walk(this)
     }.collect(Collectors.toList()).filterNotNull().toList()
 
 interface ParseDirectoryWorkParameters : WorkParameters {
-    fun getCorrectDirectory(): RegularFileProperty
+    fun getCorrectPath(): RegularFileProperty
 
     fun getBaseDirectory(): RegularFileProperty
 
@@ -94,24 +94,19 @@ interface ParseDirectoryWorkParameters : WorkParameters {
 
 abstract class ParseDirectory : WorkAction<ParseDirectoryWorkParameters> {
     override fun execute() {
-        val correctDirectory = parameters.getCorrectDirectory().get().asFile.toPath()
+        val correctPath = parameters.getCorrectPath().get().asFile.toPath()
         val baseDirectory = parameters.getBaseDirectory().get().asFile.toPath()
         val rootDirectory = parameters.getRootDirectory().get().asFile.toPath()
-        val questionPath = correctDirectory.parent.resolve(".question.json")
+        val questionPath = correctPath.parent.resolve(".question.json")
         val packageMap = parameters.getPackageMap().get().asFile.readFromFile()
 
-        val repeatCount = 2
-        repeat(repeatCount) { i ->
-            try {
-                correctDirectory.parseDirectory(baseDirectory, packageMap, rootDirectory = rootDirectory).writeToFile(questionPath.toFile())
-                return
-            } catch (e: Exception) {
-                if (i == repeatCount - 1) {
-                    questionPath.toFile().delete()
-                    throw e
-                }
-            }
+        try {
+            correctPath.parseDirectory(baseDirectory, packageMap, rootDirectory = rootDirectory)
+                .writeToFile(questionPath.toFile())
+        } catch (e: Exception) {
+            throw Exception("Problem parsing file://$correctPath", e)
         }
+        return
     }
 }
 
