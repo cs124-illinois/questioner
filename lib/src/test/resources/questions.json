@@ -504,11 +504,11 @@
       "seed": 124,
       "requiredTestCount": 12,
       "mutationCount": 6,
-      "solutionMaxRuntime": 22,
-      "bootstrapLength": 7327,
-      "mutationLength": 16,
-      "incorrectLength": 704,
-      "calibrationLength": 123,
+      "solutionMaxRuntime": 31,
+      "bootstrapLength": 6418,
+      "mutationLength": 42,
+      "incorrectLength": 769,
+      "calibrationLength": 114,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -1147,11 +1147,11 @@
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 6,
-      "solutionMaxRuntime": 32,
-      "bootstrapLength": 7318,
-      "mutationLength": 21,
-      "incorrectLength": 243,
-      "calibrationLength": 265,
+      "solutionMaxRuntime": 25,
+      "bootstrapLength": 2945,
+      "mutationLength": 15,
+      "incorrectLength": 381,
+      "calibrationLength": 131,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -2246,19 +2246,19 @@
         "kotlin": 1968
       },
       "allocationLimit": {
-        "java": 1383808,
-        "kotlin": 1383808
+        "java": 1384832,
+        "kotlin": 1384832
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 123,
       "mutationCount": 14,
-      "solutionMaxRuntime": 24,
-      "bootstrapLength": 7406,
-      "mutationLength": 22,
-      "incorrectLength": 1004,
-      "calibrationLength": 393,
+      "solutionMaxRuntime": 15,
+      "bootstrapLength": 6443,
+      "mutationLength": 38,
+      "incorrectLength": 999,
+      "calibrationLength": 446,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -3466,11 +3466,11 @@
       "seed": 124,
       "requiredTestCount": 75,
       "mutationCount": 17,
-      "solutionMaxRuntime": 18,
-      "bootstrapLength": 3386,
-      "mutationLength": 109,
-      "incorrectLength": 1064,
-      "calibrationLength": 40,
+      "solutionMaxRuntime": 16,
+      "bootstrapLength": 520,
+      "mutationLength": 69,
+      "incorrectLength": 840,
+      "calibrationLength": 27,
       "solutionCoverage": {
         "covered": 12,
         "total": 12,
@@ -4767,11 +4767,11 @@
       "seed": 124,
       "requiredTestCount": 117,
       "mutationCount": 28,
-      "solutionMaxRuntime": 11,
-      "bootstrapLength": 1329,
-      "mutationLength": 189,
-      "incorrectLength": 1402,
-      "calibrationLength": 24,
+      "solutionMaxRuntime": 17,
+      "bootstrapLength": 2840,
+      "mutationLength": 261,
+      "incorrectLength": 1645,
+      "calibrationLength": 33,
       "solutionCoverage": {
         "covered": 8,
         "total": 8,
@@ -5400,11 +5400,11 @@
       "seed": 124,
       "requiredTestCount": 6,
       "mutationCount": 7,
-      "solutionMaxRuntime": 43,
-      "bootstrapLength": 2138,
-      "mutationLength": 197,
-      "incorrectLength": 1077,
-      "calibrationLength": 86,
+      "solutionMaxRuntime": 26,
+      "bootstrapLength": 3142,
+      "mutationLength": 17,
+      "incorrectLength": 356,
+      "calibrationLength": 62,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -7187,7 +7187,7 @@
       },
       "allocationLimit": {
         "java": 884736,
-        "kotlin": 890368
+        "kotlin": 884736
       },
       "solutionClassSize": {
         "java": 897,
@@ -7228,11 +7228,11 @@
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 35,
-      "solutionMaxRuntime": 8,
-      "bootstrapLength": 7039,
-      "mutationLength": 261,
-      "incorrectLength": 1828,
-      "calibrationLength": 112,
+      "solutionMaxRuntime": 7,
+      "bootstrapLength": 6056,
+      "mutationLength": 201,
+      "incorrectLength": 1939,
+      "calibrationLength": 155,
       "solutionCoverage": {
         "covered": 8,
         "total": 8,
@@ -7244,7 +7244,7 @@
       },
       "memoryAllocation": {
         "java": 55296,
-        "kotlin": 55648
+        "kotlin": 55296
       },
       "canTestTest": false
     },
@@ -8515,19 +8515,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 6016,
-        "kotlin": 6016
+        "java": 5632,
+        "kotlin": 5632
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 21,
       "mutationCount": 4,
-      "solutionMaxRuntime": 12,
-      "bootstrapLength": 7295,
-      "mutationLength": 14,
-      "incorrectLength": 715,
-      "calibrationLength": 76,
+      "solutionMaxRuntime": 34,
+      "bootstrapLength": 6359,
+      "mutationLength": 17,
+      "incorrectLength": 563,
+      "calibrationLength": 115,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -9470,19 +9470,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 88048256,
-        "kotlin": 88048256
+        "java": 88047232,
+        "kotlin": 88047232
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 23,
-      "solutionMaxRuntime": 20,
-      "bootstrapLength": 2877,
-      "mutationLength": 352,
-      "incorrectLength": 2123,
-      "calibrationLength": 33,
+      "solutionMaxRuntime": 19,
+      "bootstrapLength": 2329,
+      "mutationLength": 266,
+      "incorrectLength": 2429,
+      "calibrationLength": 42,
       "solutionCoverage": {
         "covered": 7,
         "total": 7,
@@ -9518,19 +9518,6 @@
         "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
-          "@@ -10,1 +10,1 @@",
-          "-    if (range < 0) {",
-          "+    if (range >= 0) {"
-        ],
-        "language": "java",
-        "mutation": "REMOVE_PLUS",
-        "testCount": 0,
-        "suppressions": []
-      },
-      {
-        "deltas": [
-          "--- Correct.java",
-          "+++ Incorrect.java",
           "@@ -4,1 +4,1 @@",
           "-      return 0;",
           "+      return 1;"
@@ -9549,7 +9536,7 @@
           "+    return rangeSumHelper(range - 1);"
         ],
         "language": "java",
-        "mutation": "PLUS_TO_MINUS",
+        "mutation": "REMOVE_METHOD",
         "testCount": 1,
         "suppressions": []
       },
@@ -9575,20 +9562,7 @@
           "+    return 0;"
         ],
         "language": "java",
-        "mutation": "CONDITIONAL_BOUNDARY",
-        "testCount": 1,
-        "suppressions": []
-      },
-      {
-        "deltas": [
-          "--- Correct.java",
-          "+++ Incorrect.java",
-          "@@ -6,1 +6,1 @@",
-          "-    return range + rangeSumHelper(range - 1);",
-          "+    return range + rangeSumHelper(range + 1);"
-        ],
-        "language": "java",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "PLUS_TO_MINUS",
         "testCount": 1,
         "suppressions": []
       },
@@ -9604,7 +9578,7 @@
           "+    return 0;"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "REMOVE_IF",
         "testCount": 1,
         "suppressions": []
       },
@@ -9669,7 +9643,7 @@
           "+    if (range < 1) {"
         ],
         "language": "java",
-        "mutation": "REMOVE_IF",
+        "mutation": "REMOVE_PLUS",
         "testCount": 2,
         "suppressions": []
       },
@@ -10221,7 +10195,7 @@
         "java": 9216
       },
       "allocationLimit": {
-        "java": 24732416
+        "java": 24535808
       },
       "solutionClassSize": {
         "java": 431
@@ -10256,11 +10230,11 @@
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 4,
-      "solutionMaxRuntime": 27,
-      "bootstrapLength": 4352,
+      "solutionMaxRuntime": 49,
+      "bootstrapLength": 3068,
       "mutationLength": 11,
-      "incorrectLength": 261,
-      "calibrationLength": 38,
+      "incorrectLength": 373,
+      "calibrationLength": 61,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -10270,7 +10244,7 @@
         "java": 576
       },
       "memoryAllocation": {
-        "java": 1545776
+        "java": 1533488
       },
       "canTestTest": false
     },
@@ -11657,19 +11631,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 2856832,
-        "kotlin": 2856832
+        "java": 2864256,
+        "kotlin": 2864256
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 6,
       "mutationCount": 22,
-      "solutionMaxRuntime": 12,
-      "bootstrapLength": 7480,
-      "mutationLength": 53,
-      "incorrectLength": 1330,
-      "calibrationLength": 283,
+      "solutionMaxRuntime": 15,
+      "bootstrapLength": 6529,
+      "mutationLength": 48,
+      "incorrectLength": 1367,
+      "calibrationLength": 329,
       "solutionCoverage": {
         "covered": 6,
         "total": 6,
@@ -12761,10 +12735,10 @@
       "requiredTestCount": 27,
       "mutationCount": 5,
       "solutionMaxRuntime": 16,
-      "bootstrapLength": 7323,
-      "mutationLength": 9,
-      "incorrectLength": 1080,
-      "calibrationLength": 211,
+      "bootstrapLength": 2743,
+      "mutationLength": 74,
+      "incorrectLength": 1144,
+      "calibrationLength": 287,
       "solutionCoverage": {
         "covered": 6,
         "total": 6,
@@ -13407,19 +13381,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 15616,
-        "kotlin": 15616
+        "java": 5632,
+        "kotlin": 5632
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 4,
-      "solutionMaxRuntime": 72,
-      "bootstrapLength": 2087,
-      "mutationLength": 234,
-      "incorrectLength": 528,
-      "calibrationLength": 114,
+      "solutionMaxRuntime": 11,
+      "bootstrapLength": 2140,
+      "mutationLength": 268,
+      "incorrectLength": 887,
+      "calibrationLength": 79,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -14051,11 +14025,11 @@
       "seed": 124,
       "requiredTestCount": 8,
       "mutationCount": 3,
-      "solutionMaxRuntime": 15,
-      "bootstrapLength": 4233,
-      "mutationLength": 7,
-      "incorrectLength": 106,
-      "calibrationLength": 105,
+      "solutionMaxRuntime": 8,
+      "bootstrapLength": 3689,
+      "mutationLength": 9,
+      "incorrectLength": 169,
+      "calibrationLength": 32,
       "solutionCoverage": {
         "covered": 3,
         "total": 3,
@@ -14426,11 +14400,11 @@
       "seed": 124,
       "requiredTestCount": 12,
       "mutationCount": 1,
-      "solutionMaxRuntime": 50,
-      "bootstrapLength": 3452,
-      "mutationLength": 6,
-      "incorrectLength": 97,
-      "calibrationLength": 60,
+      "solutionMaxRuntime": 21,
+      "bootstrapLength": 3188,
+      "mutationLength": 9,
+      "incorrectLength": 130,
+      "calibrationLength": 74,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -14875,19 +14849,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 1580032,
-        "kotlin": 1580032
+        "java": 1579648,
+        "kotlin": 1579648
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 1,
-      "solutionMaxRuntime": 27,
-      "bootstrapLength": 2092,
-      "mutationLength": 216,
-      "incorrectLength": 184,
-      "calibrationLength": 81,
+      "solutionMaxRuntime": 121,
+      "bootstrapLength": 2131,
+      "mutationLength": 281,
+      "incorrectLength": 495,
+      "calibrationLength": 169,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -15304,11 +15278,11 @@
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 1,
-      "solutionMaxRuntime": 98,
-      "bootstrapLength": 2083,
-      "mutationLength": 202,
-      "incorrectLength": 195,
-      "calibrationLength": 213,
+      "solutionMaxRuntime": 57,
+      "bootstrapLength": 3216,
+      "mutationLength": 5,
+      "incorrectLength": 55,
+      "calibrationLength": 142,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -16478,19 +16452,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 43782656,
-        "kotlin": 43782656
+        "java": 43781632,
+        "kotlin": 43781632
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 17,
-      "solutionMaxRuntime": 14,
-      "bootstrapLength": 7475,
-      "mutationLength": 52,
-      "incorrectLength": 925,
-      "calibrationLength": 340,
+      "solutionMaxRuntime": 23,
+      "bootstrapLength": 6515,
+      "mutationLength": 49,
+      "incorrectLength": 817,
+      "calibrationLength": 194,
       "solutionCoverage": {
         "covered": 4,
         "total": 5,
@@ -17296,11 +17270,11 @@
       "seed": 124,
       "requiredTestCount": 475,
       "mutationCount": 13,
-      "solutionMaxRuntime": 52,
-      "bootstrapLength": 7397,
-      "mutationLength": 37,
-      "incorrectLength": 1379,
-      "calibrationLength": 200,
+      "solutionMaxRuntime": 57,
+      "bootstrapLength": 6428,
+      "mutationLength": 52,
+      "incorrectLength": 1376,
+      "calibrationLength": 300,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -18835,19 +18809,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 8554624,
-        "kotlin": 8554624
+        "java": 8555648,
+        "kotlin": 8555648
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 4,
       "mutationCount": 10,
-      "solutionMaxRuntime": 24,
-      "bootstrapLength": 7474,
-      "mutationLength": 38,
-      "incorrectLength": 689,
-      "calibrationLength": 328,
+      "solutionMaxRuntime": 20,
+      "bootstrapLength": 6662,
+      "mutationLength": 30,
+      "incorrectLength": 734,
+      "calibrationLength": 515,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -20589,11 +20563,11 @@
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 61,
-      "solutionMaxRuntime": 11,
-      "bootstrapLength": 7474,
-      "mutationLength": 382,
-      "incorrectLength": 2054,
-      "calibrationLength": 71,
+      "solutionMaxRuntime": 23,
+      "bootstrapLength": 6499,
+      "mutationLength": 357,
+      "incorrectLength": 2179,
+      "calibrationLength": 89,
       "solutionCoverage": {
         "covered": 9,
         "total": 9,
@@ -21691,11 +21665,11 @@
       "seed": 124,
       "requiredTestCount": 13,
       "mutationCount": 3,
-      "solutionMaxRuntime": 34,
-      "bootstrapLength": 1403,
-      "mutationLength": 14,
-      "incorrectLength": 231,
-      "calibrationLength": 97,
+      "solutionMaxRuntime": 42,
+      "bootstrapLength": 2325,
+      "mutationLength": 85,
+      "incorrectLength": 865,
+      "calibrationLength": 62,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -22143,11 +22117,11 @@
       "seed": 124,
       "requiredTestCount": 18,
       "mutationCount": 1,
-      "solutionMaxRuntime": 27,
-      "bootstrapLength": 1247,
-      "mutationLength": 10,
-      "incorrectLength": 46,
-      "calibrationLength": 62,
+      "solutionMaxRuntime": 18,
+      "bootstrapLength": 2152,
+      "mutationLength": 248,
+      "incorrectLength": 500,
+      "calibrationLength": 238,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
