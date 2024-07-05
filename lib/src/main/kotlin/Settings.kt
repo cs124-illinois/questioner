@@ -14,9 +14,13 @@ internal val testingLimiter = Semaphore(questionerMaxConcurrency)
 internal const val QUESTIONER_DEFAULT_TEST_TIMEOUT_MS = 80L
 internal val questionerTestTimeoutMS =
     dotenv.get("QUESTIONER_TEST_TIMEOUT_MS")?.toLong() ?: QUESTIONER_DEFAULT_TEST_TIMEOUT_MS
-internal const val QUESTIONER_DEFAULT_WALL_CLOCK_TIMEOUT_MULTIPLIER = 32
-internal val questionerWallClockTimeoutMultiplier =
-    dotenv.get("QUESTIONER_WALL_CLOCK_TIMEOUT_MULTIPLIER")?.toInt() ?: QUESTIONER_DEFAULT_WALL_CLOCK_TIMEOUT_MULTIPLIER
 internal const val QUESTIONER_DEFAULT_TESTTEST_TIMEOUT_MS = 160L
 internal val questionerTestTestTimeoutMS =
     dotenv.get("QUESTIONER_TESTTEST_TIMEOUT_MS")?.toLong() ?: QUESTIONER_DEFAULT_TESTTEST_TIMEOUT_MS
+internal const val QUESTIONER_DEFAULT_WALL_CLOCK_TIMEOUT_MULTIPLIER = 32
+internal val questionerWallClockTimeoutMultiplier =
+    dotenv.get("QUESTIONER_WALL_CLOCK_TIMEOUT_MULTIPLIER")?.toInt() ?: QUESTIONER_DEFAULT_WALL_CLOCK_TIMEOUT_MULTIPLIER
+internal const val QUESTIONER_DEFAULT_WARM_JENISOL_TIMEOUT_MULTIPLIER = 4.0
+internal val questionerWarmJenisolTimeoutMultiplier =
+    dotenv.get("QUESTIONER_WARM_JENISOL_TIMEOUT_MULTIPLIER")?.toDouble()
+        ?: QUESTIONER_DEFAULT_WARM_JENISOL_TIMEOUT_MULTIPLIER

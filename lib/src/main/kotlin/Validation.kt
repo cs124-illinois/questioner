@@ -284,6 +284,14 @@ suspend fun Question.validate(
             }
     }
 
+    /*
+    if (firstCorrectResults.size > 1) {
+        val firstTime = firstCorrectResults[0].taskResults!!.cpuTime
+        val restTime = (1 until firstCorrectResults.size).map { firstCorrectResults[it].taskResults!!.cpuTime }.average()
+        println("${published.packageName}: ${firstTime.toDouble() / restTime}")
+    }
+    */
+
     val bootstrapTrace = firstCorrectResults.first().jenisolResults!!.randomTrace!!
 
     val solutionJavaRecursiveMethods = firstCorrectResults.getRecursiveMethods(Language.java)

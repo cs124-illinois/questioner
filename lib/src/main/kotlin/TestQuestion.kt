@@ -31,6 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger
 class CachePoisonedException(message: String) : Error(message)
 
 val busyCount = AtomicInteger(0)
+val totalTestedCount = AtomicInteger(0)
 
 @Suppress("ReturnCount", "LongMethod", "ComplexMethod", "LongParameterList")
 suspend fun Question.test(
@@ -41,6 +42,9 @@ suspend fun Question.test(
 ): TestResults {
     try {
         testingLimiter.acquire()
+        busyCount.incrementAndGet()
+
+        val currentTestedCount = totalTestedCount.getAndIncrement()
 
         warm()
 
@@ -186,7 +190,8 @@ suspend fun Question.test(
         )
         val systemInStream = BumpingInputStream()
 
-        val baseTimeout = (questionerTestTimeoutMS.toDouble() * control.timeoutMultiplier!!).toLong()
+        val baseTimeout = (questionerTestTimeoutMS.toDouble() *
+            (settings.timeoutMultiplier ?: control.timeoutMultiplier!!)).toLong()
 
         val executionArguments = Sandbox.ExecutionArguments(
             timeout = settings.testCount * baseTimeout * questionerWallClockTimeoutMultiplier,
@@ -227,12 +232,14 @@ suspend fun Question.test(
         ) { (classLoader, _, sandboxControl) ->
             val testingEventListener = { e: TestingEvent ->
                 if (e is StartLoop) {
-                    val stepTimeout = if (solveCount == 0) {
-                        baseTimeout * 10
-                    } else {
-                        baseTimeout
+                    var stepTimeout = baseTimeout.toDouble()
+                    if (e.loopCount == 0 && currentTestedCount == 0) {
+                        stepTimeout *= questionerWarmJenisolTimeoutMultiplier
                     }
-                    sandboxControl.setCPUTimeoutNS(stepTimeout * 1000L * 1000L)
+                    if (e.loopCount == 0 && testedCount == 0) {
+                        stepTimeout *= control.questionerWarmTimeoutMultiplier!!
+                    }
+                    sandboxControl.setCPUTimeoutNS(stepTimeout.toLong() * 1000L * 1000L)
                 } else if (e is EndTest) {
                     sandboxControl.clearCPUTimeout()
                 }
@@ -359,6 +366,7 @@ suspend fun Question.test(
             return results
         }
 
+        testedCount++
         val testingResults = taskResults.returned!!.map { it.asTestResult(compiledSubmission.source, published.type) }
         val taskTestingResults = TestResults.TestingResult(
             testingResults,

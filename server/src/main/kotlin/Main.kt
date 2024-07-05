@@ -9,7 +9,7 @@ import edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring
 import edu.illinois.cs.cs125.questioner.lib.VERSION
 import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
 import edu.illinois.cs.cs125.questioner.lib.server.Submission
-import edu.illinois.cs.cs125.questioner.lib.server.toSubmission
+import edu.illinois.cs.cs125.questioner.lib.warm
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCallPipeline
@@ -145,27 +145,12 @@ fun Application.questioner() {
     }
 }
 
-suspend fun warm() {
-    val question = getQuestionByPath(warmQuestion)
-    check(question != null) { "Warm question should exist" }
-    check(question.published.languages.contains(Language.java)) { "Warm question should support Java" }
-    check(question.published.languages.contains(Language.kotlin)) { "Warm question should support Kotlin" }
-
-    question.toSubmission(
-        Submission.SubmissionType.SOLVE,
-        Language.java,
-        """System.out.println("Hello, world!);""",
-    ).also { javaSubmission ->
-        javaSubmission.test(question)
-    }
-
-    question.toSubmission(
-        Submission.SubmissionType.SOLVE,
-        Language.kotlin,
-        """println("Hello, world!)""",
-    ).also { kotlinSubmission ->
-        kotlinSubmission.test(question)
-    }
+suspend fun doWarm() {
+    val question = getQuestionByPath(warmQuestion)?.apply {
+        check(published.languages.contains(Language.java)) { "Warm question should support Java" }
+        check(published.languages.contains(Language.kotlin)) { "Warm question should support Kotlin" }
+    } ?: error("Warm question should exist")
+    warm(question)
 }
 
 fun main(): Unit = runBlocking {
@@ -212,9 +197,10 @@ fun main(): Unit = runBlocking {
     } catch (e: Exception) {
         logger.warn { e }
     }
+
     logger.info { "Warming Questioner" }
     try {
-        warm()
+        doWarm()
     } catch (e: Exception) {
         logger.warn { e }
     }

@@ -216,7 +216,7 @@ internal data class ParsedJavaFile(val path: String, val contents: String) {
                 val maxComplexityMultiplier = parameters["maxComplexityMultiplier"]?.toDouble()
                 val maxLineCountMultiplier = parameters["maxLineCountMultiplier"]?.toDouble()
                 val maxClassSizeMultiplier = parameters["maxClassSizeMultiplier"]?.toDouble()
-                val initialTestingDelay = parameters["initialTestingDelay"]?.toInt()
+                val questionWarmTimeoutMultiplier = parameters["questionWarmTimeoutMultiplier"]?.toDouble()
                 val canTestTest = parameters["canTestTest"]?.toBoolean()
                 val fullDesignErrors = parameters["fullDesignErrors"]?.toBoolean()
 
@@ -251,7 +251,7 @@ internal data class ParsedJavaFile(val path: String, val contents: String) {
                         maxComplexityMultiplier,
                         maxLineCountMultiplier,
                         maxClassSizeMultiplier,
-                        initialTestingDelay,
+                        questionWarmTimeoutMultiplier,
                         canTestTest,
                         fullDesignErrors,
                     ),

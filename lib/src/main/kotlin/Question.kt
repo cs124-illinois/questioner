@@ -150,7 +150,7 @@ data class Question(
         val maxComplexityMultiplier: Double?,
         val maxLineCountMultiplier: Double?,
         val maxClassSizeMultiplier: Double?,
-        val initialTestingDelay: Int?,
+        val questionerWarmTimeoutMultiplier: Double?,
         val canTestTest: Boolean?,
         val fullDesignErrors: Boolean?
     ) {
@@ -178,7 +178,7 @@ data class Question(
             const val DEFAULT_MIN_FAIL_FAST_COMPLEXITY = 16
             const val DEFAULT_MIN_FAIL_FAST_CLASS_SIZE_MULTIPLIER = 16
             const val DEFAULT_MAX_EXECUTION_COUNT: Long = 2048L * 1024L * 1024L
-            const val DEFAULT_INITIAL_TESTING_DELAY: Int = 0
+            const val DEFAULT_QUESTION_WARM_TIMEOUT_MULTIPLIER: Double = 1.0
             const val DEFAULT_CAN_TESTTEST: Boolean = true
             const val DEFAULT_FULL_DESIGN_ERRORS: Boolean = false
 
@@ -204,7 +204,7 @@ data class Question(
                 DEFAULT_MAX_COMPLEXITY_MULTIPLIER,
                 DEFAULT_MAX_LINECOUNT_MULTIPLIER,
                 DEFAULT_MAX_CLASSSIZE_MULTIPLIER,
-                DEFAULT_INITIAL_TESTING_DELAY,
+                DEFAULT_QUESTION_WARM_TIMEOUT_MULTIPLIER,
                 DEFAULT_CAN_TESTTEST,
                 DEFAULT_FULL_DESIGN_ERRORS
             )
@@ -241,7 +241,8 @@ data class Question(
         val kotlinSuppressions: Set<String>? = null,
         val runAll: Boolean = false,
         val recordTrace: Boolean = false,
-        val followTrace: List<Int>? = null
+        val followTrace: List<Int>? = null,
+        val timeoutMultiplier: Double? = null
     )
 
     @JsonClass(generateAdapter = true)
@@ -584,14 +585,21 @@ ${question.contents}
     @Transient
     var solveCount: Int = 0
 
+    @Transient
+    var testedCount: Int = 0
+
     fun cleanForUpload() {
         correctPath = null
-        solveCount = 0
         metadata = null
+        solveCount = 0
+        testedCount = 0
     }
 
     @Transient
     val fullPath = "${published.author}/${published.path}/${published.version}/${published.contentHash}"
+
+    @Transient
+    val usefulPath = "${published.author}/${published.path}/${published.version}"
 }
 
 fun String.deTemplate(template: String?): String {
