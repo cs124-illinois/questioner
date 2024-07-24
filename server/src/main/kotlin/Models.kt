@@ -51,6 +51,7 @@ private val serverStarted = Instant.now()
 
 @JsonClass(generateAdapter = true)
 internal data class Status(
+    val name: String = "questioner",
     val started: Instant = serverStarted,
     val version: String = VERSION,
     val useJeedCache: Boolean = useCompilationCache,

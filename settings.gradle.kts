@@ -16,4 +16,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "questioner"
-include("lib", "plugin", "server")
+include("lib", "plugin", "server", "stumperd")

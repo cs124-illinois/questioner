@@ -205,6 +205,8 @@ fun main(): Unit = runBlocking {
         logger.warn { e }
     }
 
-    logger.info { "Starting server" }
+    val logLevel = (LoggerFactory.getILoggerFactory() as LoggerContext).getLogger(logger.name).level
+    println("Starting questioner server (log level $logLevel)")
+
     embeddedServer(Netty, port = 8888, module = Application::questioner).start(wait = true)
 }
