@@ -1,4 +1,4 @@
-package edu.illinois.cs.cs124.stumperd.server
+package edu.illinois.cs.cs124.stumperd
 
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
@@ -71,29 +71,47 @@ fun CoroutineScope.produceSubmissions(options: PipelineOptions) =
         }
     }
 
+private class FinishStep : Exception()
+
 fun CoroutineScope.launchStumperProcessor(
     @Suppress("UNUSED_PARAMETER") id: Int,
     options: PipelineOptions,
     input: ReceiveChannel<Submission>,
     output: SendChannel<SubmissionResult>,
 ) = launch {
+    fun checkLimit(step: Steps) {
+        if (options.stepLimit < step.value) {
+            throw FinishStep()
+        }
+    }
+
     for (submission in input) {
         try {
-            if (options.stepLimit >= Steps.IDENTIFY.value) {
-                val identified = submission.identify(options.questionCollection)
-                if (options.stepLimit >= Steps.DEDUPLICATE.value) {
-                    val deduplicated = identified.deduplicate(options.stumperdCollections.deduplicateCollection)
-                    if (options.stepLimit >= Steps.CLEAN.value) {
-                        val cleaned = deduplicated.clean()
-                        if (options.stepLimit >= Steps.REDEDUPLICATE.value) {
-                            val rededuplicated = cleaned.rededuplicate(options.stumperdCollections.rededuplicateCollection)
-                            if (options.stepLimit >= Steps.VALIDATE.value) {
-                                val validated = rededuplicated.validate()
-                            }
-                        }
-                    }
-                }
-            }
+            checkLimit(Steps.IDENTIFY)
+            val identified = submission.identify(options.questionCollection)
+
+            checkLimit(Steps.DEDUPLICATE)
+            val deduplicated = identified.deduplicate(options.stumperdCollections.deduplicateCollection)
+
+            checkLimit(Steps.CLEAN)
+            val cleaned = deduplicated.clean()
+
+            checkLimit(Steps.REDEDUPLICATE)
+            val rededuplicated =
+                cleaned.rededuplicate(options.stumperdCollections.rededuplicateCollection)
+
+            checkLimit(Steps.VALIDATE)
+            val validated = rededuplicated.validate()
+
+            checkLimit(Steps.MUTATE)
+            val mutated = validated.mutate()
+
+            checkLimit(Steps.DEDUPLICATE_MUTANTS)
+            val deduplicateMutants =
+                mutated.deduplicateMutants(options.stumperdCollections.deduplicateMutantsCollection)
+
+            output.send(SubmissionResult(submission))
+        } catch (_: FinishStep) {
             output.send(SubmissionResult(submission))
         } catch (e: Exception) {
             output.send(SubmissionResult(submission, e))

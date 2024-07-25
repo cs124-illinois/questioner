@@ -12,6 +12,6 @@ mongorestore --drop --gzip --archive=.fixtures/results.bson.gz --nsFrom="test.st
   mongosh testing --eval "db.results.dropIndexes()" && \
   mongosh testing --eval "db.results.createIndex({ timestamp: 1 })"
 
-mongorestore --drop --gzip --archive=.fixtures/questions.bson.gz --nsFrom="cs125.questioner_questions" --nsTo="testing.questions"
+mongorestore --drop --gzip --archive=.fixtures/questions.bson.gz --nsFrom="cs124.questioner_questions" --nsTo="testing.questions"
 
 # vim: tw=0

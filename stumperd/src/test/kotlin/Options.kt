@@ -1,7 +1,7 @@
-import edu.illinois.cs.cs124.stumperd.server.PipelineOptions
-import edu.illinois.cs.cs124.stumperd.server.StumperdCollections
-import edu.illinois.cs.cs124.stumperd.server.collection
-import edu.illinois.cs.cs124.stumperd.server.empty
+import edu.illinois.cs.cs124.stumperd.PipelineOptions
+import edu.illinois.cs.cs124.stumperd.StumperdCollections
+import edu.illinois.cs.cs124.stumperd.collection
+import edu.illinois.cs.cs124.stumperd.empty
 
 val submissionsCollection by lazy {
     System.getenv("MONGODB_TESTING").collection("results")
@@ -13,6 +13,8 @@ val questionsCollection by lazy {
 fun StumperdCollections.reset(): StumperdCollections {
     deduplicateCollection.empty()
     rededuplicateCollection.empty()
+    deduplicateMutantsCollection.empty()
+
     doneCollection.empty()
     statusCollection.empty()
     return this

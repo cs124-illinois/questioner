@@ -1,4 +1,4 @@
-package edu.illinois.cs.cs124.stumperd.server
+package edu.illinois.cs.cs124.stumperd
 
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
@@ -23,9 +23,6 @@ suspend fun Rededuplicated.validate(): Validated = try {
         "Stumper did not pass validation"
     }
     this
-} catch (e: NoClassDefFoundError) {
-    // TODO: Remove workaround for broken question
-    throw ValidationFailure(e)
 } catch (e: Exception) {
     throw ValidationFailure(e)
 }

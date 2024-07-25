@@ -29,6 +29,8 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging:3.0.5")
 }
 tasks.withType<Test> {
+    enableAssertions = true
+
     environment["MONGODB_TESTING"] = "mongodb://localhost:27017/testing"
     environment["QUESTIONER_QUESTION_CACHE_SIZE"] = 4
     environment["QUESTIONER_TEST_TIMEOUT_MS"] = 160
@@ -41,7 +43,7 @@ tasks.shadowJar {
     }
 }
 application {
-    mainClass.set("edu.illinois.cs.cs124.stumperd.server.MainKt")
+    mainClass.set("edu.illinois.cs.cs124.stumperd.MainKt")
 }
 tasks.withType<ShadowJar> {
     isZip64 = true

@@ -1,4 +1,4 @@
-package edu.illinois.cs.cs124.stumperd.server
+package edu.illinois.cs.cs124.stumperd
 
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext

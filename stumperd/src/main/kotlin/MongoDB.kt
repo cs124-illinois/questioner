@@ -1,4 +1,4 @@
-package edu.illinois.cs.cs124.stumperd.server
+package edu.illinois.cs.cs124.stumperd
 
 import com.mongodb.MongoClient
 import com.mongodb.MongoClientOptions

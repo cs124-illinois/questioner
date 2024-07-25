@@ -1,6 +1,6 @@
 @file:Suppress("ktlint:standard:filename")
 
-package edu.illinois.cs.cs124.stumperd.server
+package edu.illinois.cs.cs124.stumperd
 
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
@@ -15,6 +15,10 @@ class StumperdCollections(mongodb: String) {
 
     val rededuplicateCollection by lazy {
         mongodb.collection("stumperd_rededuplicate").addDeduplicateIndices()
+    }
+
+    val deduplicateMutantsCollection by lazy {
+        mongodb.collection("stumperd_deduplicatemutants").addDeduplicateIndices()
     }
 
     class DoneCollection(collection: MongoCollection<BsonDocument>) : MongoCollection<BsonDocument> by collection {

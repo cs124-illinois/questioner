@@ -1,10 +1,10 @@
 
-import edu.illinois.cs.cs124.stumperd.server.Submission
-import edu.illinois.cs.cs124.stumperd.server.asSequence
-import edu.illinois.cs.cs124.stumperd.server.collection
-import edu.illinois.cs.cs124.stumperd.server.filterResults
-import edu.illinois.cs.cs124.stumperd.server.filterType
-import edu.illinois.cs.cs124.stumperd.server.findSubmissions
+import edu.illinois.cs.cs124.stumperd.Submission
+import edu.illinois.cs.cs124.stumperd.asSequence
+import edu.illinois.cs.cs124.stumperd.collection
+import edu.illinois.cs.cs124.stumperd.filterResults
+import edu.illinois.cs.cs124.stumperd.filterType
+import edu.illinois.cs.cs124.stumperd.findSubmissions
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
