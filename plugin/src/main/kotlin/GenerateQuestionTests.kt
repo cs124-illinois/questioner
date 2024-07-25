@@ -4,6 +4,7 @@ import edu.illinois.cs.cs125.jeed.core.KtLintArguments
 import edu.illinois.cs.cs125.jeed.core.ktFormat
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.loadQuestionList
+import edu.illinois.cs.cs125.questioner.lib.verifiers.toBase64
 import io.kotest.common.runBlocking
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
@@ -13,6 +14,7 @@ import org.gradle.api.tasks.TaskAction
 import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.exists
+import kotlin.io.path.pathString
 
 @Suppress("unused")
 abstract class GenerateQuestionTests : DefaultTask() {
@@ -82,7 +84,7 @@ abstract class GenerateQuestionTests : DefaultTask() {
                         |  init {${
                         if (questionsForFile.isNotEmpty()) {
                             """
-                        |    val options = ValidatorOptions($maxMutationCount, $retries, $verbose, "${project.rootProject.projectDir.toPath()}")    
+                        |    val options = ValidatorOptions($maxMutationCount, $retries, $verbose, "${project.rootProject.projectDir.toPath().pathString.toBase64()}")
                         |    concurrency = $concurrency
                         |    threads = $concurrency
                         |    """

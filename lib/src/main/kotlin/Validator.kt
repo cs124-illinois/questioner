@@ -1,5 +1,6 @@
 package edu.illinois.cs.cs125.questioner.lib
 
+import edu.illinois.cs.cs125.questioner.lib.verifiers.fromBase64
 import java.nio.file.Path
 import kotlin.io.path.deleteIfExists
 
@@ -31,7 +32,7 @@ data class ValidatorOptions(val maxMutationCount: Int, val retries: Int, val ver
 suspend fun String.validate(options: ValidatorOptions) {
     val (maxMutationCount, retries, verbose, rootDirectory) = options
 
-    gradleRootDirectory = rootDirectory
+    gradleRootDirectory = rootDirectory.fromBase64()
 
     val file = Path.of(this).toFile()
     check(file.exists())

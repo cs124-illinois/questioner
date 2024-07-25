@@ -12,16 +12,18 @@ data class MutateOptions(
     val ignoredMutations: Set<Mutation.Type> = setOf(
         Mutation.Type.REMOVE_METHOD,
         Mutation.Type.NULL_RETURN,
-        Mutation.Type.PRIMITIVE_RETURN
-    )
+        Mutation.Type.PRIMITIVE_RETURN,
+    ),
 )
 
 suspend fun Stumper.mutate(options: MutateOptions = MutateOptions()) = doStep(Stumper.Steps.MUTATE) {
     val template = question.getTemplate(language)
 
-    val sourceToMutate = (template?.let {
-        "// TEMPLATE_START\n$cleanedContents\n// TEMPLATE_END\n"
-    } ?: cleanedContents).let { contents ->
+    val sourceToMutate = (
+        template?.let {
+            "// TEMPLATE_START\n$cleanedContents\n// TEMPLATE_END\n"
+        } ?: cleanedContents
+        ).let { contents ->
         question.templateSubmission(contents, language)
     }
 
@@ -30,9 +32,11 @@ suspend fun Stumper.mutate(options: MutateOptions = MutateOptions()) = doStep(St
         .allFixedMutations(random = Random(options.seed), types = mutationsToUse)
         .asSequence()
         .map { mutatedSource ->
-            val contents = (template?.let {
-                mutatedSource.contents.deTemplate(template)
-            } ?: mutatedSource.contents).trim()
+            val contents = (
+                template?.let {
+                    mutatedSource.contents.deTemplate(template)
+                } ?: mutatedSource.contents
+                ).trim()
             assert(mutatedSource.mutations.size == 1)
             Stumper.MutatedSolution(mutatedSource.mutations.first().mutation.mutationType, contents)
         }.filter { mutant ->

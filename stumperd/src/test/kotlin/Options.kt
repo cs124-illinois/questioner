@@ -39,7 +39,7 @@ data class FailureCounts(
     val validationFailureCount: Int = 0,
     val mutationFailureCount: Int = 0,
     val deduplicateMutantsFailureCount: Int = 0,
-    val validateMutantsFailureCount: Int = 0
+    val validateMutantsFailureCount: Int = 0,
 ) {
     fun failureCount(stepLimit: Stumper.Steps) = Stumper.Steps.forLimit(stepLimit).sumOf { step -> countForStep(step) }
     fun successCount(stepLimit: Stumper.Steps) = correctCount - failureCount(stepLimit)

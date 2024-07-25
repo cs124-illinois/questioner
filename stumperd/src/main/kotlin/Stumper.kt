@@ -21,7 +21,7 @@ class Stumper(
     val language: Language,
     val path: String,
     val contents: String,
-    val author: String? = null
+    val author: String? = null,
 ) {
     enum class Steps(val value: Int) {
         NONE(0),
@@ -33,7 +33,8 @@ class Stumper(
         MUTATE(6),
         DEDUPLICATE_MUTANTS(7),
         VALIDATE_MUTANTS(8),
-        DONE(16);
+        DONE(16),
+        ;
 
         companion object {
             fun forLimit(limit: Steps) = entries.filter { it.value <= limit.value }.sortedBy { it.value }
