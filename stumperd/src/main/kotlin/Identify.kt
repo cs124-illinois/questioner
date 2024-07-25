@@ -4,15 +4,12 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Projections
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
+import io.ktor.util.collections.ConcurrentMap
 import org.bson.BsonBoolean
 import org.bson.BsonDocument
 import org.bson.BsonString
 
-data class Identified(val submission: Submission, val question: Question)
-
-class IdentifyFailure(cause: Throwable) : StumperFailure(Steps.IDENTIFY, cause)
-
-fun Submission.identify(questionCollection: MongoCollection<BsonDocument>) = try {
+suspend fun Stumper.identify(questionCollection: MongoCollection<BsonDocument>) = doStep(Stumper.Steps.IDENTIFY) {
     val query = BsonDocument().apply {
         append("latest", BsonBoolean(true))
         append("published.path", BsonString(path))
@@ -29,7 +26,10 @@ fun Submission.identify(questionCollection: MongoCollection<BsonDocument>) = try
             check(matchingQuestions.size == 1) { "Could not find question for $path" }
         }.first()
 
-    Identified(this, moshi.adapter(Question::class.java).fromJson(matchingQuestion.toJson())!!)
-} catch (e: Exception) {
-    throw IdentifyFailure(e)
+    val contentHash = matchingQuestion.getDocument("published").getString("contentHash").value
+    question = jsonCache.getOrPut(contentHash) {
+        moshi.adapter(Question::class.java).fromJson(matchingQuestion.toJson())!!
+    }
 }
+
+private val jsonCache = ConcurrentMap<String, Question>()

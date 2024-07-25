@@ -7,14 +7,10 @@ import com.mongodb.client.model.Updates
 import org.bson.BsonDocument
 import java.time.Instant
 
-class RededuplicateFailure(cause: Throwable) : StumperFailure(Steps.REDEDUPLICATE, cause)
-
-typealias Rededuplicated = Cleaned
-
-fun Cleaned.rededuplicate(rededuplicateCollection: MongoCollection<BsonDocument>): Rededuplicated = try {
+suspend fun Stumper.rededuplicate(rededuplicateCollection: MongoCollection<BsonDocument>) = doStep(Stumper.Steps.REDEDUPLICATE) {
     val timestamp = Instant.now()
     val contentHash = cleanedContents.md5()
-    val questionPath = "${identified.question.published.author}/${identified.question.published.path}"
+    val questionPath = "${question.published.author}/${question.published.path}"
     val updateResult = rededuplicateCollection.updateOne(
         Filters.and(Filters.eq("questionPath", questionPath), Filters.eq("contentHash", contentHash)),
         Updates.combine(
@@ -25,7 +21,4 @@ fun Cleaned.rededuplicate(rededuplicateCollection: MongoCollection<BsonDocument>
         UpdateOptions().upsert(true),
     )
     check(updateResult.upsertedId != null) { "Duplicate submission for $questionPath" }
-    this
-} catch (e: Exception) {
-    throw RededuplicateFailure(e)
 }

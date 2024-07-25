@@ -7,8 +7,6 @@ import edu.illinois.cs.cs125.questioner.lib.deTemplate
 import edu.illinois.cs.cs125.questioner.lib.templateSubmission
 import kotlin.random.Random
 
-class MutationFailure(cause: Throwable) : StumperFailure(Steps.MUTATE, cause)
-
 data class MutateOptions(
     val seed: Int = 124,
     val ignoredMutations: Set<Mutation.Type> = setOf(
@@ -18,12 +16,7 @@ data class MutateOptions(
     )
 )
 
-data class MutatedSolution(val type: Mutation.Type, val contents: String)
-data class Mutated(val validated: Validated, val mutants: Set<MutatedSolution>)
-
-fun Validated.mutate(options: MutateOptions = MutateOptions()) = try {
-    val question = identified.question
-    val language = identified.submission.language
+suspend fun Stumper.mutate(options: MutateOptions = MutateOptions()) = doStep(Stumper.Steps.MUTATE) {
     val template = question.getTemplate(language)
 
     val sourceToMutate = (template?.let {
@@ -33,7 +26,7 @@ fun Validated.mutate(options: MutateOptions = MutateOptions()) = try {
     }
 
     val mutationsToUse = ALL - options.ignoredMutations
-    val mutants = sourceToMutate
+    val initialMutants = sourceToMutate
         .allFixedMutations(random = Random(options.seed), types = mutationsToUse)
         .asSequence()
         .map { mutatedSource ->
@@ -41,19 +34,17 @@ fun Validated.mutate(options: MutateOptions = MutateOptions()) = try {
                 mutatedSource.contents.deTemplate(template)
             } ?: mutatedSource.contents).trim()
             assert(mutatedSource.mutations.size == 1)
-            MutatedSolution(mutatedSource.mutations.first().mutation.mutationType, contents)
+            Stumper.MutatedSolution(mutatedSource.mutations.first().mutation.mutationType, contents)
         }.filter { mutant ->
             mutant.contents != cleanedContents && mutant.contents.isNotBlank()
         }.distinctBy { mutant -> mutant.contents }
         .toSet()
 
-    assert(mutants.distinctBy { it.type }.intersect(options.ignoredMutations).isEmpty()) {
+    assert(initialMutants.distinctBy { it.type }.intersect(options.ignoredMutations).isEmpty()) {
         "Mutations include ignored mutations"
     }
 
-    check(mutants.isNotEmpty()) { "Solution generated no mutants" }
+    check(initialMutants.isNotEmpty()) { "Solution generated no mutants" }
 
-    Mutated(this, mutants)
-} catch (e: Exception) {
-    throw MutationFailure(e)
+    mutants = initialMutants
 }

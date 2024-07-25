@@ -13,12 +13,7 @@ import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.deTemplate
 import edu.illinois.cs.cs125.questioner.lib.templateSubmission
 
-class CleaningFailure(cause: Throwable) : StumperFailure(Steps.CLEAN, cause)
-
-data class Cleaned(val cleanedContents: String, val identified: Identified)
-
-suspend fun Deduplicated.clean() = try {
-    val language = submission.language
+suspend fun Stumper.clean() = doStep(Stumper.Steps.CLEAN) {
     val template = question.getTemplate(language)
 
     val fileType = when (language) {
@@ -26,7 +21,7 @@ suspend fun Deduplicated.clean() = try {
         Language.java -> Source.FileType.JAVA
     }
 
-    val templatedCleanedContents = submission.contents.stripComments(fileType).let {
+    val templatedCleanedContents = contents.stripComments(fileType).let {
         if (template != null) {
             "// TEMPLATE_START\n$it\n// TEMPLATE_END \n"
         } else {
@@ -38,20 +33,16 @@ suspend fun Deduplicated.clean() = try {
 
     templatedCleanedContents.hasBadWords(question.badWords())?.also { error("Has bad words: $it") }
 
-    val cleanedContents = when (templatedCleanedContents.type) {
+    cleanedContents = when (templatedCleanedContents.type) {
         Source.SourceType.JAVA -> templatedCleanedContents.googleFormat()
         Source.SourceType.KOTLIN -> templatedCleanedContents.ktFormat(KtLintArguments(failOnError = false, indent = 2))
         else -> error("Invalid source type: ${templatedCleanedContents.type}")
     }.contents.deTemplate(template)
-
-    Cleaned(cleanedContents, this)
-} catch (e: Exception) {
-    throw CleaningFailure(e)
 }
 
 private val badWords = mutableMapOf<Question, Set<String>>()
 
-fun Question.badWords() = badWords.getOrPut(this) {
+private fun Question.badWords() = badWords.getOrPut(this) {
     getCorrect(Language.java)!!.let {
         if (getTemplate(Language.java) != null) {
             "// TEMPLATE_START\n$it\n// TEMPLATE_END \n"

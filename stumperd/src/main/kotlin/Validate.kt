@@ -5,24 +5,17 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.test
 
-class ValidationFailure(cause: Throwable) : StumperFailure(Steps.VALIDATE, cause)
-
 private val questionCacheSize = System.getenv("QUESTIONER_QUESTION_CACHE_SIZE").toLong()
 
-val questionCache: Cache<String, Question> = Caffeine.newBuilder().maximumSize(questionCacheSize).build()
+val warmedQuestionHash: Cache<String, Question> = Caffeine.newBuilder().maximumSize(questionCacheSize).build()
 
-typealias Validated = Rededuplicated
-
-suspend fun Rededuplicated.validate(): Validated = try {
-    val question = questionCache.get(identified.question.published.contentHash) { identified.question }
+suspend fun Stumper.validate() = doStep(Stumper.Steps.VALIDATE) {
+    val question = warmedQuestionHash.get(question.published.contentHash) { question }
         .also { question ->
             question.warm()
         }
-    val results = question.test(cleanedContents, identified.submission.language)
+    val results = question.test(cleanedContents, language)
     check(results.complete.partial?.passedSteps?.quality == true) {
         "Stumper did not pass validation"
     }
-    this
-} catch (e: Exception) {
-    throw ValidationFailure(e)
 }

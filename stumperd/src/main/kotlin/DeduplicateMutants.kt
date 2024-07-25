@@ -7,13 +7,9 @@ import com.mongodb.client.model.Updates
 import org.bson.BsonDocument
 import java.time.Instant
 
-class DeduplicateMutantsFailure(cause: Throwable) : StumperFailure(Steps.DEDUPLICATE_MUTANTS, cause)
-
-typealias DeduplicatedMutants = Mutated
-
-fun Mutated.deduplicateMutants(deduplicateMutantsCollection: MongoCollection<BsonDocument>): DeduplicatedMutants = try {
+suspend fun Stumper.deduplicateMutants(deduplicateMutantsCollection: MongoCollection<BsonDocument>) = doStep(Stumper.Steps.DEDUPLICATE_MUTANTS) {
     val timestamp = Instant.now()
-    val questionPath = "${validated.identified.question.published.author}/${validated.identified.question.published.path}"
+    val questionPath = "${question.published.author}/${question.published.path}"
 
     val deduplicatedMutants = mutants.filter { mutant ->
         val contentHash = mutant.contents.md5()
@@ -31,7 +27,5 @@ fun Mutated.deduplicateMutants(deduplicateMutantsCollection: MongoCollection<Bso
 
     check(deduplicatedMutants.isNotEmpty()) { "Solution generated no new mutants" }
 
-    DeduplicatedMutants(validated, deduplicatedMutants)
-} catch (e: Exception) {
-    throw DeduplicateMutantsFailure(e)
+    mutants = deduplicatedMutants
 }

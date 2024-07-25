@@ -31,7 +31,7 @@ class StumperdCollections(mongodb: String) {
         val failureCount: Long
             get() = countDocuments(Filters.eq("failed", true))
 
-        fun failureCountForStep(step: Steps) =
+        fun failureCountForStep(step: Stumper.Steps) =
             countDocuments(Filters.and(Filters.eq("failed", true), Filters.eq("failure.type", step.name)))
     }
 

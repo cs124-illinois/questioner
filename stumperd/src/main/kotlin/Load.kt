@@ -92,7 +92,7 @@ fun MongoCollection<BsonDocument>.asSequence(
 
 fun MongoCollection<BsonDocument>.findSubmissions(
     startTime: Instant = beginningOfStumperdTime,
-): Sequence<Submission> = asSequence(startTime)
+): Sequence<Stumper> = asSequence(startTime)
     .filterResults()
     .filter { bsonDocument ->
         bsonDocument.getQuality() ?: bsonDocument.getPassed() ?: bsonDocument.getSucceededNoFailures() ?: false
@@ -105,5 +105,5 @@ fun MongoCollection<BsonDocument>.findSubmissions(
         val path = submission.getString("path").value!!
         val contents = submission.getString("contents").value!!
         val author = submission.getString("author", null)?.value
-        Submission(index, timestamp, id, language, path, contents, author)
+        Stumper(index, timestamp, id, language, path, contents, author)
     }
