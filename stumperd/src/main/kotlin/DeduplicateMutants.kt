@@ -7,7 +7,7 @@ import com.mongodb.client.model.Updates
 import org.bson.BsonDocument
 import java.time.Instant
 
-class DeduplicateMutantsFailure(cause: Throwable) : StumperFailure(Steps.REDEDUPLICATE, cause)
+class DeduplicateMutantsFailure(cause: Throwable) : StumperFailure(Steps.DEDUPLICATE_MUTANTS, cause)
 
 typealias DeduplicatedMutants = Mutated
 

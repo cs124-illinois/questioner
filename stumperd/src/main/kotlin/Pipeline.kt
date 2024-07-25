@@ -110,6 +110,9 @@ fun CoroutineScope.launchStumperProcessor(
             val deduplicateMutants =
                 mutated.deduplicateMutants(options.stumperdCollections.deduplicateMutantsCollection)
 
+            checkLimit(Steps.VALIDATE_MUTANTS)
+            val validatedMutants = deduplicateMutants.validateMutants()
+
             output.send(SubmissionResult(submission))
         } catch (_: FinishStep) {
             output.send(SubmissionResult(submission))

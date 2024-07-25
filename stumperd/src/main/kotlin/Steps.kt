@@ -7,7 +7,8 @@ enum class Steps(val value: Int) {
     REDEDUPLICATE(4),
     VALIDATE(5),
     MUTATE(6),
-    DEDUPLICATE_MUTANTS(7);
+    DEDUPLICATE_MUTANTS(7),
+    VALIDATE_MUTANTS(8);
 
     fun toException() = when (this) {
         IDENTIFY -> IdentifyFailure::class
@@ -17,6 +18,7 @@ enum class Steps(val value: Int) {
         VALIDATE -> ValidationFailure::class
         MUTATE -> MutationFailure::class
         DEDUPLICATE_MUTANTS -> DeduplicateMutantsFailure::class
+        VALIDATE_MUTANTS -> ValidateMutantsFailure::class
     }
 
     companion object {

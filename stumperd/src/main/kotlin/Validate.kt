@@ -9,7 +9,7 @@ class ValidationFailure(cause: Throwable) : StumperFailure(Steps.VALIDATE, cause
 
 private val questionCacheSize = System.getenv("QUESTIONER_QUESTION_CACHE_SIZE").toLong()
 
-private val questionCache: Cache<String, Question> = Caffeine.newBuilder().maximumSize(questionCacheSize).build()
+val questionCache: Cache<String, Question> = Caffeine.newBuilder().maximumSize(questionCacheSize).build()
 
 typealias Validated = Rededuplicated
 
