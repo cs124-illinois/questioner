@@ -10,55 +10,10 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.produce
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.bson.BsonDocument
 import org.bson.BsonString
 import java.time.Instant
-import kotlin.random.Random
-
-@OptIn(ExperimentalCoroutinesApi::class)
-fun CoroutineScope.produceNumbers() = produce {
-    for (i in 0 until 16) {
-        send(i)
-        delay(Random.nextLong(100))
-    }
-}
-
-fun CoroutineScope.launchNumberProcessor(input: ReceiveChannel<Int>, output: SendChannel<Int>) = launch {
-    for (number in input) {
-        delay(Random.nextLong(1000))
-        output.send(number)
-    }
-}
-
-@OptIn(ExperimentalCoroutinesApi::class)
-fun CoroutineScope.collectNumbers(channel: ReceiveChannel<Int>) = produce {
-    var waitingFor = 0
-    val received = mutableListOf<Int>()
-    for (number in channel) {
-        received += number
-        received.sort()
-        while (received.firstOrNull() == waitingFor) {
-            waitingFor++
-            send(received.removeFirst())
-        }
-    }
-}
-
-suspend fun numberPipeline() = coroutineScope {
-    val producer = produceNumbers()
-    val output = Channel<Int>()
-    val jobs = (0 until 4).map { launchNumberProcessor(producer, output) }
-    launch {
-        jobs.forEach { it.join() }
-        output.close()
-    }
-    for (number in collectNumbers(output)) {
-        println(number)
-    }
-}
 
 data class SubmissionResult(val submission: Submission, val exception: Exception? = null) {
     fun recordDone(doneCollection: MongoCollection<BsonDocument>) {
@@ -78,8 +33,8 @@ data class SubmissionResult(val submission: Submission, val exception: Exception
                     "failure",
                     BsonDocument()
                         .append("type", BsonString(failureType))
-                        .append("message", BsonString(message))
-                )
+                        .append("message", BsonString(message)),
+                ),
             )
         }
         doneCollection.updateOne(Filters.eq("id", submission.id), update, UpdateOptions().upsert(true))
@@ -88,12 +43,12 @@ data class SubmissionResult(val submission: Submission, val exception: Exception
     fun recordTimestamp(statusCollection: MongoCollection<BsonDocument>) {
         val timestamp = Instant.now()
         statusCollection.updateOne(
-            Filters.eq("latestTimestamp"),
+            Filters.eq("_id", "latestTimestamp"),
             Updates.combine(
                 Updates.set("timestamp", submission.timestamp),
-                Updates.set("updated", timestamp)
+                Updates.set("updated", timestamp),
             ),
-            UpdateOptions().upsert(true)
+            UpdateOptions().upsert(true),
         )
     }
 }
@@ -101,11 +56,11 @@ data class SubmissionResult(val submission: Submission, val exception: Exception
 data class PipelineOptions(
     val submissionCollection: MongoCollection<BsonDocument>,
     val questionCollection: MongoCollection<BsonDocument>,
-    val doneCollection: MongoCollection<BsonDocument>? = null,
-    val statusCollection: MongoCollection<BsonDocument>? = null,
+    val stumperdCollections: StumperdCollections,
     val doneCallback: (done: SubmissionResult) -> Unit = {},
     val concurrency: Int = 1,
-    val limit: Int = Int.MAX_VALUE
+    val limit: Int = Int.MAX_VALUE,
+    val stepLimit: Int = Int.MAX_VALUE,
 )
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -120,11 +75,25 @@ fun CoroutineScope.launchStumperProcessor(
     @Suppress("UNUSED_PARAMETER") id: Int,
     options: PipelineOptions,
     input: ReceiveChannel<Submission>,
-    output: SendChannel<SubmissionResult>
+    output: SendChannel<SubmissionResult>,
 ) = launch {
     for (submission in input) {
         try {
-            submission.identify(options.questionCollection)
+            if (options.stepLimit >= Steps.IDENTIFY.value) {
+                val identified = submission.identify(options.questionCollection)
+                if (options.stepLimit >= Steps.DEDUPLICATE.value) {
+                    val deduplicated = identified.deduplicate(options.stumperdCollections.deduplicateCollection)
+                    if (options.stepLimit >= Steps.CLEAN.value) {
+                        val cleaned = deduplicated.clean()
+                        if (options.stepLimit >= Steps.REDEDUPLICATE.value) {
+                            val rededuplicated = cleaned.rededuplicate(options.stumperdCollections.rededuplicateCollection)
+                            if (options.stepLimit >= Steps.VALIDATE.value) {
+                                val validated = rededuplicated.validate()
+                            }
+                        }
+                    }
+                }
+            }
             output.send(SubmissionResult(submission))
         } catch (e: Exception) {
             output.send(SubmissionResult(submission, e))
@@ -137,7 +106,7 @@ fun CoroutineScope.collectSubmissions(options: PipelineOptions, input: ReceiveCh
     var waitingFor = 0
     val received = mutableListOf<SubmissionResult>()
     for (result in input) {
-        options.doneCollection?.also { result.recordDone(it) }
+        result.recordDone(options.stumperdCollections.doneCollection)
 
         received += result
         received.sortBy { it.submission.index }
@@ -145,13 +114,13 @@ fun CoroutineScope.collectSubmissions(options: PipelineOptions, input: ReceiveCh
         while (received.firstOrNull()?.submission?.index == waitingFor) {
             waitingFor++
             val latest = received.removeFirst()
-            options.statusCollection?.also { result.recordTimestamp(it) }
+            latest.recordTimestamp(options.stumperdCollections.statusCollection)
             send(latest)
         }
     }
 }
 
-fun CoroutineScope.pipeline(options: PipelineOptions): ReceiveChannel<SubmissionResult>  {
+fun CoroutineScope.pipeline(options: PipelineOptions): ReceiveChannel<SubmissionResult> {
     val producer = produceSubmissions(options)
     val output = Channel<SubmissionResult>()
     val jobs = (0 until options.concurrency).map { id -> launchStumperProcessor(id, options, producer, output) }

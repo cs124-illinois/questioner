@@ -2,14 +2,15 @@ package edu.illinois.cs.cs124.stumperd.server
 
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Projections
+import edu.illinois.cs.cs125.questioner.lib.Question
+import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
 import org.bson.BsonBoolean
 import org.bson.BsonDocument
 import org.bson.BsonString
 
-data class Identified(val submission: Submission, val contentHash: String, val path: String, val author: String)
+data class Identified(val submission: Submission, val question: Question)
 
-class IdentificationFailure(submission: Submission, cause: Throwable) :
-    StumperFailure(Steps.IDENTIFY, submission, cause)
+class IdentifyFailure(cause: Throwable) : StumperFailure(Steps.IDENTIFY, cause)
 
 fun Submission.identify(questionCollection: MongoCollection<BsonDocument>) = try {
     val query = BsonDocument().apply {
@@ -19,7 +20,7 @@ fun Submission.identify(questionCollection: MongoCollection<BsonDocument>) = try
             append("published.author", BsonString(author))
         }
     }
-    val projection = Projections.include("published")
+    val projection = Projections.exclude("_id")
 
     val matchingQuestion = questionCollection
         .find(query)
@@ -28,12 +29,7 @@ fun Submission.identify(questionCollection: MongoCollection<BsonDocument>) = try
             check(matchingQuestions.size == 1) { "Could not find question for $path" }
         }.first()
 
-    matchingQuestion.getDocument("published").let { published ->
-        val contentHash = published.getString("contentHash").value
-        val path = published.getString("path").value
-        val author = published.getString("author").value
-        Identified(this, contentHash, path, author)
-    }
+    Identified(this, moshi.adapter(Question::class.java).fromJson(matchingQuestion.toJson())!!)
 } catch (e: Exception) {
-    throw IdentificationFailure(this, e)
+    throw IdentifyFailure(e)
 }

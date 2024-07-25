@@ -11,3 +11,8 @@ fun String.collection(collection: String): MongoCollection<BsonDocument> =
         .let { uri ->
             MongoClient(uri).getDatabase(uri.database!!).getCollection(collection, BsonDocument::class.java)
         }
+
+fun MongoCollection<BsonDocument>.empty(): MongoCollection<BsonDocument> {
+    deleteMany(BsonDocument())
+    return this
+}

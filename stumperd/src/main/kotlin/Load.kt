@@ -18,10 +18,12 @@ data class Submission(
     val language: Language,
     val path: String,
     val contents: String,
-    val author: String? = null
+    val author: String? = null,
 ) {
     enum class Type {
-        QUALITY, PASSED, SUCCEEDED_NO_FAILURES
+        QUALITY,
+        PASSED,
+        SUCCEEDED_NO_FAILURES,
     }
 }
 
@@ -50,7 +52,6 @@ private fun BsonDocument.getQuality() = getDocument("testingResults", null)
     ?.getDocument("passedSteps", null)
     ?.getBoolean("quality", null)?.value
 
-
 fun Sequence<BsonDocument>.filterType(type: Submission.Type) = filter { bsonDocument ->
     when (type) {
         Submission.Type.PASSED -> bsonDocument.getPassed() == true
@@ -60,7 +61,7 @@ fun Sequence<BsonDocument>.filterType(type: Submission.Type) = filter { bsonDocu
 }
 
 fun MongoCollection<BsonDocument>.asSequence(
-    startTime: Instant = beginningOfStumperdTime
+    startTime: Instant = beginningOfStumperdTime,
 ): Sequence<BsonDocument> {
     createIndex(Indexes.ascending("timestamp"))
 
@@ -82,7 +83,7 @@ fun MongoCollection<BsonDocument>.asSequence(
         // For submission
         "id",
         "language",
-        "submission"
+        "submission",
     )
     val starters = find(query).projection(projection).sort(sort).batchSize(32).noCursorTimeout(true)
 
@@ -90,7 +91,7 @@ fun MongoCollection<BsonDocument>.asSequence(
 }
 
 fun MongoCollection<BsonDocument>.findSubmissions(
-    startTime: Instant = beginningOfStumperdTime
+    startTime: Instant = beginningOfStumperdTime,
 ): Sequence<Submission> = asSequence(startTime)
     .filterResults()
     .filter { bsonDocument ->

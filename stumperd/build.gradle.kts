@@ -10,9 +10,12 @@ plugins {
     id("org.jmailen.kotlinter")
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.google.devtools.ksp")
+    id("com.ryandens.javaagent-test") version "0.5.1"
 }
 dependencies {
     val ktorVersion = "2.3.12"
+
+    testJavaagent("com.beyondgrader.resource-agent:agent:2024.7.0")
 
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.1")
 
@@ -26,7 +29,9 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging:3.0.5")
 }
 tasks.withType<Test> {
-    environment("MONGODB_TESTING", "mongodb://localhost:27017/testing")
+    environment["MONGODB_TESTING"] = "mongodb://localhost:27017/testing"
+    environment["QUESTIONER_QUESTION_CACHE_SIZE"] = 4
+    environment["QUESTIONER_TEST_TIMEOUT_MS"] = 160
 }
 tasks.shadowJar {
     manifest {

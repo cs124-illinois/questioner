@@ -22,7 +22,7 @@ class TestLoad : StringSpec() {
             val expectedCounts = mapOf(
                 Submission.Type.QUALITY to 503,
                 Submission.Type.SUCCEEDED_NO_FAILURES to 810,
-                Submission.Type.PASSED to 1018
+                Submission.Type.PASSED to 1018,
             )
             allCollection.asSequence().also { sequence ->
                 sequence.filterResults().count() shouldBe 24696
@@ -36,7 +36,7 @@ class TestLoad : StringSpec() {
             val expectedCounts = mapOf(
                 Submission.Type.QUALITY to 1077,
                 Submission.Type.SUCCEEDED_NO_FAILURES to 1714,
-                Submission.Type.PASSED to 1019
+                Submission.Type.PASSED to 1019,
             )
             resultsCollection.asSequence().also { sequence ->
                 sequence.filterResults().count() shouldBe 40960
