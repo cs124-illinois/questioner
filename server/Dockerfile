@@ -8,16 +8,19 @@ ENTRYPOINT ["/tini", "--"]
 
 WORKDIR /
 COPY *.jar questioner.jar
-CMD ["java", "-ea", "--enable-preview", "-Dfile.encoding=UTF-8", "-Djava.security.manager=allow", \
-    "-Xss256k", "-XX:+UseZGC", "-XX:ZCollectionInterval=8", "-XX:-OmitStackTraceInFastThrow", "-XX:+UnlockExperimentalVMOptions", "-XX:-VMContinuations", \
-    "--add-opens", "java.base/java.lang=ALL-UNNAMED", \
-    "--add-opens", "java.base/java.util=ALL-UNNAMED", \
-    "--add-exports", "jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED", \
-    "--add-exports", "jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED", \
-    "--add-exports", "jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED", \
-    "--add-exports", "jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED", \
-    "--add-exports", "jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED", \
-    "--add-exports", "java.management/sun.management=ALL-UNNAMED", \
-    "$JAVA_OPTS", "-jar", "questioner.jar"]
+SHELL ["/bin/sh", "-c"]
+CMD java -ea --enable-preview -Dfile.encoding=UTF-8 -Djava.security.manager=allow \
+    -Xss256k -XX:+UseZGC -XX:ZCollectionInterval=8 -XX:-OmitStackTraceInFastThrow \
+    -XX:+UnlockExperimentalVMOptions -XX:-VMContinuations \
+    --add-opens java.base/java.lang=ALL-UNNAMED \
+    --add-opens java.base/java.util=ALL-UNNAMED \
+    --add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
+    --add-exports jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED \
+    --add-exports jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
+    --add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
+    --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
+    --add-exports java.management/sun.management=ALL-UNNAMED \
+    $JAVA_OPTS \
+    -jar questioner.jar
 
 # vim: tw=0
