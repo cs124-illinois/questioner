@@ -213,7 +213,7 @@ class QuestionerPlugin : Plugin<Project> {
                 PublishQuestions::class.java,
             ) { publishQuestions ->
                 publishQuestions.endpoint = endpoint
-                publishQuestions.dependsOn("collectQuestions")
+                publishQuestions.dependsOn("collectQuestions", "recollectQuestions")
                 publishQuestions.outputs.upToDateWhen { false }
                 publishQuestions.description = "Publish questions to ${endpoint.name} (${endpoint.url})"
             }.get()

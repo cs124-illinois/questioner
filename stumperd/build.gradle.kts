@@ -10,7 +10,7 @@ plugins {
     id("org.jmailen.kotlinter")
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.google.devtools.ksp")
-    id("com.ryandens.javaagent-test") version "0.5.1"
+    id("com.ryandens.javaagent-test") version "0.5.2"
 }
 dependencies {
     val ktorVersion = "2.3.12"

@@ -8,7 +8,7 @@ plugins {
     `maven-publish`
     signing
     id("com.google.devtools.ksp")
-    id("com.ryandens.javaagent-test") version "0.5.1"
+    id("com.ryandens.javaagent-test") version "0.5.2"
 }
 dependencies {
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.1")
