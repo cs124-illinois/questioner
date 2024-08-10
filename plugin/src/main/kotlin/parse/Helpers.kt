@@ -140,9 +140,9 @@ internal fun String.toReason() = when (uppercase()) {
     "RECURSION" -> Question.IncorrectFile.Reason.RECURSION
     "COMPLEXITY" -> Question.IncorrectFile.Reason.COMPLEXITY
     "FEATURES" -> Question.IncorrectFile.Reason.FEATURES
-    "TOOMUCHOUTPUT" -> Question.IncorrectFile.Reason.TOOMUCHOUTPUT
     "MEMOIZATION" -> Question.IncorrectFile.Reason.MEMOIZATION
     "CLASSSIZE" -> Question.IncorrectFile.Reason.CLASSSIZE
     "KTLINT" -> Question.IncorrectFile.Reason.KTLINT
+    "EXTRAOUTPUT" -> Question.IncorrectFile.Reason.EXTRAOUTPUT
     else -> error("Invalid incorrect reason: $this")
 }

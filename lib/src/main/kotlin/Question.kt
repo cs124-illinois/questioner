@@ -242,7 +242,8 @@ data class Question(
         val runAll: Boolean = false,
         val recordTrace: Boolean = false,
         val followTrace: List<Int>? = null,
-        val timeoutMultiplier: Double? = null
+        val timeoutMultiplier: Double? = null,
+        val solutionOutputAmount: Int? = null
     )
 
     @JsonClass(generateAdapter = true)
@@ -286,6 +287,7 @@ data class Question(
         val solutionCoverage: TestResults.CoverageComparison.LineCoverage,
         val executionCounts: LanguagesResourceUsage,
         val memoryAllocation: LanguagesResourceUsage,
+        val outputAmount: Int? = null,
         val solutionMaxClassSize: LanguagesResourceUsage? = null,
         val canTestTest: Boolean = false
     )
@@ -347,7 +349,7 @@ data class Question(
     ) {
         @Suppress("SpellCheckingInspection")
         enum class Reason {
-            DESIGN, COMPILE, TEST, CHECKSTYLE, KTLINT, TIMEOUT, DEADCODE, LINECOUNT, TOOLONG, MEMORYLIMIT, RECURSION, COMPLEXITY, FEATURES, TOOMUCHOUTPUT, MEMOIZATION, CLASSSIZE
+            DESIGN, COMPILE, TEST, CHECKSTYLE, KTLINT, TIMEOUT, DEADCODE, LINECOUNT, TOOLONG, MEMORYLIMIT, RECURSION, COMPLEXITY, FEATURES, MEMOIZATION, CLASSSIZE, EXTRAOUTPUT
         }
     }
 

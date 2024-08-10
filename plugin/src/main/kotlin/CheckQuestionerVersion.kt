@@ -21,7 +21,7 @@ open class CheckQuestionerVersion : DefaultTask() {
                 it.getInputStream().close()
             }
         } catch (e: Exception) {
-            error("Unable to retrieve latest Questioner version: network not connected.")
+            project.logger.warn("Unable to retrieve latest Questioner version. Check your network connection?")
         }
         if (!isLatestVersion()) {
             val latestVersion = getLatestQuestionerVersion()

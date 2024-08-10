@@ -12,6 +12,7 @@ export const DEFAULT_WARNING_ORDER: Array<Step> = [
   "features",
   "lineCount",
   "executioncount",
+  "extraOutput",
   "memoryAllocation",
   "coverage",
   "classSize",
@@ -261,6 +262,10 @@ export const terminalOutput = (
         ", ",
       )}`
   }
+  if (complete.extraOutput?.failed === true) {
+    warnings["extraOutput"] = `Your submission generated unnecessary output. Please remove any debugging statements.`
+  }
+
   if (results.succeeded !== true) {
     if (results.failureCount === undefined) {
       return {

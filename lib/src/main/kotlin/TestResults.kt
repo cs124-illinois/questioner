@@ -66,6 +66,7 @@ data class TestResults(
         memoryAllocation,
         testing,
         coverage,
+        extraOutput
     }
 
     @JsonClass(generateAdapter = true)
@@ -86,7 +87,8 @@ data class TestResults(
         var executionCount: ResourceUsageComparison? = null,
         var memoryAllocation: ResourceUsageComparison? = null,
         var testing: TestingResult? = null,
-        var coverage: CoverageComparison? = null
+        var coverage: CoverageComparison? = null,
+        var extraOutput: OutputComparison? = null
     )
 
     fun checkAll() {
@@ -104,6 +106,7 @@ data class TestResults(
         check(complete.memoryAllocation?.failed == false)
         check(complete.coverage?.failed == false)
         check(complete.classSize?.failed == false)
+        check(complete.extraOutput?.failed == false)
     }
 
     @JsonClass(generateAdapter = true)
@@ -163,6 +166,19 @@ data class TestResults(
     }
 
     @JsonClass(generateAdapter = true)
+    data class OutputComparison(
+        val solution: Int,
+        val submission: Int,
+        val truncated: Boolean,
+        val failed: Boolean = truncated || (solution == 0 && submission > 0)
+    ) {
+        init {
+            require(solution >= 0) { "Invalid solution output amount: $solution" }
+            require(submission >= 0) { "Invalid submission resource usage: $submission" }
+        }
+    }
+
+    @JsonClass(generateAdapter = true)
     data class ResourceUsageComparison(
         val solution: Long,
         val submission: Long,
@@ -217,6 +233,8 @@ data class TestResults(
         @Transient
         val jenisolResults: edu.illinois.cs.cs125.jenisol.core.TestResults? = null,
         val passed: Boolean = completed && tests.none { !it.passed },
+        val outputAmount: Int = tests.sumOf { it.outputAmount },
+        val truncatedLines: Int = tests.sumOf { it.truncatedLines ?: 0 }
     ) {
         @JsonClass(generateAdapter = true)
         data class TestResult(
@@ -236,8 +254,14 @@ data class TestResults(
             val complexity: Int? = null,
             val submissionStackTrace: String? = null,
             val stdin: String? = null,
+            val truncatedLines: Int? = null,
             @Transient val jenisol: JenisolTestResult<*, *>? = null,
-            @Transient val submissionResourceUsage: ResourceMonitoringCheckpoint? = null
+            @Transient val submissionResourceUsage: ResourceMonitoringCheckpoint? = null,
+            val outputAmount: Int = when {
+                output == null -> 0
+                output.isEmpty() -> 0
+                else -> output.lines().size
+            }
         )
     }
 
@@ -285,7 +309,7 @@ data class TestResults(
             "Submission executed too many lines: ${failed.lineCount}"
         } else if (timeout && !taskResults!!.cpuTimeout) {
             "Testing wall clock timeout after ${taskResults!!.executionNanoTime / 1000 / 1000}ms " +
-                "(${complete.testing?.tests?.size ?: 0 } / ${complete.testing?.testCount ?: 0} tests completed, ${jenisolResults?.loopCount ?: 0} loop count)"
+                "(${complete.testing?.tests?.size ?: 0} / ${complete.testing?.testCount ?: 0} tests completed, ${jenisolResults?.loopCount ?: 0} loop count)"
         } else if (timeout && taskResults!!.cpuTimeout) {
             "Testing CPU timeout after ${taskResults!!.cpuTime / 1000 / 1000}ms (${complete.testing?.tests?.size ?: 0} tests completed, ${jenisolResults?.loopCount ?: 0} loop count)"
         } else if (complete.testing?.passed == false) {
@@ -346,6 +370,7 @@ fun TestResult<*, *>.asTestResult(source: Source, questionType: Question.Type) =
         )
     ),
     submission.stdin,
+    submission.truncatedLines,
     this,
     this.submission.tag as ResourceMonitoringCheckpoint
 )

@@ -399,7 +399,6 @@ suspend fun Question.test(
             )
         }
 
-
         results.complete.recursion = checkRecursion(klassName, language, settings, isSolution, results)
         results.completedSteps.add(TestResults.Step.recursion)
 
@@ -459,6 +458,12 @@ suspend fun Question.test(
             TestResults.CoverageComparison(solutionCoverage, submissionCoverage, missed, solutionDeadCode.toInt())
         results.completedSteps.add(TestResults.Step.coverage)
 
+        val submissionOutputAmount = results.complete.testing!!.outputAmount
+        val solutionOutputAmount = validationResults?.outputAmount ?: settings.solutionOutputAmount ?: submissionOutputAmount
+        results.complete.extraOutput =
+            TestResults.OutputComparison(solutionOutputAmount, submissionOutputAmount, taskResults.truncatedLines > 0)
+        results.completedSteps.add(TestResults.Step.extraOutput)
+
         results.complete.partial!!.passedSteps.quality =
             results.complete.partial!!.passedSteps.fullyCorrect && results.complete.let {
                 it.checkstyle?.errors?.isNotEmpty() == true ||
@@ -470,7 +475,8 @@ suspend fun Question.test(
                     it.memoryAllocation?.failed == true ||
                     it.coverage?.failed == true ||
                     it.classSize?.failed == true ||
-                    it.recursion?.failed == true
+                    it.recursion?.failed == true ||
+                    it.extraOutput?.failed == true
             } == false
 
         return results

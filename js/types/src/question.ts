@@ -29,18 +29,6 @@ export type QuestionPath = Static<typeof QuestionPath>
 export const Citation = Record({ source: String }).And(Partial({ link: String }))
 export type Citation = Static<typeof Citation>
 
-/*
-export const QuestionMetadata = Record({
-  unusedFiles: RuntypeArray(String),
-}).And(
-  Partial({
-    focused: Boolean,
-    publish: Boolean,
-  }),
-)
-export type QuestionMetadata = Static<typeof QuestionMetadata>
-*/
-
 export const MethodInfo = Record({
   className: String,
   methodName: String,

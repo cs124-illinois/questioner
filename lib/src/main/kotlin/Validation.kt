@@ -152,7 +152,7 @@ suspend fun Question.validate(
             }
 
         val size = toJson().length
-        if (finalChecks && (size > Question.DEFAULT_MAX_OUTPUT_SIZE || taskResults!!.truncatedLines > 0)) {
+        if (finalChecks && (size > Question.DEFAULT_MAX_OUTPUT_SIZE || complete.testing!!.truncatedLines > 0)) {
             throw TooMuchOutput(file.contents, file.path, size, Question.DEFAULT_MAX_OUTPUT_SIZE, file.language)
         }
 
@@ -201,7 +201,7 @@ suspend fun Question.validate(
             try {
                 validate(file.reason)
             } catch (e: Exception) {
-                val exception = when (succeeded) {
+                val exception = when (succeeded && file.reason == Question.IncorrectFile.Reason.TEST) {
                     true -> RetryValidation(IncorrectPassed(file, javaSolution, this, verbose), badTimeout())
                     else -> IncorrectWrongReason(file, e.message!!, summary)
                 }
@@ -284,14 +284,6 @@ suspend fun Question.validate(
             }
     }
 
-    /*
-    if (firstCorrectResults.size > 1) {
-        val firstTime = firstCorrectResults[0].taskResults!!.cpuTime
-        val restTime = (1 until firstCorrectResults.size).map { firstCorrectResults[it].taskResults!!.cpuTime }.average()
-        println("${published.packageName}: ${firstTime.toDouble() / restTime}")
-    }
-    */
-
     val bootstrapTrace = firstCorrectResults.first().jenisolResults!!.randomTrace!!
 
     val solutionJavaRecursiveMethods = firstCorrectResults.getRecursiveMethods(Language.java)
@@ -317,6 +309,8 @@ suspend fun Question.validate(
     val bootstrapClassSize = firstCorrectResults.setResourceUsage { solution ->
         solution.classSize
     }
+
+    val bootstrapSolutionOutputAmount = firstCorrectResults.maxOf { it.complete.testing?.outputAmount ?: 0 }
 
     val bootstrapLength = Instant.now().toEpochMilli() - bootStrapStart.toEpochMilli()
 
@@ -358,7 +352,8 @@ suspend fun Question.validate(
         solutionClassSize = bootstrapClassSize,
         suppressions = javaSolution.suppressions,
         kotlinSuppressions = kotlinSolution?.suppressions,
-        followTrace = bootstrapTrace
+        followTrace = bootstrapTrace,
+        solutionOutputAmount = bootstrapSolutionOutputAmount
     )
     val incorrectResults = allIncorrect.map { wrong ->
         val specificIncorrectSettings = if (wrong.reason == Question.IncorrectFile.Reason.MEMORYLIMIT) {
@@ -514,6 +509,8 @@ suspend fun Question.validate(
         .minByOrNull {
             it.solution.covered / it.solution.total
         }!!.solution
+    val solutionOutputAmount =
+        calibrationResults.maxOf { it.results.complete.testing?.outputAmount ?: 0 }
 
     testingSettings = Question.TestingSettings(
         seed = seed,
@@ -574,6 +571,7 @@ suspend fun Question.validate(
         solutionCoverage = solutionCoverage,
         executionCounts = solutionExecutionCounts,
         memoryAllocation = solutionAllocation,
+        outputAmount = solutionOutputAmount,
         canTestTest = canTestTest
     )
 
@@ -654,7 +652,11 @@ private fun TestResults.validate(reason: Question.IncorrectFile.Reason) {
             "Expected submission to be so complex as to suggest memoization"
         }
 
-        else -> require(complete.testing?.passed == false) {
+        Question.IncorrectFile.Reason.EXTRAOUTPUT -> require(complete.extraOutput?.failed == true) {
+            "Expected submission to generate unnecessary output"
+        }
+
+        Question.IncorrectFile.Reason.TEST -> require(complete.testing?.passed == false) {
             "Expected submission to fail tests"
         }
     }
@@ -857,7 +859,7 @@ class IncorrectPassed(
                 if (incorrect.mutation != null) {
                     " (mutated) "
                 } else {
-                    ""
+                    " "
                 }
             }passed the test suites:
         |If the code is incorrect, add an input to @FixedParameters to handle this case

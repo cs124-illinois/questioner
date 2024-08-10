@@ -12,6 +12,8 @@ export const QualityStep = Literal("classSize")
   .Or(Literal("executioncount"))
   .Or(Literal("memoryAllocation"))
   .Or(Literal("coverage"))
+  .Or(Literal("extraOutput"))
+
 export type QualityStep = Static<typeof QualityStep>
 export const QualitySteps: QualityStep[] = [
   "classSize",
@@ -22,6 +24,7 @@ export const QualitySteps: QualityStep[] = [
   "executioncount",
   "memoryAllocation",
   "coverage",
+  "extraOutput",
 ]
 
 export const CompilationStep = Literal("checkInitialSubmission")

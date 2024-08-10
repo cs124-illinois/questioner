@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.logging.LogLevel
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.SourceTask
@@ -105,6 +106,7 @@ class QuestionerPlugin : Plugin<Project> {
             testTask.useJUnitPlatform()
             testTask.enableAssertions = true
             testTask.environment["JEED_USE_CACHE"] = true
+            @Suppress("SpellCheckingInspection")
             testTask.jvmArgs(
                 "-ea", "--enable-preview", "-Dfile.encoding=UTF-8", "-Djava.security.manager=allow",
                 "-XX:+UseZGC", "-XX:ZCollectionInterval=8", "-XX:-OmitStackTraceInFastThrow",
@@ -117,11 +119,13 @@ class QuestionerPlugin : Plugin<Project> {
                 "--add-exports", "jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
                 "--add-exports", "jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
                 "--add-exports", "java.management/sun.management=ALL-UNNAMED",
+                "-Dslf4j.internal.verbosity=WARN",
                 "-javaagent:$agentJarPath",
             )
             testTask.outputs.upToDateWhen { false }
             testTask.dependsOn("reconfigureForTesting")
             testTask.finalizedBy("recollectQuestions")
+            testTask.logging.captureStandardError(LogLevel.DEBUG)
         }
 
         configurations.getByName("checkstyle").apply {
