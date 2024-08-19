@@ -44,20 +44,11 @@ export type OutputOptions = {
   treatAsErrors?: Step[]
   showWithTestResults?: Step[]
   defaultIndentation?: number
+  warningOrder?: Step[]
 }
 export const DEFAULT_OPTIONS: OutputOptions = {
   successMessage: "Your code passed all tests and code quality checks.",
   defaultIndentation: 2,
-}
-
-const pluralize = (input: string, count: number, plural?: string): string => {
-  if (count === 1) {
-    return input
-  } else if (plural) {
-    return plural
-  } else {
-    return `${input}s`
-  }
 }
 
 export const terminalOutput = (
@@ -316,7 +307,7 @@ export const terminalOutput = (
 
   if (showWarnings) {
     for (const warning of Object.keys(warnings) as Step[]) {
-      if (!showWarnings.includes(warning)) {
+      if (warning !== "testing" && !showWarnings.includes(warning)) {
         delete warnings[warning]
       }
     }
@@ -327,7 +318,7 @@ export const terminalOutput = (
     return { error: false, retry: false, output: `${outputOptions.successMessage} ${wellDone}!` }
   } else if (warnings["testing"]) {
     let header
-    for (const which of DEFAULT_WARNING_ORDER) {
+    for (const which of options.warningOrder ?? DEFAULT_WARNING_ORDER) {
       if (warnings[which] && showWithTestResults && showWithTestResults.includes(which)) {
         header = `Your submission will eventually be considered incorrect because of this error:\n${indentString(
           warnings[which] as string,
@@ -341,7 +332,7 @@ export const terminalOutput = (
       return { error: false, retry: false, output: warnings["testing"] }
     }
   } else {
-    for (const which of DEFAULT_WARNING_ORDER) {
+    for (const which of options.warningOrder ?? DEFAULT_WARNING_ORDER) {
       if (warnings[which]) {
         if (treatAsErrors && treatAsErrors.includes(which)) {
           return {
@@ -370,5 +361,15 @@ export const terminalOutput = (
     error: true,
     retry: true,
     output: "Error printing testing output. If this happens repeatedly, please report a bug.",
+  }
+}
+
+const pluralize = (input: string, count: number, plural?: string): string => {
+  if (count === 1) {
+    return input
+  } else if (plural) {
+    return plural
+  } else {
+    return `${input}s`
   }
 }

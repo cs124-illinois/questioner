@@ -50,3 +50,33 @@ export const TestTestingStep = CompilationStep.Or(Literal("checkExecutedSubmissi
   LintingStep,
 )
 export type TestTestingStep = Static<typeof TestTestingStep>
+
+export const stepToKey = (step: Step): string => {
+  if (step === "executioncount") {
+    return "executionCount"
+  } else {
+    return step
+  }
+}
+
+export const TestingOrder: Step[] = [
+  "checkInitialSubmission",
+  "templateSubmission",
+  "compileSubmission",
+  "checkstyle",
+  "ktlint",
+  "checkCompiledSubmission",
+  "classSize",
+  "complexity",
+  "features",
+  "lineCount",
+  "partial",
+  // execution
+  "checkExecutedSubmission",
+  "recursion",
+  "executioncount",
+  "memoryAllocation",
+  "testing",
+  "coverage",
+  "extraOutput",
+]
