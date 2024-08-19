@@ -1,6 +1,6 @@
 {
   "name": "@cs124/questioner-mongodb",
-  "version": "2024.8.0",
+  "version": "2024.8.1",
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
@@ -18,7 +18,7 @@
   },
   "types": "dist/index.d.ts",
   "peerDependencies": {
-    "@cs124/questioner-types": "2024.8.0"
+    "@cs124/questioner-types": "2024.8.1"
   },
   "devDependencies": {
     "@cs124/jeed-types": "2024.6.1",
