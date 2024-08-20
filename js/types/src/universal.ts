@@ -1,5 +1,6 @@
 import { InstanceOf, Partial, Record, Static, String, Unknown } from "runtypes"
 import { Languages } from "./languages"
+import { SubmissionType } from "./submission"
 
 export const UniversalSubmission = Record({
   id: String,
@@ -14,6 +15,7 @@ export const UniversalSubmission = Record({
     }),
   ),
   author: String,
+  type: SubmissionType,
   contents: String,
   results: Unknown,
 }).And(
