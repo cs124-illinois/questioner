@@ -19,10 +19,10 @@ dependencies {
     implementation("io.github.java-diff-utils:java-diff-utils:4.12")
     implementation("org.ow2.asm:asm:9.7")
     implementation("org.mongodb:mongodb-driver:3.12.14")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.10")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.20")
 
-    implementation("org.slf4j:slf4j-api:2.0.15")
-    implementation("ch.qos.logback:logback-classic:1.5.6")
+    implementation("org.slf4j:slf4j-api:2.0.16")
+    implementation("ch.qos.logback:logback-classic:1.5.7")
     implementation("io.github.microutils:kotlin-logging:3.0.5")
 
     api("com.squareup.moshi:moshi-kotlin:1.15.1")
@@ -38,7 +38,7 @@ dependencies {
     api("io.kotest:kotest-runner-junit5:5.9.1")
     api("com.google.truth:truth:1.4.4")
 
-    api("io.github.cdimascio:dotenv-kotlin:6.4.1")
+    api("io.github.cdimascio:dotenv-kotlin:6.4.2")
 }
 tasks {
     val sourcesJar by creating(Jar::class) {

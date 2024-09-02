@@ -176,7 +176,9 @@ class QuestionerPlugin : Plugin<Project> {
             project.tasks.getByName("jar").enabled = false
         }
 
-        project.tasks.register("recollectQuestions", CollectQuestions::class.java)
+        project.tasks.register("recollectQuestions", CollectQuestions::class.java) { recollectQuestions ->
+            recollectQuestions.dependsOn("saveQuestions")
+        }
 
         listOf("testAllQuestions", "testUnvalidatedQuestions", "testFocusedQuestions").map { testName ->
             project.tasks.create(testName, Test::class.java) { testTask ->
