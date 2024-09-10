@@ -23,7 +23,7 @@ dependencies {
     implementation("org.cs124:ktor-moshi:2024.6.0")
     implementation("org.mongodb:mongodb-driver:3.12.14")
     implementation("org.slf4j:slf4j-api:2.0.16")
-    implementation("ch.qos.logback:logback-classic:1.5.7")
+    implementation("ch.qos.logback:logback-classic:1.5.8")
     implementation("io.github.microutils:kotlin-logging:3.0.5")
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 }

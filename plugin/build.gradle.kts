@@ -26,7 +26,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.0.20")
     implementation("gradle.plugin.com.github.sherter.google-java-format:google-java-format-gradle-plugin:0.9")
-    implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.6")
+    implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.7")
     implementation("org.jmailen.gradle:kotlinter-gradle:4.4.1")
 
     val ktorVersion = "2.3.12"

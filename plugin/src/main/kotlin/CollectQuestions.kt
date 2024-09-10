@@ -23,7 +23,6 @@ abstract class CollectQuestions : DefaultTask() {
     val outputFile: File = project.layout.buildDirectory.dir("questioner/questions.json").get().asFile
 
     @InputFiles
-    @Suppress("unused")
     val inputFiles: FileCollection = project.extensions.getByType(JavaPluginExtension::class.java)
         .sourceSets.getByName("main")
         .allSource.filter { file -> file.name == ".question.json" }
