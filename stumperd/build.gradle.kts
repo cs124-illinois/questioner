@@ -10,7 +10,7 @@ plugins {
     id("org.jmailen.kotlinter")
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.google.devtools.ksp")
-    id("com.ryandens.javaagent-test") version "0.5.2"
+    id("com.ryandens.javaagent-test") version "0.6.1"
 }
 dependencies {
     val ktorVersion = "2.3.12"
@@ -22,7 +22,7 @@ dependencies {
     implementation(project(":lib"))
 
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
     implementation("org.mongodb:mongodb-driver:3.12.14")
     implementation("org.slf4j:slf4j-api:2.0.16")
     implementation("ch.qos.logback:logback-classic:1.5.8")
