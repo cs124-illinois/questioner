@@ -344,6 +344,9 @@ fun Path.parseDirectory(
         templateImports = templateImports,
         questionerVersion = questionerVersion,
         tags = solution.tags.toMutableSet(),
+        kotlinImports = kotlinImports,
+        javaTestingImports = templateImports + setOf("org.junit.Assert"),
+        kotlinTestingImports = kotlinImports + setOf("org.junit.Assert"),
     )
 
     val classification = Question.Classification(
