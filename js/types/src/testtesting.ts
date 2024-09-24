@@ -71,6 +71,7 @@ export const TestTestResults = Record({
   succeeded: Boolean,
 }).And(
   Partial({
+    kind: Literal("TESTTESTING"),
     failedLinting: Boolean,
   }),
 )

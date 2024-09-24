@@ -1,17 +1,5 @@
 import { Feature, FeatureValue } from "@cs124/jeed-types"
-import {
-  Array,
-  Boolean,
-  Dictionary,
-  Literal,
-  Number,
-  Partial,
-  Record,
-  Array as RuntypeArray,
-  Static,
-  String,
-  Union,
-} from "runtypes"
+import { Array, Boolean, Dictionary, Literal, Number, Partial, Record, Static, String, Union } from "runtypes"
 import { Languages } from "./languages"
 import { LineCounts } from "./linecounts"
 import { LineCoverage } from "./linecoverage"
@@ -51,9 +39,9 @@ export const QuestionPublished = QuestionPath.And(
     name: String,
     type: QuestionType,
     packageName: String,
-    languages: RuntypeArray(Languages),
+    languages: Array(Languages),
     descriptions: Dictionary(String, Languages),
-    templateImports: RuntypeArray(String),
+    templateImports: Array(String),
     questionerVersion: String,
     authorName: String,
     klass: String,
@@ -63,6 +51,9 @@ export const QuestionPublished = QuestionPath.And(
     citation: Citation,
     starters: Dictionary(String, Languages),
     tags: Array(String),
+    kotlinImports: Array(String),
+    javaTestingImports: Array(String),
+    kotlinTestingImports: Array(String),
   }),
 )
 export type QuestionPublished = Static<typeof QuestionPublished>
@@ -73,8 +64,8 @@ export const QuestionClassification = Record({
   lineCounts: Dictionary(LineCounts, Languages),
 }).And(
   Partial({
-    recursiveMethodsByLanguage: Dictionary(RuntypeArray(MethodInfo), Languages),
-    loadedClassesByLanguage: Dictionary(RuntypeArray(String), Languages),
+    recursiveMethodsByLanguage: Dictionary(Array(MethodInfo), Languages),
+    loadedClassesByLanguage: Dictionary(Array(String), Languages),
   }),
 )
 export type QuestionClassification = Static<typeof QuestionClassification>
@@ -127,6 +118,6 @@ export const QuestionTagged = QuestionPublished.And(
 export type QuestionTagged = Static<typeof QuestionTagged>
 
 export const questionFeatures = (question: Question) =>
-  RuntypeArray(Feature)
+  Array(Feature)
     .check(Object.keys(question.classification.featuresByLanguage.java.featureMap))
     .filter((feature) => question.classification.featuresByLanguage.java.featureMap[feature] > 0)

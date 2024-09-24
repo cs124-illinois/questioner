@@ -231,6 +231,7 @@ export const TestResults = Record({
   succeeded: Boolean,
 }).And(
   Partial({
+    kind: Literal("SOLVE"),
     failedLinting: Boolean,
     failureCount: Number,
   }),
