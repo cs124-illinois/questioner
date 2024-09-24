@@ -10,6 +10,7 @@ import edu.illinois.cs.cs125.jeed.core.Sandbox
 import edu.illinois.cs.cs125.jeed.core.TemplatingFailed
 import edu.illinois.cs.cs125.jeed.core.moshi.CompiledSourceResult
 import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
+import edu.illinois.cs.cs125.questioner.lib.server.Submission
 
 @JsonClass(generateAdapter = true)
 data class TestTestResults(
@@ -24,6 +25,9 @@ data class TestTestResults(
     @Transient
     var taskResults: Sandbox.TaskResults<*>? = null
 ) {
+    @Suppress("unused")
+    val kind = Submission.SubmissionType.TESTTESTING
+
     var completed: Boolean = false
     var succeeded: Boolean = false
     var failedLinting: Boolean? = null

@@ -1,7 +1,7 @@
 [
   {
     "published": {
-      "contentHash": "9ad83f3fb086e1f22aa2e11a0b994c37-v2024.9.0",
+      "contentHash": "9ad83f3fb086e1f22aa2e11a0b994c37-v2024.9.1",
       "path": "add-one",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -22,9 +22,16 @@
         "kotlin": "fun addOne(value: Int): Int = 0 // You may need to remove this starter code"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -74,7 +81,7 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 9
+                "column": 15
               }
             },
             {
@@ -251,7 +258,7 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 9
+                "column": 15
               }
             },
             {
@@ -516,11 +523,11 @@
       "seed": 124,
       "requiredTestCount": 12,
       "mutationCount": 6,
-      "solutionMaxRuntime": 19,
-      "bootstrapLength": 3228,
+      "solutionMaxRuntime": 13,
+      "bootstrapLength": 3426,
       "mutationLength": 26,
-      "incorrectLength": 915,
-      "calibrationLength": 81,
+      "incorrectLength": 972,
+      "calibrationLength": 444,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -648,7 +655,7 @@
   },
   {
     "published": {
-      "contentHash": "60b41b4e572f978f8ab8099ee9d4c8c1-v2024.9.0",
+      "contentHash": "60b41b4e572f978f8ab8099ee9d4c8c1-v2024.9.1",
       "path": "add-one-class",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -665,9 +672,16 @@
         "kotlin": "<p>Write a function <code>addOne</code> that returns its <code>Int</code> argument plus one.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -748,7 +762,7 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 11
+                "column": 17
               }
             },
             {
@@ -947,7 +961,7 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 11
+                "column": 17
               }
             },
             {
@@ -1160,11 +1174,11 @@
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 6,
-      "solutionMaxRuntime": 18,
-      "bootstrapLength": 6418,
-      "mutationLength": 16,
-      "incorrectLength": 314,
-      "calibrationLength": 87,
+      "solutionMaxRuntime": 20,
+      "bootstrapLength": 6681,
+      "mutationLength": 24,
+      "incorrectLength": 279,
+      "calibrationLength": 99,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -1266,7 +1280,7 @@
   },
   {
     "published": {
-      "contentHash": "05e3220fb2a6cccf89cce606059ba94a-v2024.9.0",
+      "contentHash": "05e3220fb2a6cccf89cce606059ba94a-v2024.9.1",
       "path": "bad-extra-private-variable",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -1283,9 +1297,16 @@
         "kotlin": "<p>Test bad use of superclass method.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -1491,14 +1512,14 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 10,
-                "column": 11
+                "column": 21
               }
             },
             {
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 10,
-                "column": 11
+                "column": 27
               }
             },
             {
@@ -1890,14 +1911,14 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 10,
-                "column": 11
+                "column": 21
               }
             },
             {
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 10,
-                "column": 11
+                "column": 27
               }
             },
             {
@@ -2268,11 +2289,11 @@
       "seed": 124,
       "requiredTestCount": 123,
       "mutationCount": 14,
-      "solutionMaxRuntime": 15,
-      "bootstrapLength": 6673,
-      "mutationLength": 70,
-      "incorrectLength": 1088,
-      "calibrationLength": 214,
+      "solutionMaxRuntime": 18,
+      "bootstrapLength": 6687,
+      "mutationLength": 76,
+      "incorrectLength": 1014,
+      "calibrationLength": 609,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -2426,7 +2447,7 @@
   },
   {
     "published": {
-      "contentHash": "59f3453763803120e38f9719ce636c7f-v2024.9.0",
+      "contentHash": "59f3453763803120e38f9719ce636c7f-v2024.9.1",
       "path": "classroom-getters-and-setters",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -2441,9 +2462,16 @@
         "java": "<p>Getter and setter testing.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -2575,7 +2603,7 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 6,
-                "column": 11
+                "column": 25
               }
             },
             {
@@ -2603,14 +2631,14 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 7,
-                "column": 11
+                "column": 19
               }
             },
             {
               "feature": "REFERENCE_EQUALITY",
               "location": {
                 "line": 7,
-                "column": 11
+                "column": 19
               }
             },
             {
@@ -2778,7 +2806,7 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 17,
-                "column": 11
+                "column": 25
               }
             },
             {
@@ -3073,7 +3101,7 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 6,
-                "column": 11
+                "column": 25
               }
             },
             {
@@ -3101,14 +3129,14 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 7,
-                "column": 11
+                "column": 19
               }
             },
             {
               "feature": "REFERENCE_EQUALITY",
               "location": {
                 "line": 7,
-                "column": 11
+                "column": 19
               }
             },
             {
@@ -3276,7 +3304,7 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 17,
-                "column": 11
+                "column": 25
               }
             },
             {
@@ -3481,11 +3509,11 @@
       "seed": 124,
       "requiredTestCount": 75,
       "mutationCount": 17,
-      "solutionMaxRuntime": 18,
-      "bootstrapLength": 3089,
-      "mutationLength": 127,
-      "incorrectLength": 1142,
-      "calibrationLength": 42,
+      "solutionMaxRuntime": 47,
+      "bootstrapLength": 2537,
+      "mutationLength": 454,
+      "incorrectLength": 1312,
+      "calibrationLength": 130,
       "solutionCoverage": {
         "covered": 12,
         "total": 12,
@@ -3711,7 +3739,7 @@
   },
   {
     "published": {
-      "contentHash": "a4c371d9d36e6dd818a07d69d2faebb8-v2024.9.0",
+      "contentHash": "a4c371d9d36e6dd818a07d69d2faebb8-v2024.9.1",
       "path": "cougar-feliform",
       "author": "challen@illinois.edu",
       "version": "2021.7.0",
@@ -3726,9 +3754,16 @@
         "java": "<p>Create and complete the implementation of the <code>Cougar</code> class.\nYour class should be public, not final and not abstract, inherit from the <code>Feliform</code> class,\nand provide the following methods:</p><ol><li>Constructor that takes a <code>int</code> parameter <code>speed</code> and a second <code>weight</code>.\nCreates a new <code>Cougar</code> with the passed speed and weight.\nYou should call the <code>Feliform</code> constructor and pass it the <code>String</code> &quot;cougar&quot; to identify the type\nof this feliform.</li><li>Public instance method <code>dangerousness</code> that takes no arguments and returns an <code>int</code>.\nReturn the dangerousness of this cougar which equals its speed times its weight.</li><li>Override <code>public boolean equals(Object other)</code>.\nReturn <code>true</code> if <code>other</code> is a <code>Cougar</code> with the same speed and weight, and <code>false</code> otherwise.\nNote that <code>other</code> may be <code>null</code> or not a <code>Housecat</code>.</li></ol><p>Finally, note that your class should not expose any of its internal state publicly.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -3954,7 +3989,7 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 12,
-                "column": 11
+                "column": 17
               }
             },
             {
@@ -4017,7 +4052,7 @@
               "feature": "INSTANCEOF",
               "location": {
                 "line": 16,
-                "column": 10
+                "column": 12
               }
             },
             {
@@ -4094,63 +4129,63 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 19,
-                "column": 11
+                "column": 17
+              }
+            },
+            {
+              "feature": "REFERENCE_EQUALITY",
+              "location": {
+                "line": 19,
+                "column": 17
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 19,
+                "column": 28
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 19,
+                "column": 28
               }
             },
             {
               "feature": "LOGICAL_OPERATORS",
               "location": {
                 "line": 19,
-                "column": 11
-              }
-            },
-            {
-              "feature": "REFERENCE_EQUALITY",
-              "location": {
-                "line": 19,
-                "column": 11
-              }
-            },
-            {
-              "feature": "DOT_NOTATION",
-              "location": {
-                "line": 19,
-                "column": 20
-              }
-            },
-            {
-              "feature": "DOTTED_VARIABLE_ACCESS",
-              "location": {
-                "line": 19,
-                "column": 20
+                "column": 35
               }
             },
             {
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 19,
-                "column": 38
+                "column": 45
               }
             },
             {
               "feature": "REFERENCE_EQUALITY",
               "location": {
                 "line": 19,
-                "column": 38
+                "column": 45
               }
             },
             {
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 19,
-                "column": 48
+                "column": 56
               }
             },
             {
               "feature": "DOTTED_VARIABLE_ACCESS",
               "location": {
                 "line": 19,
-                "column": 48
+                "column": 56
               }
             },
             {
@@ -4458,7 +4493,7 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 12,
-                "column": 11
+                "column": 17
               }
             },
             {
@@ -4521,7 +4556,7 @@
               "feature": "INSTANCEOF",
               "location": {
                 "line": 16,
-                "column": 10
+                "column": 12
               }
             },
             {
@@ -4598,63 +4633,63 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 19,
-                "column": 11
+                "column": 17
+              }
+            },
+            {
+              "feature": "REFERENCE_EQUALITY",
+              "location": {
+                "line": 19,
+                "column": 17
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 19,
+                "column": 28
+              }
+            },
+            {
+              "feature": "DOTTED_VARIABLE_ACCESS",
+              "location": {
+                "line": 19,
+                "column": 28
               }
             },
             {
               "feature": "LOGICAL_OPERATORS",
               "location": {
                 "line": 19,
-                "column": 11
-              }
-            },
-            {
-              "feature": "REFERENCE_EQUALITY",
-              "location": {
-                "line": 19,
-                "column": 11
-              }
-            },
-            {
-              "feature": "DOT_NOTATION",
-              "location": {
-                "line": 19,
-                "column": 20
-              }
-            },
-            {
-              "feature": "DOTTED_VARIABLE_ACCESS",
-              "location": {
-                "line": 19,
-                "column": 20
+                "column": 35
               }
             },
             {
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 19,
-                "column": 38
+                "column": 45
               }
             },
             {
               "feature": "REFERENCE_EQUALITY",
               "location": {
                 "line": 19,
-                "column": 38
+                "column": 45
               }
             },
             {
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 19,
-                "column": 48
+                "column": 56
               }
             },
             {
               "feature": "DOTTED_VARIABLE_ACCESS",
               "location": {
                 "line": 19,
-                "column": 48
+                "column": 56
               }
             },
             {
@@ -4783,11 +4818,11 @@
       "seed": 124,
       "requiredTestCount": 117,
       "mutationCount": 28,
-      "solutionMaxRuntime": 13,
-      "bootstrapLength": 3045,
-      "mutationLength": 364,
-      "incorrectLength": 1471,
-      "calibrationLength": 33,
+      "solutionMaxRuntime": 28,
+      "bootstrapLength": 2457,
+      "mutationLength": 641,
+      "incorrectLength": 1835,
+      "calibrationLength": 45,
       "solutionCoverage": {
         "covered": 8,
         "total": 8,
@@ -5085,7 +5120,7 @@
   },
   {
     "published": {
-      "contentHash": "f4e3e9056d1f6093687b994d7b59953b-v2024.9.0",
+      "contentHash": "f4e3e9056d1f6093687b994d7b59953b-v2024.9.1",
       "path": "equals-88",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -5100,9 +5135,16 @@
         "java": "<p>Write a method named <code>equals88</code> that returns <code>true</code> if its <code>int</code> argument is equal to 88,\nour magic number.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -5153,14 +5195,14 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 9
+                "column": 15
               }
             },
             {
               "feature": "REFERENCE_EQUALITY",
               "location": {
                 "line": 3,
-                "column": 9
+                "column": 15
               }
             },
             {
@@ -5288,14 +5330,14 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 9
+                "column": 15
               }
             },
             {
               "feature": "REFERENCE_EQUALITY",
               "location": {
                 "line": 3,
-                "column": 9
+                "column": 15
               }
             },
             {
@@ -5409,19 +5451,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 5632,
-        "kotlin": 5632
+        "java": 6016,
+        "kotlin": 6016
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 6,
       "mutationCount": 7,
-      "solutionMaxRuntime": 54,
-      "bootstrapLength": 2505,
-      "mutationLength": 46,
-      "incorrectLength": 985,
-      "calibrationLength": 242,
+      "solutionMaxRuntime": 18,
+      "bootstrapLength": 2517,
+      "mutationLength": 327,
+      "incorrectLength": 560,
+      "calibrationLength": 58,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -5521,7 +5563,7 @@
   },
   {
     "published": {
-      "contentHash": "bf70754a624fcd0a3d682d5f2d7b3c2a-v2024.9.0",
+      "contentHash": "bf70754a624fcd0a3d682d5f2d7b3c2a-v2024.9.1",
       "path": "input-interleaving-test",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -5538,9 +5580,16 @@
         "kotlin": "<p>Testing STDIN generation and interleaving. In Kotlin!</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -5664,14 +5713,14 @@
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 6,
-                "column": 34
+                "column": 40
               }
             },
             {
               "feature": "DOTTED_VARIABLE_ACCESS",
               "location": {
                 "line": 6,
-                "column": 34
+                "column": 40
               }
             },
             {
@@ -5699,14 +5748,14 @@
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 7,
-                "column": 19
+                "column": 26
               }
             },
             {
               "feature": "DOTTED_METHOD_CALL",
               "location": {
                 "line": 7,
-                "column": 19
+                "column": 26
               }
             },
             {
@@ -5727,7 +5776,7 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 8,
-                "column": 23
+                "column": 33
               }
             },
             {
@@ -5762,14 +5811,14 @@
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 9,
-                "column": 20
+                "column": 27
               }
             },
             {
               "feature": "DOTTED_METHOD_CALL",
               "location": {
                 "line": 9,
-                "column": 20
+                "column": 27
               }
             },
             {
@@ -5790,7 +5839,7 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 10,
-                "column": 23
+                "column": 34
               }
             },
             {
@@ -6329,14 +6378,14 @@
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 6,
-                "column": 34
+                "column": 40
               }
             },
             {
               "feature": "DOTTED_VARIABLE_ACCESS",
               "location": {
                 "line": 6,
-                "column": 34
+                "column": 40
               }
             },
             {
@@ -6364,14 +6413,14 @@
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 7,
-                "column": 19
+                "column": 26
               }
             },
             {
               "feature": "DOTTED_METHOD_CALL",
               "location": {
                 "line": 7,
-                "column": 19
+                "column": 26
               }
             },
             {
@@ -6392,7 +6441,7 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 8,
-                "column": 23
+                "column": 33
               }
             },
             {
@@ -6427,14 +6476,14 @@
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 9,
-                "column": 20
+                "column": 27
               }
             },
             {
               "feature": "DOTTED_METHOD_CALL",
               "location": {
                 "line": 9,
-                "column": 20
+                "column": 27
               }
             },
             {
@@ -6455,7 +6504,7 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 10,
-                "column": 23
+                "column": 34
               }
             },
             {
@@ -7204,7 +7253,7 @@
         "kotlin": 336
       },
       "allocationLimit": {
-        "java": 886528,
+        "java": 884736,
         "kotlin": 884736
       },
       "solutionClassSize": {
@@ -7246,11 +7295,11 @@
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 35,
-      "solutionMaxRuntime": 6,
-      "bootstrapLength": 6190,
-      "mutationLength": 120,
-      "incorrectLength": 1946,
-      "calibrationLength": 248,
+      "solutionMaxRuntime": 7,
+      "bootstrapLength": 6194,
+      "mutationLength": 124,
+      "incorrectLength": 2216,
+      "calibrationLength": 295,
       "solutionCoverage": {
         "covered": 8,
         "total": 8,
@@ -7261,7 +7310,7 @@
         "kotlin": 21
       },
       "memoryAllocation": {
-        "java": 55408,
+        "java": 55296,
         "kotlin": 55296
       },
       "outputAmount": 5,
@@ -7705,7 +7754,7 @@
   },
   {
     "published": {
-      "contentHash": "a99bf381d8f7b41afb3261dbc6c03dbc-v2024.9.0",
+      "contentHash": "a99bf381d8f7b41afb3261dbc6c03dbc-v2024.9.1",
       "path": "kotlin-faux-property-testing",
       "author": "challen@illinois.edu",
       "version": "2023.7.0",
@@ -7722,9 +7771,16 @@
         "kotlin": "<p>Question to test detection of Kotlin faux properties in Jenisol 2023.7.0.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -8542,11 +8598,11 @@
       "seed": 124,
       "requiredTestCount": 21,
       "mutationCount": 4,
-      "solutionMaxRuntime": 18,
-      "bootstrapLength": 3144,
-      "mutationLength": 16,
-      "incorrectLength": 557,
-      "calibrationLength": 100,
+      "solutionMaxRuntime": 17,
+      "bootstrapLength": 6605,
+      "mutationLength": 9,
+      "incorrectLength": 638,
+      "calibrationLength": 81,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -8624,7 +8680,7 @@
   },
   {
     "published": {
-      "contentHash": "67850bb6b73a3a28de10c685bb17626b-v2024.9.0",
+      "contentHash": "67850bb6b73a3a28de10c685bb17626b-v2024.9.1",
       "path": "private-recursive-helper",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -8639,9 +8695,16 @@
         "java": "<p>Testing question for recursion checks on private methods.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -8727,14 +8790,14 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 8
+                "column": 14
               }
             },
             {
               "feature": "REFERENCE_EQUALITY",
               "location": {
                 "line": 3,
-                "column": 8
+                "column": 14
               }
             },
             {
@@ -8811,14 +8874,14 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 6,
-                "column": 11
+                "column": 17
               }
             },
             {
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 6,
-                "column": 34
+                "column": 40
               }
             },
             {
@@ -8881,7 +8944,7 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 10,
-                "column": 8
+                "column": 14
               }
             },
             {
@@ -9129,14 +9192,14 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 8
+                "column": 14
               }
             },
             {
               "feature": "REFERENCE_EQUALITY",
               "location": {
                 "line": 3,
-                "column": 8
+                "column": 14
               }
             },
             {
@@ -9213,14 +9276,14 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 6,
-                "column": 11
+                "column": 17
               }
             },
             {
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 6,
-                "column": 34
+                "column": 40
               }
             },
             {
@@ -9283,7 +9346,7 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 10,
-                "column": 8
+                "column": 14
               }
             },
             {
@@ -9498,10 +9561,10 @@
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 23,
-      "solutionMaxRuntime": 16,
-      "bootstrapLength": 2431,
-      "mutationLength": 202,
-      "incorrectLength": 1450,
+      "solutionMaxRuntime": 19,
+      "bootstrapLength": 971,
+      "mutationLength": 123,
+      "incorrectLength": 1783,
       "calibrationLength": 35,
       "solutionCoverage": {
         "covered": 7,
@@ -9519,20 +9582,6 @@
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
-      {
-        "deltas": [
-          "--- Correct.java",
-          "+++ Incorrect.java",
-          "@@ -10,3 +10,0 @@",
-          "-    if (range < 0) {",
-          "-      throw new IllegalArgumentException();",
-          "-    }"
-        ],
-        "language": "java",
-        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
-        "testCount": 0,
-        "suppressions": []
-      },
       {
         "deltas": [
           "--- Correct.java",
@@ -9558,7 +9607,7 @@
           "+      return 1;"
         ],
         "language": "java",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "PRIMITIVE_RETURN",
         "testCount": 1,
         "suppressions": []
       },
@@ -9571,7 +9620,7 @@
           "+    return rangeSumHelper(range - 1);"
         ],
         "language": "java",
-        "mutation": "PLUS_TO_MINUS",
+        "mutation": "REMOVE_METHOD",
         "testCount": 1,
         "suppressions": []
       },
@@ -9597,20 +9646,7 @@
           "+    return 0;"
         ],
         "language": "java",
-        "mutation": "CONDITIONAL_BOUNDARY",
-        "testCount": 1,
-        "suppressions": []
-      },
-      {
-        "deltas": [
-          "--- Correct.java",
-          "+++ Incorrect.java",
-          "@@ -6,1 +6,1 @@",
-          "-    return range + rangeSumHelper(range - 1);",
-          "+    return range + rangeSumHelper(range + 1);"
-        ],
-        "language": "java",
-        "mutation": "REMOVE_PLUS",
+        "mutation": "PLUS_TO_MINUS",
         "testCount": 1,
         "suppressions": []
       },
@@ -9626,7 +9662,7 @@
           "+    return 0;"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "REMOVE_IF",
         "testCount": 1,
         "suppressions": []
       },
@@ -9678,7 +9714,7 @@
           "+    if (range <= 0) {"
         ],
         "language": "java",
-        "mutation": "PRIMITIVE_RETURN",
+        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
         "testCount": 2,
         "suppressions": []
       },
@@ -9691,7 +9727,7 @@
           "+    if (range < 1) {"
         ],
         "language": "java",
-        "mutation": "REMOVE_IF",
+        "mutation": "REMOVE_PLUS",
         "testCount": 2,
         "suppressions": []
       },
@@ -9726,7 +9762,7 @@
   },
   {
     "published": {
-      "contentHash": "218e2ccf7e9cf8ca63dc5966ef403834-v2024.9.0",
+      "contentHash": "218e2ccf7e9cf8ca63dc5966ef403834-v2024.9.1",
       "path": "read-hello-world",
       "author": "challen@illinois.edu",
       "version": "2023.11.0",
@@ -9741,9 +9777,16 @@
         "java": "<p>Question to test filesystem generation.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -9866,28 +9909,28 @@
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 7,
-                "column": 21
+                "column": 47
+              }
+            },
+            {
+              "feature": "DOTTED_METHOD_CALL",
+              "location": {
+                "line": 7,
+                "column": 47
               }
             },
             {
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 7,
-                "column": 21
+                "column": 67
               }
             },
             {
               "feature": "DOTTED_METHOD_CALL",
               "location": {
                 "line": 7,
-                "column": 21
-              }
-            },
-            {
-              "feature": "DOTTED_METHOD_CALL",
-              "location": {
-                "line": 7,
-                "column": 21
+                "column": 67
               }
             },
             {
@@ -10113,28 +10156,28 @@
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 7,
-                "column": 21
+                "column": 47
+              }
+            },
+            {
+              "feature": "DOTTED_METHOD_CALL",
+              "location": {
+                "line": 7,
+                "column": 47
               }
             },
             {
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 7,
-                "column": 21
+                "column": 67
               }
             },
             {
               "feature": "DOTTED_METHOD_CALL",
               "location": {
                 "line": 7,
-                "column": 21
-              }
-            },
-            {
-              "feature": "DOTTED_METHOD_CALL",
-              "location": {
-                "line": 7,
-                "column": 21
+                "column": 67
               }
             },
             {
@@ -10278,11 +10321,11 @@
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 4,
-      "solutionMaxRuntime": 52,
-      "bootstrapLength": 3097,
-      "mutationLength": 31,
-      "incorrectLength": 319,
-      "calibrationLength": 222,
+      "solutionMaxRuntime": 64,
+      "bootstrapLength": 3342,
+      "mutationLength": 26,
+      "incorrectLength": 172,
+      "calibrationLength": 79,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -10357,7 +10400,7 @@
   },
   {
     "published": {
-      "contentHash": "569c84817e65063ba59cf01e22724df2-v2024.9.0",
+      "contentHash": "569c84817e65063ba59cf01e22724df2-v2024.9.1",
       "path": "recursive-factorial",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -10374,9 +10417,16 @@
         "kotlin": "<p>Write a method that provides a recursive implementation of factorial, accepting and returning <code>Long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -10462,7 +10512,7 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 8
+                "column": 14
               }
             },
             {
@@ -10546,14 +10596,14 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 6,
-                "column": 8
+                "column": 14
               }
             },
             {
               "feature": "REFERENCE_EQUALITY",
               "location": {
                 "line": 6,
-                "column": 8
+                "column": 14
               }
             },
             {
@@ -10630,14 +10680,14 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 9,
-                "column": 11
+                "column": 17
               }
             },
             {
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 9,
-                "column": 29
+                "column": 35
               }
             },
             {
@@ -10996,7 +11046,7 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 8
+                "column": 14
               }
             },
             {
@@ -11080,14 +11130,14 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 6,
-                "column": 8
+                "column": 14
               }
             },
             {
               "feature": "REFERENCE_EQUALITY",
               "location": {
                 "line": 6,
-                "column": 8
+                "column": 14
               }
             },
             {
@@ -11164,14 +11214,14 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 9,
-                "column": 11
+                "column": 17
               }
             },
             {
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 9,
-                "column": 29
+                "column": 35
               }
             },
             {
@@ -11680,19 +11730,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 2857728,
-        "kotlin": 2857728
+        "java": 2856832,
+        "kotlin": 2856832
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 6,
       "mutationCount": 22,
-      "solutionMaxRuntime": 13,
-      "bootstrapLength": 6799,
-      "mutationLength": 53,
-      "incorrectLength": 1258,
-      "calibrationLength": 172,
+      "solutionMaxRuntime": 22,
+      "bootstrapLength": 3428,
+      "mutationLength": 62,
+      "incorrectLength": 1561,
+      "calibrationLength": 221,
       "solutionCoverage": {
         "covered": 6,
         "total": 6,
@@ -11734,12 +11784,13 @@
         "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
-          "@@ -3,1 +3,1 @@",
+          "@@ -3,3 +3,0 @@",
           "-    if (input <= 0) { // mutate-disable-conditional-boundary",
-          "+    if (input > 0) { // mutate-disable-conditional-boundary"
+          "-      throw new IllegalArgumentException();",
+          "-    }"
         ],
         "language": "java",
-        "mutation": "PRIMITIVE_RETURN",
+        "mutation": "MATH",
         "testCount": 0,
         "suppressions": []
       },
@@ -11753,7 +11804,7 @@
           "-    }"
         ],
         "language": "java",
-        "mutation": "NEGATE_CONDITIONAL",
+        "mutation": "PRIMITIVE_RETURN",
         "testCount": 3,
         "suppressions": []
       },
@@ -11766,7 +11817,7 @@
           "+    if (input <= 1) { // mutate-disable-conditional-boundary"
         ],
         "language": "java",
-        "mutation": "REMOVE_BINARY",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 3,
         "suppressions": []
       },
@@ -11779,7 +11830,7 @@
           "+    if (input == 0) {"
         ],
         "language": "java",
-        "mutation": "NEGATE_CONDITIONAL",
+        "mutation": "REMOVE_IF",
         "testCount": 3,
         "suppressions": []
       },
@@ -11792,7 +11843,7 @@
           "+    if (input != 1) {"
         ],
         "language": "java",
-        "mutation": "REMOVE_BINARY",
+        "mutation": "REMOVE_IF",
         "testCount": 3,
         "suppressions": []
       },
@@ -11805,7 +11856,7 @@
           "+      return 0;"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "REMOVE_BINARY",
         "testCount": 3,
         "suppressions": []
       },
@@ -11818,7 +11869,7 @@
           "+      return 2;"
         ],
         "language": "java",
-        "mutation": "MATH",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 3,
         "suppressions": []
       },
@@ -11831,7 +11882,7 @@
           "+    if (!(input == 1)) {"
         ],
         "language": "java",
-        "mutation": "PRIMITIVE_RETURN",
+        "mutation": "NEGATE_CONDITIONAL",
         "testCount": 3,
         "suppressions": []
       },
@@ -11844,7 +11895,7 @@
           "+    if (input == 2) {"
         ],
         "language": "java",
-        "mutation": "MATH",
+        "mutation": "NEGATE_IF",
         "testCount": 3,
         "suppressions": []
       },
@@ -11867,36 +11918,10 @@
           "+++ Incorrect.java",
           "@@ -9,1 +9,1 @@",
           "-    return input * factorial(input - 1);",
-          "+    return input * factorial(input + 1);"
-        ],
-        "language": "java",
-        "mutation": "NEGATE_IF",
-        "testCount": 4,
-        "suppressions": []
-      },
-      {
-        "deltas": [
-          "--- Correct.java",
-          "+++ Incorrect.java",
-          "@@ -9,1 +9,1 @@",
-          "-    return input * factorial(input - 1);",
           "+    return input * factorial(input - 2);"
         ],
         "language": "java",
-        "mutation": "REMOVE_IF",
-        "testCount": 4,
-        "suppressions": []
-      },
-      {
-        "deltas": [
-          "--- Correct.java",
-          "+++ Incorrect.java",
-          "@@ -9,1 +9,1 @@",
-          "-    return input * factorial(input - 1);",
-          "+    return input * factorial(input - 0);"
-        ],
-        "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "REMOVE_BINARY",
         "testCount": 4,
         "suppressions": []
       },
@@ -11909,7 +11934,7 @@
           "+    return factorial(input - 1);"
         ],
         "language": "java",
-        "mutation": "REMOVE_IF",
+        "mutation": "NEGATE_CONDITIONAL",
         "testCount": 4,
         "suppressions": []
       },
@@ -11922,7 +11947,7 @@
           "+    return input * factorial(1);"
         ],
         "language": "java",
-        "mutation": "NEGATE_IF",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 5,
         "suppressions": []
       },
@@ -11948,7 +11973,7 @@
           "+    return input / factorial(input - 1);"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "PRIMITIVE_RETURN",
         "testCount": 5,
         "suppressions": []
       }
@@ -11957,7 +11982,7 @@
   },
   {
     "published": {
-      "contentHash": "1933eb154d0af63b7af722e30dc6437f-v2024.9.0",
+      "contentHash": "1933eb154d0af63b7af722e30dc6437f-v2024.9.1",
       "path": "test-bad-kotlin-getter-setter",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -11974,9 +11999,16 @@
         "kotlin": "<p>Test to ensure that we can detect unnecessary Kotlin setter or getter overrides.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -12810,11 +12842,11 @@
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 5,
-      "solutionMaxRuntime": 27,
-      "bootstrapLength": 5385,
-      "mutationLength": 10,
-      "incorrectLength": 1214,
-      "calibrationLength": 328,
+      "solutionMaxRuntime": 14,
+      "bootstrapLength": 6576,
+      "mutationLength": 14,
+      "incorrectLength": 1209,
+      "calibrationLength": 564,
       "solutionCoverage": {
         "covered": 6,
         "total": 6,
@@ -12907,7 +12939,7 @@
   },
   {
     "published": {
-      "contentHash": "caa4922981779dbc69b038999e5b6a16-v2024.9.0",
+      "contentHash": "caa4922981779dbc69b038999e5b6a16-v2024.9.1",
       "path": "test-constructor-notnull",
       "author": "challen@illinois.edu",
       "version": "2022.10.0",
@@ -12922,9 +12954,16 @@
         "java": "<p>Testing @NotNull annotation on constructor parameters.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -13032,14 +13071,14 @@
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 5,
-                "column": 19
+                "column": 24
               }
             },
             {
               "feature": "DOTTED_METHOD_CALL",
               "location": {
                 "line": 5,
-                "column": 19
+                "column": 24
               }
             },
             {
@@ -13282,14 +13321,14 @@
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 5,
-                "column": 19
+                "column": 24
               }
             },
             {
               "feature": "DOTTED_METHOD_CALL",
               "location": {
                 "line": 5,
-                "column": 19
+                "column": 24
               }
             },
             {
@@ -13466,11 +13505,11 @@
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 4,
-      "solutionMaxRuntime": 26,
-      "bootstrapLength": 2023,
-      "mutationLength": 16,
-      "incorrectLength": 282,
-      "calibrationLength": 128,
+      "solutionMaxRuntime": 49,
+      "bootstrapLength": 2488,
+      "mutationLength": 361,
+      "incorrectLength": 180,
+      "calibrationLength": 65,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -13531,7 +13570,7 @@
   },
   {
     "published": {
-      "contentHash": "99edd2570f09907ad4b8f37d339ef6b4-v2024.9.0",
+      "contentHash": "99edd2570f09907ad4b8f37d339ef6b4-v2024.9.1",
       "path": "test-empty-constructor",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -13546,9 +13585,16 @@
         "java": "<p>Test to make sure we can parse the empty constructor.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -13630,14 +13676,14 @@
               "feature": "VARIABLE_REASSIGNMENTS",
               "location": {
                 "line": 5,
-                "column": 11
+                "column": 16
               }
             },
             {
               "feature": "UNARY_OPERATORS",
               "location": {
                 "line": 5,
-                "column": 11
+                "column": 16
               }
             },
             {
@@ -13796,14 +13842,14 @@
               "feature": "VARIABLE_REASSIGNMENTS",
               "location": {
                 "line": 5,
-                "column": 11
+                "column": 16
               }
             },
             {
               "feature": "UNARY_OPERATORS",
               "location": {
                 "line": 5,
-                "column": 11
+                "column": 16
               }
             },
             {
@@ -13979,14 +14025,14 @@
               "feature": "VARIABLE_REASSIGNMENTS",
               "location": {
                 "line": 9,
-                "column": 11
+                "column": 16
               }
             },
             {
               "feature": "UNARY_OPERATORS",
               "location": {
                 "line": 9,
-                "column": 11
+                "column": 16
               }
             },
             {
@@ -14103,11 +14149,11 @@
       "seed": 124,
       "requiredTestCount": 8,
       "mutationCount": 3,
-      "solutionMaxRuntime": 14,
-      "bootstrapLength": 3613,
+      "solutionMaxRuntime": 30,
+      "bootstrapLength": 4133,
       "mutationLength": 17,
-      "incorrectLength": 182,
-      "calibrationLength": 73,
+      "incorrectLength": 147,
+      "calibrationLength": 162,
       "solutionCoverage": {
         "covered": 3,
         "total": 3,
@@ -14168,7 +14214,7 @@
   },
   {
     "published": {
-      "contentHash": "00c2c0d452cdc275a3b0d69d34034246-v2024.9.0",
+      "contentHash": "00c2c0d452cdc275a3b0d69d34034246-v2024.9.1",
       "path": "test-memoization-defense",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -14183,9 +14229,16 @@
         "java": "<p>Testing class size based memoization defense.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -14479,11 +14532,11 @@
       "seed": 124,
       "requiredTestCount": 12,
       "mutationCount": 1,
-      "solutionMaxRuntime": 14,
-      "bootstrapLength": 3085,
-      "mutationLength": 10,
-      "incorrectLength": 346,
-      "calibrationLength": 129,
+      "solutionMaxRuntime": 24,
+      "bootstrapLength": 3667,
+      "mutationLength": 5,
+      "incorrectLength": 164,
+      "calibrationLength": 31,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -14518,7 +14571,7 @@
   },
   {
     "published": {
-      "contentHash": "51ba370a3098f7354b7a659ce0e68542-v2024.9.0",
+      "contentHash": "51ba370a3098f7354b7a659ce0e68542-v2024.9.1",
       "path": "test-raw-types",
       "author": "challen@illinois.edu",
       "version": "2023.11.0",
@@ -14533,9 +14586,16 @@
         "java": "<p>Test support for raw type error filtering.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -14929,19 +14989,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 1580288,
-        "kotlin": 1580288
+        "java": 1579648,
+        "kotlin": 1579648
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 1,
-      "solutionMaxRuntime": 18,
-      "bootstrapLength": 2252,
-      "mutationLength": 142,
-      "incorrectLength": 672,
-      "calibrationLength": 94,
+      "solutionMaxRuntime": 19,
+      "bootstrapLength": 3181,
+      "mutationLength": 17,
+      "incorrectLength": 127,
+      "calibrationLength": 31,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -14976,7 +15036,7 @@
   },
   {
     "published": {
-      "contentHash": "c14d76df7271c791ccc5c93981b5d1c8-v2024.9.0",
+      "contentHash": "c14d76df7271c791ccc5c93981b5d1c8-v2024.9.1",
       "path": "with-common-code",
       "author": "challen@illinois.edu",
       "version": "2023.12.0",
@@ -14991,9 +15051,16 @@
         "java": "<p>Test loading common code.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -15359,11 +15426,11 @@
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 1,
-      "solutionMaxRuntime": 24,
-      "bootstrapLength": 2290,
-      "mutationLength": 43,
-      "incorrectLength": 642,
-      "calibrationLength": 64,
+      "solutionMaxRuntime": 43,
+      "bootstrapLength": 2296,
+      "mutationLength": 8,
+      "incorrectLength": 82,
+      "calibrationLength": 51,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -15398,7 +15465,7 @@
   },
   {
     "published": {
-      "contentHash": "3247a24e43fa77810da0ee41da0d8e7d-v2024.9.0",
+      "contentHash": "3247a24e43fa77810da0ee41da0d8e7d-v2024.9.1",
       "path": "with-dead-code-annotation",
       "author": "challen@illinois.edu",
       "version": "2023.2.0",
@@ -15415,9 +15482,16 @@
         "kotlin": "<p>Testing dead code comments.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -15502,21 +15576,21 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 8
+                "column": 14
               }
             },
             {
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 8
+                "column": 18
               }
             },
             {
               "feature": "REFERENCE_EQUALITY",
               "location": {
                 "line": 3,
-                "column": 8
+                "column": 18
               }
             },
             {
@@ -15551,7 +15625,7 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 4,
-                "column": 13
+                "column": 19
               }
             },
             {
@@ -15952,21 +16026,21 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 8
+                "column": 14
               }
             },
             {
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 8
+                "column": 18
               }
             },
             {
               "feature": "REFERENCE_EQUALITY",
               "location": {
                 "line": 3,
-                "column": 8
+                "column": 18
               }
             },
             {
@@ -16001,7 +16075,7 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 4,
-                "column": 13
+                "column": 19
               }
             },
             {
@@ -16534,19 +16608,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 43788160,
-        "kotlin": 43788160
+        "java": 43782016,
+        "kotlin": 43782016
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 17,
-      "solutionMaxRuntime": 16,
-      "bootstrapLength": 6801,
-      "mutationLength": 48,
-      "incorrectLength": 812,
-      "calibrationLength": 312,
+      "solutionMaxRuntime": 23,
+      "bootstrapLength": 6926,
+      "mutationLength": 59,
+      "incorrectLength": 816,
+      "calibrationLength": 524,
       "solutionCoverage": {
         "covered": 4,
         "total": 5,
@@ -16778,7 +16852,7 @@
   },
   {
     "published": {
-      "contentHash": "736308f223c73871743d16c35e1dff2c-v2024.9.0",
+      "contentHash": "736308f223c73871743d16c35e1dff2c-v2024.9.1",
       "path": "with-feature-check",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -16795,9 +16869,16 @@
         "kotlin": "<p>For testing features.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -16847,21 +16928,21 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 9
+                "column": 16
               }
             },
             {
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 10
+                "column": 25
               }
             },
             {
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 19
+                "column": 31
               }
             },
             {
@@ -17053,21 +17134,21 @@
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 9
+                "column": 16
               }
             },
             {
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 10
+                "column": 25
               }
             },
             {
               "feature": "ARITHMETIC_OPERATORS",
               "location": {
                 "line": 3,
-                "column": 19
+                "column": 31
               }
             },
             {
@@ -17353,11 +17434,11 @@
       "seed": 124,
       "requiredTestCount": 475,
       "mutationCount": 13,
-      "solutionMaxRuntime": 46,
-      "bootstrapLength": 6787,
-      "mutationLength": 26,
-      "incorrectLength": 1421,
-      "calibrationLength": 191,
+      "solutionMaxRuntime": 53,
+      "bootstrapLength": 6880,
+      "mutationLength": 32,
+      "incorrectLength": 1490,
+      "calibrationLength": 182,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -17550,7 +17631,7 @@
   },
   {
     "published": {
-      "contentHash": "c0e60adbcb8d6e6d1ad0088a3a1271da-v2024.9.0",
+      "contentHash": "c0e60adbcb8d6e6d1ad0088a3a1271da-v2024.9.1",
       "path": "with-feature-dead-code",
       "author": "challen@illinois.edu",
       "version": "2023.2.0",
@@ -17570,9 +17651,18 @@
         "java.util.ArrayList",
         "java.util.List"
       ],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "java.util.ArrayList",
+        "java.util.List",
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -17695,21 +17785,21 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 4,
-                "column": 18
+                "column": 20
               }
             },
             {
               "feature": "VARIABLE_REASSIGNMENTS",
               "location": {
                 "line": 4,
-                "column": 29
+                "column": 31
               }
             },
             {
               "feature": "ASSIGNMENT_OPERATORS",
               "location": {
                 "line": 4,
-                "column": 29
+                "column": 31
               }
             },
             {
@@ -17737,14 +17827,14 @@
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 5,
-                "column": 4
+                "column": 10
               }
             },
             {
               "feature": "DOTTED_METHOD_CALL",
               "location": {
                 "line": 5,
-                "column": 4
+                "column": 10
               }
             },
             {
@@ -18220,21 +18310,21 @@
               "feature": "COMPARISON_OPERATORS",
               "location": {
                 "line": 4,
-                "column": 18
+                "column": 20
               }
             },
             {
               "feature": "VARIABLE_REASSIGNMENTS",
               "location": {
                 "line": 4,
-                "column": 29
+                "column": 31
               }
             },
             {
               "feature": "ASSIGNMENT_OPERATORS",
               "location": {
                 "line": 4,
-                "column": 29
+                "column": 31
               }
             },
             {
@@ -18262,14 +18352,14 @@
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 5,
-                "column": 4
+                "column": 10
               }
             },
             {
               "feature": "DOTTED_METHOD_CALL",
               "location": {
                 "line": 5,
-                "column": 4
+                "column": 10
               }
             },
             {
@@ -18902,10 +18992,10 @@
       "requiredTestCount": 4,
       "mutationCount": 10,
       "solutionMaxRuntime": 21,
-      "bootstrapLength": 6791,
-      "mutationLength": 33,
-      "incorrectLength": 637,
-      "calibrationLength": 355,
+      "bootstrapLength": 6967,
+      "mutationLength": 25,
+      "incorrectLength": 654,
+      "calibrationLength": 328,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -19052,7 +19142,7 @@
   },
   {
     "published": {
-      "contentHash": "7e1641997386c3e3f1f5592632470def-v2024.9.0",
+      "contentHash": "7e1641997386c3e3f1f5592632470def-v2024.9.1",
       "path": "with-java-switch",
       "author": "challen@illinois.edu",
       "version": "2023.12.0",
@@ -19069,9 +19159,16 @@
         "kotlin": "<p>Test feature check using Java 14 switch expression, Kotlin equivalent.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -20648,11 +20745,11 @@
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 61,
-      "solutionMaxRuntime": 10,
-      "bootstrapLength": 3318,
-      "mutationLength": 224,
-      "incorrectLength": 2181,
-      "calibrationLength": 72,
+      "solutionMaxRuntime": 11,
+      "bootstrapLength": 6833,
+      "mutationLength": 229,
+      "incorrectLength": 2420,
+      "calibrationLength": 87,
       "solutionCoverage": {
         "covered": 9,
         "total": 9,
@@ -21357,7 +21454,7 @@
   },
   {
     "published": {
-      "contentHash": "698a87ee8a0d8c4960d859c396ea1d22-v2024.9.0",
+      "contentHash": "698a87ee8a0d8c4960d859c396ea1d22-v2024.9.1",
       "path": "with-map-extras",
       "author": "challen@illinois.edu",
       "version": "2023.9.0",
@@ -21375,9 +21472,18 @@
         "java.util.Map",
         "java.util.Set"
       ],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "java.util.Map",
+        "java.util.Set",
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -21452,14 +21558,14 @@
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 3,
-                "column": 9
+                "column": 12
               }
             },
             {
               "feature": "DOTTED_METHOD_CALL",
               "location": {
                 "line": 3,
-                "column": 9
+                "column": 12
               }
             },
             {
@@ -21616,14 +21722,14 @@
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 3,
-                "column": 9
+                "column": 12
               }
             },
             {
               "feature": "DOTTED_METHOD_CALL",
               "location": {
                 "line": 3,
-                "column": 9
+                "column": 12
               }
             },
             {
@@ -21751,11 +21857,11 @@
       "seed": 124,
       "requiredTestCount": 13,
       "mutationCount": 3,
-      "solutionMaxRuntime": 65,
-      "bootstrapLength": 3027,
-      "mutationLength": 27,
-      "incorrectLength": 349,
-      "calibrationLength": 100,
+      "solutionMaxRuntime": 14,
+      "bootstrapLength": 887,
+      "mutationLength": 24,
+      "incorrectLength": 143,
+      "calibrationLength": 34,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -21816,7 +21922,7 @@
   },
   {
     "published": {
-      "contentHash": "3fccc106cc61afe617573d2ed3a2786f-v2024.9.0",
+      "contentHash": "3fccc106cc61afe617573d2ed3a2786f-v2024.9.1",
       "path": "with-template-imports",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -21835,9 +21941,26 @@
         "java.util.List",
         "java.util.ArrayList"
       ],
-      "questionerVersion": "2024.9.0",
+      "questionerVersion": "2024.9.1",
       "authorName": "",
-      "tags": []
+      "tags": [],
+      "kotlinImports": [
+        "java.util.List",
+        "java.util.ArrayList",
+        "java.util.Arrays"
+      ],
+      "javaTestingImports": [
+        "java.util.Arrays",
+        "java.util.List",
+        "java.util.ArrayList",
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "java.util.List",
+        "java.util.ArrayList",
+        "java.util.Arrays",
+        "org.junit.Assert"
+      ]
     },
     "classification": {
       "featuresByLanguage": {
@@ -21904,14 +22027,14 @@
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 3,
-                "column": 9
+                "column": 15
               }
             },
             {
               "feature": "DOTTED_METHOD_CALL",
               "location": {
                 "line": 3,
-                "column": 9
+                "column": 15
               }
             },
             {
@@ -22061,14 +22184,14 @@
               "feature": "DOT_NOTATION",
               "location": {
                 "line": 3,
-                "column": 9
+                "column": 15
               }
             },
             {
               "feature": "DOTTED_METHOD_CALL",
               "location": {
                 "line": 3,
-                "column": 9
+                "column": 15
               }
             },
             {
@@ -22196,19 +22319,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 4311808,
-        "kotlin": 4311808
+        "java": 4311424,
+        "kotlin": 4311424
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 18,
       "mutationCount": 1,
-      "solutionMaxRuntime": 23,
-      "bootstrapLength": 2321,
-      "mutationLength": 61,
-      "incorrectLength": 676,
-      "calibrationLength": 68,
+      "solutionMaxRuntime": 20,
+      "bootstrapLength": 2613,
+      "mutationLength": 10,
+      "incorrectLength": 55,
+      "calibrationLength": 63,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -22240,5 +22363,564 @@
       }
     ],
     "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/withtemplateimports/Question.java"
+  },
+  {
+    "published": {
+      "contentHash": "33ae494d0e768a4053e01207051b72a7-v2024.9.1",
+      "path": "with-null-assert",
+      "author": "challen@illinois.edu",
+      "version": "2024.9.0",
+      "name": "With null assert",
+      "type": "METHOD",
+      "packageName": "com.github.cs124_illinois.questioner.testing.withnullassert",
+      "klass": "Question",
+      "languages": [
+        "java"
+      ],
+      "descriptions": {
+        "java": "<p>For test correctness testing to ensure AssertionErrors pop through.</p>"
+      },
+      "templateImports": [],
+      "questionerVersion": "2024.9.1",
+      "authorName": "",
+      "tags": [],
+      "kotlinImports": [],
+      "javaTestingImports": [
+        "org.junit.Assert"
+      ],
+      "kotlinTestingImports": [
+        "org.junit.Assert"
+      ]
+    },
+    "classification": {
+      "featuresByLanguage": {
+        "java": {
+          "featureMap": {
+            "COMPARISON_OPERATORS": 1,
+            "METHOD": 1,
+            "RETURN": 1,
+            "STRING": 1,
+            "NULL": 1,
+            "ASSERT": 1,
+            "REFERENCE_EQUALITY": 1,
+            "DOT_NOTATION": 1,
+            "DOTTED_METHOD_CALL": 1
+          },
+          "featureList": [
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 1,
+                "column": 22
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 2,
+                "column": 0
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 2,
+                "column": 17
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 2,
+                "column": 31
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 3,
+                "column": 2
+              }
+            },
+            {
+              "feature": "ASSERT",
+              "location": {
+                "line": 3,
+                "column": 2
+              }
+            },
+            {
+              "feature": "COMPARISON_OPERATORS",
+              "location": {
+                "line": 3,
+                "column": 15
+              }
+            },
+            {
+              "feature": "REFERENCE_EQUALITY",
+              "location": {
+                "line": 3,
+                "column": 15
+              }
+            },
+            {
+              "feature": "NULL",
+              "location": {
+                "line": 3,
+                "column": 18
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 3,
+                "column": 22
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 4,
+                "column": 2
+              }
+            },
+            {
+              "feature": "RETURN",
+              "location": {
+                "line": 4,
+                "column": 2
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 4,
+                "column": 14
+              }
+            },
+            {
+              "feature": "DOTTED_METHOD_CALL",
+              "location": {
+                "line": 4,
+                "column": 14
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 4,
+                "column": 23
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 5,
+                "column": 0
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 6,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [
+            "int",
+            "String"
+          ],
+          "identifierList": [],
+          "dottedMethodList": [
+            "length"
+          ]
+        }
+      },
+      "lineCounts": {
+        "java": {
+          "source": 4,
+          "comment": 0,
+          "blank": 0
+        }
+      },
+      "complexity": {
+        "java": 2
+      },
+      "recursiveMethodsByLanguage": {
+        "java": []
+      },
+      "loadedClassesByLanguage": {
+        "java": [
+          "java.lang.Throwable",
+          "java.lang.AssertionError",
+          "java.lang.Integer",
+          "java.lang.Long",
+          "java.lang.Object",
+          "java.lang.Class",
+          "java.lang.String",
+          "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+        ]
+      }
+    },
+    "metadata": {
+      "allFiles": [
+        "src/main/java/com/github/cs124_illinois/questioner/testing/withnullassert/Question.java"
+      ],
+      "unusedFiles": [],
+      "focused": false,
+      "publish": true
+    },
+    "annotatedControls": {},
+    "question": {
+      "klass": "Question",
+      "contents": "import edu.illinois.cs.cs125.questioner.lib.Correct;\nimport edu.illinois.cs.cs125.questioner.lib.Wrap;\n\n/*\n * For test correctness testing to ensure AssertionErrors pop through.\n */\n\n@Correct(name = \"With null assert\", author = \"challen@illinois.edu\", version = \"2024.9.0\")\n@Wrap\npublic class Question {\n  int stringLength(String input) {\n    assert input != null;\n    return input.length();\n  }\n}",
+      "language": "java",
+      "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withnullassert/Question.java",
+      "suppressions": []
+    },
+    "solutionByLanguage": {
+      "java": {
+        "klass": "Question",
+        "contents": "int stringLength(String input) {\n  assert input != null;\n  return input.length();\n}",
+        "language": "java",
+        "path": "src/main/java/com/github/cs124_illinois/questioner/testing/withnullassert/Question.java",
+        "complexity": 2,
+        "features": {
+          "featureMap": {
+            "COMPARISON_OPERATORS": 1,
+            "METHOD": 1,
+            "RETURN": 1,
+            "STRING": 1,
+            "NULL": 1,
+            "ASSERT": 1,
+            "REFERENCE_EQUALITY": 1,
+            "DOT_NOTATION": 1,
+            "DOTTED_METHOD_CALL": 1
+          },
+          "featureList": [
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 1,
+                "column": 22
+              }
+            },
+            {
+              "feature": "METHOD",
+              "location": {
+                "line": 2,
+                "column": 0
+              }
+            },
+            {
+              "feature": "STRING",
+              "location": {
+                "line": 2,
+                "column": 17
+              }
+            },
+            {
+              "feature": "BLOCK_START",
+              "location": {
+                "line": 2,
+                "column": 31
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 3,
+                "column": 2
+              }
+            },
+            {
+              "feature": "ASSERT",
+              "location": {
+                "line": 3,
+                "column": 2
+              }
+            },
+            {
+              "feature": "COMPARISON_OPERATORS",
+              "location": {
+                "line": 3,
+                "column": 15
+              }
+            },
+            {
+              "feature": "REFERENCE_EQUALITY",
+              "location": {
+                "line": 3,
+                "column": 15
+              }
+            },
+            {
+              "feature": "NULL",
+              "location": {
+                "line": 3,
+                "column": 18
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 3,
+                "column": 22
+              }
+            },
+            {
+              "feature": "STATEMENT_START",
+              "location": {
+                "line": 4,
+                "column": 2
+              }
+            },
+            {
+              "feature": "RETURN",
+              "location": {
+                "line": 4,
+                "column": 2
+              }
+            },
+            {
+              "feature": "DOT_NOTATION",
+              "location": {
+                "line": 4,
+                "column": 14
+              }
+            },
+            {
+              "feature": "DOTTED_METHOD_CALL",
+              "location": {
+                "line": 4,
+                "column": 14
+              }
+            },
+            {
+              "feature": "STATEMENT_END",
+              "location": {
+                "line": 4,
+                "column": 23
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 5,
+                "column": 0
+              }
+            },
+            {
+              "feature": "BLOCK_END",
+              "location": {
+                "line": 6,
+                "column": 0
+              }
+            }
+          ],
+          "importList": [],
+          "typeList": [
+            "int",
+            "String"
+          ],
+          "identifierList": [],
+          "dottedMethodList": [
+            "length"
+          ]
+        },
+        "lineCount": {
+          "source": 4,
+          "comment": 0,
+          "blank": 0
+        },
+        "expectedDeadCount": 0,
+        "suppressions": []
+      }
+    },
+    "alternativeSolutions": [],
+    "incorrectExamples": [],
+    "commonFiles": [],
+    "templateByLanguage": {
+      "java": "public class Question {\n  {{{ contents }}}\n}"
+    },
+    "importWhitelist": [],
+    "importBlacklist": [],
+    "checkstyleSuppressions": [],
+    "testingSettings": {
+      "seed": 124,
+      "testCount": 64,
+      "outputLimit": 0,
+      "perTestOutputLimit": 1024,
+      "javaWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.lang.Throwable",
+        "java.lang.AssertionError",
+        "java.lang.Integer",
+        "edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring$TracingSink",
+        "java.lang.Long",
+        "Question",
+        "java.lang.Object",
+        "java.lang.Class",
+        "java.lang.String",
+        "com.beyondgrader.resourceagent.jeed.VirtualFilesystem$EnsureRedirectingSink"
+      ],
+      "kotlinWhitelist": [
+        "java.lang.",
+        "java.io.PrintStream",
+        "kotlin.Metadata",
+        "kotlin.reflect.jvm.",
+        "java.util.Iterator",
+        "java.util.Collection",
+        "java.util.",
+        "kotlin."
+      ],
+      "shrink": false,
+      "executionCountLimit": {
+        "java": 6064
+      },
+      "allocationLimit": {
+        "java": 92032
+      },
+      "solutionClassSize": {
+        "java": 440
+      },
+      "solutionDeadCode": {
+        "java": 0
+      },
+      "checkBlacklist": true,
+      "disableLineCountLimit": false,
+      "disableAllocationLimit": false,
+      "solutionRecursiveMethods": {
+        "java": []
+      },
+      "minTestCount": -1,
+      "maxTestCount": -1,
+      "suppressions": [],
+      "runAll": false,
+      "recordTrace": false
+    },
+    "testTestingLimits": {
+      "outputLimit": 512,
+      "executionCountLimit": {
+        "java": 1024,
+        "kotlin": 1024
+      },
+      "allocationLimit": {
+        "java": 93056,
+        "kotlin": 93056
+      }
+    },
+    "validationResults": {
+      "seed": 124,
+      "requiredTestCount": 14,
+      "mutationCount": 6,
+      "solutionMaxRuntime": 67,
+      "bootstrapLength": 2491,
+      "mutationLength": 348,
+      "incorrectLength": 521,
+      "calibrationLength": 77,
+      "solutionCoverage": {
+        "covered": 2,
+        "total": 2,
+        "missed": 0
+      },
+      "executionCounts": {
+        "java": 379
+      },
+      "memoryAllocation": {
+        "java": 5752
+      },
+      "outputAmount": 0,
+      "canTestTest": true
+    },
+    "fauxStatic": true,
+    "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,2 +2,1 @@",
+          "-  assert input != null;",
+          "-  return input.length();",
+          "+  return 0;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,1 @@",
+          "-  assert input != null;",
+          "+  assert input == null;"
+        ],
+        "language": "java",
+        "mutation": "NEGATE_CONDITIONAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-  return input.length();",
+          "+  return 0;"
+        ],
+        "language": "java",
+        "mutation": "PRIMITIVE_RETURN",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-  return input.length();",
+          "+  return input.length() + 1;"
+        ],
+        "language": "java",
+        "mutation": "MODIFY_LENGTH_AND_SIZE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -3,1 +3,1 @@",
+          "-  return input.length();",
+          "+  return input.length() - 1;"
+        ],
+        "language": "java",
+        "mutation": "MODIFY_LENGTH_AND_SIZE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.java",
+          "+++ Incorrect.java",
+          "@@ -2,1 +2,0 @@",
+          "-  assert input != null;"
+        ],
+        "language": "java",
+        "mutation": "REMOVE_RUNTIME_CHECK",
+        "testCount": 4,
+        "suppressions": []
+      }
+    ],
+    "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/withnullassert/Question.java"
   }
 ]

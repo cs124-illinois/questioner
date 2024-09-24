@@ -102,7 +102,10 @@ data class Question(
         val templateImports: Set<String>,
         val questionerVersion: String,
         val authorName: String,
-        val tags: MutableSet<String> = mutableSetOf()
+        val tags: MutableSet<String> = mutableSetOf(),
+        val kotlinImports: Set<String>? = null,
+        val javaTestingImports: Set<String>? = null,
+        val kotlinTestingImports: Set<String>? = null
     )
 
     @JsonClass(generateAdapter = true)
@@ -550,6 +553,8 @@ ${question.contents}
     }
 
     fun filename(language: Language) = "${published.klass}.${language.extension()}"
+
+    fun testFilename(language: Language) = "Test${published.klass}.${language.extension()}"
 
     @Suppress("unused")
     companion object {

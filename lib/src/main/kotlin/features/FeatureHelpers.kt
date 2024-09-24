@@ -16,3 +16,5 @@ fun Features.doesNotHaveFeature(feature: FeatureName) = featureMap[feature] == 0
 
 fun Features.hasFeatures(features: List<FeatureName>) = features.any { feature -> featureMap[feature] > 0 }
 fun Features.doesNotHaveFeatures(features: List<FeatureName>) = features.any { feature -> featureMap[feature] == 0 }
+
+fun Features.countFeature(feature: FeatureName) = featureMap[feature] ?: 0

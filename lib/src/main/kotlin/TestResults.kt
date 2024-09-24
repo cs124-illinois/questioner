@@ -15,6 +15,7 @@ import edu.illinois.cs.cs125.jeed.core.moshi.CompiledSourceResult
 import edu.illinois.cs.cs125.jenisol.core.TestResult
 import edu.illinois.cs.cs125.jenisol.core.safePrint
 import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
+import edu.illinois.cs.cs125.questioner.lib.server.Submission
 import edu.illinois.cs.cs125.jenisol.core.TestResult as JenisolTestResult
 
 @JsonClass(generateAdapter = true)
@@ -38,6 +39,9 @@ data class TestResults(
     @Transient
     var jenisolResults: edu.illinois.cs.cs125.jenisol.core.TestResults? = null
 ) {
+    @Suppress("unused")
+    val kind = Submission.SubmissionType.SOLVE
+
     var completed: Boolean = false
     var succeeded: Boolean = false
     var failedLinting: Boolean? = null

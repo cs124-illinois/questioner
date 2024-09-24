@@ -6,6 +6,7 @@ import edu.illinois.cs.cs125.jeed.core.CompilationArguments
 import edu.illinois.cs.cs125.jeed.core.CompilationFailed
 import edu.illinois.cs.cs125.jeed.core.CompiledSource
 import edu.illinois.cs.cs125.jeed.core.ConfiguredSandboxPlugin
+import edu.illinois.cs.cs125.jeed.core.FeatureName
 import edu.illinois.cs.cs125.jeed.core.JeedClassLoader
 import edu.illinois.cs.cs125.jeed.core.KompilationArguments
 import edu.illinois.cs.cs125.jeed.core.KtLintArguments
@@ -16,6 +17,7 @@ import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.TemplatingFailed
 import edu.illinois.cs.cs125.jeed.core.checkstyle
 import edu.illinois.cs.cs125.jeed.core.compile
+import edu.illinois.cs.cs125.jeed.core.features
 import edu.illinois.cs.cs125.jeed.core.fromJavaSnippet
 import edu.illinois.cs.cs125.jeed.core.fromKotlinSnippet
 import edu.illinois.cs.cs125.jeed.core.fromTemplates
@@ -25,6 +27,8 @@ import edu.illinois.cs.cs125.jeed.core.moshi.CompiledSourceResult
 import edu.illinois.cs.cs125.jenisol.core.isPackagePrivate
 import edu.illinois.cs.cs125.jenisol.core.isPrivate
 import edu.illinois.cs.cs125.jenisol.core.isStatic
+import edu.illinois.cs.cs125.questioner.lib.features.countFeature
+import edu.illinois.cs.cs125.questioner.lib.features.usesLoop
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.ClassWriter
@@ -81,7 +85,7 @@ suspend fun Question.testTests(
         }
 
         // checkCompiledTestSuite
-        val klassName = checkCompiledTestSuite(compiledSubmission, results) ?: return results
+        val klassName = checkCompiledTestSuite(compiledSubmission, results, language) ?: return results
         val testingIncorrect = testTestingIncorrect
         check(!testingIncorrect.isNullOrEmpty()) {
             "Value should not be null or empty"
@@ -96,13 +100,12 @@ suspend fun Question.testTests(
             }
         }
 
-        val testingLoaders = testingMutations.map { it.compiled(this) }.toMutableList()
         val random = if (settings.seed != null) {
             Random(settings.seed)
         } else {
             Random
         }
-        testingLoaders.add(random.nextInt(testingLoaders.size + 1), compiledSolutionForTesting)
+        val solutionPosition = random.nextInt(testingMutations.size + 1)
 
         val baseTimeout = (questionerTestTestTimeoutMS.toDouble() * control.timeoutMultiplier!!).toLong()
 
@@ -149,7 +152,23 @@ suspend fun Question.testTests(
 
         val testTestingStarted = Instant.now()
         val output = mutableListOf<String>()
-        for (testingLoader in testingLoaders) {
+
+        var mutationIndex = 0
+        for (i in 0 until testingMutations.size + 1) {
+            val testingLoader = if (i == solutionPosition) {
+                compiledSolutionForTesting
+            } else {
+                testingMutations[mutationIndex].compiled(this)
+            }
+            val usedMutationIndex = if (i == solutionPosition) {
+                -1
+            } else {
+                mutationIndex
+            }
+            if (i != solutionPosition) {
+                mutationIndex++
+            }
+
             val isSolution = testingLoader == compiledSolutionForTesting
 
             val testingSuiteLoader = CopyableClassLoader.copy(compiledSubmission.classLoader, testingLoader.classloader)
@@ -227,6 +246,17 @@ suspend fun Question.testTests(
             } else {
                 taskResults.threw != null
             }
+            if (!isCorrect && System.getenv("DEBUG_TEST_CORRECTNESS") != null) {
+                if (isSolution) {
+                    logger.debug { "${published.path}/${published.author}/${published.version}: tests marked solution as incorrect: ${taskResults.threw}" }
+                } else {
+                    logger.debug {
+                        """${published.path}/${published.author}/${published.version}: missed incorrect mutation
+                            |---${testingMutations[usedMutationIndex].deltas.joinToString("\n")}
+                            |---"""
+                    }
+                }
+            }
             if (isSolution) {
                 identifiedSolution = isCorrect
             }
@@ -254,7 +284,7 @@ suspend fun Question.testTests(
                 correct,
                 incorrect,
                 identifiedSolution,
-                testingLoaders.size,
+                testingMutations.size + 1,
                 Instant.now().toEpochMilli() - testTestingStarted.toEpochMilli(),
                 output
             )
@@ -274,16 +304,21 @@ fun Question.templateTestSuites(
         Question.Type.METHOD -> {
             when (language) {
                 Language.java -> {
-                    """public class Test${published.klass} extends ${published.klass} {
-  {{{ contents }}}
-}
-"""
+                    val templateImports = published.javaTestingImports ?: published.templateImports
+                    """${templateImports.joinToString("\n") { "import $it;" }}
+                        |
+                        |public class Test${published.klass} extends ${published.klass} {
+                        |  {{{ contents }}}
+                        |}""".trimMargin().trimStart()
                 }
 
                 Language.kotlin -> {
-                    """class Test${published.klass} : ${published.klass}() {
-  {{{ contents }}}
-}"""
+                    val templateImports = published.kotlinTestingImports ?: published.kotlinImports ?: published.templateImports
+                    """${templateImports.joinToString("\n") { "import $it;" }}
+                        |
+                        |class Test${published.klass} : ${published.klass}() {
+                        |  {{{ contents }}}
+                        |}""".trimMargin().trimStart()
                 }
             }
         }
@@ -386,7 +421,8 @@ private fun Class<*>.getTestingMethod() = declaredMethods.find { testingMethod -
 
 fun Question.checkCompiledTestSuite(
     compiledTestSuite: CompiledSource,
-    testResults: TestTestResults
+    testResults: TestTestResults,
+    language: Language
 ): String? = compiledTestSuite.classLoader.definedClasses.topLevelClasses().let { klasses ->
     val testKlass = "Test${published.klass}"
 
@@ -429,6 +465,19 @@ fun Question.checkCompiledTestSuite(
             return null
         }
     }
+
+    val features = compiledTestSuite.source.features().lookup("", testFilename(language)).features
+    if (features.usesLoop()) {
+        testResults.failed.checkCompiledSubmission = "Testing code may not use loops"
+        testResults.failedSteps.add(TestTestResults.Step.checkCompiledSubmission)
+        return null
+    }
+    if (features.countFeature(FeatureName.METHOD) > 1) {
+        testResults.failed.checkCompiledSubmission = "Testing code may not define extra methods"
+        testResults.failedSteps.add(TestTestResults.Step.checkCompiledSubmission)
+        return null
+    }
+
     return klass
 }
 
@@ -482,6 +531,9 @@ fun Question.fixTestingMethods(classLoader: JeedClassLoader): ClassLoader {
 @Suppress("SpellCheckingInspection")
 fun linspace(stop: Int, num: Int): List<Int> {
     check(num <= stop + 1) { "Bad num value" }
+    if (num == 1) {
+        return listOf(stop)
+    }
     val step = stop.toDouble() / (num - 1)
     return (0 until num).map { (it * step).roundToInt() }.distinct().also {
         check(it.contains(stop)) { "$stop $num: $it does not contain $stop" }

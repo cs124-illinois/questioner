@@ -9,6 +9,7 @@ import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.longs.shouldBeLessThan
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.string.shouldContain
 import kotlin.system.measureTimeMillis
 
 const val JAVA_EMPTY_SUITE_CLASS = """
@@ -95,12 +96,25 @@ fun test() {
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.succeeded shouldBe true
         }
+        question.testTests(
+            """
+fun myAddOne(value: Int) = value + 1
+fun test() {
+  check(Question.addOne(0) == myAddOne(0))
+  check(Question.addOne(1) == myAddOne(1))
+}
+""", Language.kotlin
+        ).also { results ->
+            results.failedSteps shouldContain TestTestResults.Step.checkCompiledSubmission
+            results.failed.checkCompiledSubmission shouldContain "not define extra methods"
+        }
     }
     "should timeout test test suites for classes" {
         val (question) = Validator.validate("Add One Class").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
+
         val sleepTime = measureTimeMillis {
             question.testTests(
                 """
@@ -128,10 +142,8 @@ public class TestQuestion {
   }
 }""", Language.java
             ).also { results ->
-                results.lineCountTimeout shouldBe true
-                results.completedSteps shouldNotContain TestTestResults.Step.checkExecutedSubmission
-                results.failed.checkExecutedSubmission shouldNotBe null
-                results.completedSteps shouldNotContain TestTestResults.Step.testTesting
+                results.failedSteps shouldContain TestTestResults.Step.checkCompiledSubmission
+                results.failed.checkCompiledSubmission shouldContain "may not use loops"
             }
         }
         lineCountTime shouldBeLessThan questionerTestTestTimeoutMS * questionerWallClockTimeoutMultiplier
@@ -215,6 +227,88 @@ public class TestQuestion {
 }""", Language.kotlin
         ).also { results ->
             results.failedSteps.size shouldBe 0
+        }
+    }
+    "should test test suites for methods that use template imports" {
+        val (question) = Validator.validate("With Template Imports").also { (question, report) ->
+            question.validated shouldBe true
+            report shouldNotBe null
+        }
+        question.testTests(JAVA_EMPTY_SUITE_METHOD, Language.java).also { results ->
+            results.failedSteps.size shouldBe 0
+            results.complete.testTesting!!.also {
+                it.total shouldBe question.testTestingIncorrect!!.size + 1
+                it.shortCircuited shouldBe false
+                it.succeeded shouldBe false
+            }
+        }
+        question.testTests(KOTLIN_EMPTY_SUITE, Language.kotlin).also { results ->
+            results.failedSteps.size shouldBe 0
+            results.complete.testTesting!!.also {
+                it.total shouldBe question.testTestingIncorrect!!.size + 1
+                it.shortCircuited shouldBe false
+                it.succeeded shouldBe false
+            }
+        }
+        question.testTests(
+            """void test() {
+  assert(max(1, 2).equals(Arrays.asList(1, 2)));
+}""", Language.java
+        ).also { results ->
+            results.failedSteps.size shouldBe 0
+        }
+        question.testTests(
+            """fun test() {
+  assert(max(1, 2).equals(Arrays.asList(1, 2)))
+}""", Language.kotlin
+        ).also { results ->
+            results.failedSteps.size shouldBe 0
+        }
+    }
+    "should test test suites for methods that use null assert" {
+        val (question) = Validator.validate("With null assert").also { (question, report) ->
+            question.validated shouldBe true
+            report shouldNotBe null
+        }
+        question.testTests(JAVA_EMPTY_SUITE_METHOD, Language.java).also { results ->
+            results.failedSteps.size shouldBe 0
+            results.complete.testTesting!!.also {
+                it.total shouldBe question.testTestingIncorrect!!.size + 1
+                it.shortCircuited shouldBe false
+                it.succeeded shouldBe false
+            }
+        }
+        question.testTests(KOTLIN_EMPTY_SUITE, Language.kotlin).also { results ->
+            results.failedSteps.size shouldBe 0
+            results.complete.testTesting!!.also {
+                it.total shouldBe question.testTestingIncorrect!!.size + 1
+                it.shortCircuited shouldBe false
+                it.succeeded shouldBe false
+            }
+        }
+        question.testTests(
+            """void test() {
+  assert stringLength("test") == 4;
+  Assert.assertThrows(AssertionError.class, () -> stringLength(null));
+}""", Language.java
+        ).also { results ->
+            results.failedSteps.size shouldBe 0
+            results.complete.testTesting!!.also {
+                it.total shouldBe question.testTestingIncorrect!!.size + 1
+                it.succeeded shouldBe true
+            }
+        }
+        question.testTests(
+            """fun test() {
+  assert(stringLength("test") == 4)
+  Assert.assertThrows(AssertionError::class.java, { stringLength(null) })
+}""", Language.kotlin
+        ).also { results ->
+            results.failedSteps.size shouldBe 0
+            results.complete.testTesting!!.also {
+                it.total shouldBe question.testTestingIncorrect!!.size + 1
+                it.succeeded shouldBe true
+            }
         }
     }
     "original incorrect examples should recover and fail" {
