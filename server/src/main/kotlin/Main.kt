@@ -168,9 +168,10 @@ fun main(): Unit = runBlocking {
         "Please set the QUESTIONER_TESTTEST_TIMEOUT_MS environment variable"
     }
 
-    if (System.getenv("LOG_LEVEL_DEBUG") != null) {
-        (LoggerFactory.getILoggerFactory() as LoggerContext).getLogger(logger.name).level = Level.DEBUG
-        logger.debug { "Enabling debug logging" }
+    System.getenv("LOG_LEVEL")?.also { logLevel ->
+        (LoggerFactory.getILoggerFactory() as LoggerContext).getLogger(logger.name).level = Level.toLevel(logLevel)
+    } ?: run {
+        (LoggerFactory.getILoggerFactory() as LoggerContext).getLogger(logger.name).level = Level.INFO
     }
 
     val memoryLimitThreshold = System.getenv("MEMORY_LIMIT_THRESHOLD")?.toDoubleOrNull() ?: 0.8
@@ -205,8 +206,9 @@ fun main(): Unit = runBlocking {
         logger.warn { e }
     }
 
-    val logLevel = (LoggerFactory.getILoggerFactory() as LoggerContext).getLogger(logger.name).level
-    println("Starting questioner server (log level $logLevel)")
+    (LoggerFactory.getILoggerFactory() as LoggerContext).getLogger(logger.name).also { logLevel ->
+        logger.info("Starting questioner server (log level $logLevel)")
+    }
 
     embeddedServer(Netty, port = 8888, module = Application::questioner).start(wait = true)
 }
