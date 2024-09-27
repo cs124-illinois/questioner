@@ -27,10 +27,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -515,19 +517,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 5632,
-        "kotlin": 5632
+        "java": 6016,
+        "kotlin": 6016
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 12,
       "mutationCount": 6,
-      "solutionMaxRuntime": 46,
-      "bootstrapLength": 4341,
-      "mutationLength": 33,
-      "incorrectLength": 1108,
-      "calibrationLength": 373,
+      "solutionMaxRuntime": 22,
+      "bootstrapLength": 6707,
+      "mutationLength": 21,
+      "incorrectLength": 1186,
+      "calibrationLength": 382,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -677,10 +679,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -1174,11 +1178,11 @@
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 6,
-      "solutionMaxRuntime": 9,
-      "bootstrapLength": 4662,
-      "mutationLength": 15,
-      "incorrectLength": 325,
-      "calibrationLength": 56,
+      "solutionMaxRuntime": 30,
+      "bootstrapLength": 6670,
+      "mutationLength": 13,
+      "incorrectLength": 368,
+      "calibrationLength": 108,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -1302,10 +1306,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -2289,11 +2295,11 @@
       "seed": 124,
       "requiredTestCount": 123,
       "mutationCount": 14,
-      "solutionMaxRuntime": 20,
-      "bootstrapLength": 7101,
-      "mutationLength": 47,
-      "incorrectLength": 1024,
-      "calibrationLength": 473,
+      "solutionMaxRuntime": 34,
+      "bootstrapLength": 6673,
+      "mutationLength": 34,
+      "incorrectLength": 1234,
+      "calibrationLength": 392,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -2467,10 +2473,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -3509,11 +3517,11 @@
       "seed": 124,
       "requiredTestCount": 75,
       "mutationCount": 17,
-      "solutionMaxRuntime": 22,
-      "bootstrapLength": 2269,
-      "mutationLength": 205,
-      "incorrectLength": 1378,
-      "calibrationLength": 42,
+      "solutionMaxRuntime": 10,
+      "bootstrapLength": 2725,
+      "mutationLength": 106,
+      "incorrectLength": 1582,
+      "calibrationLength": 34,
       "solutionCoverage": {
         "covered": 12,
         "total": 12,
@@ -3759,10 +3767,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -4818,11 +4828,11 @@
       "seed": 124,
       "requiredTestCount": 117,
       "mutationCount": 28,
-      "solutionMaxRuntime": 11,
-      "bootstrapLength": 820,
-      "mutationLength": 691,
-      "incorrectLength": 1220,
-      "calibrationLength": 28,
+      "solutionMaxRuntime": 12,
+      "bootstrapLength": 3420,
+      "mutationLength": 225,
+      "incorrectLength": 1787,
+      "calibrationLength": 26,
       "solutionCoverage": {
         "covered": 8,
         "total": 8,
@@ -5140,10 +5150,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -5459,11 +5471,11 @@
       "seed": 124,
       "requiredTestCount": 6,
       "mutationCount": 7,
-      "solutionMaxRuntime": 12,
-      "bootstrapLength": 2235,
-      "mutationLength": 366,
-      "incorrectLength": 1041,
-      "calibrationLength": 20,
+      "solutionMaxRuntime": 14,
+      "bootstrapLength": 1031,
+      "mutationLength": 30,
+      "incorrectLength": 378,
+      "calibrationLength": 33,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -5585,10 +5597,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -7253,8 +7267,8 @@
         "kotlin": 336
       },
       "allocationLimit": {
-        "java": 881664,
-        "kotlin": 881664
+        "java": 884736,
+        "kotlin": 884736
       },
       "solutionClassSize": {
         "java": 897,
@@ -7296,10 +7310,10 @@
       "requiredTestCount": 1,
       "mutationCount": 35,
       "solutionMaxRuntime": 6,
-      "bootstrapLength": 4288,
-      "mutationLength": 126,
-      "incorrectLength": 2033,
-      "calibrationLength": 175,
+      "bootstrapLength": 6336,
+      "mutationLength": 148,
+      "incorrectLength": 2191,
+      "calibrationLength": 161,
       "solutionCoverage": {
         "covered": 8,
         "total": 8,
@@ -7310,8 +7324,8 @@
         "kotlin": 21
       },
       "memoryAllocation": {
-        "java": 55104,
-        "kotlin": 55104
+        "java": 55296,
+        "kotlin": 55296
       },
       "outputAmount": 5,
       "canTestTest": false
@@ -7776,10 +7790,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -8598,11 +8614,11 @@
       "seed": 124,
       "requiredTestCount": 21,
       "mutationCount": 4,
-      "solutionMaxRuntime": 153,
-      "bootstrapLength": 7986,
-      "mutationLength": 11,
-      "incorrectLength": 678,
-      "calibrationLength": 236,
+      "solutionMaxRuntime": 16,
+      "bootstrapLength": 6685,
+      "mutationLength": 25,
+      "incorrectLength": 800,
+      "calibrationLength": 74,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -8700,10 +8716,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -9561,11 +9579,11 @@
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 23,
-      "solutionMaxRuntime": 24,
-      "bootstrapLength": 2948,
-      "mutationLength": 111,
-      "incorrectLength": 2682,
-      "calibrationLength": 45,
+      "solutionMaxRuntime": 8,
+      "bootstrapLength": 3597,
+      "mutationLength": 122,
+      "incorrectLength": 1853,
+      "calibrationLength": 21,
       "solutionCoverage": {
         "covered": 7,
         "total": 7,
@@ -9608,20 +9626,6 @@
         ],
         "language": "java",
         "mutation": "PRIMITIVE_RETURN",
-        "testCount": 1,
-        "suppressions": []
-      },
-      {
-        "deltas": [
-          "--- Correct.java",
-          "+++ Incorrect.java",
-          "@@ -3,3 +3,0 @@",
-          "-    if (range == 0) {",
-          "-      return 0;",
-          "-    }"
-        ],
-        "language": "java",
-        "mutation": "CONDITIONAL_BOUNDARY",
         "testCount": 1,
         "suppressions": []
       },
@@ -9796,10 +9800,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -10335,11 +10341,11 @@
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 4,
-      "solutionMaxRuntime": 39,
-      "bootstrapLength": 3444,
-      "mutationLength": 149,
-      "incorrectLength": 351,
-      "calibrationLength": 48,
+      "solutionMaxRuntime": 28,
+      "bootstrapLength": 3027,
+      "mutationLength": 22,
+      "incorrectLength": 217,
+      "calibrationLength": 53,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -10436,10 +10442,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -11744,19 +11752,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 2862208,
-        "kotlin": 2862208
+        "java": 2856832,
+        "kotlin": 2856832
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 6,
       "mutationCount": 22,
-      "solutionMaxRuntime": 17,
-      "bootstrapLength": 8319,
-      "mutationLength": 47,
-      "incorrectLength": 1440,
-      "calibrationLength": 352,
+      "solutionMaxRuntime": 12,
+      "bootstrapLength": 3998,
+      "mutationLength": 59,
+      "incorrectLength": 1498,
+      "calibrationLength": 207,
       "solutionCoverage": {
         "covered": 6,
         "total": 6,
@@ -11798,26 +11806,13 @@
         "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
-          "@@ -3,1 +3,1 @@",
-          "-    if (input <= 0) { // mutate-disable-conditional-boundary",
-          "+    if (!(input <= 0)) { // mutate-disable-conditional-boundary"
-        ],
-        "language": "java",
-        "mutation": "PRIMITIVE_RETURN",
-        "testCount": 0,
-        "suppressions": []
-      },
-      {
-        "deltas": [
-          "--- Correct.java",
-          "+++ Incorrect.java",
           "@@ -6,3 +6,0 @@",
           "-    if (input == 1) {",
           "-      return 1;",
           "-    }"
         ],
         "language": "java",
-        "mutation": "NEGATE_IF",
+        "mutation": "PRIMITIVE_RETURN",
         "testCount": 3,
         "suppressions": []
       },
@@ -11830,7 +11825,7 @@
           "+    if (input <= 1) { // mutate-disable-conditional-boundary"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "REMOVE_BINARY",
         "testCount": 3,
         "suppressions": []
       },
@@ -11843,7 +11838,7 @@
           "+    if (input == 0) {"
         ],
         "language": "java",
-        "mutation": "REMOVE_IF",
+        "mutation": "REMOVE_BINARY",
         "testCount": 3,
         "suppressions": []
       },
@@ -11856,7 +11851,7 @@
           "+    if (input != 1) {"
         ],
         "language": "java",
-        "mutation": "REMOVE_IF",
+        "mutation": "MATH",
         "testCount": 3,
         "suppressions": []
       },
@@ -11869,7 +11864,7 @@
           "+      return 0;"
         ],
         "language": "java",
-        "mutation": "REMOVE_BINARY",
+        "mutation": "REMOVE_IF",
         "testCount": 3,
         "suppressions": []
       },
@@ -11882,7 +11877,7 @@
           "+      return 2;"
         ],
         "language": "java",
-        "mutation": "NEGATE_IF",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 3,
         "suppressions": []
       },
@@ -11895,7 +11890,7 @@
           "+    if (!(input == 1)) {"
         ],
         "language": "java",
-        "mutation": "NEGATE_CONDITIONAL",
+        "mutation": "REMOVE_IF",
         "testCount": 3,
         "suppressions": []
       },
@@ -11908,7 +11903,7 @@
           "+    if (input == 2) {"
         ],
         "language": "java",
-        "mutation": "NEGATE_CONDITIONAL",
+        "mutation": "NEGATE_IF",
         "testCount": 3,
         "suppressions": []
       },
@@ -11934,19 +11929,6 @@
           "+    return input * factorial(input - 2);"
         ],
         "language": "java",
-        "mutation": "REMOVE_BINARY",
-        "testCount": 4,
-        "suppressions": []
-      },
-      {
-        "deltas": [
-          "--- Correct.java",
-          "+++ Incorrect.java",
-          "@@ -9,1 +9,1 @@",
-          "-    return input * factorial(input - 1);",
-          "+    return input * factorial(input - 0);"
-        ],
-        "language": "java",
         "mutation": "NUMBER_LITERAL",
         "testCount": 4,
         "suppressions": []
@@ -11960,7 +11942,7 @@
           "+    return factorial(input - 1);"
         ],
         "language": "java",
-        "mutation": "MATH",
+        "mutation": "NEGATE_CONDITIONAL",
         "testCount": 4,
         "suppressions": []
       },
@@ -11986,7 +11968,7 @@
           "+    return input;"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "PRIMITIVE_RETURN",
         "testCount": 5,
         "suppressions": []
       },
@@ -11999,7 +11981,7 @@
           "+    return input / factorial(input - 1);"
         ],
         "language": "java",
-        "mutation": "PRIMITIVE_RETURN",
+        "mutation": "NEGATE_CONDITIONAL",
         "testCount": 5,
         "suppressions": []
       }
@@ -12030,10 +12012,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -12868,11 +12852,11 @@
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 5,
-      "solutionMaxRuntime": 12,
-      "bootstrapLength": 8015,
-      "mutationLength": 18,
-      "incorrectLength": 1177,
-      "calibrationLength": 421,
+      "solutionMaxRuntime": 11,
+      "bootstrapLength": 6697,
+      "mutationLength": 13,
+      "incorrectLength": 1401,
+      "calibrationLength": 329,
       "solutionCoverage": {
         "covered": 6,
         "total": 6,
@@ -12985,10 +12969,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -13523,19 +13509,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 6016,
-        "kotlin": 6016
+        "java": 5632,
+        "kotlin": 5632
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 4,
-      "solutionMaxRuntime": 39,
-      "bootstrapLength": 2223,
-      "mutationLength": 350,
-      "incorrectLength": 884,
-      "calibrationLength": 116,
+      "solutionMaxRuntime": 61,
+      "bootstrapLength": 713,
+      "mutationLength": 15,
+      "incorrectLength": 231,
+      "calibrationLength": 91,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -13616,10 +13602,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -14175,11 +14163,11 @@
       "seed": 124,
       "requiredTestCount": 8,
       "mutationCount": 3,
-      "solutionMaxRuntime": 15,
-      "bootstrapLength": 3929,
-      "mutationLength": 11,
-      "incorrectLength": 207,
-      "calibrationLength": 47,
+      "solutionMaxRuntime": 13,
+      "bootstrapLength": 2986,
+      "mutationLength": 14,
+      "incorrectLength": 216,
+      "calibrationLength": 40,
       "solutionCoverage": {
         "covered": 3,
         "total": 3,
@@ -14260,10 +14248,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -14558,11 +14548,11 @@
       "seed": 124,
       "requiredTestCount": 12,
       "mutationCount": 1,
-      "solutionMaxRuntime": 19,
-      "bootstrapLength": 2319,
-      "mutationLength": 12,
-      "incorrectLength": 190,
-      "calibrationLength": 28,
+      "solutionMaxRuntime": 16,
+      "bootstrapLength": 2526,
+      "mutationLength": 5,
+      "incorrectLength": 112,
+      "calibrationLength": 23,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -14617,10 +14607,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -15015,19 +15007,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 1580544,
-        "kotlin": 1580544
+        "java": 1579648,
+        "kotlin": 1579648
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 1,
-      "solutionMaxRuntime": 68,
-      "bootstrapLength": 3135,
-      "mutationLength": 6,
-      "incorrectLength": 89,
-      "calibrationLength": 191,
+      "solutionMaxRuntime": 42,
+      "bootstrapLength": 2321,
+      "mutationLength": 170,
+      "incorrectLength": 208,
+      "calibrationLength": 54,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -15082,10 +15074,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -15444,19 +15438,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 792064,
-        "kotlin": 792064
+        "java": 792448,
+        "kotlin": 792448
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 1,
-      "solutionMaxRuntime": 51,
-      "bootstrapLength": 2195,
-      "mutationLength": 324,
-      "incorrectLength": 595,
-      "calibrationLength": 66,
+      "solutionMaxRuntime": 74,
+      "bootstrapLength": 2279,
+      "mutationLength": 172,
+      "incorrectLength": 209,
+      "calibrationLength": 181,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -15513,10 +15507,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -16642,11 +16638,11 @@
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 17,
-      "solutionMaxRuntime": 12,
-      "bootstrapLength": 8337,
-      "mutationLength": 49,
-      "incorrectLength": 908,
-      "calibrationLength": 483,
+      "solutionMaxRuntime": 13,
+      "bootstrapLength": 3771,
+      "mutationLength": 50,
+      "incorrectLength": 966,
+      "calibrationLength": 346,
       "solutionCoverage": {
         "covered": 4,
         "total": 5,
@@ -16900,10 +16896,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -17460,11 +17458,11 @@
       "seed": 124,
       "requiredTestCount": 475,
       "mutationCount": 13,
-      "solutionMaxRuntime": 58,
-      "bootstrapLength": 8314,
-      "mutationLength": 24,
-      "incorrectLength": 1422,
-      "calibrationLength": 264,
+      "solutionMaxRuntime": 51,
+      "bootstrapLength": 5766,
+      "mutationLength": 21,
+      "incorrectLength": 1527,
+      "calibrationLength": 183,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -17684,10 +17682,12 @@
       "javaTestingImports": [
         "java.util.ArrayList",
         "java.util.List",
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -19009,19 +19009,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 8554624,
-        "kotlin": 8554624
+        "java": 8555008,
+        "kotlin": 8555008
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 4,
       "mutationCount": 10,
-      "solutionMaxRuntime": 15,
-      "bootstrapLength": 8339,
-      "mutationLength": 23,
-      "incorrectLength": 790,
-      "calibrationLength": 289,
+      "solutionMaxRuntime": 41,
+      "bootstrapLength": 6933,
+      "mutationLength": 97,
+      "incorrectLength": 625,
+      "calibrationLength": 378,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -19190,10 +19190,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -20771,11 +20773,11 @@
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 61,
-      "solutionMaxRuntime": 11,
-      "bootstrapLength": 8226,
-      "mutationLength": 229,
-      "incorrectLength": 2376,
-      "calibrationLength": 78,
+      "solutionMaxRuntime": 10,
+      "bootstrapLength": 6816,
+      "mutationLength": 344,
+      "incorrectLength": 2316,
+      "calibrationLength": 81,
       "solutionCoverage": {
         "covered": 9,
         "total": 9,
@@ -21505,10 +21507,12 @@
       "javaTestingImports": [
         "java.util.Map",
         "java.util.Set",
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -21883,11 +21887,11 @@
       "seed": 124,
       "requiredTestCount": 13,
       "mutationCount": 3,
-      "solutionMaxRuntime": 18,
-      "bootstrapLength": 3524,
-      "mutationLength": 21,
-      "incorrectLength": 544,
-      "calibrationLength": 38,
+      "solutionMaxRuntime": 64,
+      "bootstrapLength": 2613,
+      "mutationLength": 33,
+      "incorrectLength": 240,
+      "calibrationLength": 132,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -21979,13 +21983,15 @@
         "java.util.Arrays",
         "java.util.List",
         "java.util.ArrayList",
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
         "java.util.List",
         "java.util.ArrayList",
         "java.util.Arrays",
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -22353,11 +22359,11 @@
       "seed": 124,
       "requiredTestCount": 18,
       "mutationCount": 1,
-      "solutionMaxRuntime": 13,
-      "bootstrapLength": 3550,
-      "mutationLength": 8,
-      "incorrectLength": 50,
-      "calibrationLength": 27,
+      "solutionMaxRuntime": 18,
+      "bootstrapLength": 2360,
+      "mutationLength": 132,
+      "incorrectLength": 205,
+      "calibrationLength": 96,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -22412,10 +22418,12 @@
       "tags": [],
       "kotlinImports": [],
       "javaTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ],
       "kotlinTestingImports": [
-        "org.junit.Assert"
+        "org.junit.Assert",
+        "com.google.common.truth.Truth"
       ]
     },
     "classification": {
@@ -22847,11 +22855,11 @@
       "seed": 124,
       "requiredTestCount": 14,
       "mutationCount": 6,
-      "solutionMaxRuntime": 35,
-      "bootstrapLength": 2248,
-      "mutationLength": 324,
-      "incorrectLength": 1175,
-      "calibrationLength": 62,
+      "solutionMaxRuntime": 45,
+      "bootstrapLength": 2569,
+      "mutationLength": 27,
+      "incorrectLength": 546,
+      "calibrationLength": 57,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,

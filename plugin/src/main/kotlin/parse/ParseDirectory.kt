@@ -345,8 +345,8 @@ fun Path.parseDirectory(
         questionerVersion = questionerVersion,
         tags = solution.tags.toMutableSet(),
         kotlinImports = kotlinImports,
-        javaTestingImports = templateImports + setOf("org.junit.Assert"),
-        kotlinTestingImports = kotlinImports + setOf("org.junit.Assert"),
+        javaTestingImports = templateImports + DEFAULT_TESTING_IMPORTS,
+        kotlinTestingImports = kotlinImports + DEFAULT_TESTING_IMPORTS,
     )
 
     val classification = Question.Classification(
@@ -446,3 +446,5 @@ private fun Sequence<Path>.getLocalImportNames(baseDirectory: Path) = map { path
         else -> error("""Invalid path type: file://$path""")
     }
 }.toSet()
+
+private val DEFAULT_TESTING_IMPORTS = setOf("org.junit.Assert", "com.google.common.truth.Truth")

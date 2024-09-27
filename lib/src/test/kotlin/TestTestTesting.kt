@@ -259,7 +259,7 @@ public class TestQuestion {
         }
         question.testTests(
             """fun test() {
-  assert(max(1, 2).equals(Arrays.asList(1, 2)))
+  Truth.assertThat(max(1, 2)).isEqualTo(Arrays.asList(1, 2))
 }""", Language.kotlin
         ).also { results ->
             results.failedSteps.size shouldBe 0
