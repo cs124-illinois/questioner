@@ -18,6 +18,14 @@ public class TestQuestion {
   }
 }
 """
+const val JAVA_ALTERNATE_SUITE_CLASS = """
+public class TestQuestion {
+  private static int iteration = 0;
+  public static void test() {
+    assert iteration++ % 2 == 0;
+  }
+}
+"""
 const val JAVA_EMPTY_SUITE_METHOD = """void test() {
 }
 """
@@ -36,16 +44,16 @@ class TestTestTesting : StringSpec({
             results.complete.testTesting!!.also {
                 it.total shouldBe 7
                 it.correct shouldBe 1
-                it.identifiedSolution shouldBe false
+                it.identifiedSolution shouldBe true
                 it.shortCircuited shouldBe false
                 it.succeeded shouldBe false
             }
         }
-        question.testTests(JAVA_EMPTY_SUITE_CLASS, Language.java, Question.TestTestingSettings(true, seed = 124))
+        question.testTests(JAVA_EMPTY_SUITE_CLASS, Language.java, Question.TestTestingSettings(true, 6, seed = 124))
             .also { results ->
                 results.failedSteps.size shouldBe 0
                 results.complete.testTesting!!.also {
-                    it.total shouldBe 7
+                    it.total shouldBe 6
                     it.correct shouldBe 0
                     it.identifiedSolution shouldBe null
                     it.shortCircuited shouldBe true
@@ -57,7 +65,7 @@ class TestTestTesting : StringSpec({
             results.complete.testTesting!!.also {
                 it.total shouldBe 7
                 it.correct shouldBe 1
-                it.identifiedSolution shouldBe false
+                it.identifiedSolution shouldBe true
                 it.shortCircuited shouldBe false
                 it.succeeded shouldBe false
             }
@@ -337,6 +345,15 @@ public class TestQuestion {
                 it.complete.testing?.passed shouldBe false
                 it.tests()?.size shouldBe incorrect.testCount + 1
             }
+        }
+    }
+    "should defeat alternate testing implementations" {
+        val (question) = Validator.validate("Add One Class").also { (question, report) ->
+            question.validated shouldBe true
+            report shouldNotBe null
+        }
+        question.testTests(JAVA_ALTERNATE_SUITE_CLASS, Language.java).also { results ->
+            results.failedSteps.size shouldBe 1
         }
     }
 })

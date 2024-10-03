@@ -35,6 +35,8 @@ import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.Opcodes
 import java.lang.reflect.InvocationTargetException
 import java.time.Instant
+import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
@@ -98,14 +100,25 @@ suspend fun Question.testTests(
             Question.TestTestingSettings.SelectionStrategy.EVENLY_SPACED -> {
                 linspace(testingIncorrect.size - 1, incorrectLimit).map { testingIncorrect[it] }
             }
+
+            Question.TestTestingSettings.SelectionStrategy.EASIEST_AND_HARDEST ->
+                testingIncorrect.take(ceil((incorrectLimit.toDouble() / 2.0)).toInt()) +
+                    testingIncorrect.takeLast(floor((incorrectLimit.toDouble() / 2.0)).toInt())
         }
+
+        check(testingMutations.size == incorrectLimit)
 
         val random = if (settings.seed != null) {
             Random(settings.seed)
         } else {
             Random
         }
-        val solutionPosition = random.nextInt(testingMutations.size + 1)
+        val testingMutationsOrSolutions = testingMutations.mapIndexed { i, mutation ->
+            IndexBoundMutation(mutation, i)
+        }.toMutableList()
+
+        val randomPosition = random.nextInt(testingMutationsOrSolutions.size + 1)
+        testingMutationsOrSolutions.add(randomPosition, IndexBoundMutation())
 
         val baseTimeout = (questionerTestTestTimeoutMS.toDouble() * control.timeoutMultiplier!!).toLong()
 
@@ -146,30 +159,14 @@ suspend fun Question.testTests(
             }
         }
 
-        var correct = 0
-        var incorrect = 0
-        var identifiedSolution: Boolean? = null
+        val correctMap = mutableMapOf<Int, Boolean>()
 
         val testTestingStarted = Instant.now()
         val output = mutableListOf<String>()
 
-        var mutationIndex = 0
-        for (i in 0 until testingMutations.size + 1) {
-            val testingLoader = if (i == solutionPosition) {
-                compiledSolutionForTesting
-            } else {
-                testingMutations[mutationIndex].compiled(this)
-            }
-            val usedMutationIndex = if (i == solutionPosition) {
-                -1
-            } else {
-                mutationIndex
-            }
-            if (i != solutionPosition) {
-                mutationIndex++
-            }
-
-            val isSolution = testingLoader == compiledSolutionForTesting
+        for ((testingMutationOrSolution, i) in testingMutationsOrSolutions) {
+            val testingLoader = testingMutationOrSolution?.compiled(this) ?: compiledSolutionForTesting
+            val isSolution = testingMutationOrSolution == null
 
             val testingSuiteLoader = CopyableClassLoader.copy(compiledSubmission.classLoader, testingLoader.classloader)
             val taskResults = Sandbox.execute(
@@ -252,41 +249,39 @@ suspend fun Question.testTests(
                 } else {
                     logger.debug {
                         """${published.path}/${published.author}/${published.version}: missed incorrect mutation
-                            |---${testingMutations[usedMutationIndex].deltas.joinToString("\n")}
+                            |---${testingMutationOrSolution!!.deltas.joinToString("\n")}
                             |---"""
                     }
                 }
             }
-            if (isSolution) {
-                identifiedSolution = isCorrect
-            }
-            if (isCorrect) {
-                correct++
+
+            val mapIndex = if (isSolution) {
+                0
             } else {
-                incorrect++
+                i!! + 1
             }
+            check(correctMap[mapIndex] == null)
+            correctMap[mapIndex] = isCorrect
+
             output += taskResults.stdout.trim() + if (taskResults.truncatedLines > 0) {
                 "\n(${taskResults.truncatedLines} lines truncated)\n"
             } else {
                 "\n"
             }
-            if (incorrect > 0 && settings.shortCircuit!!) {
+            if (correctMap.values.contains(false) && settings.shortCircuit!!) {
                 break
             }
         }
 
-        if (identifiedSolution != null) {
-            identifiedSolution = identifiedSolution == true && correct > 1
-        }
-
         results.addTestTestingResults(
             TestTestResults.TestTestingResults(
-                correct,
-                incorrect,
-                identifiedSolution,
+                correctMap.values.count { it },
+                correctMap.values.count { !it },
+                correctMap[0],
                 testingMutations.size + 1,
                 Instant.now().toEpochMilli() - testTestingStarted.toEpochMilli(),
-                output
+                output,
+                correctMap
             )
         )
         return results
@@ -294,6 +289,8 @@ suspend fun Question.testTests(
         testingLimiter.release()
     }
 }
+
+data class IndexBoundMutation(val mutation: Question.TestTestingMutation? = null, val index: Int? = null)
 
 fun Question.templateTestSuites(
     contents: String,
@@ -313,7 +310,8 @@ fun Question.templateTestSuites(
                 }
 
                 Language.kotlin -> {
-                    val templateImports = published.kotlinTestingImports ?: published.kotlinImports ?: published.templateImports
+                    val templateImports =
+                        published.kotlinTestingImports ?: published.kotlinImports ?: published.templateImports
                     """${templateImports.joinToString("\n") { "import $it;" }}
                         |
                         |class Test${published.klass} : ${published.klass}() {

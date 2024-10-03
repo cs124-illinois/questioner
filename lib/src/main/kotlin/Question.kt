@@ -257,14 +257,14 @@ data class Question(
         val seed: Long? = null
     ) {
         enum class SelectionStrategy {
-            HARDEST, EASIEST, EVENLY_SPACED
+            EASIEST, HARDEST, EVENLY_SPACED, EASIEST_AND_HARDEST
         }
 
         companion object {
             val DEFAULTS = TestTestingSettings(
                 false,
                 Int.MAX_VALUE,
-                SelectionStrategy.EVENLY_SPACED,
+                SelectionStrategy.EASIEST_AND_HARDEST,
                 null
             )
         }

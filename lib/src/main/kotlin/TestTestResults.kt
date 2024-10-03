@@ -95,9 +95,14 @@ data class TestTestResults(
         val total: Int,
         val duration: Long,
         val output: List<String>,
+        val correctMap: Map<Int, Boolean>,
         val succeeded: Boolean = correct == total && incorrect == 0,
         val shortCircuited: Boolean = correct + incorrect < total
-    )
+    ) {
+        init {
+            check(correctMap.size == correct + incorrect)
+        }
+    }
 
     @Transient
     val canCache = !(timeout && !lineCountTimeout)

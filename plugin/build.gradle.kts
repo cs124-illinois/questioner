@@ -20,8 +20,8 @@ dependencies {
         exclude(module = "kotlin-js")
     }
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.17.2")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.2")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.0")
     implementation("com.github.slugify:slugify:3.0.7")
 
     implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.0.20")
