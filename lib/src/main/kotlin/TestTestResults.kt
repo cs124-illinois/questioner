@@ -89,6 +89,7 @@ data class TestTestResults(
 
     @JsonClass(generateAdapter = true)
     data class TestTestingResults(
+        val selectionStrategy: Question.TestTestingSettings.SelectionStrategy,
         val correct: Int,
         val incorrect: Int,
         val identifiedSolution: Boolean?,

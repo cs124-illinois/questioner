@@ -7,11 +7,13 @@ import com.squareup.moshi.Types
 import edu.illinois.cs.cs125.jeed.core.CompilationArguments
 import edu.illinois.cs.cs125.jeed.core.Features
 import edu.illinois.cs.cs125.jeed.core.JeedFileManager
+import edu.illinois.cs.cs125.jeed.core.KompilationArguments
 import edu.illinois.cs.cs125.jeed.core.LineCounts
 import edu.illinois.cs.cs125.jeed.core.MutatedSource
 import edu.illinois.cs.cs125.jeed.core.Mutation
 import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.compile
+import edu.illinois.cs.cs125.jeed.core.kompile
 import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
 import java.io.File
 import java.lang.reflect.ReflectPermission
@@ -389,7 +391,7 @@ data class Question(
                         source,
                         InvertingClassLoader(setOf(question.published.klass)),
                         results,
-                        suppressions
+                        suppressions,
                     )
 
                 Language.kotlin ->
@@ -399,8 +401,9 @@ data class Question(
                         results,
                         suppressions
                     )
-            }.let {
-                TestTestingSource(contents(question), question.fixTestingMethods(it.classLoader))
+            }.let { compiledSource ->
+                val (newClassLoader, newFileManager) = question.fixTestingMethods(compiledSource, language)
+                TestTestingSource(source.contents, newClassLoader, newFileManager)
             }
         }
     }
@@ -455,10 +458,10 @@ ${question.contents}
         }
     }
 
-    data class TestTestingSource(val contents: String, val classloader: ClassLoader)
+    data class TestTestingSource(val contents: String, val classloader: ClassLoader, val fileManager: JeedFileManager)
 
     @delegate:Transient
-    val compiledSolutionForTesting by lazy {
+    val javaSolutionForTesting by lazy {
         try {
             Source(mapOf("${question.klass}.java" to question.contents)).let { questionSource ->
                 if (compiledCommon == null) {
@@ -474,18 +477,58 @@ ${question.contents}
                         )
                     )
                 }
-            }.let {
-                TestTestingSource(question.contents, fixTestingMethods(it.classLoader))
+            }.let { compiledSource ->
+                val (newClassLoader, newFileManager) = fixTestingMethods(compiledSource, Language.java)
+                TestTestingSource(question.contents, newClassLoader, newFileManager)
+
             }
         } catch (e: Exception) {
             System.err.println(
                 """
-Failed compiling solution control class:
+Failed compiling Java solution:
 ---
 ${question.contents}
 ---"""
             )
             throw e
+        }
+    }
+
+    @delegate:Transient
+    val kotlinSolutionForTesting by lazy {
+        if (solutionByLanguage[Language.kotlin] == null) {
+            null
+        } else {
+            val contents = templateSubmission(solutionByLanguage[Language.kotlin]!!.contents, Language.kotlin).contents
+            try {
+                Source(mapOf("${question.klass}.kt" to contents)).let { questionSource ->
+                    if (compiledCommon == null) {
+                        questionSource.kompile(
+                            KompilationArguments(isolatedClassLoader = true, parameters = true)
+                        )
+                    } else {
+                        questionSource.kompile(
+                            KompilationArguments(
+                                parentClassLoader = compiledCommon!!.classLoader,
+                                parentFileManager = compiledCommon!!.fileManager,
+                                parameters = true,
+                            )
+                        )
+                    }
+                }.let { compiledSource ->
+                    val (newClassLoader, newFileManager) = fixTestingMethods(compiledSource, Language.kotlin)
+                    TestTestingSource(contents, newClassLoader, newFileManager)
+                }
+            } catch (e: Exception) {
+                System.err.println(
+                    """
+Failed compiling Kotlin solution:
+---
+${solutionByLanguage[Language.kotlin]!!.contents}
+---"""
+                )
+                throw e
+            }
         }
     }
 
@@ -578,10 +621,18 @@ ${question.contents}
     }
 
     fun warm() {
-        // warm
         compiledCommon
         compiledSolution
-        compiledSolutionForTesting
+        compilationDefinedClass
+        solution
+        featureChecker
+    }
+
+    fun warmTest() {
+        compiledCommon
+        compiledSolution
+        javaSolutionForTesting
+        kotlinSolutionForTesting
         compilationDefinedClass
         solution
         featureChecker

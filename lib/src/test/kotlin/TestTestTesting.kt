@@ -85,7 +85,7 @@ public class TestQuestion {
         question.testTests(
             """
 fun test() {
-  check(Question.addOne(0) == 1)
+  check(addOne(0) == 1)
 }
 """, Language.kotlin
         ).also { results ->
@@ -96,8 +96,8 @@ fun test() {
         question.testTests(
             """
 fun test() {
-  check(Question.addOne(0) == 1)
-  check(Question.addOne(1) == 2)
+  check(addOne(0) == 1)
+  check(addOne(1) == 2)
 }
 """, Language.kotlin
         ).also { results ->
@@ -108,8 +108,8 @@ fun test() {
             """
 fun myAddOne(value: Int) = value + 1
 fun test() {
-  check(Question.addOne(0) == myAddOne(0))
-  check(Question.addOne(1) == myAddOne(1))
+  check(addOne(0) == myAddOne(0))
+  check(addOne(1) == myAddOne(1))
 }
 """, Language.kotlin
         ).also { results ->
@@ -354,6 +354,19 @@ public class TestQuestion {
         }
         question.testTests(JAVA_ALTERNATE_SUITE_CLASS, Language.java).also { results ->
             results.failedSteps.size shouldBe 1
+        }
+    }
+    "should handle Kotlin null properly" {
+        val (question) = Validator.validate("Pure null check").also { (question, report) ->
+            question.validated shouldBe true
+            report shouldNotBe null
+        }
+        question.testTests("""
+fun test() {
+  nullCheck(null, false)
+}""".trimIndent(), Language.kotlin).also { results ->
+            results.failedSteps.size shouldBe 1
+            results.failedSteps shouldContain TestTestResults.Step.compileSubmission
         }
     }
 })

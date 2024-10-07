@@ -8,6 +8,7 @@ import edu.illinois.cs.cs125.jeed.core.CompiledSource
 import edu.illinois.cs.cs125.jeed.core.ConfiguredSandboxPlugin
 import edu.illinois.cs.cs125.jeed.core.FeatureName
 import edu.illinois.cs.cs125.jeed.core.JeedClassLoader
+import edu.illinois.cs.cs125.jeed.core.JeedFileManager
 import edu.illinois.cs.cs125.jeed.core.KompilationArguments
 import edu.illinois.cs.cs125.jeed.core.KtLintArguments
 import edu.illinois.cs.cs125.jeed.core.KtLintFailed
@@ -29,6 +30,7 @@ import edu.illinois.cs.cs125.jenisol.core.isPrivate
 import edu.illinois.cs.cs125.jenisol.core.isStatic
 import edu.illinois.cs.cs125.questioner.lib.features.countFeature
 import edu.illinois.cs.cs125.questioner.lib.features.usesLoop
+import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.ClassReader
 import org.objectweb.asm.ClassVisitor
 import org.objectweb.asm.ClassWriter
@@ -38,6 +40,9 @@ import java.time.Instant
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.roundToInt
+import kotlin.metadata.Modality
+import kotlin.metadata.jvm.KotlinClassMetadata
+import kotlin.metadata.modality
 import kotlin.random.Random
 
 suspend fun Question.testTests(
@@ -54,7 +59,7 @@ suspend fun Question.testTests(
         check(published.type != Question.Type.SNIPPET) { "Test testing not supported for snippets" }
         check(settings.limit!! >= 2) { "Limit must be at least 2" }
 
-        warm()
+        warmTest()
 
         val testKlass = "Test${published.klass}"
         val results = TestTestResults(language)
@@ -64,17 +69,56 @@ suspend fun Question.testTests(
             return results
         }
 
+        // Perform an initial unused Kotlin compile so that the compiler can perform null checks properly
+        var kotlinToLevelMethod = false
+        if (language == Language.kotlin && kotlinSolutionForTesting != null) {
+            kotlinToLevelMethod = try {
+                kotlinSolutionForTesting!!.classloader.loadClass("${published.klass}Kt")
+                true
+            } catch (e: Exception) {
+                false
+            }
+
+            try {
+                kompileTestSuites(
+                    contents, InvertingClassLoader(
+                        setOf(testKlass, "${testKlass}Kt"),
+                        kotlinSolutionForTesting!!.classloader
+                    ), kotlinSolutionForTesting!!.fileManager, results, false
+                )
+            } catch (e: TemplatingFailed) {
+                return results
+            } catch (e: CompilationFailed) {
+                return results
+            } catch (e: CheckstyleFailed) {
+                return results
+            } catch (e: KtLintFailed) {
+                return results
+            }
+        }
         val compilationClassLoader = when (language) {
-            Language.java -> InvertingClassLoader(setOf(testKlass), compiledSolutionForTesting.classloader)
+            Language.java -> InvertingClassLoader(setOf(testKlass), javaSolutionForTesting.classloader)
             Language.kotlin -> InvertingClassLoader(
                 setOf(testKlass, "${testKlass}Kt"),
-                compiledSolutionForTesting.classloader
+                javaSolutionForTesting.classloader
             )
         }
         val compiledSubmission = try {
             when (language) {
-                Language.java -> compileTestSuites(contents, compilationClassLoader, results)
-                Language.kotlin -> kompileTestSuites(contents, compilationClassLoader, results)
+                Language.java -> compileTestSuites(
+                    contents,
+                    compilationClassLoader,
+                    javaSolutionForTesting.fileManager,
+                    results
+                )
+
+                Language.kotlin -> kompileTestSuites(
+                    contents,
+                    compilationClassLoader,
+                    javaSolutionForTesting.fileManager,
+                    results,
+                    kotlinToLevelMethod
+                )
             }
         } catch (e: TemplatingFailed) {
             return results
@@ -165,7 +209,7 @@ suspend fun Question.testTests(
         val output = mutableListOf<String>()
 
         for ((testingMutationOrSolution, i) in testingMutationsOrSolutions) {
-            val testingLoader = testingMutationOrSolution?.compiled(this) ?: compiledSolutionForTesting
+            val testingLoader = testingMutationOrSolution?.compiled(this) ?: javaSolutionForTesting
             val isSolution = testingMutationOrSolution == null
 
             val testingSuiteLoader = CopyableClassLoader.copy(compiledSubmission.classLoader, testingLoader.classloader)
@@ -221,7 +265,7 @@ suspend fun Question.testTests(
                     "Class design error:\n  Could not find class ${published.klass}"
 
                 is NoClassDefFoundError -> results.failed.checkExecutedSubmission =
-                    "Class design error:\n  Attempted to use unavailable class ${threw.message}"
+                    "Class design error:\n  Attempted to use unavailable class ${threw.message} ${threw.stackTraceToString()}"
 
                 is OutOfMemoryError -> results.failed.checkExecutedSubmission =
                     "Allocated too much memory: ${threw.message}, already used ${resourceUsage.allocatedMemory} bytes.\nIf you are printing for debug purposes, consider less verbose output."
@@ -260,7 +304,7 @@ suspend fun Question.testTests(
             } else {
                 i!! + 1
             }
-            check(correctMap[mapIndex] == null)
+            check(correctMap[mapIndex] == null) { "Shouldn't overwrite previous value" }
             correctMap[mapIndex] = isCorrect
 
             output += taskResults.stdout.trim() + if (taskResults.truncatedLines > 0) {
@@ -273,8 +317,11 @@ suspend fun Question.testTests(
             }
         }
 
+        check(settings.shortCircuit!! || correctMap[0] != null) { "Should have tested solution" }
+
         results.addTestTestingResults(
             TestTestResults.TestTestingResults(
+                settings.selectionStrategy,
                 correctMap.values.count { it },
                 correctMap.values.count { !it },
                 correctMap[0],
@@ -294,10 +341,21 @@ data class IndexBoundMutation(val mutation: Question.TestTestingMutation? = null
 
 fun Question.templateTestSuites(
     contents: String,
-    language: Language
+    language: Language,
+    kotlinTopLevelMethod: Boolean = false
 ): Pair<Source, String?> {
     val template = when (published.type) {
-        Question.Type.KLASS -> null
+        Question.Type.KLASS -> {
+            if (language == Language.java || !kotlinTopLevelMethod) {
+                null
+            } else {
+                """import ${published.klass}.*
+                    |
+                    |{{{ contents }}}
+                """.trimMargin()
+            }
+        }
+
         Question.Type.METHOD -> {
             when (language) {
                 Language.java -> {
@@ -341,6 +399,7 @@ fun Question.templateTestSuites(
 suspend fun Question.compileTestSuites(
     contents: String,
     parentClassLoader: ClassLoader,
+    parentFileManager: JeedFileManager,
     testResults: TestTestResults
 ): CompiledSource {
     return try {
@@ -351,7 +410,7 @@ suspend fun Question.compileTestSuites(
         val compiledSource = source.compile(
             CompilationArguments(
                 parentClassLoader = parentClassLoader,
-                parentFileManager = compiledSolution.fileManager,
+                parentFileManager = parentFileManager,
                 parameters = true
             )
         ).also {
@@ -379,17 +438,19 @@ suspend fun Question.compileTestSuites(
 suspend fun Question.kompileTestSuites(
     contents: String,
     parentClassLoader: ClassLoader,
-    testResults: TestTestResults
+    parentFileManager: JeedFileManager,
+    testResults: TestTestResults,
+    kotlinTopLevelMethod: Boolean
 ): CompiledSource {
     return try {
-        val (source, template) = templateTestSuites(contents, Language.kotlin)
+        val (source, template) = templateTestSuites(contents, Language.kotlin, kotlinTopLevelMethod)
         if (template != null) {
             testResults.completedSteps.add(TestTestResults.Step.templateSubmission)
         }
         val compiledSource = source.kompile(
             KompilationArguments(
                 parentClassLoader = parentClassLoader,
-                parentFileManager = compiledSolution.fileManager,
+                parentFileManager = parentFileManager,
                 parameters = true
             )
         ).also {
@@ -432,13 +493,11 @@ fun Question.checkCompiledTestSuite(
             return null
         }
     }
-    var klass = klasses.first()
-    if (compiledTestSuite.source.type == Source.SourceType.KOTLIN &&
-        (solution.skipReceiver || solution.fauxStatic) &&
-        klass == "${testKlass}Kt"
+    val klass = klasses.first()
+    if (!(compiledTestSuite.source.type == Source.SourceType.KOTLIN &&
+            (solution.skipReceiver || solution.fauxStatic) &&
+            klass == "${testKlass}Kt")
     ) {
-        klass = "${testKlass}Kt"
-    } else {
         if (klass != testKlass) {
             testResults.failed.checkCompiledSubmission =
                 "Test suite defines incorrect class: ${klasses.first()} != $testKlass"
@@ -497,13 +556,68 @@ class CopyableClassLoader(override val bytecodeForClasses: Map<String, ByteArray
     }
 }
 
-fun Question.fixTestingMethods(classLoader: JeedClassLoader): ClassLoader {
-    val methodsToOpen = classLoader.loadClass(published.klass).declaredMethods
+fun Question.fixTestingMethods(compiledSource: CompiledSource, language: Language): Pair<ClassLoader, JeedFileManager> {
+    val classLoader = compiledSource.classLoader
+    val klass = if (language == Language.java) {
+        published.klass
+    } else {
+        if (classLoader.definedClasses.contains(published.klass)) {
+            published.klass
+        } else {
+            "${published.klass}Kt"
+        }
+    }
+    check(classLoader.definedClasses.contains(klass)) { "Couldn't find $klass ($language)" }
+    val loadedKlass = classLoader.loadClass(klass)
+
+    val newKotlinMetadataAnnotation = if (language == Language.kotlin && klass == published.klass) {
+        loadedKlass.getAnnotation(Metadata::class.java)?.let { oldAnnotation ->
+            KotlinClassMetadata.transform(oldAnnotation) { metadata ->
+                when (metadata) {
+                    is KotlinClassMetadata.Class -> {
+                        if (metadata.kmClass.name == klass) {
+                            metadata.kmClass.modality = Modality.OPEN
+                        }
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    } else {
+        null
+    }
+
+    val methodsToOpen = loadedKlass.declaredMethods
         .filter { method -> method.isPackagePrivate() }
         .map { method -> method.name }
-    val classReader = ClassReader(classLoader.bytecodeForClasses[published.klass])
+    val classReader = ClassReader(classLoader.bytecodeForClasses[klass])
     val classWriter = ClassWriter(classReader, 0)
     val openingVisitor = object : ClassVisitor(Opcodes.ASM8, classWriter) {
+        private val kotlinAnnotationName = "Lkotlin/Metadata;"
+        override fun visit(
+            version: Int,
+            access: Int,
+            name: String?,
+            signature: String?,
+            superName: String?,
+            interfaces: Array<out String>?
+        ) {
+            super.visit(version, access and Opcodes.ACC_FINAL.inv(), name, signature, superName, interfaces)
+        }
+
+        override fun visitAnnotation(descriptor: String?, visible: Boolean): AnnotationVisitor {
+            if (descriptor != kotlinAnnotationName || newKotlinMetadataAnnotation == null) {
+                return super.visitAnnotation(descriptor, visible)
+            }
+            val newAnnotation = object : AnnotationVisitor(Opcodes.ASM8) {}
+            newKotlinMetadataAnnotation::class.java.declaredFields.forEach { field ->
+                field.isAccessible = true
+                newAnnotation.visit(field.name, field.get(newKotlinMetadataAnnotation))
+            }
+            return newAnnotation
+        }
+
         override fun visitMethod(
             access: Int,
             name: String,
@@ -522,8 +636,15 @@ fun Question.fixTestingMethods(classLoader: JeedClassLoader): ClassLoader {
             else -> super.visitMethod(access, name, descriptor, signature, exceptions)
         }
     }
+
     classReader.accept(openingVisitor, 0)
-    return CopyableClassLoader(mapOf(published.klass to classWriter.toByteArray()), classLoader.parent)
+    val newKlass = classWriter.toByteArray()
+
+    return Pair(
+        CopyableClassLoader(mapOf(klass to newKlass), classLoader.parent),
+        JeedFileManager(compiledSource.fileManager).also {
+            it.replaceClass(klass, newKlass)
+        })
 }
 
 @Suppress("SpellCheckingInspection")
