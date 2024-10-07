@@ -7,11 +7,16 @@ import {
   KtlintResults,
   TemplatingFailed,
 } from "@cs124/jeed-types"
-import { Array, Boolean, Literal, Number, Partial, Record, Static, String, Union } from "runtypes"
+import { Array, Boolean, Dictionary, Literal, Number, Partial, Record, Static, String, Union } from "runtypes"
 import { Languages } from "./languages"
 import { TestTestingStep } from "./steps"
 
-export const SelectionStrategy = Union(Literal("HARDEST"), Literal("EASIEST"), Literal("EVENLY_SPACED"))
+export const SelectionStrategy = Union(
+  Literal("HARDEST"),
+  Literal("EASIEST"),
+  Literal("EVENLY_SPACED"),
+  Literal("EASIEST_AND_HARDEST"),
+)
 export type SelectionStrategy = Static<typeof SelectionStrategy>
 
 export const TestTestingSettings = Partial({
@@ -32,7 +37,9 @@ export const TestTestingResult = Record({
   output: Array(String),
 }).And(
   Partial({
+    selectionStrategy: SelectionStrategy,
     identifiedSolution: Boolean,
+    correctMap: Dictionary(Boolean, Number),
   }),
 )
 export type TestTestingResult = Static<typeof TestTestingResult>

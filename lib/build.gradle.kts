@@ -17,9 +17,10 @@ dependencies {
 
     implementation("org.apache.commons:commons-text:1.12.0")
     implementation("io.github.java-diff-utils:java-diff-utils:4.12")
-    implementation("org.ow2.asm:asm:9.7")
+    implementation("org.ow2.asm:asm:9.7.1")
     implementation("org.mongodb:mongodb-driver:3.12.14")
     implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.20")
+    implementation("org.jetbrains.kotlin:kotlin-metadata-jvm:2.0.20")
 
     implementation("org.slf4j:slf4j-api:2.0.16")
     implementation("ch.qos.logback:logback-classic:1.5.8")
@@ -30,7 +31,7 @@ dependencies {
     api("com.beyondgrader.resource-agent:virtualfsplugin:2024.7.0") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2024.9.2")
+    api("org.cs124.jeed:core:2024.10.0")
     api("org.cs124:jenisol:2024.9.1")
     api("org.cs124:libcs1:2024.9.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.18.0")

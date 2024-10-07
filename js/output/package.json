@@ -1,6 +1,6 @@
 {
   "name": "@cs124/questioner-output",
-  "version": "2024.9.0",
+  "version": "2024.10.0",
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
@@ -19,14 +19,14 @@
   "types": "dist/index.d.ts",
   "dependencies": {
     "@cs124/jeed-types": "2024.9.0",
-    "@cs124/questioner-types": "2024.9.0",
+    "@cs124/questioner-types": "2024.10.0",
     "capitalize": "2.0.4",
     "indent-string": "4.0.0"
   },
   "devDependencies": {
     "@types/capitalize": "2.0.2",
-    "@typescript-eslint/eslint-plugin": "8.7.0",
-    "@typescript-eslint/parser": "8.7.0",
+    "@typescript-eslint/eslint-plugin": "8.8.0",
+    "@typescript-eslint/parser": "8.8.0",
     "depcheck": "1.4.7",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
