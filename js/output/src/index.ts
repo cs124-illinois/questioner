@@ -197,8 +197,8 @@ export const terminalOutput = (
   }
   if (complete.complexity?.failed === true) {
     const { solution, submission } = complete.complexity
-    warnings["complexity"] = `Your submission is a bit too complicated:\n${indentString(
-      `The solution has ${solution} code ${pluralize("path", solution)}.\nYour submission has ${submission}.`,
+    warnings["complexity"] = `Your submission is too complicated:\n${indentString(
+      `The solution has a cyclomaticy complexity of ${solution}.\nYour submission has ${submission}.`,
       indentation,
     )}`
   }
