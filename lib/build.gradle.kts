@@ -8,7 +8,7 @@ plugins {
     `maven-publish`
     signing
     id("com.google.devtools.ksp")
-    id("com.ryandens.javaagent-test") version "0.6.1"
+    id("com.ryandens.javaagent-test") version "0.7.0"
 }
 dependencies {
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.1")
@@ -19,11 +19,11 @@ dependencies {
     implementation("io.github.java-diff-utils:java-diff-utils:4.12")
     implementation("org.ow2.asm:asm:9.7.1")
     implementation("org.mongodb:mongodb-driver:3.12.14")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.20")
-    implementation("org.jetbrains.kotlin:kotlin-metadata-jvm:2.0.20")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.0.21")
+    implementation("org.jetbrains.kotlin:kotlin-metadata-jvm:2.0.21")
 
     implementation("org.slf4j:slf4j-api:2.0.16")
-    implementation("ch.qos.logback:logback-classic:1.5.8")
+    implementation("ch.qos.logback:logback-classic:1.5.11")
     implementation("io.github.microutils:kotlin-logging:3.0.5")
 
     api("com.squareup.moshi:moshi-kotlin:1.15.1")
@@ -31,7 +31,7 @@ dependencies {
     api("com.beyondgrader.resource-agent:virtualfsplugin:2024.7.0") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2024.10.0")
+    api("org.cs124.jeed:core:2024.10.1")
     api("org.cs124:jenisol:2024.9.1")
     api("org.cs124:libcs1:2024.9.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.18.0")

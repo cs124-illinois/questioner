@@ -462,8 +462,12 @@ ${question.contents}
 
     @delegate:Transient
     val javaSolutionForTesting by lazy {
+        // End-of-source comment to prevent cache collisions on actual solution but still enable caching
+        val contents = """${question.contents}
+// Java solution for testing
+"""
         try {
-            Source(mapOf("${question.klass}.java" to question.contents)).let { questionSource ->
+            Source(mapOf("${question.klass}.java" to contents)).let { questionSource ->
                 if (compiledCommon == null) {
                     questionSource.compile(
                         CompilationArguments(isolatedClassLoader = true, parameters = true)
@@ -487,7 +491,7 @@ ${question.contents}
                 """
 Failed compiling Java solution:
 ---
-${question.contents}
+$contents
 ---"""
             )
             throw e
@@ -499,7 +503,11 @@ ${question.contents}
         if (solutionByLanguage[Language.kotlin] == null) {
             null
         } else {
-            val contents = templateSubmission(solutionByLanguage[Language.kotlin]!!.contents, Language.kotlin).contents
+            // End-of-source comment to prevent cache collisions on actual solution but still enable caching
+            val contents =
+"""${templateSubmission(solutionByLanguage[Language.kotlin]!!.contents, Language.kotlin).contents}
+// Kotlin solution for testing
+"""
             try {
                 Source(mapOf("${question.klass}.kt" to contents)).let { questionSource ->
                     if (compiledCommon == null) {
@@ -524,7 +532,7 @@ ${question.contents}
                     """
 Failed compiling Kotlin solution:
 ---
-${solutionByLanguage[Language.kotlin]!!.contents}
+$contents
 ---"""
                 )
                 throw e

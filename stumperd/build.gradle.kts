@@ -10,10 +10,10 @@ plugins {
     id("org.jmailen.kotlinter")
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("com.google.devtools.ksp")
-    id("com.ryandens.javaagent-test") version "0.6.1"
+    id("com.ryandens.javaagent-test") version "0.7.0"
 }
 dependencies {
-    val ktorVersion = "2.3.12"
+    val ktorVersion = "3.0.0"
 
     testJavaagent("com.beyondgrader.resource-agent:agent:2024.7.0")
 
@@ -25,7 +25,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
     implementation("org.mongodb:mongodb-driver:3.12.14")
     implementation("org.slf4j:slf4j-api:2.0.16")
-    implementation("ch.qos.logback:logback-classic:1.5.8")
+    implementation("ch.qos.logback:logback-classic:1.5.11")
     implementation("io.github.microutils:kotlin-logging:3.0.5")
 }
 tasks.withType<Test> {
