@@ -510,42 +510,37 @@ internal fun String.parseKotlin() = CharStreams.fromStream(StringInputStream(thi
     }
 }
 
-fun KotlinParser.FileAnnotationsContext.getAnnotation(vararg toFind: Class<*>): KotlinParser.UnescapedAnnotationContext? =
-    fileAnnotation()?.flatMap { it.unescapedAnnotation() }?.find { annotation ->
-        annotation.identifier()?.text != null && toFind.map { it.simpleName }.contains(annotation.identifier().text)
-    }
+fun KotlinParser.FileAnnotationsContext.getAnnotation(vararg toFind: Class<*>): KotlinParser.UnescapedAnnotationContext? = fileAnnotation()?.flatMap { it.unescapedAnnotation() }?.find { annotation ->
+    annotation.identifier()?.text != null && toFind.map { it.simpleName }.contains(annotation.identifier().text)
+}
 
 @Suppress("unused")
-fun KotlinParser.FileAnnotationsContext.getAnnotation(vararg toFind: String): KotlinParser.UnescapedAnnotationContext? =
-    fileAnnotation()?.flatMap { it.unescapedAnnotation() }?.find { annotation ->
-        annotation.identifier()?.text != null && toFind.contains(annotation.identifier().text)
-    }
+fun KotlinParser.FileAnnotationsContext.getAnnotation(vararg toFind: String): KotlinParser.UnescapedAnnotationContext? = fileAnnotation()?.flatMap { it.unescapedAnnotation() }?.find { annotation ->
+    annotation.identifier()?.text != null && toFind.contains(annotation.identifier().text)
+}
 
-fun KotlinParser.ClassDeclarationContext.getAnnotation(annotation: Class<*>): KotlinParser.AnnotationContext? =
-    modifierList()?.annotations()?.find {
-        it.annotation()?.LabelReference()?.text == "@${annotation.simpleName}"
-    }?.annotation()
+fun KotlinParser.ClassDeclarationContext.getAnnotation(annotation: Class<*>): KotlinParser.AnnotationContext? = modifierList()?.annotations()?.find {
+    it.annotation()?.LabelReference()?.text == "@${annotation.simpleName}"
+}?.annotation()
 
 @Suppress("unused")
-fun KotlinParser.ClassDeclarationContext.getAnnotation(vararg toFind: String): KotlinParser.AnnotationContext? =
-    modifierList()?.annotations()?.find { toFind.contains(it.annotation()?.LabelReference()?.text) }?.annotation()
+fun KotlinParser.ClassDeclarationContext.getAnnotation(vararg toFind: String): KotlinParser.AnnotationContext? = modifierList()?.annotations()?.find { toFind.contains(it.annotation()?.LabelReference()?.text) }?.annotation()
 
-fun KotlinParser.KotlinFileContext.comment() =
-    topLevelObject().find { it.DelimitedComment() != null }?.DelimitedComment()?.text
-        ?.toString()?.split("\n")?.joinToString(separator = "\n") { line ->
-            line.trim()
-                .removePrefix("""/*""")
-                .removePrefix("""*/""")
-                .removePrefix("""* """)
-                .removeSuffix("""*//*""")
-                .let {
-                    if (it == "*") {
-                        ""
-                    } else {
-                        it
-                    }
+fun KotlinParser.KotlinFileContext.comment() = topLevelObject().find { it.DelimitedComment() != null }?.DelimitedComment()?.text
+    ?.toString()?.split("\n")?.joinToString(separator = "\n") { line ->
+        line.trim()
+            .removePrefix("""/*""")
+            .removePrefix("""*/""")
+            .removePrefix("""* """)
+            .removeSuffix("""*//*""")
+            .let {
+                if (it == "*") {
+                    ""
+                } else {
+                    it
                 }
-        }?.trim()
+            }
+    }?.trim()
 
 fun KotlinParser.ClassDeclarationContext.comment() = DelimitedComment()?.text
     ?.toString()?.split("\n")?.joinToString(separator = "\n") { line ->

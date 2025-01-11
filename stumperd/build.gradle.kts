@@ -13,19 +13,19 @@ plugins {
     id("com.ryandens.javaagent-test") version "0.7.0"
 }
 dependencies {
-    val ktorVersion = "3.0.1"
+    val ktorVersion = "3.0.3"
 
     testJavaagent("com.beyondgrader.resource-agent:agent:2024.7.0")
 
-    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.1")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.2")
 
     implementation(project(":lib"))
 
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
     implementation("org.mongodb:mongodb-driver:3.12.14")
     implementation("org.slf4j:slf4j-api:2.0.16")
-    implementation("ch.qos.logback:logback-classic:1.5.12")
+    implementation("ch.qos.logback:logback-classic:1.5.16")
     implementation("io.github.microutils:kotlin-logging:3.0.5")
 }
 tasks.withType<Test> {

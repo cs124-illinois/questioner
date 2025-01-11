@@ -19,17 +19,17 @@ dependencies {
         exclude(module = "kotlin-runtime")
         exclude(module = "kotlin-js")
     }
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.1")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.2")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.2")
     implementation("com.github.slugify:slugify:3.0.7")
 
-    implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.0.21")
+    implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.1.0")
     implementation("gradle.plugin.com.github.sherter.google-java-format:google-java-format-gradle-plugin:0.9")
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.7")
-    implementation("org.jmailen.gradle:kotlinter-gradle:4.4.1")
+    implementation("org.jmailen.gradle:kotlinter-gradle:5.0.1")
 
-    val ktorVersion = "3.0.1"
+    val ktorVersion = "3.0.3"
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("com.beust:klaxon:5.6")
@@ -66,7 +66,7 @@ configurations {
     }
 }
 tasks {
-    val sourcesJar by creating(Jar::class) {
+    val sourcesJar by registering(Jar::class) {
         archiveClassifier.set("sources")
         from(sourceSets["main"].allSource)
         dependsOn(getTasksByName("generateGrammarSource", false))

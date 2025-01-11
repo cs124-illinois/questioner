@@ -20,12 +20,11 @@ data class PipelineOptions(
 )
 
 @OptIn(ExperimentalCoroutinesApi::class)
-fun CoroutineScope.produceSubmissions(options: PipelineOptions) =
-    produce {
-        for (starter in options.submissionCollection.findSubmissions().take(options.limit)) {
-            send(starter)
-        }
+fun CoroutineScope.produceSubmissions(options: PipelineOptions) = produce {
+    for (starter in options.submissionCollection.findSubmissions().take(options.limit)) {
+        send(starter)
     }
+}
 
 fun CoroutineScope.launchStumperProcessor(
     @Suppress("UNUSED_PARAMETER") id: Int,

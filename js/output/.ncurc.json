@@ -1,3 +1,3 @@
 {
-  "reject": ["indent-string", "eslint", "prettier-plugin-organize-imports"]
+  "reject": ["indent-string", "eslint"]
 }

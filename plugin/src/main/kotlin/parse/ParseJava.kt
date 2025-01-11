@@ -745,28 +745,25 @@ internal fun String.parseJava() = runBlocking {
     }
 }
 
-fun JavaParser.CompilationUnitContext.topLevelClass(): JavaParser.TypeDeclarationContext =
-    children.filterIsInstance<JavaParser.TypeDeclarationContext>().filter {
-        it.classDeclaration() != null || it.interfaceDeclaration() != null
-    }.let {
-        check(it.isNotEmpty()) {
-            "Couldn't find solution class. Make sure description comment is immediately above the @Correct annotation."
-        }
-        check(it.size == 1) {
-            "Found multiple top-level classes"
-        }
-        it.first()
+fun JavaParser.CompilationUnitContext.topLevelClass(): JavaParser.TypeDeclarationContext = children.filterIsInstance<JavaParser.TypeDeclarationContext>().filter {
+    it.classDeclaration() != null || it.interfaceDeclaration() != null
+}.let {
+    check(it.isNotEmpty()) {
+        "Couldn't find solution class. Make sure description comment is immediately above the @Correct annotation."
     }
+    check(it.size == 1) {
+        "Found multiple top-level classes"
+    }
+    it.first()
+}
 
-fun JavaParser.TypeDeclarationContext.getAnnotation(annotation: Class<*>): JavaParser.AnnotationContext? =
-    classOrInterfaceModifier().find {
-        it.annotation()?.qualifiedName()?.asString() == annotation.simpleName
-    }?.annotation()
+fun JavaParser.TypeDeclarationContext.getAnnotation(annotation: Class<*>): JavaParser.AnnotationContext? = classOrInterfaceModifier().find {
+    it.annotation()?.qualifiedName()?.asString() == annotation.simpleName
+}?.annotation()
 
-fun JavaParser.TypeDeclarationContext.getAnnotations(annotation: Class<*>): List<JavaParser.AnnotationContext> =
-    classOrInterfaceModifier().filter {
-        it.annotation()?.qualifiedName()?.asString() == annotation.simpleName
-    }.map { it.annotation() }
+fun JavaParser.TypeDeclarationContext.getAnnotations(annotation: Class<*>): List<JavaParser.AnnotationContext> = classOrInterfaceModifier().filter {
+    it.annotation()?.qualifiedName()?.asString() == annotation.simpleName
+}.map { it.annotation() }
 
 fun ElementValueContext.getValue() = expression().primary().literal().let { literal ->
     literal.STRING_LITERAL()
@@ -775,12 +772,11 @@ fun ElementValueContext.getValue() = expression().primary().literal().let { lite
         ?: literal.floatLiteral()?.FLOAT_LITERAL()
 }.toString().removeSurrounding("\"")
 
-fun JavaParser.AnnotationContext.parameterMap(): Map<String, String> =
-    elementValuePairs()?.elementValuePair()?.associate {
-        it.identifier().text to it.elementValue().getValue()
-    } ?: elementValue()?.let {
-        mapOf("value" to it.getValue())
-    } ?: mapOf()
+fun JavaParser.AnnotationContext.parameterMap(): Map<String, String> = elementValuePairs()?.elementValuePair()?.associate {
+    it.identifier().text to it.elementValue().getValue()
+} ?: elementValue()?.let {
+    mapOf("value" to it.getValue())
+} ?: mapOf()
 
 fun JavaParser.AnnotationContext.comment(): String = when {
     parent.parent is JavaParser.TypeDeclarationContext ->

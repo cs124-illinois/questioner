@@ -181,7 +181,7 @@ class QuestionerPlugin : Plugin<Project> {
         }
 
         listOf("testAllQuestions", "testUnvalidatedQuestions", "testFocusedQuestions").map { testName ->
-            project.tasks.create(testName, Test::class.java) { testTask ->
+            project.tasks.register(testName, Test::class.java) { testTask ->
                 testTask.setTestNameIncludePatterns(listOf(testName.capitalized()))
             }
         }
