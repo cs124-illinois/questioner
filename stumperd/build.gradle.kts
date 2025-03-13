@@ -59,7 +59,7 @@ tasks.register<Exec>("dockerBuild") {
     workingDir(layout.buildDirectory.dir("docker"))
     environment("DOCKER_BUILDKIT", "1")
     commandLine(
-        ("docker build . " +
+        ("/usr/local/bin/docker build . " +
             "-t ${dockerName}:latest " +
             "-t ${dockerName}:${project.version}").split(" ")
     )
@@ -68,7 +68,7 @@ tasks.register<Exec>("dockerPush") {
     dependsOn("dockerCopyJar", "dockerCopyDockerfile")
     workingDir(layout.buildDirectory.dir("docker"))
     commandLine(
-        ("docker buildx build . --platform=linux/amd64,linux/arm64/v8 " +
+        ("/usr/local/bin/docker buildx build . --platform=linux/amd64,linux/arm64/v8 " +
             "--tag ${dockerName}:latest " +
             "--tag ${dockerName}:${project.version} --push").split(" ")
     )

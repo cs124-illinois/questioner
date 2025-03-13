@@ -8,6 +8,7 @@ ENTRYPOINT ["/tini", "--"]
 
 WORKDIR /
 COPY *.jar stumperd.jar
+SHELL ["/bin/sh", "-c"]
 CMD java -ea --enable-preview -Dfile.encoding=UTF-8 -Djava.security.manager=allow \
     -Xss256k -XX:+UseZGC -XX:ZCollectionInterval=8 -XX:-OmitStackTraceInFastThrow \
     -XX:+UnlockExperimentalVMOptions -XX:-VMContinuations \
