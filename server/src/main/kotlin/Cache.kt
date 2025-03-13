@@ -15,7 +15,7 @@ data class CacheStats(val hits: Long, val misses: Long) {
     constructor(caffeineStats: CacheStats) : this(caffeineStats.hitCount(), caffeineStats.missCount())
 }
 
-internal val questionCache: Cache<String, Question> =
+internal val questionCache: Cache<String, Question?> =
     Caffeine.newBuilder().maximumSize(questionCacheSize).recordStats().build()
 
 internal fun getStats() = CacheStats(questionCache.stats())
@@ -23,7 +23,6 @@ internal fun getStats() = CacheStats(questionCache.stats())
 internal fun getQuestionByPath(path: String): Question? = questionerCollection.find(
     Filters.and(Filters.eq("published.path", path), Filters.eq("latest", true)),
 ).sort(Sorts.descending("updated")).let { results ->
-    @Suppress("ReplaceSizeZeroCheckWithIsEmpty")
     if (results.count() == 0) {
         return null
     }
@@ -37,7 +36,6 @@ internal fun Submission.getQuestion() = questionCache.get(contentHash) {
     questionerCollection.find(
         Filters.and(Filters.eq("published.contentHash", contentHash)),
     ).sort(Sorts.descending("updated")).let { results ->
-        @Suppress("ReplaceSizeZeroCheckWithIsEmpty")
         if (results.count() == 0) {
             return@get null
         }

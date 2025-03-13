@@ -407,7 +407,7 @@ fun Question.computeClassSize(
     val submissionClassSize = (compiledSubmission.classLoader.sizeInBytes.toLong() - emptyClassSize).let { size ->
         when {
             size < 0 -> {
-                logger.warn { "Negative relative class size value: $size" }
+                logger.debug { "Negative relative class size value: $size" }
                 0
             }
 

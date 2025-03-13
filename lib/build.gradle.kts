@@ -19,27 +19,27 @@ dependencies {
     implementation("io.github.java-diff-utils:java-diff-utils:4.15")
     implementation("org.ow2.asm:asm:9.7.1")
     implementation("org.mongodb:mongodb-driver:3.12.14")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:2.1.0")
-    implementation("org.jetbrains.kotlin:kotlin-metadata-jvm:2.1.0")
-
-    implementation("org.slf4j:slf4j-api:2.0.16")
-    implementation("ch.qos.logback:logback-classic:1.5.16")
-    implementation("io.github.microutils:kotlin-logging:3.0.5")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.1.10")
+    implementation("org.jetbrains.kotlin:kotlin-metadata-jvm:2.1.10")
 
     api("com.squareup.moshi:moshi-kotlin:1.15.2")
     api("com.beyondgrader.resource-agent:agent:2024.7.0")
     api("com.beyondgrader.resource-agent:virtualfsplugin:2024.7.0") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2025.1.0")
-    api("org.cs124:jenisol:2025.1.0")
-    api("org.cs124:libcs1:2025.1.0")
-    api("com.fasterxml.jackson.core:jackson-databind:2.18.2")
+    api("org.cs124.jeed:core:2025.3.0")
+    api("org.cs124:jenisol:2025.3.0")
+    api("org.cs124:libcs1:2025.3.0")
+    api("com.fasterxml.jackson.core:jackson-databind:2.18.3")
 
     api("io.kotest:kotest-runner-junit5:5.9.1")
     api("com.google.truth:truth:1.4.4")
 
-    api("io.github.cdimascio:dotenv-kotlin:6.5.0")
+    api("io.github.cdimascio:dotenv-kotlin:6.5.1")
+
+    api("org.slf4j:slf4j-api:2.0.17")
+    api("ch.qos.logback:logback-classic:1.5.17")
+    api("io.github.microutils:kotlin-logging:3.0.5")
 }
 tasks {
     val sourcesJar by registering(Jar::class) {
@@ -50,16 +50,12 @@ tasks {
         add("archives", sourcesJar)
     }
 }
-tasks.compileKotlin {
-    dependsOn("createProperties")
-}
-task("createProperties") {
-    dependsOn(tasks.processResources)
+tasks.register("createProperties") {
     doLast {
         val properties = Properties().also {
             it["version"] = project.version.toString()
         }
-        File(projectDir, "src/main/resources/edu.illinois.cs.cs124.questioner.lib.version")
+        File(projectDir, "src/main/resources/edu.illinois.cs.cs124.questioner.version")
             .printWriter().use { printWriter ->
                 printWriter.print(
                     StringWriter().also { properties.store(it, null) }.buffer.toString()
@@ -67,6 +63,12 @@ task("createProperties") {
                 )
             }
     }
+}
+tasks.compileKotlin {
+    dependsOn("createProperties")
+}
+tasks.processResources {
+    dependsOn("createProperties")
 }
 java {
     withJavadocJar()
