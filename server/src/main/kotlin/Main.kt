@@ -28,6 +28,11 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import io.ktor.util.AttributeKey
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.ObsoleteCoroutinesApi
+import kotlinx.coroutines.channels.ticker
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import org.slf4j.LoggerFactory
@@ -38,24 +43,35 @@ import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
 import javax.management.NotificationEmitter
 import javax.management.NotificationListener
-import kotlin.collections.forEach
 import kotlin.math.floor
+import kotlin.math.pow
 import kotlin.system.exitProcess
+import kotlin.system.measureTimeMillis
 import edu.illinois.cs.cs125.jeed.core.moshi.Adapters as JeedAdapters
 import edu.illinois.cs.cs125.jeed.core.warm as warmJeed
+import kotlin.math.round as kotlinRound
 
 internal val logger = KotlinLogging.logger {}
 
 internal val questionCacheSize = System.getenv("QUESTIONER_QUESTION_CACHE_SIZE")?.toLong() ?: 16L
 private val warmQuestion = System.getenv("QUESTIONER_WARM_QUESTION")?.toString() ?: "hello-world"
 
+private val runtime: Runtime = Runtime.getRuntime()
+
+private fun totalMemoryMB() = (runtime.totalMemory().toFloat() / 1024.0 / 1024.0).toInt()
+private fun availableMemoryMB() = System.getenv("AVAILABLE_MEMORY_MB")?.toInt() ?: totalMemoryMB()
+private fun freeMemoryMB() = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
+private fun usedMemoryMB() = (totalMemoryMB() - freeMemoryMB()).coerceAtLeast(0)
+private fun memoryPercent() = (usedMemoryMB().toFloat() / totalMemoryMB().toFloat() * 100.0).toInt()
+private fun printMemory() = "${memoryPercent()}% (${usedMemoryMB()} / ${totalMemoryMB()} / ${availableMemoryMB()})"
+
+private fun Double.round(decimals: Int) = 10.0.pow(decimals)
+    .let { multiplier -> kotlinRound(this * multiplier) / multiplier }
+
 @Suppress("LongMethod")
 fun Application.questioner() {
     val callStartTime = AttributeKey<Long>("CallStartTime")
     val counter = AtomicInteger()
-
-    val runtime: Runtime = Runtime.getRuntime()
-    fun getMemory() = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
 
     intercept(ApplicationCallPipeline.Setup) {
         call.attributes.put(callStartTime, Instant.now().toEpochMilli())
@@ -106,33 +122,33 @@ fun Application.questioner() {
 
             @Suppress("TooGenericExceptionCaught")
             try {
-                val startMemory = getMemory()
+                val startMemory = freeMemoryMB()
                 val response = submission.test(question)
                 call.respond(response)
-                val endMemory = getMemory()
-                logger.debug {
+                val endMemory = freeMemoryMB()
+                logger.debug(
                     "$runCount: ${question.fullPath}: $startMemory -> $endMemory (${
                         Instant.now().toEpochMilli() - submitted.toEpochMilli()
-                    }, ${response.duration})"
-                }
-                logger.debug { "Cache hit rate: ${questionCache.stats().hitRate()} (Size $questionCacheSize)" }
+                    }, ${response.duration})",
+                )
+                logger.debug("Cache hit rate: ${questionCache.stats().hitRate()} (Size $questionCacheSize)")
             } catch (e: StackOverflowError) {
                 e.printStackTrace()
                 call.respond(HttpStatusCode.BadRequest)
             } catch (e: Error) {
                 e.printStackTrace()
                 logger.debug { submission }
-                logger.error { e.toString() }
+                logger.error(e.toString())
                 // Firm shutdown
                 Runtime.getRuntime().halt(-1)
             } catch (e: Throwable) {
                 e.printStackTrace()
-                logger.warn { e.toString() }
+                logger.warn(e.toString())
                 call.respond(HttpStatusCode.BadRequest)
             } finally {
-                System.getenv("DUMP_AT_SUBMISSION")?.toInt()?.also {
-                    if (it == runCount) {
-                        logger.debug { "Dumping heap" }
+                System.getenv("DUMP_AT_SUBMISSION")?.toInt()?.also { dumpCount ->
+                    if (dumpCount == runCount) {
+                        logger.debug("Dumping heap")
                         ManagementFactory.newPlatformMXBeanProxy(
                             ManagementFactory.getPlatformMBeanServer(),
                             "com.sun.management:type=HotSpotDiagnostic",
@@ -153,6 +169,7 @@ suspend fun doWarm() {
     warm(question)
 }
 
+@OptIn(DelicateCoroutinesApi::class, ObsoleteCoroutinesApi::class)
 fun main(): Unit = runBlocking {
     ResourceMonitoring.ensureAgentActivated()
 
@@ -168,46 +185,60 @@ fun main(): Unit = runBlocking {
         "Please set the QUESTIONER_TESTTEST_TIMEOUT_MS environment variable"
     }
 
-    System.getenv("LOG_LEVEL")?.also { logLevel ->
-        (LoggerFactory.getILoggerFactory() as LoggerContext).getLogger(logger.name).level = Level.toLevel(logLevel)
-    } ?: run {
-        (LoggerFactory.getILoggerFactory() as LoggerContext).getLogger(logger.name).level = Level.INFO
-    }
+    (LoggerFactory.getILoggerFactory() as LoggerContext).getLogger(logger.name).level =
+        System.getenv("LOG_LEVEL")?.let { Level.toLevel(it) } ?: Level.INFO
+
+    logger.info { Status().toJson() }
 
     val memoryLimitThreshold = System.getenv("MEMORY_LIMIT_THRESHOLD")?.toDoubleOrNull() ?: 0.8
-    ManagementFactory.getMemoryPoolMXBeans().find {
-        it.type == MemoryType.HEAP && it.isUsageThresholdSupported
-    }?.also {
-        val threshold = floor(it.usage.max * memoryLimitThreshold).toLong()
-        logger.debug { "Setting memory collection threshold to $threshold" }
-        it.collectionUsageThreshold = threshold
-        val listener = NotificationListener { notification, _ ->
-            if (notification.type == MemoryNotificationInfo.MEMORY_COLLECTION_THRESHOLD_EXCEEDED) {
-                logger.error { "Memory threshold exceeded" }
-                exitProcess(-1)
+    val memoryLimitAction = System.getenv("MEMORY_LIMIT_ACTION") ?: "ignore"
+
+    ManagementFactory.getMemoryPoolMXBeans()
+        .find { bean -> bean.type == MemoryType.HEAP && bean.isUsageThresholdSupported }
+        ?.also { bean ->
+            val threshold = floor(bean.usage.max * memoryLimitThreshold).toLong()
+            logger.debug("Setting memory collection threshold to $threshold")
+            bean.collectionUsageThreshold = threshold
+            val listener = NotificationListener { notification, _ ->
+                if (notification.type == MemoryNotificationInfo.MEMORY_COLLECTION_THRESHOLD_EXCEEDED) {
+                    if (memoryLimitAction == "reboot") {
+                        logger.error("Memory threshold exceeded, rebooting as requested")
+                        exitProcess(-1)
+                    } else if (memoryLimitAction == "warn") {
+                        logger.warn("Memory threshold exceeded")
+                    }
+                }
             }
-        }
-        (ManagementFactory.getMemoryMXBean() as NotificationEmitter).addNotificationListener(listener, null, null)
-    } ?: logger.warn { "Memory management interface not found" }
+            (ManagementFactory.getMemoryMXBean() as NotificationEmitter).addNotificationListener(listener, null, null)
+        } ?: logger.warn("Memory management interface not found")
 
-    logger.debug { Status().toJson() }
-
-    logger.info { "Warming Jeed" }
+    logger.info("Warming Jeed")
     try {
         warmJeed(2, failLint = false)
     } catch (e: Exception) {
-        logger.warn { e }
-    }
-
-    logger.info { "Warming Questioner" }
-    try {
-        doWarm()
-    } catch (e: Exception) {
-        logger.warn { e }
+        logger.error("Warming Jeed failed: $e")
+        exitProcess(-1)
     }
 
     (LoggerFactory.getILoggerFactory() as LoggerContext).getLogger(logger.name).also { logLevel ->
         logger.info("Starting questioner server (log level $logLevel)")
+    }
+
+    val memoryCheckInterval = System.getenv("MEMORY_CHECK_INTERVAL_SEC")?.toLong() ?: 300L
+    val tickerChannel = ticker(delayMillis = memoryCheckInterval * 1000, initialDelayMillis = 0)
+    GlobalScope.launch {
+        @Suppress("UNUSED")
+        for (unused in tickerChannel) {
+            val warmTime = measureTimeMillis {
+                try {
+                    doWarm()
+                } catch (e: Exception) {
+                    logger.error("Questioner heartbeat failed: $e. Restarting.")
+                    exitProcess(-1)
+                }
+            }
+            logger.info("Questioner heartbeat completed in ${(warmTime / 1000.0).round(1)}s ${printMemory()}")
+        }
     }
 
     embeddedServer(Netty, port = 8888, module = Application::questioner).start(wait = true)

@@ -64,6 +64,8 @@ internal data class Status(
         val jeedCacheSize: Long = compilationCacheSizeMB,
         val cacheSize: Long = questionCacheSize,
         val maxConcurrency: Int = System.getenv("QUESTIONER_MAX_CONCURRENCY").toInt(),
+        val testTimeout: Int = System.getenv("QUESTIONER_TEST_TIMEOUT_MS").toInt(),
+        val testTestTimeout: Int = System.getenv("QUESTIONER_TESTTEST_TIMEOUT_MS").toInt(),
     )
 
     @JsonClass(generateAdapter = true)
