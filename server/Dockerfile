@@ -9,9 +9,10 @@ ENTRYPOINT ["/tini", "--"]
 WORKDIR /
 COPY *.jar questioner.jar
 SHELL ["/bin/sh", "-c"]
-CMD java -ea --enable-preview -Dfile.encoding=UTF-8 -Djava.security.manager=allow \
-    -Xss256k -XX:+UseZGC -XX:ZCollectionInterval=8 -XX:-OmitStackTraceInFastThrow \
-    -XX:+UnlockExperimentalVMOptions -XX:-VMContinuations -XX:+ZGenerational \
+CMD java -ea --enable-preview -Dfile.encoding=UTF-8 \
+    -Djava.security.manager=allow -XX:-OmitStackTraceInFastThrow \
+    -XX:+UnlockExperimentalVMOptions -XX:-VMContinuations \
+    -Xss256k -XX:+UseZGC -XX:+ZGenerational \
     --add-opens java.base/java.lang=ALL-UNNAMED \
     --add-opens java.base/java.util=ALL-UNNAMED \
     --add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \

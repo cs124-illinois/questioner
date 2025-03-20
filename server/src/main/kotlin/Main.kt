@@ -31,8 +31,10 @@ import io.ktor.util.AttributeKey
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.ObsoleteCoroutinesApi
-import kotlinx.coroutines.channels.ticker
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import org.slf4j.LoggerFactory
@@ -40,6 +42,9 @@ import java.lang.management.ManagementFactory
 import java.lang.management.MemoryNotificationInfo
 import java.lang.management.MemoryType
 import java.time.Instant
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.concurrent.atomic.AtomicInteger
 import javax.management.NotificationEmitter
 import javax.management.NotificationListener
@@ -47,6 +52,7 @@ import kotlin.math.floor
 import kotlin.math.pow
 import kotlin.system.exitProcess
 import kotlin.system.measureTimeMillis
+import kotlin.time.Duration.Companion.seconds
 import edu.illinois.cs.cs125.jeed.core.moshi.Adapters as JeedAdapters
 import edu.illinois.cs.cs125.jeed.core.warm as warmJeed
 import kotlin.math.round as kotlinRound
@@ -59,11 +65,10 @@ private val warmQuestion = System.getenv("QUESTIONER_WARM_QUESTION")?.toString()
 private val runtime: Runtime = Runtime.getRuntime()
 
 private fun totalMemoryMB() = (runtime.totalMemory().toFloat() / 1024.0 / 1024.0).toInt()
-private fun availableMemoryMB() = System.getenv("AVAILABLE_MEMORY_MB")?.toInt() ?: totalMemoryMB()
 private fun freeMemoryMB() = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
 private fun usedMemoryMB() = (totalMemoryMB() - freeMemoryMB()).coerceAtLeast(0)
 private fun memoryPercent() = (usedMemoryMB().toFloat() / totalMemoryMB().toFloat() * 100.0).toInt()
-private fun printMemory() = "${memoryPercent()}% (${usedMemoryMB()} / ${totalMemoryMB()} / ${availableMemoryMB()})"
+private fun printMemory() = "${memoryPercent()}% (${usedMemoryMB()} / ${totalMemoryMB()})"
 
 private fun Double.round(decimals: Int) = 10.0.pow(decimals)
     .let { multiplier -> kotlinRound(this * multiplier) / multiplier }
@@ -145,17 +150,6 @@ fun Application.questioner() {
                 e.printStackTrace()
                 logger.warn(e.toString())
                 call.respond(HttpStatusCode.BadRequest)
-            } finally {
-                System.getenv("DUMP_AT_SUBMISSION")?.toInt()?.also { dumpCount ->
-                    if (dumpCount == runCount) {
-                        logger.debug("Dumping heap")
-                        ManagementFactory.newPlatformMXBeanProxy(
-                            ManagementFactory.getPlatformMBeanServer(),
-                            "com.sun.management:type=HotSpotDiagnostic",
-                            HotSpotDiagnosticMXBean::class.java,
-                        ).dumpHeap("questioner.hprof", false)
-                    }
-                }
             }
         }
     }
@@ -224,22 +218,34 @@ fun main(): Unit = runBlocking {
         logger.info("Starting questioner server (log level $logLevel)")
     }
 
-    val memoryCheckInterval = System.getenv("MEMORY_CHECK_INTERVAL_SEC")?.toLong() ?: 300L
-    val tickerChannel = ticker(delayMillis = memoryCheckInterval * 1000, initialDelayMillis = 0)
-    GlobalScope.launch {
-        @Suppress("UNUSED")
-        for (unused in tickerChannel) {
-            val warmTime = measureTimeMillis {
-                try {
-                    doWarm()
-                } catch (e: Exception) {
-                    logger.error("Questioner heartbeat failed: $e. Restarting.")
-                    exitProcess(-1)
-                }
-            }
-            logger.info("Questioner heartbeat completed in ${(warmTime / 1000.0).round(1)}s ${printMemory()}")
+    val heartbeatInterval = System.getenv("HEARTBEAT_INTERVAL_SEC")?.toLong() ?: 300L
+    flow {
+        for (i in generateSequence(0) { it + 1 }) {
+            emit(i)
+            delay(heartbeatInterval.seconds)
         }
-    }
+    }.map { index ->
+        val warmTime = measureTimeMillis {
+            try {
+                doWarm()
+            } catch (e: Exception) {
+                logger.error("Questioner heartbeat failed: $e. Restarting.")
+                exitProcess(-1)
+            }
+            System.getenv("DUMP_AFTER_HEARTBEAT")?.also {
+                val heapDumpName = """questioner_${index.toString().padStart(6)}_${
+                    ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ISO_INSTANT)
+                }.hprof"""
+                logger.debug("Dumping heap")
+                ManagementFactory.newPlatformMXBeanProxy(
+                    ManagementFactory.getPlatformMBeanServer(),
+                    "com.sun.management:type=HotSpotDiagnostic",
+                    HotSpotDiagnosticMXBean::class.java,
+                ).dumpHeap(heapDumpName, false)
+            }
+        }
+        logger.info("Questioner heartbeat $index completed in ${(warmTime / 1000.0).round(1)}s ${printMemory()}")
+    }.launchIn(GlobalScope)
 
     embeddedServer(Netty, port = 8888, module = Application::questioner).start(wait = true)
 }
