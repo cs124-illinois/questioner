@@ -10,7 +10,7 @@ plugins {
 }
 allprojects {
     group = "org.cs124.questioner"
-    version = "2025.3.2"
+    version = "2025.3.3"
 }
 subprojects {
     tasks.withType<KotlinCompile> {

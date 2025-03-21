@@ -20,12 +20,12 @@ open class CheckQuestionerVersion : DefaultTask() {
                 it.connect()
                 it.getInputStream().close()
             }
-        } catch (e: Exception) {
+            if (!isLatestVersion()) {
+                val latestVersion = getLatestQuestionerVersion()
+                project.logger.warn("\nPlease upgrade your build.gradle.kts to use the latest version of Questioner: $latestVersion\n")
+            }
+        } catch (_: Exception) {
             project.logger.warn("Unable to retrieve latest Questioner version. Check your network connection?")
-        }
-        if (!isLatestVersion()) {
-            val latestVersion = getLatestQuestionerVersion()
-            project.logger.warn("\nPlease upgrade your build.gradle.kts to use the latest version of Questioner: $latestVersion\n")
         }
     }
 }
