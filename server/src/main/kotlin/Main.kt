@@ -68,7 +68,7 @@ private fun totalMemoryMB() = (runtime.totalMemory().toFloat() / 1024.0 / 1024.0
 private fun freeMemoryMB() = (runtime.freeMemory().toFloat() / 1024.0 / 1024.0).toInt()
 private fun usedMemoryMB() = (totalMemoryMB() - freeMemoryMB()).coerceAtLeast(0)
 private fun memoryPercent() = (usedMemoryMB().toFloat() / totalMemoryMB().toFloat() * 100.0).toInt()
-private fun printMemory() = "${memoryPercent()}% (${usedMemoryMB()} / ${totalMemoryMB()})"
+private fun printMemory() = "Heap ${memoryPercent()}% (${usedMemoryMB()} / ${totalMemoryMB()})"
 
 private fun Double.round(decimals: Int) = 10.0.pow(decimals)
     .let { multiplier -> kotlinRound(this * multiplier) / multiplier }
@@ -244,7 +244,7 @@ fun main(): Unit = runBlocking {
                 ).dumpHeap(heapDumpName, false)
             }
         }
-        logger.info("Questioner heartbeat $index completed in ${(warmTime / 1000.0).round(1)}s ${printMemory()}")
+        logger.info("Questioner heartbeat $index completed in ${(warmTime / 1000.0).round(1)}s. ${printMemory()}. Cache ${questionCache.estimatedSize()} / $questionCacheSize")
     }.launchIn(GlobalScope)
 
     embeddedServer(Netty, port = 8888, module = Application::questioner).start(wait = true)

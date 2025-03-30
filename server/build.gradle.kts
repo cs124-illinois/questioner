@@ -10,7 +10,7 @@ plugins {
     id("com.google.devtools.ksp")
 }
 dependencies {
-    val ktorVersion = "3.1.1"
+    val ktorVersion = "3.1.2"
 
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.2")
 
