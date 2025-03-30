@@ -244,7 +244,7 @@ fun main(): Unit = runBlocking {
                 ).dumpHeap(heapDumpName, false)
             }
         }
-        logger.info("Questioner heartbeat $index completed in ${(warmTime / 1000.0).round(1)}s. ${printMemory()}. Cache ${questionCache.estimatedSize()} / $questionCacheSize")
+        logger.info("Questioner heartbeat $index completed in ${(warmTime / 1000.0).round(1)}s. ${printMemory()}. Cache ${questionCache.estimatedSize()} / $questionCacheSize.")
     }.launchIn(GlobalScope)
 
     embeddedServer(Netty, port = 8888, module = Application::questioner).start(wait = true)
