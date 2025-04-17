@@ -1,4 +1,4 @@
-@file:Suppress("PackageUpdate")
+@file:Suppress("PackageUpdate", "SpellCheckingInspection")
 
 import java.io.StringWriter
 import java.util.Properties
@@ -15,7 +15,7 @@ dependencies {
 
     testJavaagent("com.beyondgrader.resource-agent:agent:2024.7.0")
 
-    implementation("org.apache.commons:commons-text:1.13.0")
+    implementation("org.apache.commons:commons-text:1.13.1")
     implementation("io.github.java-diff-utils:java-diff-utils:4.15")
     implementation("org.ow2.asm:asm:9.8")
     implementation("org.mongodb:mongodb-driver:3.12.14")
@@ -27,9 +27,9 @@ dependencies {
     api("com.beyondgrader.resource-agent:virtualfsplugin:2024.7.0") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2025.3.2")
-    api("org.cs124:jenisol:2025.3.0")
-    api("org.cs124:libcs1:2025.3.0")
+    api("org.cs124.jeed:core:2025.4.0")
+    api("org.cs124:jenisol:2025.4.0")
+    api("org.cs124:libcs1:2025.4.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.18.3")
 
     api("io.kotest:kotest-runner-junit5:5.9.1")

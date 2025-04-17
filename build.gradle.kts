@@ -5,12 +5,12 @@ plugins {
     kotlin("jvm") version "2.1.20" apply false
     id("org.jmailen.kotlinter") version "5.0.1" apply false
     id("com.github.ben-manes.versions") version "0.52.0"
-    id("com.google.devtools.ksp").version("2.1.20-1.0.32") apply false
+    id("com.google.devtools.ksp").version("2.1.20-2.0.0") apply false
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 allprojects {
     group = "org.cs124.questioner"
-    version = "2025.3.4"
+    version = "2025.4.0"
 }
 subprojects {
     tasks.withType<KotlinCompile> {

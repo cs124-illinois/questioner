@@ -22,7 +22,7 @@ dependencies {
     implementation(project(":lib"))
 
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.mongodb:mongodb-driver:3.12.14")
 }
 tasks.withType<Test> {
