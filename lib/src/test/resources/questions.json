@@ -1,7 +1,7 @@
 [
   {
     "published": {
-      "contentHash": "9ad83f3fb086e1f22aa2e11a0b994c37-v2025.4.0",
+      "contentHash": "9ad83f3fb086e1f22aa2e11a0b994c37-v2025.6.0",
       "path": "add-one",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -22,7 +22,7 @@
         "kotlin": "fun addOne(value: Int): Int = 0 // You may need to remove this starter code"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -530,11 +530,11 @@
       "seed": 124,
       "requiredTestCount": 12,
       "mutationCount": 6,
-      "solutionMaxRuntime": 26,
-      "bootstrapLength": 5214,
-      "mutationLength": 23,
-      "incorrectLength": 963,
-      "calibrationLength": 96,
+      "solutionMaxRuntime": 15,
+      "bootstrapLength": 6725,
+      "mutationLength": 11,
+      "incorrectLength": 1000,
+      "calibrationLength": 126,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -662,7 +662,7 @@
   },
   {
     "published": {
-      "contentHash": "60b41b4e572f978f8ab8099ee9d4c8c1-v2025.4.0",
+      "contentHash": "60b41b4e572f978f8ab8099ee9d4c8c1-v2025.6.0",
       "path": "add-one-class",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -679,7 +679,7 @@
         "kotlin": "<p>Write a function <code>addOne</code> that returns its <code>Int</code> argument plus one.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -1188,11 +1188,11 @@
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 6,
-      "solutionMaxRuntime": 24,
-      "bootstrapLength": 6457,
-      "mutationLength": 16,
-      "incorrectLength": 257,
-      "calibrationLength": 115,
+      "solutionMaxRuntime": 31,
+      "bootstrapLength": 8626,
+      "mutationLength": 11,
+      "incorrectLength": 345,
+      "calibrationLength": 138,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -1294,7 +1294,7 @@
   },
   {
     "published": {
-      "contentHash": "05e3220fb2a6cccf89cce606059ba94a-v2025.4.0",
+      "contentHash": "05e3220fb2a6cccf89cce606059ba94a-v2025.6.0",
       "path": "bad-extra-private-variable",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -1311,7 +1311,7 @@
         "kotlin": "<p>Test bad use of superclass method.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -2344,11 +2344,11 @@
       "seed": 124,
       "requiredTestCount": 123,
       "mutationCount": 14,
-      "solutionMaxRuntime": 16,
-      "bootstrapLength": 6613,
-      "mutationLength": 45,
-      "incorrectLength": 1178,
-      "calibrationLength": 276,
+      "solutionMaxRuntime": 19,
+      "bootstrapLength": 8465,
+      "mutationLength": 37,
+      "incorrectLength": 1197,
+      "calibrationLength": 383,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -2502,7 +2502,7 @@
   },
   {
     "published": {
-      "contentHash": "59f3453763803120e38f9719ce636c7f-v2025.4.0",
+      "contentHash": "59f3453763803120e38f9719ce636c7f-v2025.6.0",
       "path": "classroom-getters-and-setters",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -2517,7 +2517,7 @@
         "java": "<p>Getter and setter testing.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -3568,11 +3568,11 @@
       "seed": 124,
       "requiredTestCount": 75,
       "mutationCount": 17,
-      "solutionMaxRuntime": 16,
-      "bootstrapLength": 3340,
-      "mutationLength": 109,
-      "incorrectLength": 979,
-      "calibrationLength": 28,
+      "solutionMaxRuntime": 29,
+      "bootstrapLength": 3330,
+      "mutationLength": 398,
+      "incorrectLength": 1666,
+      "calibrationLength": 195,
       "solutionCoverage": {
         "covered": 12,
         "total": 12,
@@ -3798,7 +3798,7 @@
   },
   {
     "published": {
-      "contentHash": "a4c371d9d36e6dd818a07d69d2faebb8-v2025.4.0",
+      "contentHash": "a4c371d9d36e6dd818a07d69d2faebb8-v2025.6.0",
       "path": "cougar-feliform",
       "author": "challen@illinois.edu",
       "version": "2021.7.0",
@@ -3813,7 +3813,7 @@
         "java": "<p>Create and complete the implementation of the <code>Cougar</code> class.\nYour class should be public, not final and not abstract, inherit from the <code>Feliform</code> class,\nand provide the following methods:</p><ol><li>Constructor that takes a <code>int</code> parameter <code>speed</code> and a second <code>weight</code>.\nCreates a new <code>Cougar</code> with the passed speed and weight.\nYou should call the <code>Feliform</code> constructor and pass it the <code>String</code> &quot;cougar&quot; to identify the type\nof this feliform.</li><li>Public instance method <code>dangerousness</code> that takes no arguments and returns an <code>int</code>.\nReturn the dangerousness of this cougar which equals its speed times its weight.</li><li>Override <code>public boolean equals(Object other)</code>.\nReturn <code>true</code> if <code>other</code> is a <code>Cougar</code> with the same speed and weight, and <code>false</code> otherwise.\nNote that <code>other</code> may be <code>null</code> or not a <code>Housecat</code>.</li></ol><p>Finally, note that your class should not expose any of its internal state publicly.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -4897,11 +4897,11 @@
       "seed": 124,
       "requiredTestCount": 117,
       "mutationCount": 28,
-      "solutionMaxRuntime": 25,
-      "bootstrapLength": 3348,
-      "mutationLength": 231,
-      "incorrectLength": 1605,
-      "calibrationLength": 53,
+      "solutionMaxRuntime": 16,
+      "bootstrapLength": 2532,
+      "mutationLength": 194,
+      "incorrectLength": 1952,
+      "calibrationLength": 33,
       "solutionCoverage": {
         "covered": 8,
         "total": 8,
@@ -5199,7 +5199,7 @@
   },
   {
     "published": {
-      "contentHash": "f4e3e9056d1f6093687b994d7b59953b-v2025.4.0",
+      "contentHash": "f4e3e9056d1f6093687b994d7b59953b-v2025.6.0",
       "path": "equals-88",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -5214,7 +5214,7 @@
         "java": "<p>Write a method named <code>equals88</code> that returns <code>true</code> if its <code>int</code> argument is equal to 88,\nour magic number.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -5534,19 +5534,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 6656,
-        "kotlin": 6656
+        "java": 5632,
+        "kotlin": 5632
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 6,
       "mutationCount": 7,
-      "solutionMaxRuntime": 26,
-      "bootstrapLength": 2464,
-      "mutationLength": 172,
-      "incorrectLength": 702,
-      "calibrationLength": 56,
+      "solutionMaxRuntime": 18,
+      "bootstrapLength": 3246,
+      "mutationLength": 273,
+      "incorrectLength": 789,
+      "calibrationLength": 84,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -5646,7 +5646,7 @@
   },
   {
     "published": {
-      "contentHash": "bf70754a624fcd0a3d682d5f2d7b3c2a-v2025.4.0",
+      "contentHash": "bf70754a624fcd0a3d682d5f2d7b3c2a-v2025.6.0",
       "path": "input-interleaving-test",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -5663,7 +5663,7 @@
         "kotlin": "<p>Testing STDIN generation and interleaving. In Kotlin!</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -7460,11 +7460,11 @@
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 35,
-      "solutionMaxRuntime": 7,
-      "bootstrapLength": 6043,
-      "mutationLength": 117,
-      "incorrectLength": 2265,
-      "calibrationLength": 137,
+      "solutionMaxRuntime": 5,
+      "bootstrapLength": 6405,
+      "mutationLength": 191,
+      "incorrectLength": 1891,
+      "calibrationLength": 333,
       "solutionCoverage": {
         "covered": 8,
         "total": 8,
@@ -7919,7 +7919,7 @@
   },
   {
     "published": {
-      "contentHash": "a99bf381d8f7b41afb3261dbc6c03dbc-v2025.4.0",
+      "contentHash": "a99bf381d8f7b41afb3261dbc6c03dbc-v2025.6.0",
       "path": "kotlin-faux-property-testing",
       "author": "challen@illinois.edu",
       "version": "2023.7.0",
@@ -7936,7 +7936,7 @@
         "kotlin": "<p>Question to test detection of Kotlin faux properties in Jenisol 2023.7.0.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -8771,10 +8771,10 @@
       "requiredTestCount": 21,
       "mutationCount": 4,
       "solutionMaxRuntime": 17,
-      "bootstrapLength": 6435,
-      "mutationLength": 16,
-      "incorrectLength": 666,
-      "calibrationLength": 125,
+      "bootstrapLength": 8552,
+      "mutationLength": 6,
+      "incorrectLength": 647,
+      "calibrationLength": 110,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -8852,7 +8852,7 @@
   },
   {
     "published": {
-      "contentHash": "67850bb6b73a3a28de10c685bb17626b-v2025.4.0",
+      "contentHash": "67850bb6b73a3a28de10c685bb17626b-v2025.6.0",
       "path": "private-recursive-helper",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -8867,7 +8867,7 @@
         "java": "<p>Testing question for recursion checks on private methods.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -9771,11 +9771,11 @@
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 23,
-      "solutionMaxRuntime": 18,
-      "bootstrapLength": 3517,
-      "mutationLength": 144,
-      "incorrectLength": 2037,
-      "calibrationLength": 31,
+      "solutionMaxRuntime": 28,
+      "bootstrapLength": 3421,
+      "mutationLength": 491,
+      "incorrectLength": 2454,
+      "calibrationLength": 44,
       "solutionCoverage": {
         "covered": 7,
         "total": 7,
@@ -9812,19 +9812,6 @@
         "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
-          "@@ -10,1 +10,1 @@",
-          "-    if (range < 0) {",
-          "+    if (range >= 0) {"
-        ],
-        "language": "java",
-        "mutation": "REMOVE_METHOD",
-        "testCount": 0,
-        "suppressions": []
-      },
-      {
-        "deltas": [
-          "--- Correct.java",
-          "+++ Incorrect.java",
           "@@ -4,1 +4,1 @@",
           "-      return 0;",
           "+      return 1;"
@@ -9843,7 +9830,7 @@
           "+    return rangeSumHelper(range - 1);"
         ],
         "language": "java",
-        "mutation": "REMOVE_PLUS",
+        "mutation": "REMOVE_METHOD",
         "testCount": 1,
         "suppressions": []
       },
@@ -9869,7 +9856,7 @@
           "+    return 0;"
         ],
         "language": "java",
-        "mutation": "REMOVE_IF",
+        "mutation": "PLUS_TO_MINUS",
         "testCount": 1,
         "suppressions": []
       },
@@ -9885,7 +9872,7 @@
           "+    return 0;"
         ],
         "language": "java",
-        "mutation": "CONDITIONAL_BOUNDARY",
+        "mutation": "REMOVE_IF",
         "testCount": 1,
         "suppressions": []
       },
@@ -9950,7 +9937,7 @@
           "+    if (range < 1) {"
         ],
         "language": "java",
-        "mutation": "PLUS_TO_MINUS",
+        "mutation": "REMOVE_PLUS",
         "testCount": 2,
         "suppressions": []
       },
@@ -9985,7 +9972,7 @@
   },
   {
     "published": {
-      "contentHash": "a44f4165ba8ab545558ac4865e9249fa-v2025.4.0",
+      "contentHash": "a44f4165ba8ab545558ac4865e9249fa-v2025.6.0",
       "path": "pure-null-check",
       "author": "challen@illinois.edu",
       "version": "2024.10.0",
@@ -10002,7 +9989,7 @@
         "kotlin": "<p>Test Kotlin alignment with Java null checks.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -10618,11 +10605,11 @@
       "seed": 124,
       "requiredTestCount": 19,
       "mutationCount": 5,
-      "solutionMaxRuntime": 21,
-      "bootstrapLength": 6667,
-      "mutationLength": 10,
-      "incorrectLength": 212,
-      "calibrationLength": 152,
+      "solutionMaxRuntime": 24,
+      "bootstrapLength": 8604,
+      "mutationLength": 9,
+      "incorrectLength": 415,
+      "calibrationLength": 207,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -10711,7 +10698,7 @@
   },
   {
     "published": {
-      "contentHash": "218e2ccf7e9cf8ca63dc5966ef403834-v2025.4.0",
+      "contentHash": "218e2ccf7e9cf8ca63dc5966ef403834-v2025.6.0",
       "path": "read-hello-world",
       "author": "challen@illinois.edu",
       "version": "2023.11.0",
@@ -10726,7 +10713,7 @@
         "java": "<p>Question to test filesystem generation.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -11266,19 +11253,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 395624832,
-        "kotlin": 395624832
+        "java": 395584256,
+        "kotlin": 395584256
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 4,
-      "solutionMaxRuntime": 37,
-      "bootstrapLength": 4388,
-      "mutationLength": 15,
-      "incorrectLength": 193,
-      "calibrationLength": 49,
+      "solutionMaxRuntime": 18,
+      "bootstrapLength": 5377,
+      "mutationLength": 10,
+      "incorrectLength": 174,
+      "calibrationLength": 40,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -11353,7 +11340,7 @@
   },
   {
     "published": {
-      "contentHash": "569c84817e65063ba59cf01e22724df2-v2025.4.0",
+      "contentHash": "569c84817e65063ba59cf01e22724df2-v2025.6.0",
       "path": "recursive-factorial",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -11370,7 +11357,7 @@
         "kotlin": "<p>Write a method that provides a recursive implementation of factorial, accepting and returning <code>Long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -12740,19 +12727,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 2856832,
-        "kotlin": 2856832
+        "java": 2857856,
+        "kotlin": 2857856
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 6,
       "mutationCount": 22,
-      "solutionMaxRuntime": 21,
-      "bootstrapLength": 6717,
-      "mutationLength": 39,
-      "incorrectLength": 1506,
-      "calibrationLength": 231,
+      "solutionMaxRuntime": 19,
+      "bootstrapLength": 8940,
+      "mutationLength": 33,
+      "incorrectLength": 1326,
+      "calibrationLength": 256,
       "solutionCoverage": {
         "covered": 6,
         "total": 6,
@@ -12978,7 +12965,7 @@
   },
   {
     "published": {
-      "contentHash": "1933eb154d0af63b7af722e30dc6437f-v2025.4.0",
+      "contentHash": "1933eb154d0af63b7af722e30dc6437f-v2025.6.0",
       "path": "test-bad-kotlin-getter-setter",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -12995,7 +12982,7 @@
         "kotlin": "<p>Test to ensure that we can detect unnecessary Kotlin setter or getter overrides.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -13837,19 +13824,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 6528,
-        "kotlin": 6528
+        "java": 5632,
+        "kotlin": 5632
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 5,
-      "solutionMaxRuntime": 12,
-      "bootstrapLength": 6460,
-      "mutationLength": 13,
-      "incorrectLength": 1140,
-      "calibrationLength": 266,
+      "solutionMaxRuntime": 17,
+      "bootstrapLength": 8455,
+      "mutationLength": 9,
+      "incorrectLength": 1312,
+      "calibrationLength": 473,
       "solutionCoverage": {
         "covered": 6,
         "total": 6,
@@ -13942,7 +13929,7 @@
   },
   {
     "published": {
-      "contentHash": "caa4922981779dbc69b038999e5b6a16-v2025.4.0",
+      "contentHash": "caa4922981779dbc69b038999e5b6a16-v2025.6.0",
       "path": "test-constructor-notnull",
       "author": "challen@illinois.edu",
       "version": "2022.10.0",
@@ -13957,7 +13944,7 @@
         "java": "<p>Testing @NotNull annotation on constructor parameters.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -14512,11 +14499,11 @@
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 4,
-      "solutionMaxRuntime": 36,
-      "bootstrapLength": 2307,
-      "mutationLength": 18,
-      "incorrectLength": 146,
-      "calibrationLength": 46,
+      "solutionMaxRuntime": 48,
+      "bootstrapLength": 3425,
+      "mutationLength": 127,
+      "incorrectLength": 830,
+      "calibrationLength": 64,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -14577,7 +14564,7 @@
   },
   {
     "published": {
-      "contentHash": "99edd2570f09907ad4b8f37d339ef6b4-v2025.4.0",
+      "contentHash": "99edd2570f09907ad4b8f37d339ef6b4-v2025.6.0",
       "path": "test-empty-constructor",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -14592,7 +14579,7 @@
         "java": "<p>Test to make sure we can parse the empty constructor.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -15153,19 +15140,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 5632,
-        "kotlin": 5632
+        "java": 6528,
+        "kotlin": 6528
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 8,
       "mutationCount": 3,
-      "solutionMaxRuntime": 21,
-      "bootstrapLength": 4215,
+      "solutionMaxRuntime": 12,
+      "bootstrapLength": 5134,
       "mutationLength": 9,
-      "incorrectLength": 122,
-      "calibrationLength": 82,
+      "incorrectLength": 136,
+      "calibrationLength": 38,
       "solutionCoverage": {
         "covered": 3,
         "total": 3,
@@ -15226,7 +15213,7 @@
   },
   {
     "published": {
-      "contentHash": "00c2c0d452cdc275a3b0d69d34034246-v2025.4.0",
+      "contentHash": "00c2c0d452cdc275a3b0d69d34034246-v2025.6.0",
       "path": "test-memoization-defense",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -15241,7 +15228,7 @@
         "java": "<p>Testing class size based memoization defense.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -15548,11 +15535,11 @@
       "seed": 124,
       "requiredTestCount": 12,
       "mutationCount": 1,
-      "solutionMaxRuntime": 33,
-      "bootstrapLength": 2468,
-      "mutationLength": 92,
-      "incorrectLength": 249,
-      "calibrationLength": 144,
+      "solutionMaxRuntime": 41,
+      "bootstrapLength": 2596,
+      "mutationLength": 10,
+      "incorrectLength": 141,
+      "calibrationLength": 49,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -15587,7 +15574,7 @@
   },
   {
     "published": {
-      "contentHash": "51ba370a3098f7354b7a659ce0e68542-v2025.4.0",
+      "contentHash": "51ba370a3098f7354b7a659ce0e68542-v2025.6.0",
       "path": "test-raw-types",
       "author": "challen@illinois.edu",
       "version": "2023.11.0",
@@ -15602,7 +15589,7 @@
         "java": "<p>Test support for raw type error filtering.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -16017,11 +16004,11 @@
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 1,
-      "solutionMaxRuntime": 39,
-      "bootstrapLength": 2422,
-      "mutationLength": 150,
-      "incorrectLength": 229,
-      "calibrationLength": 54,
+      "solutionMaxRuntime": 20,
+      "bootstrapLength": 3272,
+      "mutationLength": 268,
+      "incorrectLength": 136,
+      "calibrationLength": 118,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -16056,7 +16043,7 @@
   },
   {
     "published": {
-      "contentHash": "c14d76df7271c791ccc5c93981b5d1c8-v2025.4.0",
+      "contentHash": "c14d76df7271c791ccc5c93981b5d1c8-v2025.6.0",
       "path": "with-common-code",
       "author": "challen@illinois.edu",
       "version": "2023.12.0",
@@ -16071,7 +16058,7 @@
         "java": "<p>Test loading common code.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -16450,11 +16437,11 @@
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 1,
-      "solutionMaxRuntime": 49,
-      "bootstrapLength": 2411,
-      "mutationLength": 91,
-      "incorrectLength": 251,
-      "calibrationLength": 106,
+      "solutionMaxRuntime": 30,
+      "bootstrapLength": 2894,
+      "mutationLength": 310,
+      "incorrectLength": 138,
+      "calibrationLength": 92,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -16489,7 +16476,7 @@
   },
   {
     "published": {
-      "contentHash": "3247a24e43fa77810da0ee41da0d8e7d-v2025.4.0",
+      "contentHash": "3247a24e43fa77810da0ee41da0d8e7d-v2025.6.0",
       "path": "with-dead-code-annotation",
       "author": "challen@illinois.edu",
       "version": "2023.2.0",
@@ -16506,7 +16493,7 @@
         "kotlin": "<p>Testing dead code comments.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -17639,19 +17626,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 43781632,
-        "kotlin": 43781632
+        "java": 43782656,
+        "kotlin": 43782656
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 17,
-      "solutionMaxRuntime": 17,
-      "bootstrapLength": 6644,
-      "mutationLength": 29,
-      "incorrectLength": 909,
-      "calibrationLength": 207,
+      "solutionMaxRuntime": 15,
+      "bootstrapLength": 8790,
+      "mutationLength": 32,
+      "incorrectLength": 944,
+      "calibrationLength": 434,
       "solutionCoverage": {
         "covered": 4,
         "total": 5,
@@ -17883,7 +17870,7 @@
   },
   {
     "published": {
-      "contentHash": "736308f223c73871743d16c35e1dff2c-v2025.4.0",
+      "contentHash": "736308f223c73871743d16c35e1dff2c-v2025.6.0",
       "path": "with-feature-check",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -17900,7 +17887,7 @@
         "kotlin": "<p>For testing features.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -18464,19 +18451,19 @@
         "kotlin": 7600
       },
       "allocationLimit": {
-        "java": 6656,
-        "kotlin": 6656
+        "java": 5632,
+        "kotlin": 5632
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 475,
       "mutationCount": 13,
-      "solutionMaxRuntime": 59,
-      "bootstrapLength": 6825,
-      "mutationLength": 28,
-      "incorrectLength": 1246,
-      "calibrationLength": 231,
+      "solutionMaxRuntime": 52,
+      "bootstrapLength": 8586,
+      "mutationLength": 63,
+      "incorrectLength": 1378,
+      "calibrationLength": 375,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -18669,7 +18656,7 @@
   },
   {
     "published": {
-      "contentHash": "c0e60adbcb8d6e6d1ad0088a3a1271da-v2025.4.0",
+      "contentHash": "c0e60adbcb8d6e6d1ad0088a3a1271da-v2025.6.0",
       "path": "with-feature-dead-code",
       "author": "challen@illinois.edu",
       "version": "2023.2.0",
@@ -18689,7 +18676,7 @@
         "java.util.ArrayList",
         "java.util.List"
       ],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -20066,11 +20053,11 @@
       "seed": 124,
       "requiredTestCount": 4,
       "mutationCount": 10,
-      "solutionMaxRuntime": 28,
-      "bootstrapLength": 3935,
-      "mutationLength": 34,
-      "incorrectLength": 742,
-      "calibrationLength": 415,
+      "solutionMaxRuntime": 22,
+      "bootstrapLength": 4924,
+      "mutationLength": 145,
+      "incorrectLength": 658,
+      "calibrationLength": 354,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -20217,7 +20204,7 @@
   },
   {
     "published": {
-      "contentHash": "7e1641997386c3e3f1f5592632470def-v2025.4.0",
+      "contentHash": "7e1641997386c3e3f1f5592632470def-v2025.6.0",
       "path": "with-java-switch",
       "author": "challen@illinois.edu",
       "version": "2023.12.0",
@@ -20234,7 +20221,7 @@
         "kotlin": "<p>Test feature check using Java 14 switch expression, Kotlin equivalent.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -21857,11 +21844,11 @@
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 61,
-      "solutionMaxRuntime": 12,
-      "bootstrapLength": 3825,
-      "mutationLength": 263,
-      "incorrectLength": 2237,
-      "calibrationLength": 91,
+      "solutionMaxRuntime": 10,
+      "bootstrapLength": 4685,
+      "mutationLength": 361,
+      "incorrectLength": 2229,
+      "calibrationLength": 72,
       "solutionCoverage": {
         "covered": 9,
         "total": 9,
@@ -22566,7 +22553,7 @@
   },
   {
     "published": {
-      "contentHash": "698a87ee8a0d8c4960d859c396ea1d22-v2025.4.0",
+      "contentHash": "698a87ee8a0d8c4960d859c396ea1d22-v2025.6.0",
       "path": "with-map-extras",
       "author": "challen@illinois.edu",
       "version": "2023.9.0",
@@ -22584,7 +22571,7 @@
         "java.util.Map",
         "java.util.Set"
       ],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -22973,11 +22960,11 @@
       "seed": 124,
       "requiredTestCount": 13,
       "mutationCount": 3,
-      "solutionMaxRuntime": 30,
-      "bootstrapLength": 1219,
-      "mutationLength": 13,
-      "incorrectLength": 222,
-      "calibrationLength": 54,
+      "solutionMaxRuntime": 9,
+      "bootstrapLength": 949,
+      "mutationLength": 16,
+      "incorrectLength": 200,
+      "calibrationLength": 27,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -23038,7 +23025,7 @@
   },
   {
     "published": {
-      "contentHash": "3fccc106cc61afe617573d2ed3a2786f-v2025.4.0",
+      "contentHash": "3fccc106cc61afe617573d2ed3a2786f-v2025.6.0",
       "path": "with-template-imports",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -23057,7 +23044,7 @@
         "java.util.List",
         "java.util.ArrayList"
       ],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [
@@ -23447,11 +23434,11 @@
       "seed": 124,
       "requiredTestCount": 18,
       "mutationCount": 1,
-      "solutionMaxRuntime": 11,
-      "bootstrapLength": 855,
-      "mutationLength": 12,
-      "incorrectLength": 47,
-      "calibrationLength": 39,
+      "solutionMaxRuntime": 44,
+      "bootstrapLength": 676,
+      "mutationLength": 13,
+      "incorrectLength": 114,
+      "calibrationLength": 141,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -23486,7 +23473,7 @@
   },
   {
     "published": {
-      "contentHash": "33ae494d0e768a4053e01207051b72a7-v2025.4.0",
+      "contentHash": "33ae494d0e768a4053e01207051b72a7-v2025.6.0",
       "path": "with-null-assert",
       "author": "challen@illinois.edu",
       "version": "2024.9.0",
@@ -23501,7 +23488,7 @@
         "java": "<p>For test correctness testing to ensure AssertionErrors pop through.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.4.0",
+      "questionerVersion": "2025.6.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -23945,11 +23932,11 @@
       "seed": 124,
       "requiredTestCount": 14,
       "mutationCount": 6,
-      "solutionMaxRuntime": 13,
-      "bootstrapLength": 722,
-      "mutationLength": 17,
-      "incorrectLength": 266,
-      "calibrationLength": 29,
+      "solutionMaxRuntime": 9,
+      "bootstrapLength": 467,
+      "mutationLength": 13,
+      "incorrectLength": 410,
+      "calibrationLength": 18,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,

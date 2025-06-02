@@ -10,7 +10,7 @@ plugins {
     id("com.google.devtools.ksp")
 }
 dependencies {
-    val ktorVersion = "3.1.2"
+    val ktorVersion = "3.1.3"
 
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.2")
 
@@ -20,7 +20,7 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-    implementation("org.cs124:ktor-moshi:2025.1.0")
+    implementation("org.cs124:ktor-moshi:2025.6.0")
     implementation("org.mongodb:mongodb-driver:3.12.14")
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.0")
 }
