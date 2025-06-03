@@ -59,8 +59,8 @@ import kotlin.math.round as kotlinRound
 
 internal val logger = KotlinLogging.logger {}
 
-internal val questionCacheSize = System.getenv("QUESTIONER_QUESTION_CACHE_SIZE")?.toLong() ?: 16L
-private val warmQuestion = System.getenv("QUESTIONER_WARM_QUESTION")?.toString() ?: "hello-world"
+internal val questionCacheSize = (System.getenv("QUESTIONER_QUESTION_CACHE_SIZE")?.toLong() ?: 16L) + 1
+private val warmQuestion = System.getenv("QUESTIONER_WARM_QUESTION") ?: "hello-world"
 
 private val runtime: Runtime = Runtime.getRuntime()
 
@@ -131,18 +131,18 @@ fun Application.questioner() {
                 val response = submission.test(question)
                 call.respond(response)
                 val endMemory = freeMemoryMB()
-                logger.debug(
+                logger.trace(
                     "$runCount: ${question.fullPath}: $startMemory -> $endMemory (${
                         Instant.now().toEpochMilli() - submitted.toEpochMilli()
                     }, ${response.duration})",
                 )
-                logger.debug("Cache hit rate: ${questionCache.stats().hitRate()} (Size $questionCacheSize)")
+                logger.trace("Cache hit rate: ${questionCache.stats().hitRate()} (Size $questionCacheSize)")
             } catch (e: StackOverflowError) {
                 e.printStackTrace()
                 call.respond(HttpStatusCode.BadRequest)
             } catch (e: Error) {
                 e.printStackTrace()
-                logger.debug { submission }
+                logger.warn { submission }
                 logger.error(e.toString())
                 // Firm shutdown
                 Runtime.getRuntime().halt(-1)
@@ -191,7 +191,7 @@ fun main(): Unit = runBlocking {
         .find { bean -> bean.type == MemoryType.HEAP && bean.isUsageThresholdSupported }
         ?.also { bean ->
             val threshold = floor(bean.usage.max * memoryLimitThreshold).toLong()
-            logger.debug("Setting memory collection threshold to $threshold")
+            logger.trace("Setting memory collection threshold to $threshold")
             bean.collectionUsageThreshold = threshold
             val listener = NotificationListener { notification, _ ->
                 if (notification.type == MemoryNotificationInfo.MEMORY_COLLECTION_THRESHOLD_EXCEEDED) {
@@ -244,7 +244,7 @@ fun main(): Unit = runBlocking {
                 ).dumpHeap(heapDumpName, false)
             }
         }
-        logger.info("Questioner heartbeat $index completed in ${(warmTime / 1000.0).round(1)}s. ${printMemory()}. Cache ${questionCache.estimatedSize()} / $questionCacheSize.")
+        logger.debug("Questioner heartbeat $index completed in ${(warmTime / 1000.0).round(1)}s. ${printMemory()}. Cache ${questionCache.estimatedSize()} / $questionCacheSize.")
     }.launchIn(GlobalScope)
 
     embeddedServer(Netty, port = 8888, module = Application::questioner).start(wait = true)
