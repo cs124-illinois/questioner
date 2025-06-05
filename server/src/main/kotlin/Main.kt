@@ -164,7 +164,7 @@ suspend fun doWarm() {
 }
 
 @OptIn(DelicateCoroutinesApi::class, ObsoleteCoroutinesApi::class)
-fun main(): Unit = runBlocking {
+fun main(@Suppress("unused") unused: Array<String>): Unit = runBlocking {
     ResourceMonitoring.ensureAgentActivated()
 
     check(System.getenv("QUESTIONER_MAX_CONCURRENCY") != null) {
