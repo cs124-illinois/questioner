@@ -1,16 +1,16 @@
-import { Record, Static, String } from "runtypes"
+import { Object, Static, String } from "runtypes"
 import { Languages } from "./languages"
 import { SubmissionType } from "./submission"
 
-export const QuestionCoordinates = Record({
+export const QuestionCoordinates = Object({
   language: Languages,
   path: String,
   author: String,
 })
 export type QuestionCoordinates = Static<typeof QuestionCoordinates>
 
-export const SubmissionCoordinates = QuestionCoordinates.And(
-  Record({
+export const SubmissionCoordinates = QuestionCoordinates.and(
+  Object({
     submissionType: SubmissionType,
   }),
 )

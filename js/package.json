@@ -1,4 +1,4 @@
 {
   "private": true,
-  "workspaces": ["output", "types", "mongodb", "stumperd-import"]
+  "workspaces": ["output", "types", "mongodb"]
 }

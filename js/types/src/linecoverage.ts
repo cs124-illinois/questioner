@@ -1,6 +1,6 @@
-import { Number, Record, Static } from "runtypes"
+import { Number, Object, Static } from "runtypes"
 
-export const LineCoverage = Record({
+export const LineCoverage = Object({
   covered: Number,
   total: Number,
   missed: Number,

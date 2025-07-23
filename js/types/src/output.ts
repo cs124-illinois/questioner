@@ -1,6 +1,6 @@
-import { Boolean, Record, Static, String } from "runtypes"
+import { Boolean, Object, Static, String } from "runtypes"
 
-export const TerminalOutput = Record({
+export const TerminalOutput = Object({
   error: Boolean,
   retry: Boolean,
   output: String,
