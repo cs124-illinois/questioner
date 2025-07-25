@@ -75,3 +75,7 @@ The project follows a multi-module structure:
 - Version updates should follow YYYY.M.minor format in root build.gradle.kts
 - Server and stumperd modules have their own Docker configurations
 - TypeScript code uses strict type checking
+
+## Dependency Management
+
+- Always specify exact dependencies in package.json files, avoiding ~ or ^ version prefixes
