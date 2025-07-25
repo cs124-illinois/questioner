@@ -21,12 +21,12 @@ Questioner is an educational testing/validation framework for programming questi
 **TypeScript/JavaScript (js/ directory):**
 ```bash
 cd js
-yarn install          # Install all workspace dependencies
-yarn build            # Build TypeScript packages
-yarn checker          # Run linting, type checking, and build
-yarn prettier         # Format code
-yarn eslint           # Lint code
-yarn tsc              # Type check without emitting
+npm install           # Install all workspace dependencies
+npm run build         # Build TypeScript packages
+npm run check         # Run linting, type checking, and build
+npm run prettier      # Format code
+npm run eslint        # Lint code
+npm run tsc           # Type check without emitting
 ```
 
 ### Running a Single Test
@@ -65,7 +65,7 @@ The project follows a multi-module structure:
 
 - **Serialization**: Moshi for JSON serialization with Kotlin data classes
 - **Testing**: Kotest framework with JUnit Platform
-- **Monorepo**: Yarn workspaces for JavaScript packages
+- **Monorepo**: NPM workspaces for JavaScript packages
 - **Containerization**: Docker for server components
 - **JVM Settings**: Uses Java 21 with preview features enabled for testing
 

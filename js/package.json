@@ -1,5 +1,9 @@
 {
   "private": true,
   "type": "module",
-  "workspaces": ["output", "types", "mongodb"]
+  "workspaces": [
+    "output",
+    "types", 
+    "mongodb"
+  ]
 }
