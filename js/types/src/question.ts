@@ -1,5 +1,5 @@
-import { FeatureValue } from "@cs124/jeed-types"
-import { Array, Boolean, Literal, Number, Object, Record, Static, String, Union } from "runtypes"
+import { Feature, FeatureValue } from "@cs124/jeed-types"
+import { Array, Boolean, Dictionary, Literal, Number, Partial, Record, Static, String, Union } from "runtypes"
 import { Languages } from "./languages"
 import { LineCounts } from "./linecounts"
 import { LineCoverage } from "./linecoverage"
@@ -7,64 +7,70 @@ import { LineCoverage } from "./linecoverage"
 export const QuestionType = Union(Literal("SNIPPET"), Literal("METHOD"), Literal("KLASS"))
 export type QuestionType = Static<typeof QuestionType>
 
-export const QuestionPath = Object({
+export const QuestionPath = Record({
   path: String,
   author: String,
   version: String,
 })
 export type QuestionPath = Static<typeof QuestionPath>
 
-export const Citation = Object({
-  source: String,
-  link: String.optional(),
-})
+export const Citation = Record({ source: String }).And(Partial({ link: String }))
 export type Citation = Static<typeof Citation>
 
-export const MethodInfo = Object({
+export const MethodInfo = Record({
   className: String,
   methodName: String,
   descriptor: String,
 })
 export type MethodInfo = Static<typeof MethodInfo>
 
-export const LanguagesResourceUsage = Object({
+export const LanguagesResourceUsage = Record({
   java: Number,
-  kotlin: Number.optional(),
-})
+}).And(
+  Partial({
+    kotlin: Number,
+  }),
+)
 export type LanguagesResourceUsage = Static<typeof LanguagesResourceUsage>
 
-export const QuestionPublished = QuestionPath.and(
-  Object({
+export const QuestionPublished = QuestionPath.And(
+  Record({
     contentHash: String,
     name: String,
     type: QuestionType,
     packageName: String,
     languages: Array(Languages),
-    descriptions: Record(Languages, String),
+    descriptions: Dictionary(String, Languages),
     templateImports: Array(String),
     questionerVersion: String,
     authorName: String,
     klass: String,
-    citation: Citation.optional(),
-    starters: Record(Languages, String).optional(),
-    tags: Array(String).optional(),
-    kotlinImports: Array(String).optional(),
-    javaTestingImports: Array(String).optional(),
-    kotlinTestingImports: Array(String).optional(),
+  }),
+).And(
+  Partial({
+    citation: Citation,
+    starters: Dictionary(String, Languages),
+    tags: Array(String),
+    kotlinImports: Array(String),
+    javaTestingImports: Array(String),
+    kotlinTestingImports: Array(String),
   }),
 )
 export type QuestionPublished = Static<typeof QuestionPublished>
 
-export const QuestionClassification = Object({
-  featuresByLanguage: Record(Languages, FeatureValue),
-  complexity: Record(Languages, Number),
-  lineCounts: Record(Languages, LineCounts),
-  recursiveMethodsByLanguage: Record(Languages, Array(MethodInfo)).optional(),
-  loadedClassesByLanguage: Record(Languages, Array(String)).optional(),
-})
+export const QuestionClassification = Record({
+  featuresByLanguage: Dictionary(FeatureValue, Languages),
+  complexity: Dictionary(Number, Languages),
+  lineCounts: Dictionary(LineCounts, Languages),
+}).And(
+  Partial({
+    recursiveMethodsByLanguage: Dictionary(Array(MethodInfo), Languages),
+    loadedClassesByLanguage: Dictionary(Array(String), Languages),
+  }),
+)
 export type QuestionClassification = Static<typeof QuestionClassification>
 
-export const ValidationResults = Object({
+export const ValidationResults = Record({
   seed: Number,
   requiredTestCount: Number,
   mutationCount: Number,
@@ -76,20 +82,26 @@ export const ValidationResults = Object({
   solutionCoverage: LineCoverage,
   executionCounts: LanguagesResourceUsage,
   memoryAllocation: LanguagesResourceUsage,
-  solutionMaxClassSize: LanguagesResourceUsage.optional(),
-  canTestTest: Boolean.optional(),
-})
+}).And(
+  Partial({
+    solutionMaxClassSize: LanguagesResourceUsage,
+    canTestTest: Boolean,
+  }),
+)
 export type ValidationResults = Static<typeof ValidationResults>
 
-export const Question = Object({
+export const Question = Record({
   published: QuestionPublished,
   classification: QuestionClassification,
-  validationResults: ValidationResults.optional(),
-})
+}).And(
+  Partial({
+    validationResults: ValidationResults,
+  }),
+)
 export type Question = Static<typeof Question>
 
-export const QuestionDescription = QuestionPath.and(
-  Object({
+export const QuestionDescription = QuestionPath.And(
+  Record({
     name: String,
     description: String,
     packageName: String,
@@ -98,16 +110,14 @@ export const QuestionDescription = QuestionPath.and(
 )
 export type QuestionDescription = Static<typeof QuestionDescription>
 
-export const QuestionTagged = QuestionPublished.and(
-  Object({
+export const QuestionTagged = QuestionPublished.And(
+  Record({
     tags: Array(String),
   }),
 )
 export type QuestionTagged = Static<typeof QuestionTagged>
 
-export const questionFeatures = (question: Question): string[] => {
-  const globalObject = globalThis as typeof globalThis & { Object: ObjectConstructor }
-  return globalObject.Object.keys(question.classification.featuresByLanguage.java.featureMap).filter(
-    (feature: string) => question.classification.featuresByLanguage.java.featureMap[feature] > 0,
-  )
-}
+export const questionFeatures = (question: Question) =>
+  Array(Feature)
+    .check(Object.keys(question.classification.featuresByLanguage.java.featureMap))
+    .filter((feature) => question.classification.featuresByLanguage.java.featureMap[feature] > 0)

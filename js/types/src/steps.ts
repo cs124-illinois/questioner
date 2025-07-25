@@ -1,18 +1,18 @@
 import { Literal, Static } from "runtypes"
 
-export const LintingStep = Literal("checkstyle").or(Literal("ktlint"))
+export const LintingStep = Literal("checkstyle").Or(Literal("ktlint"))
 export type LintingStep = Static<typeof LintingStep>
 export const LintingSteps: LintingStep[] = ["checkstyle", "ktlint"]
 
 export const QualityStep = Literal("classSize")
-  .or(Literal("complexity"))
-  .or(Literal("features"))
-  .or(Literal("lineCount"))
-  .or(Literal("recursion"))
-  .or(Literal("executioncount"))
-  .or(Literal("memoryAllocation"))
-  .or(Literal("coverage"))
-  .or(Literal("extraOutput"))
+  .Or(Literal("complexity"))
+  .Or(Literal("features"))
+  .Or(Literal("lineCount"))
+  .Or(Literal("recursion"))
+  .Or(Literal("executioncount"))
+  .Or(Literal("memoryAllocation"))
+  .Or(Literal("coverage"))
+  .Or(Literal("extraOutput"))
 
 export type QualityStep = Static<typeof QualityStep>
 export const QualitySteps: QualityStep[] = [
@@ -28,9 +28,9 @@ export const QualitySteps: QualityStep[] = [
 ]
 
 export const CompilationStep = Literal("checkInitialSubmission")
-  .or(Literal("templateSubmission"))
-  .or(Literal("compileSubmission"))
-  .or(Literal("checkCompiledSubmission"))
+  .Or(Literal("templateSubmission"))
+  .Or(Literal("compileSubmission"))
+  .Or(Literal("checkCompiledSubmission"))
 export type CompilationStep = Static<typeof CompilationStep>
 export const CompilationSteps: CompilationStep[] = [
   "checkInitialSubmission",
@@ -39,14 +39,14 @@ export const CompilationSteps: CompilationStep[] = [
   "checkCompiledSubmission",
 ]
 
-export const Step = CompilationStep.or(Literal("partial"))
-  .or(Literal("checkExecutedSubmission"))
-  .or(Literal("testing"))
-  .or(LintingStep)
-  .or(QualityStep)
+export const Step = CompilationStep.Or(Literal("partial"))
+  .Or(Literal("checkExecutedSubmission"))
+  .Or(Literal("testing"))
+  .Or(LintingStep)
+  .Or(QualityStep)
 export type Step = Static<typeof Step>
 
-export const TestTestingStep = CompilationStep.or(Literal("checkExecutedSubmission").or(Literal("testTesting"))).or(
+export const TestTestingStep = CompilationStep.Or(Literal("checkExecutedSubmission").Or(Literal("testTesting"))).Or(
   LintingStep,
 )
 export type TestTestingStep = Static<typeof TestTestingStep>

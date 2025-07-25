@@ -1,6 +1,6 @@
-import { Number, Object, Static } from "runtypes"
+import { Number, Record, Static } from "runtypes"
 
-export const LineCounts = Object({
+export const LineCounts = Record({
   source: Number,
   comment: Number,
   blank: Number,

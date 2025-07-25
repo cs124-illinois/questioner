@@ -7,7 +7,7 @@ import {
   KtlintResults,
   TemplatingFailed,
 } from "@cs124/jeed-types"
-import { Array, Boolean, Literal, Number, Object, Record, Static, String, Union } from "runtypes"
+import { Array, Boolean, Dictionary, Literal, Number, Partial, Record, Static, String, Union } from "runtypes"
 import { Languages } from "./languages"
 import { TestTestingStep } from "./steps"
 
@@ -19,15 +19,15 @@ export const SelectionStrategy = Union(
 )
 export type SelectionStrategy = Static<typeof SelectionStrategy>
 
-export const TestTestingSettings = Object({
-  shortCircuit: Boolean.optional(),
-  limit: Number.optional(),
-  SelectionStrategy: SelectionStrategy.optional(),
-  seed: Number.optional(),
+export const TestTestingSettings = Partial({
+  shortCircuit: Boolean,
+  limit: Number,
+  SelectionStrategy: SelectionStrategy,
+  seed: Number,
 })
 export type TestTestingSettings = Static<typeof TestTestingSettings>
 
-export const TestTestingResult = Object({
+export const TestTestingResult = Record({
   correct: Number,
   incorrect: Number,
   total: Number,
@@ -35,34 +35,37 @@ export const TestTestingResult = Object({
   succeeded: Boolean,
   shortCircuited: Boolean,
   output: Array(String),
-  selectionStrategy: SelectionStrategy.optional(),
-  identifiedSolution: Boolean.optional(),
-  correctMap: Record(Number, Boolean).optional(),
-})
+}).And(
+  Partial({
+    selectionStrategy: SelectionStrategy,
+    identifiedSolution: Boolean,
+    correctMap: Dictionary(Boolean, Number),
+  }),
+)
 export type TestTestingResult = Static<typeof TestTestingResult>
 
-export const TestTestingCompletedTasks = Object({
+export const TestTestingCompletedTasks = Partial({
   // templateSubmission doesn't complete
-  compileSubmission: CompiledSourceResult.optional(),
-  checkstyle: CheckstyleResults.optional(),
-  ktlint: KtlintResults.optional(),
+  compileSubmission: CompiledSourceResult,
+  checkstyle: CheckstyleResults,
+  ktlint: KtlintResults,
   // checkCompiledSubmission doesn't complete
-  testTesting: TestTestingResult.optional(),
+  testTesting: TestTestingResult,
 })
 export type TestTestingCompletedTasks = Static<typeof TestTestingCompletedTasks>
 
-export const TestTestingFailedTasks = Object({
-  checkInitialSubmission: String.optional(),
-  templateSubmission: TemplatingFailed.optional(),
-  compileSubmission: CompilationFailed.optional(),
-  checkstyle: CheckstyleFailed.optional(),
-  ktlint: KtlintFailed.optional(),
-  checkCompiledSubmission: String.optional(),
-  checkExecutedSubmission: String.optional(),
+export const TestTestingFailedTasks = Partial({
+  checkInitialSubmission: String,
+  templateSubmission: TemplatingFailed,
+  compileSubmission: CompilationFailed,
+  checkstyle: CheckstyleFailed,
+  ktlint: KtlintFailed,
+  checkCompiledSubmission: String,
+  checkExecutedSubmission: String,
 })
 export type TestTestingFailedTasks = Static<typeof TestTestingFailedTasks>
 
-export const TestTestResults = Object({
+export const TestTestResults = Record({
   language: Languages,
   completedSteps: Array(TestTestingStep),
   complete: TestTestingCompletedTasks,
@@ -73,7 +76,10 @@ export const TestTestResults = Object({
   lineCountTimeout: Boolean,
   completed: Boolean,
   succeeded: Boolean,
-  kind: Literal("TESTTESTING").optional(),
-  failedLinting: Boolean.optional(),
-})
+}).And(
+  Partial({
+    kind: Literal("TESTTESTING"),
+    failedLinting: Boolean,
+  }),
+)
 export type TestTestResults = Static<typeof TestTestResults>

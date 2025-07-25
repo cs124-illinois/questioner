@@ -7,13 +7,13 @@ import {
   KtlintResults,
   TemplatingFailed,
 } from "@cs124/jeed-types"
-import { Array, Boolean, Literal, Number, Object, Static, String, Union } from "runtypes"
+import { Array, Boolean, Literal, Number, Partial, Record, Static, String, Union } from "runtypes"
 import { Languages } from "./languages"
 import { LineCounts } from "./linecounts"
 import { LineCoverage } from "./linecoverage"
 import { Step } from "./steps"
 
-export const ClassSizeComparison = Object({
+export const ClassSizeComparison = Record({
   solution: Number,
   submission: Number,
   limit: Number,
@@ -22,7 +22,7 @@ export const ClassSizeComparison = Object({
 })
 export type ClassSizeComparison = Static<typeof ClassSizeComparison>
 
-export const ComplexityComparison = Object({
+export const ComplexityComparison = Record({
   solution: Number,
   submission: Number,
   limit: Number,
@@ -31,7 +31,7 @@ export const ComplexityComparison = Object({
 })
 export type ComplexityComparison = Static<typeof ComplexityComparison>
 
-export const LineCountComparison = Object({
+export const LineCountComparison = Record({
   solution: LineCounts,
   submission: LineCounts,
   limit: Number,
@@ -41,13 +41,13 @@ export const LineCountComparison = Object({
 })
 export type LineCountComparison = Static<typeof LineCountComparison>
 
-export const FeaturesComparison = Object({
+export const FeaturesComparison = Record({
   errors: Array(String),
   failed: Boolean,
 })
 export type FeaturesComparison = Static<typeof FeaturesComparison>
 
-export const PassedSteps = Object({
+export const PassedSteps = Record({
   compiled: Boolean,
   design: Boolean,
   partiallyCorrect: Boolean,
@@ -56,34 +56,37 @@ export const PassedSteps = Object({
 })
 export type PassedSteps = Static<typeof PassedSteps>
 
-export const PassedTestCount = Object({
+export const PassedTestCount = Record({
   passed: Number,
   total: Number,
   completed: Boolean,
 })
 export type PassedTestCount = Static<typeof PassedTestCount>
 
-export const PassedMutantCount = Object({
+export const PassedMutantCount = Record({
   passed: Number,
   total: Number,
   completed: Boolean,
 })
 export type PassedMutantCount = Static<typeof PassedMutantCount>
 
-export const PartialCredit = Object({
+export const PartialCredit = Record({
   passedSteps: PassedSteps,
-  passedTestCount: PassedTestCount.optional(),
-  passedMutantCount: PassedMutantCount.optional(),
-})
+}).And(
+  Partial({
+    passedTestCount: PassedTestCount,
+    passedMutantCount: PassedMutantCount,
+  }),
+)
 export type PartialCredit = Static<typeof PartialCredit>
 
-export const RecursionComparison = Object({
+export const RecursionComparison = Record({
   missingMethods: Array(String),
   failed: Boolean,
 })
 export type RecursionComparison = Static<typeof RecursionComparison>
 
-export const ExecutionCountComparison = Object({
+export const ExecutionCountComparison = Record({
   solution: Number,
   submission: Number,
   limit: Number,
@@ -92,7 +95,7 @@ export const ExecutionCountComparison = Object({
 })
 export type ExecutionCountComparison = Static<typeof ExecutionCountComparison>
 
-export const MemoryAllocationComparison = Object({
+export const MemoryAllocationComparison = Record({
   solution: Number,
   submission: Number,
   limit: Number,
@@ -101,7 +104,7 @@ export const MemoryAllocationComparison = Object({
 })
 export type MemoryAllocationComparison = Static<typeof MemoryAllocationComparison>
 
-export const TestResult = Object({
+export const TestResult = Record({
   name: String,
   passed: Boolean,
   type: Union(
@@ -128,20 +131,23 @@ export const TestResult = Object({
     ),
   ),
   outputAmount: Number,
-  message: String.optional(),
-  arguments: String.optional(),
-  expected: String.optional(),
-  found: String.optional(),
-  explanation: String.optional(),
-  output: String.optional(),
-  complexity: Number.optional(),
-  submissionStackTrace: String.optional(),
-  stdin: String.optional(),
-  truncatedLines: Number.optional(),
-})
+}).And(
+  Partial({
+    message: String,
+    arguments: String,
+    expected: String,
+    found: String,
+    explanation: String,
+    output: String,
+    complexity: Number,
+    submissionStackTrace: String,
+    stdin: String,
+    truncatedLines: Number,
+  }),
+)
 export type TestResult = Static<typeof TestResult>
 
-export const TestingResult = Object({
+export const TestingResult = Record({
   tests: Array(TestResult),
   testCount: Number,
   completed: Boolean,
@@ -152,7 +158,7 @@ export const TestingResult = Object({
 })
 export type TestingResult = Static<typeof TestingResult>
 
-export const CoverageComparison = Object({
+export const CoverageComparison = Record({
   solution: LineCoverage,
   submission: LineCoverage,
   missed: Array(Number),
@@ -162,7 +168,7 @@ export const CoverageComparison = Object({
 })
 export type CoverageComparison = Static<typeof CoverageComparison>
 
-export const OutputComparison = Object({
+export const OutputComparison = Record({
   solution: Number,
   submission: Number,
   truncated: Boolean,
@@ -170,41 +176,41 @@ export const OutputComparison = Object({
 })
 export type OutputComparison = Static<typeof OutputComparison>
 
-export const CompletedTasks = Object({
+export const CompletedTasks = Partial({
   // templateSubmission doesn't complete
-  compileSubmission: CompiledSourceResult.optional(),
-  checkstyle: CheckstyleResults.optional(),
-  ktlint: KtlintResults.optional(),
+  compileSubmission: CompiledSourceResult,
+  checkstyle: CheckstyleResults,
+  ktlint: KtlintResults,
   // checkCompiledSubmission doesn't complete
-  classSize: ClassSizeComparison.optional(),
-  complexity: ComplexityComparison.optional(),
-  features: FeaturesComparison.optional(),
-  lineCount: LineCountComparison.optional(),
-  partial: PartialCredit.optional(),
+  classSize: ClassSizeComparison,
+  complexity: ComplexityComparison,
+  features: FeaturesComparison,
+  lineCount: LineCountComparison,
+  partial: PartialCredit,
   // execution
   // checkExecutedSubmission doesn't complete
-  recursion: RecursionComparison.optional(),
-  executionCount: ExecutionCountComparison.optional(),
-  memoryAllocation: MemoryAllocationComparison.optional(),
-  testing: TestingResult.optional(),
-  coverage: CoverageComparison.optional(),
-  extraOutput: OutputComparison.optional(),
+  recursion: RecursionComparison,
+  executionCount: ExecutionCountComparison,
+  memoryAllocation: MemoryAllocationComparison,
+  testing: TestingResult,
+  coverage: CoverageComparison,
+  extraOutput: OutputComparison,
 })
 export type CompletedTasks = Static<typeof CompletedTasks>
 
-export const FailedTasks = Object({
-  checkInitialSubmission: String.optional(),
-  templateSubmission: TemplatingFailed.optional(),
-  compileSubmission: CompilationFailed.optional(),
-  checkstyle: CheckstyleFailed.optional(),
-  ktlint: KtlintFailed.optional(),
-  checkCompiledSubmission: String.optional(),
-  classSize: String.optional(),
-  complexity: String.optional(),
-  features: String.optional(),
-  lineCount: String.optional(),
+export const FailedTasks = Partial({
+  checkInitialSubmission: String,
+  templateSubmission: TemplatingFailed,
+  compileSubmission: CompilationFailed,
+  checkstyle: CheckstyleFailed,
+  ktlint: KtlintFailed,
+  checkCompiledSubmission: String,
+  classSize: String,
+  complexity: String,
+  features: String,
+  lineCount: String,
   // execution
-  checkExecutedSubmission: String.optional(),
+  checkExecutedSubmission: String,
   // executionCount doesn't fail
   // memoryAllocation doesn't fail
   // testing doesn't fail
@@ -212,7 +218,7 @@ export const FailedTasks = Object({
 })
 export type FailedTasks = Static<typeof FailedTasks>
 
-export const TestResults = Object({
+export const TestResults = Record({
   language: Languages,
   completedSteps: Array(Step),
   complete: CompletedTasks,
@@ -223,8 +229,11 @@ export const TestResults = Object({
   lineCountTimeout: Boolean,
   completed: Boolean,
   succeeded: Boolean,
-  kind: Literal("SOLVE").optional(),
-  failedLinting: Boolean.optional(),
-  failureCount: Number.optional(),
-})
+}).And(
+  Partial({
+    kind: Literal("SOLVE"),
+    failedLinting: Boolean,
+    failureCount: Number,
+  }),
+)
 export type TestResults = Static<typeof TestResults>

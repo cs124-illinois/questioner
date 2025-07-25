@@ -1,21 +1,27 @@
-import { InstanceOf, Object, Static, String, Unknown } from "runtypes"
+import { InstanceOf, Partial, Record, Static, String, Unknown } from "runtypes"
 import { Languages } from "./languages"
 import { SubmissionType } from "./submission"
 
-export const UniversalSubmission = Object({
+export const UniversalSubmission = Record({
   type: SubmissionType,
   id: String,
   timestamp: InstanceOf(Date),
-  question: Object({
+  question: Record({
     language: Languages,
     path: String,
-    author: String.optional(),
-    version: String.optional(),
-    contentHash: String.optional(),
-  }),
+  }).And(
+    Partial({
+      author: String,
+      version: String,
+      contentHash: String,
+    }),
+  ),
   contents: String,
   results: Unknown,
-  email: String.optional(),
-  browserID: String.optional(),
-})
+}).And(
+  Partial({
+    email: String,
+    browserID: String,
+  }),
+)
 export type UniversalSubmission = Static<typeof UniversalSubmission>
