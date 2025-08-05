@@ -1,8 +1,7 @@
 {
   "name": "@cs124/questioner-types",
-  "version": "2025.7.1",
+  "version": "2025.7.3",
   "license": "MIT",
-  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",

@@ -1,8 +1,7 @@
 {
   "name": "@cs124/questioner-mongodb",
-  "version": "2025.7.1",
+  "version": "2025.7.3",
   "license": "MIT",
-  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
@@ -19,7 +18,7 @@
   },
   "types": "dist/index.d.ts",
   "peerDependencies": {
-    "@cs124/questioner-types": "2025.7.1"
+    "@cs124/questioner-types": "2025.7.3"
   },
   "devDependencies": {
     "@eslint/js": "9.13.0",
