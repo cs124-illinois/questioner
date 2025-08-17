@@ -1,6 +1,5 @@
 @file:Suppress("PackageUpdate")
 
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jmailen.gradle.kotlinter.tasks.FormatTask
 import org.jmailen.gradle.kotlinter.tasks.LintTask
 
@@ -8,12 +7,12 @@ plugins {
     kotlin("jvm")
     application
     id("org.jmailen.kotlinter")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "9.0.1"
     id("com.google.devtools.ksp")
-    id("com.ryandens.javaagent-test") version "0.8.0"
+    id("com.ryandens.javaagent-test") version "0.9.1"
 }
 dependencies {
-    val ktorVersion = "3.1.2"
+    val ktorVersion = "3.2.3"
 
     testJavaagent("com.beyondgrader.resource-agent:agent:2024.7.0")
 
@@ -42,7 +41,7 @@ tasks.shadowJar {
 application {
     mainClass.set("edu.illinois.cs.cs124.stumperd.MainKt")
 }
-tasks.withType<ShadowJar> {
+tasks.shadowJar {
     isZip64 = true
 }
 val dockerName = "cs124/stumperd"

@@ -1,4 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jmailen.gradle.kotlinter.tasks.FormatTask
 import org.jmailen.gradle.kotlinter.tasks.LintTask
 
@@ -6,11 +5,11 @@ plugins {
     kotlin("jvm")
     application
     id("org.jmailen.kotlinter")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "9.0.1"
     id("com.google.devtools.ksp")
 }
 dependencies {
-    val ktorVersion = "3.1.3"
+    val ktorVersion = "3.2.3"
 
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.2")
 
@@ -20,9 +19,9 @@ dependencies {
     implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-    implementation("org.cs124:ktor-moshi:2025.6.0")
+    implementation("org.cs124:ktor-moshi:2025.8.0")
     implementation("org.mongodb:mongodb-driver:3.12.14")
-    implementation("com.github.ben-manes.caffeine:caffeine:3.2.0")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.2.2")
 }
 tasks.shadowJar {
     manifest {
@@ -34,7 +33,7 @@ tasks.shadowJar {
 application {
     mainClass.set("edu.illinois.cs.cs125.questioner.server.MainKt")
 }
-tasks.withType<ShadowJar> {
+tasks.shadowJar {
     isZip64 = true
 }
 val dockerName = "cs124/questioner"
@@ -71,10 +70,12 @@ java {
         languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
-tasks.withType<FormatTask> {
-    this.source = this.source.minus(fileTree("build")).asFileTree
-}
-tasks.withType<LintTask> {
-    this.source = this.source.minus(fileTree("build")).asFileTree
+afterEvaluate {
+    tasks.withType<FormatTask> {
+        this.source = this.source.minus(fileTree("build")).asFileTree
+    }
+    tasks.withType<LintTask> {
+        this.source = this.source.minus(fileTree("build")).asFileTree
+    }
 }
 
