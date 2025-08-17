@@ -45,7 +45,7 @@ class QuestionerPlugin : Plugin<Project> {
             sourceSets.getByName("test").java.srcDirs(layout.buildDirectory.dir("questioner").get().asFile)
         }
 
-        buildscript.dependencies.add("classpath", "org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.0")
+        buildscript.dependencies.add("classpath", "org.jetbrains.kotlin:kotlin-gradle-plugin:2.1.21")
         pluginManager.apply("org.jetbrains.kotlin.jvm")
 
         pluginManager.apply("checkstyle")
