@@ -43,18 +43,18 @@ The project follows a multi-module structure:
 - **lib/**: Core library with question validation logic
   - Main classes: `Question`, `TestQuestion`, `Validator`, `TestResults`
   - Uses Jeed for Java/Kotlin code execution
-  
+
 - **plugin/**: Gradle plugin for question management
   - Contains ANTLR grammars for Java/Kotlin parsing
   - Tasks: `CollectQuestions`, `GenerateQuestionTests`, `PublishQuestions`
-  
+
 - **server/**: REST API server
   - MongoDB integration for data storage
   - Dockerized deployment
-  
+
 - **stumperd/**: Mutation testing and deduplication
   - Separate Docker setup
-  
+
 - **js/**: TypeScript packages using Yarn workspaces
   - types: Shared TypeScript definitions
   - output: Output formatting utilities
@@ -79,3 +79,4 @@ The project follows a multi-module structure:
 ## Dependency Management
 
 - Always specify exact dependencies in package.json files, avoiding ~ or ^ version prefixes
+- Remember to update kotlin-gradle-plugin in plugin/src/main/kotlin/QuestionerPlugin.kt when upgrading Kotlin!
