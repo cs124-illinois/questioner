@@ -51,7 +51,7 @@ class QuestionerPlugin : Plugin<Project> {
 
         pluginManager.apply(GoogleJavaFormatPlugin::class.java)
         extensions.getByType(GoogleJavaFormatExtension::class.java).apply {
-            toolVersion = "1.22.0"
+            toolVersion = "1.28.0"
         }
 
         pluginManager.apply(DetektPlugin::class.java)
