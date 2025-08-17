@@ -42,13 +42,6 @@ tasks.compileKotlin {
 tasks.compileTestKotlin {
     dependsOn(tasks.generateTestGrammarSource)
 }
-// Kotlinter task configuration - tasks renamed in newer versions
-// tasks.named("formatKotlinMain") {
-//     dependsOn(tasks.generateGrammarSource)
-// }
-// tasks.named("lintKotlinMain") {
-//     dependsOn(tasks.generateGrammarSource)
-// }
 tasks.generateGrammarSource {
     outputDirectory = File(projectDir, "src/main/java/edu/illinois/cs/cs125/questioner/antlr")
     arguments.addAll(
