@@ -1,5 +1,8 @@
 @file:Suppress("PackageUpdate")
 
+import org.jmailen.gradle.kotlinter.tasks.FormatTask
+import org.jmailen.gradle.kotlinter.tasks.LintTask
+
 plugins {
     kotlin("jvm")
     antlr
@@ -19,19 +22,15 @@ dependencies {
         exclude(module = "kotlin-runtime")
         exclude(module = "kotlin-js")
     }
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.19.0")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.19.0")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.19.2")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.19.2")
     implementation("com.github.slugify:slugify:3.0.7")
 
-    implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.1.21")
+    implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.2.10")
     implementation("gradle.plugin.com.github.sherter.google-java-format:google-java-format-gradle-plugin:0.9")
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.8")
-    implementation("org.jmailen.gradle:kotlinter-gradle:5.1.0")
+    implementation("org.jmailen.gradle:kotlinter-gradle:5.2.0")
 
-    val ktorVersion = "3.1.3"
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("com.beust:klaxon:5.6")
     implementation("io.github.z4kn4fein:semver:3.0.0")
 
@@ -43,12 +42,13 @@ tasks.compileKotlin {
 tasks.compileTestKotlin {
     dependsOn(tasks.generateTestGrammarSource)
 }
-tasks.formatKotlinMain {
-    dependsOn(tasks.generateGrammarSource)
-}
-tasks.lintKotlinMain {
-    dependsOn(tasks.generateGrammarSource)
-}
+// Kotlinter task configuration - tasks renamed in newer versions
+// tasks.named("formatKotlinMain") {
+//     dependsOn(tasks.generateGrammarSource)
+// }
+// tasks.named("lintKotlinMain") {
+//     dependsOn(tasks.generateGrammarSource)
+// }
 tasks.generateGrammarSource {
     outputDirectory = File(projectDir, "src/main/java/edu/illinois/cs/cs125/questioner/antlr")
     arguments.addAll(
@@ -88,6 +88,17 @@ java {
     withSourcesJar()
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
+afterEvaluate {
+    tasks.named("lintKotlinMain") {
+        dependsOn(tasks.generateGrammarSource)
+    }
+    tasks.withType<FormatTask> {
+        this.source = this.source.minus(fileTree("build")).asFileTree
+    }
+    tasks.withType<LintTask> {
+        this.source = this.source.minus(fileTree("build")).asFileTree
     }
 }
 publishing {

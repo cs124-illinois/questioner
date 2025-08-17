@@ -2,7 +2,6 @@
 
 package edu.illinois.cs.cs125.questioner.plugin
 
-import kotlinx.coroutines.runBlocking
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import java.net.URI
@@ -14,7 +13,7 @@ open class CheckQuestionerVersion : DefaultTask() {
     }
 
     @TaskAction
-    fun print() = runBlocking {
+    fun print() {
         try {
             URI("http://www.google.com").toURL().openConnection().let {
                 it.connect()
