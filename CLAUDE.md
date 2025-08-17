@@ -79,4 +79,3 @@ The project follows a multi-module structure:
 ## Dependency Management
 
 - Always specify exact dependencies in package.json files, avoiding ~ or ^ version prefixes
-- Remember to update kotlin-gradle-plugin in plugin/src/main/kotlin/QuestionerPlugin.kt when upgrading Kotlin!
