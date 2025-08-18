@@ -32,7 +32,10 @@ internal fun getQuestionByPath(path: String): Question? = questionerCollection.f
     }
 }
 
-internal fun Submission.getQuestion() = questionCache.get(contentHash) {
+internal fun Submission.getQuestion(testingQuestions: Map<String, Question>? = null) = questionCache.get(contentHash) {
+    if (testingQuestions != null) {
+        return@get testingQuestions.values.find { it.published.contentHash == contentHash }
+    }
     questionerCollection.find(
         Filters.and(Filters.eq("published.contentHash", contentHash)),
     ).sort(Sorts.descending("updated")).let { results ->

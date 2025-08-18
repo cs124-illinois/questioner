@@ -7,9 +7,12 @@ plugins {
     id("org.jmailen.kotlinter")
     id("com.gradleup.shadow") version "9.0.2"
     id("com.google.devtools.ksp")
+    id("com.ryandens.javaagent-test") version "0.9.1"
 }
 dependencies {
-    val ktorVersion = "3.2.3"
+    val ktorVersion = "3.1.3"
+
+    testJavaagent("com.beyondgrader.resource-agent:agent:2024.7.0")
 
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.2")
 
@@ -22,6 +25,11 @@ dependencies {
     implementation("org.cs124:ktor-moshi:2025.8.0")
     implementation("org.mongodb:mongodb-driver:3.12.14")
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.2")
+
+    testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
+    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
+    testImplementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    testImplementation("com.google.truth:truth:1.4.4")
 }
 tasks.shadowJar {
     manifest {
@@ -69,6 +77,9 @@ java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(21))
     }
+}
+tasks.test {
+    useJUnitPlatform()
 }
 afterEvaluate {
     tasks.withType<FormatTask> {

@@ -87,6 +87,9 @@ afterEvaluate {
     tasks.named("lintKotlinMain") {
         dependsOn(tasks.generateGrammarSource)
     }
+    tasks.named("formatKotlinMain") {
+        dependsOn(tasks.generateGrammarSource)
+    }
     tasks.withType<FormatTask> {
         this.source = this.source.minus(fileTree("build")).asFileTree
     }

@@ -5,6 +5,7 @@ import ch.qos.logback.classic.LoggerContext
 import com.ryanharter.ktor.moshi.moshi
 import com.sun.management.HotSpotDiagnosticMXBean
 import edu.illinois.cs.cs125.questioner.lib.Language
+import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring
 import edu.illinois.cs.cs125.questioner.lib.VERSION
 import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
@@ -74,7 +75,7 @@ private fun Double.round(decimals: Int) = 10.0.pow(decimals)
     .let { multiplier -> kotlinRound(this * multiplier) / multiplier }
 
 @Suppress("LongMethod")
-fun Application.questioner() {
+fun Application.questioner(testingQuestions: Map<String, Question>? = null) {
     val callStartTime = AttributeKey<Long>("CallStartTime")
     val counter = AtomicInteger()
 
@@ -115,7 +116,7 @@ fun Application.questioner() {
             val runCount = counter.incrementAndGet()
 
             val submission = call.receive<Submission>()
-            val question = submission.getQuestion() ?: return@post call.respond(HttpStatusCode.NotFound)
+            val question = submission.getQuestion(testingQuestions) ?: return@post call.respond(HttpStatusCode.NotFound)
 
             val validated = when (submission.type) {
                 Submission.SubmissionType.SOLVE -> question.validated
