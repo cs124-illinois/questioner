@@ -81,7 +81,7 @@ fun Question.checkInitialSubmission(contents: String, language: Language, testRe
             Language.java -> Source.fromJavaSnippet(contents)
             Language.kotlin -> Source.fromKotlinSnippet(contents)
         }.snippetProperties
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         testResults.completedSteps.add(TestResults.Step.checkInitialSubmission)
         // If the code doesn't parse as a snippet, fall back to compiler error messages which are usually more useful
         return true
@@ -255,13 +255,8 @@ fun Question.checkCompiledSubmission(
             return null
         }
     }
-    var klass = it.first()
-    if (compiledSubmission.source.type == Source.SourceType.KOTLIN &&
-        (solution.skipReceiver || solution.fauxStatic) &&
-        klass == "${compilationDefinedClass}Kt"
-    ) {
-        klass = "${compilationDefinedClass}Kt"
-    } else {
+    val klass = it.first()
+    if (compiledSubmission.source.type != Source.SourceType.KOTLIN || !(solution.skipReceiver || solution.fauxStatic) || klass != "${compilationDefinedClass}Kt") {
         if (klass != compilationDefinedClass) {
             testResults.failed.checkCompiledSubmission =
                 "Submission defines incorrect class: ${it.first()} != $compilationDefinedClass"
@@ -321,7 +316,7 @@ fun Question.checkExecutedSubmission(
     }
 }
 
-suspend fun Question.mutations(seed: Int, count: Int) =
+suspend fun Question.javaMutations(seed: Int, count: Int) =
     templateSubmission(
         if (getTemplate(Language.java) != null) {
             "// TEMPLATE_START\n" + solutionByLanguage[Language.java]!!.contents + "\n// TEMPLATE_END \n"
@@ -331,7 +326,7 @@ suspend fun Question.mutations(seed: Int, count: Int) =
     ).allFixedMutations(random = Random(seed)).mapNotNull {
         try {
             it.formatted()
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             println(
                 """
 Failed to format mutation sources for mutation type: ${it.mutations.firstOrNull()!!.mutation.mutationType}
@@ -357,7 +352,7 @@ Please report a bug so that we can improve the mutation engine.
             Pair(
                 try {
                     it.contents.deTemplate(getTemplate(Language.java))
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     getCorrect(Language.java)!!
                 }, it
             )
@@ -379,9 +374,76 @@ Please report a bug so that we can improve the mutation engine.
                 Language.java,
                 null,
                 false,
-                mutation = source
+                mutation = source,
+                mutationSourceLanguage = Language.java
             )
         }
+
+suspend fun Question.kotlinMutations(seed: Int, count: Int): List<Question.IncorrectFile> {
+    val kotlinSolution = solutionByLanguage[Language.kotlin] ?: return emptyList()
+    
+    return templateSubmission(
+        if (getTemplate(Language.kotlin) != null) {
+            "// TEMPLATE_START\n" + kotlinSolution.contents + "\n// TEMPLATE_END \n"
+        } else {
+            kotlinSolution.contents
+        }, Language.kotlin
+    ).allFixedMutations(random = Random(seed)).mapNotNull {
+        try {
+            it.formatted()
+        } catch (_: Exception) {
+            println(
+                """
+Failed to format mutation sources for mutation type: ${it.mutations.firstOrNull()!!.mutation.mutationType}
+
+Mutated:
+---
+${it.contents}
+---
+
+Original:
+---
+${it.originalSources.contents}
+---
+
+Please report a bug so that we can improve the mutation engine.
+            """.trimIndent()
+            )
+            null
+        }
+    }
+        .map {
+            // Mutations will sometimes break the entire template
+            Pair(
+                try {
+                    it.contents.deTemplate(getTemplate(Language.kotlin))
+                } catch (_: Exception) {
+                    getCorrect(Language.kotlin)!!
+                }, it
+            )
+        }
+        .filter { (contents, _) ->
+            // Templated questions sometimes will mutate the template
+            contents != getCorrect(Language.kotlin)!!
+        }
+        .distinctBy { (contents, _) ->
+            contents.stripComments(Source.FileType.KOTLIN).hashCode()
+        }
+        .shuffled(random = Random(seed))
+        .take(count)
+        .map { (contents, source) ->
+            Question.IncorrectFile(
+                published.klass,
+                contents,
+                Question.IncorrectFile.Reason.TEST,
+                Language.kotlin,
+                null,
+                false,
+                mutation = source,
+                mutationSourceLanguage = Language.kotlin
+            )
+        }
+}
 
 
 class MaxClassSizeExceeded(message: String) : RuntimeException(message)

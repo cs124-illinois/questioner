@@ -124,7 +124,8 @@ data class Question(
         val allFiles: Set<String> = setOf(),
         val unusedFiles: Set<String> = setOf(),
         val focused: Boolean? = null,
-        val publish: Boolean? = null
+        val publish: Boolean? = null,
+        val testTestingIncorrectCount: Map<Language, Int>? = null
     ) {
         companion object {
             const val DEFAULT_FOCUSED = false
@@ -350,7 +351,8 @@ data class Question(
         var testCount: Int = -1,
         val suppressions: Set<String> = setOf(),
         @Transient
-        val mutation: MutatedSource? = null
+        val mutation: MutatedSource? = null,
+        val mutationSourceLanguage: Language? = null
     ) {
         @Suppress("SpellCheckingInspection")
         enum class Reason {
@@ -383,7 +385,8 @@ data class Question(
 
         suspend fun compiled(question: Question): TestTestingSource {
             val results = TestResults(language)
-            val source = question.contentsToSource(contents(question), language, results)
+            val questionContents = contents(question)
+            val source = question.contentsToSource(questionContents, language, results)
 
             return when (language) {
                 Language.java ->
@@ -505,7 +508,7 @@ $contents
         } else {
             // End-of-source comment to prevent cache collisions on actual solution but still enable caching
             val contents =
-"""${templateSubmission(solutionByLanguage[Language.kotlin]!!.contents, Language.kotlin).contents}
+                """${templateSubmission(solutionByLanguage[Language.kotlin]!!.contents, Language.kotlin).contents}
 // Kotlin solution for testing
 """
             try {
@@ -693,13 +696,13 @@ fun File.loadQuestionList() =
 
 fun File.loadQuestion() = try {
     moshi.adapter(Question::class.java).fromJson(readText())!!
-} catch (e: Exception) {
+} catch (_: Exception) {
     null
 }
 
 fun Question.writeToFile(file: File) = try {
     file.writeText(moshi.adapter(Question::class.java).indent("  ").toJson(this))
-} catch (e: Exception) {
+} catch (_: Exception) {
     null
 }
 
