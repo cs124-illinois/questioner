@@ -558,18 +558,6 @@ suspend fun Question.validate(
         )
     )
 
-    // Update metadata with test testing incorrect counts
-    testTestingIncorrect?.let { mutations ->
-        val countMap = mutableMapOf<Language, Int>()
-        val javaCount = mutations.filter { it.language == Language.java }.size
-        val kotlinCount = mutations.filter { it.language == Language.kotlin }.size
-        
-        if (javaCount > 0) countMap[Language.java] = javaCount
-        if (kotlinCount > 0) countMap[Language.kotlin] = kotlinCount
-        
-        metadata = metadata?.copy(testTestingIncorrectCount = countMap.ifEmpty { null })
-    }
-
     val canTestTest = control.canTestTest != false &&
         (published.type == Question.Type.METHOD || published.type == Question.Type.KLASS) &&
         !calibrationResults.any { correctResults ->
@@ -577,6 +565,18 @@ suspend fun Question.validate(
                 .any { testResult -> testResult.stdin?.isNotEmpty() == true || testResult.output?.isNotEmpty() == true }
         } &&
         !solution.usesSystemIn && !solution.usesFileSystem
+
+    // Calculate test testing incorrect counts
+    val testTestingIncorrectCount = testTestingIncorrect?.let { mutations ->
+        val countMap = mutableMapOf<Language, Int>()
+        val javaCount = mutations.filter { it.language == Language.java }.size
+        val kotlinCount = mutations.filter { it.language == Language.kotlin }.size
+        
+        if (javaCount > 0) countMap[Language.java] = javaCount
+        if (kotlinCount > 0) countMap[Language.kotlin] = kotlinCount
+        
+        countMap.ifEmpty { null }
+    }
 
     validationResults = Question.ValidationResults(
         seed = seed,
@@ -591,7 +591,8 @@ suspend fun Question.validate(
         executionCounts = solutionExecutionCounts,
         memoryAllocation = solutionAllocation,
         outputAmount = solutionOutputAmount,
-        canTestTest = canTestTest
+        canTestTest = canTestTest,
+        testTestingIncorrectCount = testTestingIncorrectCount
     )
 
     classification.recursiveMethodsByLanguage = solutionRecursiveMethods!!
@@ -599,7 +600,7 @@ suspend fun Question.validate(
 
     val solutionTestingSequence = try {
         calibrationResults.first().results.jenisolResults!!.solutionTestingSequence()
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         null
     }
     return ValidationReport(

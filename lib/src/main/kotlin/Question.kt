@@ -124,8 +124,7 @@ data class Question(
         val allFiles: Set<String> = setOf(),
         val unusedFiles: Set<String> = setOf(),
         val focused: Boolean? = null,
-        val publish: Boolean? = null,
-        val testTestingIncorrectCount: Map<Language, Int>? = null
+        val publish: Boolean? = null
     ) {
         companion object {
             const val DEFAULT_FOCUSED = false
@@ -295,7 +294,8 @@ data class Question(
         val memoryAllocation: LanguagesResourceUsage,
         val outputAmount: Int? = null,
         val solutionMaxClassSize: LanguagesResourceUsage? = null,
-        val canTestTest: Boolean = false
+        val canTestTest: Boolean = false,
+        val testTestingIncorrectCount: Map<Language, Int>? = null
     )
 
     @JsonClass(generateAdapter = true)
