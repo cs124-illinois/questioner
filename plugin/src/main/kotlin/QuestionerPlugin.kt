@@ -179,14 +179,15 @@ class QuestionerPlugin : Plugin<Project> {
             recollectQuestions.dependsOn("saveQuestions")
         }
 
+        val officialTestTask = project.tasks.getByName("test") as Test
+        officialTestTask.setTestNameIncludePatterns(listOf("TestUnvalidatedQuestions"))
+
         listOf("testAllQuestions", "testUnvalidatedQuestions", "testFocusedQuestions").map { testName ->
             project.tasks.register(testName, Test::class.java) { testTask ->
+                testTask.testClassesDirs = officialTestTask.testClassesDirs
+                testTask.classpath = officialTestTask.classpath
                 testTask.setTestNameIncludePatterns(listOf(testName.capitalized()))
             }
-        }
-        project.tasks.getByName("test") { testTask ->
-            testTask as Test
-            testTask.setTestNameIncludePatterns(listOf("TestUnvalidatedQuestions"))
         }
 
         project.tasks.register("collectQuestions", CollectQuestions::class.java) { collectQuestions ->
