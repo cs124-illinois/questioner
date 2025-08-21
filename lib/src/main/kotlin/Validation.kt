@@ -195,7 +195,11 @@ suspend fun Question.validate(
 
         if (mutated) {
             if (succeeded) {
-                throw RetryValidation(IncorrectPassed(file, javaSolution, this, verbose), badTimeout())
+                // Only fail validation for Java mutations that pass tests
+                // Kotlin mutations that pass are silently discarded (assumed to be unsuppressed valid mutations)
+                if (file.mutationSourceLanguage != Language.kotlin) {
+                    throw RetryValidation(IncorrectPassed(file, javaSolution, this, verbose), badTimeout())
+                }
             }
         } else {
             try {
@@ -315,11 +319,14 @@ suspend fun Question.validate(
     val bootstrapLength = Instant.now().toEpochMilli() - bootStrapStart.toEpochMilli()
 
     val mutationStart = Instant.now()
-    val mutations = mutations(seed, control.maxMutationCount ?: maxMutationCount).also { mutations ->
-        if (mutations.size < control.minMutationCount!!) {
-            throw TooFewMutations(javaSolution, mutations.size, control.minMutationCount!!)
-        }
+    val javaMutations = javaMutations(seed, control.maxMutationCount ?: maxMutationCount)
+    val kotlinMutations = kotlinMutations(seed, control.maxMutationCount ?: maxMutationCount)
+    val mutations = javaMutations + kotlinMutations
+    
+    if (javaMutations.size < control.minMutationCount!!) {
+        throw TooFewMutations(javaSolution, javaMutations.size, control.minMutationCount!!)
     }
+    
     val allIncorrect = (incorrectExamples + mutations).also { allIncorrect ->
         if (allIncorrect.isEmpty()) {
             throw NoIncorrect(javaSolution)
@@ -550,6 +557,18 @@ suspend fun Question.validate(
             (incorrectAllocation.kotlin?.toDouble()?.times(control.allocationLimitMultiplier!!))?.toLong()
         )
     )
+
+    // Update metadata with test testing incorrect counts
+    testTestingIncorrect?.let { mutations ->
+        val countMap = mutableMapOf<Language, Int>()
+        val javaCount = mutations.filter { it.language == Language.java }.size
+        val kotlinCount = mutations.filter { it.language == Language.kotlin }.size
+        
+        if (javaCount > 0) countMap[Language.java] = javaCount
+        if (kotlinCount > 0) countMap[Language.kotlin] = kotlinCount
+        
+        metadata = metadata?.copy(testTestingIncorrectCount = countMap.ifEmpty { null })
+    }
 
     val canTestTest = control.canTestTest != false &&
         (published.type == Question.Type.METHOD || published.type == Question.Type.KLASS) &&
