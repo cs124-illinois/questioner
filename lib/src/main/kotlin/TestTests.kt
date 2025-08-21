@@ -70,9 +70,9 @@ suspend fun Question.testTests(
         }
 
         // Perform an initial unused Kotlin compile so that the compiler can perform null checks properly
-        var kotlinToLevelMethod = false
+        var kotlinTopLevelMethod = false
         if (language == Language.kotlin && kotlinSolutionForTesting != null) {
-            kotlinToLevelMethod = try {
+            kotlinTopLevelMethod = try {
                 kotlinSolutionForTesting!!.classloader.loadClass("${published.klass}Kt")
                 true
             } catch (e: Exception) {
@@ -115,9 +115,9 @@ suspend fun Question.testTests(
                 Language.kotlin -> kompileTestSuites(
                     contents,
                     compilationClassLoader,
-                    javaSolutionForTesting.fileManager,
+                    kotlinSolutionForTesting!!.fileManager,
                     results,
-                    kotlinToLevelMethod
+                    kotlinTopLevelMethod
                 )
             }
         } catch (e: TemplatingFailed) {
@@ -132,10 +132,13 @@ suspend fun Question.testTests(
 
         // checkCompiledTestSuite
         val klassName = checkCompiledTestSuite(compiledSubmission, results, language) ?: return results
-        val testingIncorrect = testTestingIncorrect
-        check(!testingIncorrect.isNullOrEmpty()) {
-            "Value should not be null or empty"
+
+        // Filter mutations to only use those compatible with the test language
+        // Java tests should only test against Java mutations, Kotlin tests against Kotlin mutations
+        val testingIncorrect = testTestingIncorrect?.filter { mutation ->
+            mutation.language == language
         }
+        check(!testingIncorrect.isNullOrEmpty()) { "Value should not be null or empty" }
 
         val incorrectLimit = (settings.limit - 1).coerceAtMost(testingIncorrect.size)
         val testingMutations = when (settings.selectionStrategy!!) {
@@ -209,7 +212,11 @@ suspend fun Question.testTests(
         val output = mutableListOf<String>()
 
         for ((testingMutationOrSolution, i) in testingMutationsOrSolutions) {
-            val testingLoader = testingMutationOrSolution?.compiled(this) ?: javaSolutionForTesting
+            val testingLoader = testingMutationOrSolution?.compiled(this) ?: if (language == Language.java) {
+                javaSolutionForTesting
+            } else {
+                kotlinSolutionForTesting!!
+            }
             val isSolution = testingMutationOrSolution == null
 
             val testingSuiteLoader = CopyableClassLoader.copy(compiledSubmission.classLoader, testingLoader.classloader)
@@ -346,14 +353,7 @@ fun Question.templateTestSuites(
 ): Pair<Source, String?> {
     val template = when (published.type) {
         Question.Type.KLASS -> {
-            if (language == Language.java || !kotlinTopLevelMethod) {
-                null
-            } else {
-                """import ${published.klass}.*
-                    |
-                    |{{{ contents }}}
-                """.trimMargin()
-            }
+            null
         }
 
         Question.Type.METHOD -> {
