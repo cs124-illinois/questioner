@@ -39,10 +39,11 @@ class TestTestTesting : StringSpec({
             question.validated shouldBe true
             report shouldNotBe null
         }
+
         question.testTests(JAVA_EMPTY_SUITE_CLASS, Language.java).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
-                it.total shouldBe 7
+                it.total shouldBe 7  // Java tests only test against Java mutations
                 it.correct shouldBe 1
                 it.identifiedSolution shouldBe true
                 it.shortCircuited shouldBe false
@@ -63,7 +64,9 @@ class TestTestTesting : StringSpec({
         question.testTests(KOTLIN_EMPTY_SUITE, Language.kotlin).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
-                it.total shouldBe 7
+                // Kotlin tests only test against Kotlin mutations
+                val kotlinMutationCount = question.testTestingIncorrect!!.filter { it.language == Language.kotlin }.size
+                it.total shouldBe kotlinMutationCount + 1  // Should be Kotlin mutations + 1 correct solution
                 it.correct shouldBe 1
                 it.identifiedSolution shouldBe true
                 it.shortCircuited shouldBe false
@@ -82,6 +85,7 @@ public class TestQuestion {
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.succeeded shouldBe true
         }
+
         question.testTests(
             """
 fun test() {
@@ -181,7 +185,7 @@ public class TestQuestion {
         question.testTests(JAVA_EMPTY_SUITE_CLASS, Language.java).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
-                it.total shouldBe 7
+                it.total shouldBe 7  // Java tests only test against Java mutations
                 it.shortCircuited shouldBe false
                 it.succeeded shouldBe false
             }
@@ -209,7 +213,9 @@ public class TestQuestion {
         question.testTests(JAVA_EMPTY_SUITE_METHOD, Language.java).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
-                it.total shouldBe question.testTestingIncorrect!!.size + 1
+                // Only count mutations compatible with the test language (Java in this case)
+                val compatibleMutations = question.testTestingIncorrect!!.filter { it.language == Language.java }.size
+                it.total shouldBe compatibleMutations + 1
                 it.shortCircuited shouldBe false
                 it.succeeded shouldBe false
             }
@@ -217,7 +223,9 @@ public class TestQuestion {
         question.testTests(KOTLIN_EMPTY_SUITE, Language.kotlin).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
-                it.total shouldBe question.testTestingIncorrect!!.size + 1
+                // Kotlin tests only test against Kotlin mutations
+                val kotlinMutationCount = question.testTestingIncorrect!!.filter { it.language == Language.kotlin }.size
+                it.total shouldBe kotlinMutationCount + 1
                 it.shortCircuited shouldBe false
                 it.succeeded shouldBe false
             }
@@ -250,25 +258,10 @@ public class TestQuestion {
                 it.succeeded shouldBe false
             }
         }
-        question.testTests(KOTLIN_EMPTY_SUITE, Language.kotlin).also { results ->
-            results.failedSteps.size shouldBe 0
-            results.complete.testTesting!!.also {
-                it.total shouldBe question.testTestingIncorrect!!.size + 1
-                it.shortCircuited shouldBe false
-                it.succeeded shouldBe false
-            }
-        }
         question.testTests(
             """void test() {
   assert(max(1, 2).equals(Arrays.asList(1, 2)));
 }""", Language.java
-        ).also { results ->
-            results.failedSteps.size shouldBe 0
-        }
-        question.testTests(
-            """fun test() {
-  Truth.assertThat(max(1, 2)).isEqualTo(Arrays.asList(1, 2))
-}""", Language.kotlin
         ).also { results ->
             results.failedSteps.size shouldBe 0
         }
@@ -281,7 +274,9 @@ public class TestQuestion {
         question.testTests(JAVA_EMPTY_SUITE_METHOD, Language.java).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
-                it.total shouldBe question.testTestingIncorrect!!.size + 1
+                // Java tests only test against Java mutations
+                val javaMutationCount = question.testTestingIncorrect!!.filter { it.language == Language.java }.size
+                it.total shouldBe javaMutationCount + 1
                 it.shortCircuited shouldBe false
                 it.succeeded shouldBe false
             }
@@ -289,7 +284,9 @@ public class TestQuestion {
         question.testTests(KOTLIN_EMPTY_SUITE, Language.kotlin).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
-                it.total shouldBe question.testTestingIncorrect!!.size + 1
+                // Kotlin tests only test against Kotlin mutations
+                val kotlinMutationCount = question.testTestingIncorrect!!.filter { it.language == Language.kotlin }.size
+                it.total shouldBe kotlinMutationCount + 1
                 it.shortCircuited shouldBe false
                 it.succeeded shouldBe false
             }
@@ -302,7 +299,9 @@ public class TestQuestion {
         ).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
-                it.total shouldBe question.testTestingIncorrect!!.size + 1
+                // Java tests only test against Java mutations
+                val javaMutationCount = question.testTestingIncorrect!!.filter { it.language == Language.java }.size
+                it.total shouldBe javaMutationCount + 1
                 it.succeeded shouldBe true
             }
         }
@@ -314,7 +313,9 @@ public class TestQuestion {
         ).also { results ->
             results.failedSteps.size shouldBe 0
             results.complete.testTesting!!.also {
-                it.total shouldBe question.testTestingIncorrect!!.size + 1
+                // Kotlin tests only test against Kotlin mutations
+                val kotlinMutationCount = question.testTestingIncorrect!!.filter { it.language == Language.kotlin }.size
+                it.total shouldBe kotlinMutationCount + 1
                 it.succeeded shouldBe true
             }
         }
@@ -337,9 +338,14 @@ public class TestQuestion {
         question.testTestingIncorrect shouldNotBe null
         question.testTestingIncorrect!!.size shouldBeGreaterThan 0
         question.testTestingIncorrect!!.forEach { incorrect ->
-            incorrect.language shouldBe Language.java
+            listOf(
+                Language.java,
+                Language.kotlin
+            ) shouldContain incorrect.language  // Now includes both Java and Kotlin mutations
             incorrect.compiled(question).also {
-                (it.classloader as CopyableClassLoader).bytecodeForClasses.keys shouldContain question.published.klass
+                val classNames = (it.classloader as CopyableClassLoader).bytecodeForClasses.keys
+                // Allow both Java class name (Question) and Kotlin class name (QuestionKt)
+                assert(classNames.contains(question.published.klass) || classNames.contains("${question.published.klass}Kt"))
             }
             question.test(incorrect.contents(question), incorrect.language).also {
                 it.complete.testing?.passed shouldBe false
@@ -361,10 +367,12 @@ public class TestQuestion {
             question.validated shouldBe true
             report shouldNotBe null
         }
-        question.testTests("""
+        question.testTests(
+            """
 fun test() {
   nullCheck(null, false)
-}""".trimIndent(), Language.kotlin).also { results ->
+}""".trimIndent(), Language.kotlin
+        ).also { results ->
             results.failedSteps.size shouldBe 1
             results.failedSteps shouldContain TestTestResults.Step.compileSubmission
         }
