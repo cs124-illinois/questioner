@@ -83,13 +83,13 @@ suspend fun Question.test(
                         settings.kotlinSuppressions ?: setOf()
                     )
             }
-        } catch (e: TemplatingFailed) {
+        } catch (_: TemplatingFailed) {
             return results
-        } catch (e: CompilationFailed) {
+        } catch (_: CompilationFailed) {
             return results
-        } catch (e: CheckstyleFailed) {
+        } catch (_: CheckstyleFailed) {
             return results
-        } catch (e: KtLintFailed) {
+        } catch (_: KtLintFailed) {
             return results
         }
 
@@ -112,7 +112,7 @@ suspend fun Question.test(
         try {
             results.complete.complexity = computeComplexity(contents, language)
             results.completedSteps.add(TestResults.Step.complexity)
-        } catch (e: SnippetTransformationFailed) {
+        } catch (_: SnippetTransformationFailed) {
             // Special case when snippet transformation fails
             results.failed.checkCompiledSubmission = "Do not use return statements for this problem"
             results.failedSteps.add(TestResults.Step.checkCompiledSubmission)

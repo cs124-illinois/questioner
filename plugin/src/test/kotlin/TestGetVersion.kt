@@ -5,7 +5,7 @@ import io.kotest.matchers.shouldNotBe
 
 class TestGetVersion :
     StringSpec({
-        "!it should get the version" {
+        "it should get the version" {
             getLatestQuestionerVersion() shouldNotBe ""
             isLatestVersion()
         }
