@@ -86,6 +86,7 @@ export const ValidationResults = Record({
   Partial({
     solutionMaxClassSize: LanguagesResourceUsage,
     canTestTest: Boolean,
+    testTestingIncorrectCount: Dictionary(Number, Languages),
   }),
 )
 export type ValidationResults = Static<typeof ValidationResults>
