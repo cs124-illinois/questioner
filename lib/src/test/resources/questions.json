@@ -1,7 +1,7 @@
 [
   {
     "published": {
-      "contentHash": "9ad83f3fb086e1f22aa2e11a0b994c37-v2025.8.1",
+      "contentHash": "9ad83f3fb086e1f22aa2e11a0b994c37-v2025.8.3",
       "path": "add-one",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -22,7 +22,7 @@
         "kotlin": "fun addOne(value: Int): Int = 0 // You may need to remove this starter code"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -529,12 +529,12 @@
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 12,
-      "mutationCount": 6,
-      "solutionMaxRuntime": 13,
-      "bootstrapLength": 7198,
-      "mutationLength": 26,
-      "incorrectLength": 1171,
-      "calibrationLength": 63,
+      "mutationCount": 11,
+      "solutionMaxRuntime": 27,
+      "bootstrapLength": 5722,
+      "mutationLength": 112,
+      "incorrectLength": 2164,
+      "calibrationLength": 89,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -549,7 +549,11 @@
         "kotlin": 352
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 7,
+        "kotlin": 6
+      }
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
@@ -594,6 +598,19 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun addOne(value: Int): Int = value + 1",
+          "+fun addOne(value: Int): Int = 1"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -2,1 +2,1 @@",
@@ -615,6 +632,58 @@
         ],
         "language": "java",
         "mutation": "REMOVE_METHOD",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun addOne(value: Int): Int = value + 1",
+          "+fun addOne(value: Int): Int = value + 0"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun addOne(value: Int): Int = value + 1",
+          "+fun addOne(value: Int): Int = value + 2"
+        ],
+        "language": "kotlin",
+        "mutation": "PLUS_TO_MINUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun addOne(value: Int): Int = value + 1",
+          "+fun addOne(value: Int): Int = value - 1"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun addOne(value: Int): Int = value + 1",
+          "+fun addOne(value: Int): Int = value"
+        ],
+        "language": "kotlin",
+        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
         "testCount": 0,
         "suppressions": []
       },
@@ -662,7 +731,7 @@
   },
   {
     "published": {
-      "contentHash": "60b41b4e572f978f8ab8099ee9d4c8c1-v2025.8.1",
+      "contentHash": "60b41b4e572f978f8ab8099ee9d4c8c1-v2025.8.3",
       "path": "add-one-class",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -679,7 +748,7 @@
         "kotlin": "<p>Write a function <code>addOne</code> that returns its <code>Int</code> argument plus one.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -1187,12 +1256,12 @@
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 11,
-      "mutationCount": 6,
-      "solutionMaxRuntime": 20,
-      "bootstrapLength": 7228,
-      "mutationLength": 38,
-      "incorrectLength": 381,
-      "calibrationLength": 214,
+      "mutationCount": 11,
+      "solutionMaxRuntime": 25,
+      "bootstrapLength": 6774,
+      "mutationLength": 46,
+      "incorrectLength": 1536,
+      "calibrationLength": 195,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -1207,7 +1276,11 @@
         "kotlin": 352
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 6,
+        "kotlin": 5
+      }
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -1226,6 +1299,19 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun addOne(value: Int): Int = value + 1",
+          "+fun addOne(value: Int): Int = 1"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -3,1 +3,1 @@",
@@ -1234,6 +1320,45 @@
         ],
         "language": "java",
         "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun addOne(value: Int): Int = value + 1",
+          "+fun addOne(value: Int): Int = value + 0"
+        ],
+        "language": "kotlin",
+        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun addOne(value: Int): Int = value + 1",
+          "+fun addOne(value: Int): Int = value + 2"
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun addOne(value: Int): Int = value + 1",
+          "+fun addOne(value: Int): Int = value - 1"
+        ],
+        "language": "kotlin",
+        "mutation": "PLUS_TO_MINUS",
         "testCount": 0,
         "suppressions": []
       },
@@ -1259,6 +1384,19 @@
           "+    return 1;"
         ],
         "language": "java",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun addOne(value: Int): Int = value + 1",
+          "+fun addOne(value: Int): Int = value"
+        ],
+        "language": "kotlin",
         "mutation": "REMOVE_PLUS",
         "testCount": 0,
         "suppressions": []
@@ -1294,7 +1432,7 @@
   },
   {
     "published": {
-      "contentHash": "05e3220fb2a6cccf89cce606059ba94a-v2025.8.1",
+      "contentHash": "05e3220fb2a6cccf89cce606059ba94a-v2025.8.3",
       "path": "bad-extra-private-variable",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -1311,7 +1449,7 @@
         "kotlin": "<p>Test bad use of superclass method.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -2343,12 +2481,12 @@
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 123,
-      "mutationCount": 14,
-      "solutionMaxRuntime": 19,
-      "bootstrapLength": 7514,
-      "mutationLength": 27,
-      "incorrectLength": 1088,
-      "calibrationLength": 238,
+      "mutationCount": 30,
+      "solutionMaxRuntime": 20,
+      "bootstrapLength": 6760,
+      "mutationLength": 421,
+      "incorrectLength": 4141,
+      "calibrationLength": 133,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -2363,7 +2501,11 @@
         "kotlin": 10640
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 10,
+        "kotlin": 4
+      }
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -2377,6 +2519,32 @@
         ],
         "language": "java",
         "incorrectIndex": 1,
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  override fun toString() = \"$firstName $lastName\"",
+          "+  override fun toString() = \"$firstName lastName\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  override fun toString() = \"$firstName $lastName\"",
+          "+  override fun toString() = \"$firstName PlastName\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
         "testCount": 3,
         "suppressions": []
       },
@@ -2421,6 +2589,19 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  override fun toString() = \"$firstName $lastName\"",
+          "+  override fun toString() = \"$firstName $6astName\""
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -10,1 +10,1 @@",
@@ -2442,6 +2623,19 @@
         ],
         "language": "java",
         "mutation": "REMOVE_PLUS",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  override fun toString() = \"$firstName $lastName\"",
+          "+  override fun toString() = \"$firstName $1astName\""
+        ],
+        "language": "kotlin",
+        "mutation": "PLUS_TO_MINUS",
         "testCount": 3,
         "suppressions": []
       },
@@ -2502,7 +2696,7 @@
   },
   {
     "published": {
-      "contentHash": "59f3453763803120e38f9719ce636c7f-v2025.8.1",
+      "contentHash": "59f3453763803120e38f9719ce636c7f-v2025.8.3",
       "path": "classroom-getters-and-setters",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -2517,7 +2711,7 @@
         "java": "<p>Getter and setter testing.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -3569,10 +3763,10 @@
       "requiredTestCount": 75,
       "mutationCount": 17,
       "solutionMaxRuntime": 13,
-      "bootstrapLength": 2066,
-      "mutationLength": 506,
-      "incorrectLength": 1712,
-      "calibrationLength": 25,
+      "bootstrapLength": 2906,
+      "mutationLength": 74,
+      "incorrectLength": 1170,
+      "calibrationLength": 26,
       "solutionCoverage": {
         "covered": 12,
         "total": 12,
@@ -3585,7 +3779,10 @@
         "java": 135352
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 16
+      }
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -3798,7 +3995,7 @@
   },
   {
     "published": {
-      "contentHash": "a4c371d9d36e6dd818a07d69d2faebb8-v2025.8.1",
+      "contentHash": "a4c371d9d36e6dd818a07d69d2faebb8-v2025.8.3",
       "path": "cougar-feliform",
       "author": "challen@illinois.edu",
       "version": "2021.7.0",
@@ -3813,7 +4010,7 @@
         "java": "<p>Create and complete the implementation of the <code>Cougar</code> class.\nYour class should be public, not final and not abstract, inherit from the <code>Feliform</code> class,\nand provide the following methods:</p><ol><li>Constructor that takes a <code>int</code> parameter <code>speed</code> and a second <code>weight</code>.\nCreates a new <code>Cougar</code> with the passed speed and weight.\nYou should call the <code>Feliform</code> constructor and pass it the <code>String</code> &quot;cougar&quot; to identify the type\nof this feliform.</li><li>Public instance method <code>dangerousness</code> that takes no arguments and returns an <code>int</code>.\nReturn the dangerousness of this cougar which equals its speed times its weight.</li><li>Override <code>public boolean equals(Object other)</code>.\nReturn <code>true</code> if <code>other</code> is a <code>Cougar</code> with the same speed and weight, and <code>false</code> otherwise.\nNote that <code>other</code> may be <code>null</code> or not a <code>Housecat</code>.</li></ol><p>Finally, note that your class should not expose any of its internal state publicly.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -4897,11 +5094,11 @@
       "seed": 124,
       "requiredTestCount": 117,
       "mutationCount": 28,
-      "solutionMaxRuntime": 23,
-      "bootstrapLength": 2020,
-      "mutationLength": 214,
-      "incorrectLength": 1977,
-      "calibrationLength": 43,
+      "solutionMaxRuntime": 17,
+      "bootstrapLength": 1818,
+      "mutationLength": 464,
+      "incorrectLength": 2048,
+      "calibrationLength": 39,
       "solutionCoverage": {
         "covered": 8,
         "total": 8,
@@ -4914,7 +5111,10 @@
         "java": 352
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 21
+      }
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -5199,7 +5399,7 @@
   },
   {
     "published": {
-      "contentHash": "f4e3e9056d1f6093687b994d7b59953b-v2025.8.1",
+      "contentHash": "f4e3e9056d1f6093687b994d7b59953b-v2025.8.3",
       "path": "equals-88",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -5214,7 +5414,7 @@
         "java": "<p>Write a method named <code>equals88</code> that returns <code>true</code> if its <code>int</code> argument is equal to 88,\nour magic number.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -5542,11 +5742,11 @@
       "seed": 124,
       "requiredTestCount": 6,
       "mutationCount": 7,
-      "solutionMaxRuntime": 142,
-      "bootstrapLength": 3150,
-      "mutationLength": 17,
-      "incorrectLength": 355,
-      "calibrationLength": 153,
+      "solutionMaxRuntime": 30,
+      "bootstrapLength": 2218,
+      "mutationLength": 42,
+      "incorrectLength": 338,
+      "calibrationLength": 38,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -5559,7 +5759,10 @@
         "java": 352
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 6
+      }
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
@@ -5646,7 +5849,7 @@
   },
   {
     "published": {
-      "contentHash": "bf70754a624fcd0a3d682d5f2d7b3c2a-v2025.8.1",
+      "contentHash": "bf70754a624fcd0a3d682d5f2d7b3c2a-v2025.8.3",
       "path": "input-interleaving-test",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -5663,7 +5866,7 @@
         "kotlin": "<p>Testing STDIN generation and interleaving. In Kotlin!</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -7459,12 +7662,12 @@
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 1,
-      "mutationCount": 35,
-      "solutionMaxRuntime": 6,
-      "bootstrapLength": 6124,
-      "mutationLength": 255,
-      "incorrectLength": 2033,
-      "calibrationLength": 94,
+      "mutationCount": 77,
+      "solutionMaxRuntime": 3,
+      "bootstrapLength": 6742,
+      "mutationLength": 858,
+      "incorrectLength": 10277,
+      "calibrationLength": 90,
       "solutionCoverage": {
         "covered": 8,
         "total": 8,
@@ -7479,7 +7682,11 @@
         "kotlin": 55296
       },
       "outputAmount": 5,
-      "canTestTest": false
+      "canTestTest": false,
+      "testTestingIncorrectCount": {
+        "java": 33,
+        "kotlin": 32
+      }
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -7493,6 +7700,32 @@
         ],
         "language": "java",
         "mutation": "STRING_LITERAL_LOOKALIKE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  println(\"Hello!\")",
+          "+  println(\"He1lo!\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -7,1 +7,1 @@",
+          "-  println(\"First: $first\")",
+          "+  println(\"first: $first\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -7524,6 +7757,19 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -9,1 +9,1 @@",
+          "-  println(\"Second: $second\")",
+          "+  println(\"Second:$second\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -5,1 +5,1 @@",
@@ -7531,6 +7777,18 @@
           "+    System.out.println(\"Hel1o!\");"
         ],
         "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,0 @@",
+          "-  println(\"Hello!\")"
+        ],
+        "language": "kotlin",
         "mutation": "STRING_LITERAL",
         "testCount": 0,
         "suppressions": []
@@ -7545,6 +7803,19 @@
         ],
         "language": "java",
         "mutation": "STRING_LITERAL_CASE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -7,1 +7,1 @@",
+          "-  println(\"First: $first\")",
+          "+  println(\"FirWt: $first\")"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_STATEMENT",
         "testCount": 0,
         "suppressions": []
       },
@@ -7571,6 +7842,32 @@
         ],
         "language": "java",
         "mutation": "STRING_LITERAL_LOOKALIKE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  println(\"Hello!\")",
+          "+  println(\"HeTlo!\")"
+        ],
+        "language": "kotlin",
+        "mutation": "PLUS_TO_MINUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -9,1 +9,1 @@",
+          "-  println(\"Second: $second\")",
+          "+  println(\"Second; $second\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -7653,6 +7950,19 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -9,1 +9,1 @@",
+          "-  println(\"Second: $second\")",
+          "+  println(\"S1cond: $second\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -5,1 +5,1 @@",
@@ -7679,6 +7989,32 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -9,1 +9,1 @@",
+          "-  println(\"Second: $second\")",
+          "+  println(\"Secon0: $second\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -7,1 +7,1 @@",
+          "-  println(\"First: $first\")",
+          "+  println(\"cirst: $first\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -5,6 +5,1 @@",
@@ -7692,6 +8028,19 @@
         ],
         "language": "java",
         "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -7,1 +7,1 @@",
+          "-  println(\"First: $first\")",
+          "+  println(\"First; $first\")"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_STATEMENT",
         "testCount": 0,
         "suppressions": []
       },
@@ -7723,6 +8072,32 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  println(\"Hello!\")",
+          "+  println(\"ello!\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -9,1 +9,1 @@",
+          "-  println(\"Second: $second\")",
+          "+  println(\"Secons: $second\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -8,1 +8,1 @@",
@@ -7736,6 +8111,70 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  println(\"Hello!\")",
+          "+  println(\"Heilo!\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -9,1 +9,1 @@",
+          "-  println(\"Second: $second\")",
+          "+  println(\"Second: Xsecond\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  println(\"Hello!\")",
+          "+  println(\"He7lo!\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -7,1 +7,0 @@",
+          "-  println(\"First: $first\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  println(\"Hello!\")",
+          "+  println(\"Hello?\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -5,1 +5,1 @@",
@@ -7743,6 +8182,19 @@
           "+    System.out.println(\"Heilo!\");"
         ],
         "language": "java",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  println(\"Hello!\")",
+          "+  println(\"HeClo!\")"
+        ],
+        "language": "kotlin",
         "mutation": "STRING_LITERAL_LOOKALIKE",
         "testCount": 0,
         "suppressions": []
@@ -7774,6 +8226,19 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  println(\"Hello!\")",
+          "+  println(\"Hello\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -8,1 +8,1 @@",
@@ -7787,6 +8252,45 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -7,1 +7,1 @@",
+          "-  println(\"First: $first\")",
+          "+  println(\"irst: $first\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  println(\"Hello!\")",
+          "+  println(\"hello!\")"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -9,1 +9,1 @@",
+          "-  println(\"Second: $second\")",
+          "+  println(\"SeconG: $second\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -10,1 +10,1 @@",
@@ -7795,6 +8299,31 @@
         ],
         "language": "java",
         "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -9,1 +9,0 @@",
+          "-  println(\"Second: $second\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -7,1 +7,1 @@",
+          "-  println(\"First: $first\")",
+          "+  println(\"FUrst: $first\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -7820,6 +8349,45 @@
           "+    System.out.println(\"Secone: \" + second);"
         ],
         "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -9,1 +9,1 @@",
+          "-  println(\"Second: $second\")",
+          "+  println(\"Second: second\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -9,1 +9,1 @@",
+          "-  println(\"Second: $second\")",
+          "+  println(\"econd: $second\")"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -9,1 +9,1 @@",
+          "-  println(\"Second: $second\")",
+          "+  println(\"Sec0nd: $second\")"
+        ],
+        "language": "kotlin",
         "mutation": "STRING_LITERAL",
         "testCount": 0,
         "suppressions": []
@@ -7878,6 +8446,37 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,6 +4,1 @@",
+          "-  println(\"Hello!\")",
+          "-  val scanner = Scanner(System.`in`)",
+          "-  val first = scanner.nextLine()",
+          "-  println(\"First: $first\")",
+          "-  val second = scanner.nextLine()",
+          "-  println(\"Second: $second\")",
+          "+  return"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -7,1 +7,1 @@",
+          "-  println(\"First: $first\")",
+          "+  println(\"First:L$first\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -5,1 +5,1 @@",
@@ -7913,13 +8512,39 @@
         "mutation": "STRING_LITERAL",
         "testCount": 0,
         "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  println(\"Hello!\")",
+          "+  println(\"Hel1o!\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -9,1 +9,1 @@",
+          "-  println(\"Second: $second\")",
+          "+  println(\"second: $second\")"
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 0,
+        "suppressions": []
       }
     ],
     "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/inputinterleavingtest/Question.java"
   },
   {
     "published": {
-      "contentHash": "a99bf381d8f7b41afb3261dbc6c03dbc-v2025.8.1",
+      "contentHash": "a99bf381d8f7b41afb3261dbc6c03dbc-v2025.8.3",
       "path": "kotlin-faux-property-testing",
       "author": "challen@illinois.edu",
       "version": "2023.7.0",
@@ -7936,7 +8561,7 @@
         "kotlin": "<p>Question to test detection of Kotlin faux properties in Jenisol 2023.7.0.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -8770,11 +9395,11 @@
       "seed": 124,
       "requiredTestCount": 21,
       "mutationCount": 4,
-      "solutionMaxRuntime": 16,
-      "bootstrapLength": 6091,
-      "mutationLength": 15,
-      "incorrectLength": 918,
-      "calibrationLength": 76,
+      "solutionMaxRuntime": 24,
+      "bootstrapLength": 5801,
+      "mutationLength": 36,
+      "incorrectLength": 803,
+      "calibrationLength": 91,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -8789,7 +9414,10 @@
         "kotlin": 352
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 4
+      }
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -8852,7 +9480,7 @@
   },
   {
     "published": {
-      "contentHash": "67850bb6b73a3a28de10c685bb17626b-v2025.8.1",
+      "contentHash": "67850bb6b73a3a28de10c685bb17626b-v2025.8.3",
       "path": "private-recursive-helper",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -8867,7 +9495,7 @@
         "java": "<p>Testing question for recursion checks on private methods.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -9763,19 +10391,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 88047232,
-        "kotlin": 88047232
+        "java": 88048128,
+        "kotlin": 88048128
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 23,
-      "solutionMaxRuntime": 7,
-      "bootstrapLength": 2108,
-      "mutationLength": 98,
-      "incorrectLength": 2177,
-      "calibrationLength": 19,
+      "solutionMaxRuntime": 28,
+      "bootstrapLength": 3158,
+      "mutationLength": 178,
+      "incorrectLength": 2052,
+      "calibrationLength": 47,
       "solutionCoverage": {
         "covered": 7,
         "total": 7,
@@ -9788,24 +10416,13 @@
         "java": 318952
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 13
+      }
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
-      {
-        "deltas": [
-          "--- Correct.java",
-          "+++ Incorrect.java",
-          "@@ -10,3 +10,0 @@",
-          "-    if (range < 0) {",
-          "-      throw new IllegalArgumentException();",
-          "-    }"
-        ],
-        "language": "java",
-        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
-        "testCount": 0,
-        "suppressions": []
-      },
       {
         "deltas": [
           "--- Correct.java",
@@ -9831,7 +10448,7 @@
           "+      return 1;"
         ],
         "language": "java",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "PRIMITIVE_RETURN",
         "testCount": 1,
         "suppressions": []
       },
@@ -9844,7 +10461,7 @@
           "+    return rangeSumHelper(range - 1);"
         ],
         "language": "java",
-        "mutation": "PLUS_TO_MINUS",
+        "mutation": "REMOVE_METHOD",
         "testCount": 1,
         "suppressions": []
       },
@@ -9870,20 +10487,7 @@
           "+    return 0;"
         ],
         "language": "java",
-        "mutation": "CONDITIONAL_BOUNDARY",
-        "testCount": 1,
-        "suppressions": []
-      },
-      {
-        "deltas": [
-          "--- Correct.java",
-          "+++ Incorrect.java",
-          "@@ -6,1 +6,1 @@",
-          "-    return range + rangeSumHelper(range - 1);",
-          "+    return range + rangeSumHelper(1);"
-        ],
-        "language": "java",
-        "mutation": "REMOVE_PLUS",
+        "mutation": "PLUS_TO_MINUS",
         "testCount": 1,
         "suppressions": []
       },
@@ -9899,7 +10503,7 @@
           "+    return 0;"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "REMOVE_IF",
         "testCount": 1,
         "suppressions": []
       },
@@ -9951,7 +10555,7 @@
           "+    if (range <= 0) {"
         ],
         "language": "java",
-        "mutation": "PRIMITIVE_RETURN",
+        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
         "testCount": 2,
         "suppressions": []
       },
@@ -9964,7 +10568,7 @@
           "+    if (range < 1) {"
         ],
         "language": "java",
-        "mutation": "REMOVE_IF",
+        "mutation": "REMOVE_PLUS",
         "testCount": 2,
         "suppressions": []
       },
@@ -9999,7 +10603,7 @@
   },
   {
     "published": {
-      "contentHash": "a44f4165ba8ab545558ac4865e9249fa-v2025.8.1",
+      "contentHash": "a44f4165ba8ab545558ac4865e9249fa-v2025.8.3",
       "path": "pure-null-check",
       "author": "challen@illinois.edu",
       "version": "2024.10.0",
@@ -10016,7 +10620,7 @@
         "kotlin": "<p>Test Kotlin alignment with Java null checks.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -10632,11 +11236,11 @@
       "seed": 124,
       "requiredTestCount": 19,
       "mutationCount": 5,
-      "solutionMaxRuntime": 33,
-      "bootstrapLength": 7261,
-      "mutationLength": 149,
-      "incorrectLength": 279,
-      "calibrationLength": 418,
+      "solutionMaxRuntime": 30,
+      "bootstrapLength": 6791,
+      "mutationLength": 31,
+      "incorrectLength": 407,
+      "calibrationLength": 208,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -10651,7 +11255,10 @@
         "kotlin": 12368
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 5
+      }
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
@@ -10725,7 +11332,7 @@
   },
   {
     "published": {
-      "contentHash": "218e2ccf7e9cf8ca63dc5966ef403834-v2025.8.1",
+      "contentHash": "218e2ccf7e9cf8ca63dc5966ef403834-v2025.8.3",
       "path": "read-hello-world",
       "author": "challen@illinois.edu",
       "version": "2023.11.0",
@@ -10740,7 +11347,7 @@
         "java": "<p>Question to test filesystem generation.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -11288,11 +11895,11 @@
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 4,
-      "solutionMaxRuntime": 39,
-      "bootstrapLength": 3038,
-      "mutationLength": 13,
-      "incorrectLength": 225,
-      "calibrationLength": 74,
+      "solutionMaxRuntime": 20,
+      "bootstrapLength": 3088,
+      "mutationLength": 12,
+      "incorrectLength": 173,
+      "calibrationLength": 40,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -11305,7 +11912,10 @@
         "java": 1545776
       },
       "outputAmount": 64,
-      "canTestTest": false
+      "canTestTest": false,
+      "testTestingIncorrectCount": {
+        "java": 4
+      }
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -11367,7 +11977,7 @@
   },
   {
     "published": {
-      "contentHash": "569c84817e65063ba59cf01e22724df2-v2025.8.1",
+      "contentHash": "569c84817e65063ba59cf01e22724df2-v2025.8.3",
       "path": "recursive-factorial",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -11384,7 +11994,7 @@
         "kotlin": "<p>Write a method that provides a recursive implementation of factorial, accepting and returning <code>Long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -12761,12 +13371,12 @@
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 6,
-      "mutationCount": 22,
-      "solutionMaxRuntime": 17,
-      "bootstrapLength": 7600,
-      "mutationLength": 41,
-      "incorrectLength": 1557,
-      "calibrationLength": 246,
+      "mutationCount": 44,
+      "solutionMaxRuntime": 11,
+      "bootstrapLength": 7310,
+      "mutationLength": 364,
+      "incorrectLength": 8377,
+      "calibrationLength": 171,
       "solutionCoverage": {
         "covered": 6,
         "total": 6,
@@ -12781,7 +13391,11 @@
         "kotlin": 21952
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 16,
+        "kotlin": 15
+      }
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -12806,6 +13420,36 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,5 +2,1 @@",
+          "-  require(input > 0)",
+          "-  if (input == 1L) {",
+          "-    return 1",
+          "-  }",
+          "-  return input * factorial(input - 1)",
+          "+  return 0L"
+        ],
+        "language": "kotlin",
+        "mutation": "NEGATE_IF",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-    return 1",
+          "+    return 0"
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -6,3 +6,0 @@",
@@ -12820,6 +13464,58 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-  if (input == 1L) {",
+          "+  if (input != 1L) {"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-  if (input == 1L) {",
+          "+  if (input == 2L) {"
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-    return 1",
+          "+    return 2"
+        ],
+        "language": "kotlin",
+        "mutation": "MATH",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-  if (input == 1L) {",
+          "+  if (input == 9L) {"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -3,1 +3,1 @@",
@@ -12828,6 +13524,45 @@
         ],
         "language": "java",
         "mutation": "REMOVE_BINARY",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,0 @@",
+          "-    return 1"
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  require(input > 0)",
+          "+  require(input > 1)"
+        ],
+        "language": "kotlin",
+        "mutation": "CONDITIONAL_BOUNDARY",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,3 +3,0 @@",
+          "-  if (input == 1L) {",
+          "-    return 1",
+          "-  }"
+        ],
+        "language": "kotlin",
+        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
         "testCount": 3,
         "suppressions": []
       },
@@ -12898,6 +13633,19 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-  if (input == 1L) {",
+          "+  if (!(input == 1L)) {"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 3,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -6,1 +6,1 @@",
@@ -12911,6 +13659,19 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -6,1 +6,1 @@",
+          "-  return input * factorial(input - 1)",
+          "+  return 0"
+        ],
+        "language": "kotlin",
+        "mutation": "CHANGE_EQUALS",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -9,1 +9,1 @@",
@@ -12919,6 +13680,32 @@
         ],
         "language": "java",
         "mutation": "REMOVE_METHOD",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -6,1 +6,1 @@",
+          "-  return input * factorial(input - 1)",
+          "+  return input * factorial(input - 0)"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_BINARY",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -6,1 +6,1 @@",
+          "-  return input * factorial(input - 1)",
+          "+  return input * factorial(input - 2)"
+        ],
+        "language": "kotlin",
+        "mutation": "NEGATE_CONDITIONAL",
         "testCount": 4,
         "suppressions": []
       },
@@ -12989,6 +13776,32 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -6,1 +6,1 @@",
+          "-  return input * factorial(input - 1)",
+          "+  return input * factorial(1)"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_BINARY",
+        "testCount": 5,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -6,1 +6,1 @@",
+          "-  return input * factorial(input - 1)",
+          "+  return input / factorial(input - 1)"
+        ],
+        "language": "kotlin",
+        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
+        "testCount": 5,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -9,1 +9,1 @@",
@@ -13005,7 +13818,7 @@
   },
   {
     "published": {
-      "contentHash": "1933eb154d0af63b7af722e30dc6437f-v2025.8.1",
+      "contentHash": "1933eb154d0af63b7af722e30dc6437f-v2025.8.3",
       "path": "test-bad-kotlin-getter-setter",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -13022,7 +13835,7 @@
         "kotlin": "<p>Test to ensure that we can detect unnecessary Kotlin setter or getter overrides.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -13872,11 +14685,11 @@
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 5,
-      "solutionMaxRuntime": 12,
-      "bootstrapLength": 6085,
-      "mutationLength": 36,
-      "incorrectLength": 1633,
-      "calibrationLength": 333,
+      "solutionMaxRuntime": 19,
+      "bootstrapLength": 6808,
+      "mutationLength": 18,
+      "incorrectLength": 1493,
+      "calibrationLength": 79,
       "solutionCoverage": {
         "covered": 6,
         "total": 6,
@@ -13891,7 +14704,10 @@
         "kotlin": 352
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 5
+      }
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -13969,7 +14785,7 @@
   },
   {
     "published": {
-      "contentHash": "caa4922981779dbc69b038999e5b6a16-v2025.8.1",
+      "contentHash": "caa4922981779dbc69b038999e5b6a16-v2025.8.3",
       "path": "test-constructor-notnull",
       "author": "challen@illinois.edu",
       "version": "2022.10.0",
@@ -13984,7 +14800,7 @@
         "java": "<p>Testing @NotNull annotation on constructor parameters.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -14539,11 +15355,11 @@
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 4,
-      "solutionMaxRuntime": 24,
-      "bootstrapLength": 2059,
-      "mutationLength": 335,
-      "incorrectLength": 698,
-      "calibrationLength": 35,
+      "solutionMaxRuntime": 21,
+      "bootstrapLength": 2469,
+      "mutationLength": 23,
+      "incorrectLength": 233,
+      "calibrationLength": 32,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -14556,7 +15372,10 @@
         "java": 352
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 3
+      }
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -14604,7 +15423,7 @@
   },
   {
     "published": {
-      "contentHash": "99edd2570f09907ad4b8f37d339ef6b4-v2025.8.1",
+      "contentHash": "99edd2570f09907ad4b8f37d339ef6b4-v2025.8.3",
       "path": "test-empty-constructor",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -14619,7 +15438,7 @@
         "java": "<p>Test to make sure we can parse the empty constructor.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -15180,19 +15999,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 6016,
-        "kotlin": 6016
+        "java": 5632,
+        "kotlin": 5632
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 8,
       "mutationCount": 3,
-      "solutionMaxRuntime": 20,
-      "bootstrapLength": 3116,
-      "mutationLength": 13,
-      "incorrectLength": 198,
-      "calibrationLength": 56,
+      "solutionMaxRuntime": 35,
+      "bootstrapLength": 3171,
+      "mutationLength": 12,
+      "incorrectLength": 202,
+      "calibrationLength": 78,
       "solutionCoverage": {
         "covered": 3,
         "total": 3,
@@ -15205,7 +16024,10 @@
         "java": 352
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 3
+      }
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -15253,7 +16075,7 @@
   },
   {
     "published": {
-      "contentHash": "00c2c0d452cdc275a3b0d69d34034246-v2025.8.1",
+      "contentHash": "00c2c0d452cdc275a3b0d69d34034246-v2025.8.3",
       "path": "test-memoization-defense",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -15268,7 +16090,7 @@
         "java": "<p>Testing class size based memoization defense.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -15567,19 +16389,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 5632,
-        "kotlin": 5632
+        "java": 6016,
+        "kotlin": 6016
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 12,
       "mutationCount": 1,
-      "solutionMaxRuntime": 24,
-      "bootstrapLength": 1981,
-      "mutationLength": 332,
-      "incorrectLength": 646,
-      "calibrationLength": 76,
+      "solutionMaxRuntime": 18,
+      "bootstrapLength": 2230,
+      "mutationLength": 25,
+      "incorrectLength": 218,
+      "calibrationLength": 156,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -15592,7 +16414,10 @@
         "java": 352
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 1
+      }
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
@@ -15614,7 +16439,7 @@
   },
   {
     "published": {
-      "contentHash": "51ba370a3098f7354b7a659ce0e68542-v2025.8.1",
+      "contentHash": "51ba370a3098f7354b7a659ce0e68542-v2025.8.3",
       "path": "test-raw-types",
       "author": "challen@illinois.edu",
       "version": "2023.11.0",
@@ -15629,7 +16454,7 @@
         "java": "<p>Test support for raw type error filtering.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -16036,19 +16861,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 1579648,
-        "kotlin": 1579648
+        "java": 1580672,
+        "kotlin": 1580672
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 1,
-      "solutionMaxRuntime": 28,
-      "bootstrapLength": 1978,
-      "mutationLength": 336,
-      "incorrectLength": 637,
-      "calibrationLength": 42,
+      "solutionMaxRuntime": 44,
+      "bootstrapLength": 2223,
+      "mutationLength": 14,
+      "incorrectLength": 263,
+      "calibrationLength": 127,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -16061,7 +16886,10 @@
         "java": 6568
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 1
+      }
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -16083,7 +16911,7 @@
   },
   {
     "published": {
-      "contentHash": "c14d76df7271c791ccc5c93981b5d1c8-v2025.8.1",
+      "contentHash": "c14d76df7271c791ccc5c93981b5d1c8-v2025.8.3",
       "path": "with-common-code",
       "author": "challen@illinois.edu",
       "version": "2023.12.0",
@@ -16098,7 +16926,7 @@
         "java": "<p>Test loading common code.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -16477,11 +17305,11 @@
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 1,
-      "solutionMaxRuntime": 33,
-      "bootstrapLength": 3107,
-      "mutationLength": 41,
-      "incorrectLength": 60,
-      "calibrationLength": 40,
+      "solutionMaxRuntime": 53,
+      "bootstrapLength": 1995,
+      "mutationLength": 111,
+      "incorrectLength": 332,
+      "calibrationLength": 85,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -16494,7 +17322,10 @@
         "java": 3424
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 1
+      }
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
@@ -16516,7 +17347,7 @@
   },
   {
     "published": {
-      "contentHash": "3247a24e43fa77810da0ee41da0d8e7d-v2025.8.1",
+      "contentHash": "3247a24e43fa77810da0ee41da0d8e7d-v2025.8.3",
       "path": "with-dead-code-annotation",
       "author": "challen@illinois.edu",
       "version": "2023.2.0",
@@ -16533,7 +17364,7 @@
         "kotlin": "<p>Testing dead code comments.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -17673,12 +18504,12 @@
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 11,
-      "mutationCount": 17,
-      "solutionMaxRuntime": 26,
-      "bootstrapLength": 7768,
-      "mutationLength": 104,
-      "incorrectLength": 844,
-      "calibrationLength": 360,
+      "mutationCount": 36,
+      "solutionMaxRuntime": 7,
+      "bootstrapLength": 7225,
+      "mutationLength": 412,
+      "incorrectLength": 7364,
+      "calibrationLength": 230,
       "solutionCoverage": {
         "covered": 4,
         "total": 5,
@@ -17693,10 +18524,45 @@
         "kotlin": 162424
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 16,
+        "kotlin": 14
+      }
     },
     "fauxStatic": false,
     "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,6 +2,1 @@",
+          "-  if (value % 2 == 0) {",
+          "-    return value * 2",
+          "-  }",
+          "-  assert(false)",
+          "-",
+          "-  return -1",
+          "+  return 0"
+        ],
+        "language": "kotlin",
+        "mutation": "MATH",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  if (value % 2 == 0) {",
+          "+  if (value % 1 == 0) {"
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
       {
         "deltas": [
           "--- Correct.java",
@@ -17763,6 +18629,70 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -5,1 +5,0 @@",
+          "-  assert(false)"
+        ],
+        "language": "kotlin",
+        "mutation": "CHANGE_EQUALS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  if (value % 2 == 0) {",
+          "+  if (value % 2 != 0) {"
+        ],
+        "language": "kotlin",
+        "mutation": "INVERT_NEGATION",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  if (value % 2 == 0) {",
+          "+  if (!(value % 2 == 0)) {"
+        ],
+        "language": "kotlin",
+        "mutation": "PRIMITIVE_RETURN",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -5,1 +5,1 @@",
+          "-  assert(false)",
+          "+  assert(true)"
+        ],
+        "language": "kotlin",
+        "mutation": "NEGATE_IF",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  if (value % 2 == 0) {",
+          "+  if (value % 2 == 1) {"
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -3,1 +3,1 @@",
@@ -17816,6 +18746,32 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,0 @@",
+          "-    return value * 2"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,3 +2,0 @@",
+          "-  if (value % 2 == 0) {",
+          "-    return value * 2",
+          "-  }"
+        ],
+        "language": "kotlin",
+        "mutation": "NEGATE_CONDITIONAL",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -4,1 +4,1 @@",
@@ -17850,6 +18806,19 @@
         ],
         "language": "java",
         "mutation": "NUMBER_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-    return value * 2",
+          "+    return value / 2"
+        ],
+        "language": "kotlin",
+        "mutation": "PRIMITIVE_RETURN",
         "testCount": 4,
         "suppressions": []
       },
@@ -17894,6 +18863,19 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-    return value * 2",
+          "+    return 0"
+        ],
+        "language": "kotlin",
+        "mutation": "MATH",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -4,1 +4,1 @@",
@@ -17904,13 +18886,52 @@
         "mutation": "BOOLEAN_LITERAL",
         "testCount": 4,
         "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  if (value % 2 == 0) {",
+          "+  if (value * 2 == 0) {"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_RUNTIME_CHECK",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  if (value % 2 == 0) {",
+          "+  if (value % 3 == 0) {"
+        ],
+        "language": "kotlin",
+        "mutation": "BOOLEAN_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-    return value * 2",
+          "+    return value * 3"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 4,
+        "suppressions": []
       }
     ],
     "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/withdeadcodeannotation/Question.java"
   },
   {
     "published": {
-      "contentHash": "736308f223c73871743d16c35e1dff2c-v2025.8.1",
+      "contentHash": "736308f223c73871743d16c35e1dff2c-v2025.8.3",
       "path": "with-feature-check",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -17927,7 +18948,7 @@
         "kotlin": "<p>For testing features.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -18491,19 +19512,19 @@
         "kotlin": 7600
       },
       "allocationLimit": {
-        "java": 6528,
-        "kotlin": 6528
+        "java": 5632,
+        "kotlin": 5632
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 475,
-      "mutationCount": 13,
-      "solutionMaxRuntime": 47,
-      "bootstrapLength": 6422,
-      "mutationLength": 22,
-      "incorrectLength": 1344,
-      "calibrationLength": 386,
+      "mutationCount": 21,
+      "solutionMaxRuntime": 65,
+      "bootstrapLength": 5953,
+      "mutationLength": 242,
+      "incorrectLength": 3465,
+      "calibrationLength": 310,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -18518,10 +19539,27 @@
         "kotlin": 352
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 13,
+        "kotlin": 8
+      }
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun sumTo(range: Int): Int = range * (range + 1) / 2",
+          "+fun sumTo(range: Int): Int = range * (range) / 2"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 0,
+        "suppressions": []
+      },
       {
         "deltas": [
           "--- Correct.java",
@@ -18563,6 +19601,19 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun sumTo(range: Int): Int = range * (range + 1) / 2",
+          "+fun sumTo(range: Int): Int = range * (range - 1) / 2"
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -2,1 +2,1 @@",
@@ -18571,6 +19622,58 @@
         ],
         "language": "java",
         "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun sumTo(range: Int): Int = range * (range + 1) / 2",
+          "+fun sumTo(range: Int): Int = range * (1) / 2"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun sumTo(range: Int): Int = range * (range + 1) / 2",
+          "+fun sumTo(range: Int): Int = range * (range + 0) / 2"
+        ],
+        "language": "kotlin",
+        "mutation": "PLUS_TO_MINUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun sumTo(range: Int): Int = range * (range + 1) / 2",
+          "+fun sumTo(range: Int): Int = range * (range + 1) * 2"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_BINARY",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun sumTo(range: Int): Int = range * (range + 1) / 2",
+          "+fun sumTo(range: Int): Int = range * (range + 1) / 3"
+        ],
+        "language": "kotlin",
+        "mutation": "MATH",
         "testCount": 0,
         "suppressions": []
       },
@@ -18641,6 +19744,19 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun sumTo(range: Int): Int = range * (range + 1) / 2",
+          "+fun sumTo(range: Int): Int = range / (range + 1) / 2"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_PLUS",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -2,1 +2,1 @@",
@@ -18663,6 +19779,19 @@
         "language": "java",
         "incorrectIndex": 1,
         "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -1,1 +1,1 @@",
+          "-fun sumTo(range: Int): Int = range * (range + 1) / 2",
+          "+fun sumTo(range: Int): Int = range * (range + 2) / 2"
+        ],
+        "language": "kotlin",
+        "mutation": "MATH",
+        "testCount": 3,
         "suppressions": []
       },
       {
@@ -18696,7 +19825,7 @@
   },
   {
     "published": {
-      "contentHash": "c0e60adbcb8d6e6d1ad0088a3a1271da-v2025.8.1",
+      "contentHash": "c0e60adbcb8d6e6d1ad0088a3a1271da-v2025.8.3",
       "path": "with-feature-dead-code",
       "author": "challen@illinois.edu",
       "version": "2023.2.0",
@@ -18716,7 +19845,7 @@
         "java.util.ArrayList",
         "java.util.List"
       ],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -20092,12 +21221,12 @@
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 4,
-      "mutationCount": 10,
-      "solutionMaxRuntime": 19,
-      "bootstrapLength": 4579,
-      "mutationLength": 26,
-      "incorrectLength": 789,
-      "calibrationLength": 277,
+      "mutationCount": 19,
+      "solutionMaxRuntime": 22,
+      "bootstrapLength": 4635,
+      "mutationLength": 362,
+      "incorrectLength": 4959,
+      "calibrationLength": 338,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -20112,7 +21241,11 @@
         "kotlin": 41592
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 9,
+        "kotlin": 6
+      }
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
@@ -20161,6 +21294,19 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-  for (i in 0 until value step 2) {",
+          "+  for (i in 0 until value step 1) {"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -3,1 +3,1 @@",
@@ -20183,6 +21329,43 @@
         ],
         "language": "java",
         "mutation": "REMOVE_LOOP",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -5,0 +5,1 @@",
+          "+    break"
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,0 @@",
+          "-    values.add(i)"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_STATEMENT",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-  for (i in 0 until value step 2) {",
+          "+  for (i in 0 until value step 3) {"
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 1,
         "suppressions": []
       },
@@ -20228,6 +21411,20 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,3 +3,0 @@",
+          "-  for (i in 0 until value step 2) {",
+          "-    values.add(i)",
+          "-  }"
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -3,1 +3,1 @@",
@@ -20238,13 +21435,26 @@
         "mutation": "NUMBER_LITERAL",
         "testCount": 1,
         "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-  for (i in 0 until value step 2) {",
+          "+  for (i in 1 until value step 2) {"
+        ],
+        "language": "kotlin",
+        "mutation": "NEGATE_CONDITIONAL",
+        "testCount": 1,
+        "suppressions": []
       }
     ],
     "correctPath": "src/main/java/com/github/cs124_illinois/questioner/testing/withfeaturedeadcode/Question.java"
   },
   {
     "published": {
-      "contentHash": "7e1641997386c3e3f1f5592632470def-v2025.8.1",
+      "contentHash": "7e1641997386c3e3f1f5592632470def-v2025.8.3",
       "path": "with-java-switch",
       "author": "challen@illinois.edu",
       "version": "2023.12.0",
@@ -20261,7 +21471,7 @@
         "kotlin": "<p>Test feature check using Java 14 switch expression, Kotlin equivalent.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -21883,11 +23093,11 @@
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 27,
-      "mutationCount": 61,
-      "solutionMaxRuntime": 9,
-      "bootstrapLength": 4434,
-      "mutationLength": 530,
-      "incorrectLength": 2125,
+      "mutationCount": 120,
+      "solutionMaxRuntime": 12,
+      "bootstrapLength": 4301,
+      "mutationLength": 1147,
+      "incorrectLength": 11451,
       "calibrationLength": 71,
       "solutionCoverage": {
         "covered": 9,
@@ -21903,7 +23113,11 @@
         "kotlin": 183952
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 51,
+        "kotlin": 59
+      }
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
@@ -21953,6 +23167,19 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  0 -> \"Monday\"",
+          "+  0 -> \"monday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -3,1 +3,1 @@",
@@ -21966,6 +23193,32 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  0 -> \"Monday\"",
+          "+  0 -> \"MoTday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  0 -> \"Monday\"",
+          "+  0 -> \"Mo7day\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -3,1 +3,1 @@",
@@ -21973,6 +23226,45 @@
           "+    case 0 -> \"Moiday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  0 -> \"Monday\"",
+          "+  0 -> \"M0nday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  0 -> \"Monday\"",
+          "+  0 -> \"MoCday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  0 -> \"Monday\"",
+          "+  1 -> \"Monday\""
+        ],
+        "language": "kotlin",
         "mutation": "NUMBER_LITERAL",
         "testCount": 1,
         "suppressions": []
@@ -22005,6 +23297,19 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  0 -> \"Monday\"",
+          "+  0 -> \"Monda\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -3,1 +3,1 @@",
@@ -22026,6 +23331,32 @@
         ],
         "language": "java",
         "mutation": "NUMBER_LITERAL",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  0 -> \"Monday\"",
+          "+  0 -> \"Moiday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 1,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  0 -> \"Monday\"",
+          "+  0 -> \"onday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
         "testCount": 1,
         "suppressions": []
       },
@@ -22083,6 +23414,45 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -8,1 +8,1 @@",
+          "-  6 -> \"Sunday\"",
+          "+  6 -> \"Sutday\""
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -8,1 +8,1 @@",
+          "-  6 -> \"Sunday\"",
+          "+  6 -> \"Sunda\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -8,1 +8,1 @@",
+          "-  6 -> \"Sunday\"",
+          "+  6 -> \"sunday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -9,1 +9,1 @@",
@@ -22091,6 +23461,32 @@
         ],
         "language": "java",
         "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -8,1 +8,1 @@",
+          "-  6 -> \"Sunday\"",
+          "+  6 -> \"Suntay\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -8,1 +8,1 @@",
+          "-  6 -> \"Sunday\"",
+          "+  6 -> \"Sunhay\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
         "testCount": 2,
         "suppressions": []
       },
@@ -22122,6 +23518,45 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -7,1 +7,1 @@",
+          "-  5 -> \"Saturday\"",
+          "+  6 -> \"Saturday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -8,1 +8,1 @@",
+          "-  6 -> \"Sunday\"",
+          "+  6 -> \"unday\""
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -8,1 +8,1 @@",
+          "-  6 -> \"Sunday\"",
+          "+  5 -> \"Sunday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -9,1 +9,1 @@",
@@ -22148,6 +23583,19 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -8,1 +8,1 @@",
+          "-  6 -> \"Sunday\"",
+          "+  6 -> \"SuSday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -9,1 +9,1 @@",
@@ -22155,6 +23603,19 @@
           "+    case 6 -> \"unday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 2,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -8,1 +8,1 @@",
+          "-  6 -> \"Sunday\"",
+          "+  7 -> \"Sunday\""
+        ],
+        "language": "kotlin",
         "mutation": "STRING_LITERAL",
         "testCount": 2,
         "suppressions": []
@@ -22169,6 +23630,19 @@
         ],
         "language": "java",
         "mutation": "STRING_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -6,1 +6,1 @@",
+          "-  4 -> \"Friday\"",
+          "+  4 -> \"friday\""
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 4,
         "suppressions": []
       },
@@ -22195,6 +23669,97 @@
         ],
         "language": "java",
         "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -6,1 +6,1 @@",
+          "-  4 -> \"Friday\"",
+          "+  5 -> \"Friday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -6,1 +6,1 @@",
+          "-  4 -> \"Friday\"",
+          "+  3 -> \"Friday\""
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -6,1 +6,1 @@",
+          "-  4 -> \"Friday\"",
+          "+  4 -> \"Uriday\""
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -6,1 +6,1 @@",
+          "-  4 -> \"Friday\"",
+          "+  4 -> \"zriday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -6,1 +6,1 @@",
+          "-  4 -> \"Friday\"",
+          "+  4 -> \"FriXay\""
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -5,1 +5,1 @@",
+          "-  3 -> \"Thursday\"",
+          "+  4 -> \"Thursday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -6,1 +6,1 @@",
+          "-  4 -> \"Friday\"",
+          "+  4 -> \"Frida\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
         "testCount": 4,
         "suppressions": []
       },
@@ -22239,6 +23804,32 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -6,1 +6,1 @@",
+          "-  4 -> \"Friday\"",
+          "+  4 -> \"FrGday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  2 -> \"Wednesday\"",
+          "+  2 -> \"ednesday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 9,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -5,1 +5,1 @@",
@@ -22260,6 +23851,71 @@
         ],
         "language": "java",
         "mutation": "NUMBER_LITERAL",
+        "testCount": 9,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  2 -> \"Wednesday\"",
+          "+  2 -> \"Wednesdgy\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 9,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  2 -> \"Wednesday\"",
+          "+  2 -> \"Wednesdey\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 9,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-  1 -> \"Tuesday\"",
+          "+  2 -> \"Tuesday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 9,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  2 -> \"Wednesday\"",
+          "+  3 -> \"Wednesday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 9,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  2 -> \"Wednesday\"",
+          "+  2 -> \"Wednesda\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
         "testCount": 9,
         "suppressions": []
       },
@@ -22291,6 +23947,32 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  2 -> \"Wednesday\"",
+          "+  2 -> \"WednesMay\""
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 9,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  2 -> \"Wednesday\"",
+          "+  2 -> \"wednesday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 9,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -5,1 +5,1 @@",
@@ -22299,6 +23981,19 @@
         ],
         "language": "java",
         "mutation": "STRING_LITERAL",
+        "testCount": 9,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -4,1 +4,1 @@",
+          "-  2 -> \"Wednesday\"",
+          "+  2 -> \"Wednesda3\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 9,
         "suppressions": []
       },
@@ -22330,6 +24025,19 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -7,1 +7,1 @@",
+          "-  5 -> \"Saturday\"",
+          "+  4 -> \"Saturday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 12,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -8,1 +8,1 @@",
@@ -22356,6 +24064,19 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -7,1 +7,1 @@",
+          "-  5 -> \"Saturday\"",
+          "+  5 -> \"aturday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 12,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -8,1 +8,1 @@",
@@ -22363,6 +24084,45 @@
           "+    case 5 -> \"Saturda\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
+        "mutation": "STRING_LITERAL",
+        "testCount": 12,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -7,1 +7,1 @@",
+          "-  5 -> \"Saturday\"",
+          "+  5 -> \"saturday\""
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 12,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -7,1 +7,1 @@",
+          "-  5 -> \"Saturday\"",
+          "+  5 -> \"SaturdaK\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 12,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -7,1 +7,1 @@",
+          "-  5 -> \"Saturday\"",
+          "+  5 -> \"SKturday\""
+        ],
+        "language": "kotlin",
         "mutation": "STRING_LITERAL",
         "testCount": 12,
         "suppressions": []
@@ -22395,6 +24155,32 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -7,1 +7,1 @@",
+          "-  5 -> \"Saturday\"",
+          "+  5 -> \"Caturday\""
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 12,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -7,1 +7,1 @@",
+          "-  5 -> \"Saturday\"",
+          "+  5 -> \"Sa5urday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 12,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -8,1 +8,1 @@",
@@ -22403,6 +24189,19 @@
         ],
         "language": "java",
         "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 12,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -7,1 +7,1 @@",
+          "-  5 -> \"Saturday\"",
+          "+  5 -> \"Saturda\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
         "testCount": 12,
         "suppressions": []
       },
@@ -22434,6 +24233,45 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-  1 -> \"Tuesday\"",
+          "+  1 -> \"Thesday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 20,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-  1 -> \"Tuesday\"",
+          "+  1 -> \"Tudsday\""
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 20,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-  1 -> \"Tuesday\"",
+          "+  1 -> \"Tuesdar\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 20,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -4,1 +4,1 @@",
@@ -22442,6 +24280,32 @@
         ],
         "language": "java",
         "mutation": "STRING_LITERAL",
+        "testCount": 20,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-  1 -> \"Tuesday\"",
+          "+  1 -> \"T2esday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 20,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-  1 -> \"Tuesday\"",
+          "+  0 -> \"Tuesday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 20,
         "suppressions": []
       },
@@ -22486,6 +24350,32 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-  1 -> \"Tuesday\"",
+          "+  1 -> \"uesday\""
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 20,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-  1 -> \"Tuesday\"",
+          "+  1 -> \"tuesday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 20,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -4,1 +4,1 @@",
@@ -22495,6 +24385,45 @@
         "language": "java",
         "mutation": "STRING_LITERAL",
         "testCount": 20,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -5,1 +5,1 @@",
+          "-  3 -> \"Thursday\"",
+          "+  3 -> \"whursday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL_CASE",
+        "testCount": 25,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -5,1 +5,1 @@",
+          "-  3 -> \"Thursday\"",
+          "+  3 -> \"hursday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 25,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -5,1 +5,1 @@",
+          "-  3 -> \"Thursday\"",
+          "+  3 -> \"ThuIsday\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 25,
         "suppressions": []
       },
       {
@@ -22564,6 +24493,45 @@
       },
       {
         "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -5,1 +5,1 @@",
+          "-  3 -> \"Thursday\"",
+          "+  3 -> \"thursday\""
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 25,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -5,1 +5,1 @@",
+          "-  3 -> \"Thursday\"",
+          "+  3 -> \"Txursday\""
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 25,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -5,1 +5,1 @@",
+          "-  3 -> \"Thursday\"",
+          "+  3 -> \"Thursda\""
+        ],
+        "language": "kotlin",
+        "mutation": "STRING_LITERAL",
+        "testCount": 25,
+        "suppressions": []
+      },
+      {
+        "deltas": [
           "--- Correct.java",
           "+++ Incorrect.java",
           "@@ -6,1 +6,1 @@",
@@ -22572,6 +24540,19 @@
         ],
         "language": "java",
         "mutation": "STRING_LITERAL_TRIM",
+        "testCount": 25,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -5,1 +5,1 @@",
+          "-  3 -> \"Thursday\"",
+          "+  3 -> \"Thursdak\""
+        ],
+        "language": "kotlin",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 25,
         "suppressions": []
       },
@@ -22593,7 +24574,7 @@
   },
   {
     "published": {
-      "contentHash": "698a87ee8a0d8c4960d859c396ea1d22-v2025.8.1",
+      "contentHash": "698a87ee8a0d8c4960d859c396ea1d22-v2025.8.3",
       "path": "with-map-extras",
       "author": "challen@illinois.edu",
       "version": "2023.9.0",
@@ -22611,7 +24592,7 @@
         "java.util.Map",
         "java.util.Set"
       ],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -23000,11 +24981,11 @@
       "seed": 124,
       "requiredTestCount": 13,
       "mutationCount": 3,
-      "solutionMaxRuntime": 11,
-      "bootstrapLength": 918,
-      "mutationLength": 17,
-      "incorrectLength": 227,
-      "calibrationLength": 29,
+      "solutionMaxRuntime": 14,
+      "bootstrapLength": 1408,
+      "mutationLength": 13,
+      "incorrectLength": 167,
+      "calibrationLength": 42,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -23017,7 +24998,10 @@
         "java": 352
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 3
+      }
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
@@ -23065,7 +25049,7 @@
   },
   {
     "published": {
-      "contentHash": "f25b5f918f2cb3cb8f04a0ee4a9babf2-v2025.8.1",
+      "contentHash": "f25b5f918f2cb3cb8f04a0ee4a9babf2-v2025.8.3",
       "path": "with-template-imports",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -23086,7 +25070,7 @@
         "java.util.List",
         "java.util.ArrayList"
       ],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [
@@ -23775,11 +25759,11 @@
       "seed": 124,
       "requiredTestCount": 18,
       "mutationCount": 1,
-      "solutionMaxRuntime": 39,
-      "bootstrapLength": 4210,
-      "mutationLength": 6,
-      "incorrectLength": 42,
-      "calibrationLength": 136,
+      "solutionMaxRuntime": 31,
+      "bootstrapLength": 3999,
+      "mutationLength": 98,
+      "incorrectLength": 78,
+      "calibrationLength": 294,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -23794,7 +25778,10 @@
         "kotlin": 16104
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 1
+      }
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
@@ -23816,7 +25803,7 @@
   },
   {
     "published": {
-      "contentHash": "1ed0415f62a57a3bc14f0082e6697487-v2025.8.1",
+      "contentHash": "1ed0415f62a57a3bc14f0082e6697487-v2025.8.3",
       "path": "with-null-assert",
       "author": "challen@illinois.edu",
       "version": "2024.9.0",
@@ -23833,7 +25820,7 @@
         "kotlin": "<p>For test correctness testing to ensure AssertionErrors pop through.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.1",
+      "questionerVersion": "2025.8.3",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -24694,12 +26681,12 @@
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 14,
-      "mutationCount": 6,
-      "solutionMaxRuntime": 27,
-      "bootstrapLength": 4279,
-      "mutationLength": 11,
-      "incorrectLength": 445,
-      "calibrationLength": 182,
+      "mutationCount": 11,
+      "solutionMaxRuntime": 18,
+      "bootstrapLength": 3506,
+      "mutationLength": 231,
+      "incorrectLength": 2173,
+      "calibrationLength": 176,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -24714,7 +26701,11 @@
         "kotlin": 5904
       },
       "outputAmount": 0,
-      "canTestTest": true
+      "canTestTest": true,
+      "testTestingIncorrectCount": {
+        "java": 6,
+        "kotlin": 4
+      }
     },
     "fauxStatic": true,
     "testTestingIncorrect": [
@@ -24742,6 +26733,19 @@
         ],
         "language": "java",
         "mutation": "NEGATE_CONDITIONAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -3,1 +3,1 @@",
+          "-  return input!!.length",
+          "+  return 0"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_STATEMENT",
         "testCount": 0,
         "suppressions": []
       },
@@ -24782,6 +26786,45 @@
         "language": "java",
         "mutation": "MODIFY_LENGTH_AND_SIZE",
         "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,2 +2,1 @@",
+          "-  assert(input != null)",
+          "-  return input!!.length",
+          "+  return 0"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_METHOD",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,1 @@",
+          "-  assert(input != null)",
+          "+  assert(input == null)"
+        ],
+        "language": "kotlin",
+        "mutation": "NEGATE_CONDITIONAL",
+        "testCount": 0,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -2,1 +2,0 @@",
+          "-  assert(input != null)"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_RUNTIME_CHECK",
+        "testCount": 4,
         "suppressions": []
       },
       {
