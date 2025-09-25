@@ -392,6 +392,9 @@ suspend fun Question.kotlinMutations(seed: Int, count: Int): List<Question.Incor
         try {
             it.formatted()
         } catch (_: Exception) {
+            if (it.mutations.first().mutation.mightNotCompile) {
+                return@mapNotNull null
+            }
             println(
                 """
 Failed to format mutation sources for mutation type: ${it.mutations.firstOrNull()!!.mutation.mutationType}

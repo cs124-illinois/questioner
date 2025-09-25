@@ -322,11 +322,11 @@ suspend fun Question.validate(
     val javaMutations = javaMutations(seed, control.maxMutationCount ?: maxMutationCount)
     val kotlinMutations = kotlinMutations(seed, control.maxMutationCount ?: maxMutationCount)
     val mutations = javaMutations + kotlinMutations
-    
+
     if (javaMutations.size < control.minMutationCount!!) {
         throw TooFewMutations(javaSolution, javaMutations.size, control.minMutationCount!!)
     }
-    
+
     val allIncorrect = (incorrectExamples + mutations).also { allIncorrect ->
         if (allIncorrect.isEmpty()) {
             throw NoIncorrect(javaSolution)
@@ -385,14 +385,10 @@ suspend fun Question.validate(
     }
     val incorrectLength = Instant.now().toEpochMilli() - incorrectStart.toEpochMilli()
 
-    val useTestingIncorrect = incorrectResults.mapIndexed { _, result ->
-        when {
-            result.results.timeout || (result.results.failureCount ?: 0) == 0 -> null
-            else -> result
-        }
-    }.filterNotNull()
+    val useTestingIncorrect =
+        incorrectResults.filter { result -> !(result.results.timeout || (result.results.failureCount ?: 0) == 0) }
 
-    testTestingIncorrect = useTestingIncorrect.mapIndexed { i, result ->
+    testTestingIncorrect = useTestingIncorrect.map { result ->
         val correct = getCorrect(result.incorrect.language)!!.lines()
         val extension = when (result.incorrect.language) {
             Language.java -> ".java"
@@ -401,11 +397,7 @@ suspend fun Question.validate(
         val diffs = DiffUtils.diff(correct, result.incorrect.contents.lines())
         val unifiedDiffs =
             UnifiedDiffUtils.generateUnifiedDiff("Correct$extension", "Incorrect$extension", correct, diffs, 0)
-        val incorrectIndex = if (allIncorrect[i] in incorrectExamples) {
-            i
-        } else {
-            null
-        }
+        val incorrectIndex = incorrectExamples.indexOf(result.incorrect)
 
         // Ignore constructor invocation for faux static methods
         val failureIndex = result.results.tests()!!.filter {
@@ -420,8 +412,12 @@ suspend fun Question.validate(
             Question.TestTestingMutation(
                 unifiedDiffs,
                 result.incorrect.language,
-                incorrectIndex,
-                allIncorrect[i].mutation?.mutations?.first()?.mutation?.mutationType,
+                if (incorrectIndex != -1) {
+                    incorrectIndex
+                } else {
+                    null
+                },
+                result.incorrect.mutation?.mutations?.first()?.mutation?.mutationType,
                 failureIndex,
                 result.incorrect.suppressions
             ), result.incorrect.contents
@@ -571,10 +567,10 @@ suspend fun Question.validate(
         val countMap = mutableMapOf<Language, Int>()
         val javaCount = mutations.filter { it.language == Language.java }.size
         val kotlinCount = mutations.filter { it.language == Language.kotlin }.size
-        
+
         if (javaCount > 0) countMap[Language.java] = javaCount
         if (kotlinCount > 0) countMap[Language.kotlin] = kotlinCount
-        
+
         countMap.ifEmpty { null }
     }
 
