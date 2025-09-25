@@ -36,7 +36,7 @@ abstract class GenerateQuestionTests : DefaultTask() {
     @OutputFiles
     val outputs =
         listOf("TestAllQuestions", "TestUnvalidatedQuestions", "TestFocusedQuestions")
-            .mapNotNull { testName -> project.layout.buildDirectory.file("questioner/$testName.kt").get().asFile }
+            .map { testName -> project.layout.buildDirectory.file("questioner/$testName.kt").get().asFile }
 
     @TaskAction
     fun generate() = runBlocking {
