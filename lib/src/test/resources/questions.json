@@ -1,7 +1,7 @@
 [
   {
     "published": {
-      "contentHash": "9ad83f3fb086e1f22aa2e11a0b994c37-v2025.8.3",
+      "contentHash": "9ad83f3fb086e1f22aa2e11a0b994c37-v2025.9.0",
       "path": "add-one",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -22,7 +22,7 @@
         "kotlin": "fun addOne(value: Int): Int = 0 // You may need to remove this starter code"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -530,11 +530,11 @@
       "seed": 124,
       "requiredTestCount": 12,
       "mutationCount": 11,
-      "solutionMaxRuntime": 27,
-      "bootstrapLength": 5722,
-      "mutationLength": 112,
-      "incorrectLength": 2164,
-      "calibrationLength": 89,
+      "solutionMaxRuntime": 19,
+      "bootstrapLength": 7062,
+      "mutationLength": 123,
+      "incorrectLength": 2140,
+      "calibrationLength": 108,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -566,7 +566,7 @@
           "+  return value + 0;"
         ],
         "language": "java",
-        "mutation": "PLUS_TO_MINUS",
+        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
         "testCount": 0,
         "suppressions": []
       },
@@ -579,7 +579,7 @@
           "+  return value + 2;"
         ],
         "language": "java",
-        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -592,7 +592,7 @@
           "+  return value - 1;"
         ],
         "language": "java",
-        "mutation": "REMOVE_PLUS",
+        "mutation": "PLUS_TO_MINUS",
         "testCount": 0,
         "suppressions": []
       },
@@ -618,7 +618,7 @@
           "+  return value;"
         ],
         "language": "java",
-        "incorrectIndex": 2,
+        "mutation": "REMOVE_PLUS",
         "testCount": 0,
         "suppressions": []
       },
@@ -631,7 +631,7 @@
           "+  return 1;"
         ],
         "language": "java",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "REMOVE_PLUS",
         "testCount": 0,
         "suppressions": []
       },
@@ -644,7 +644,7 @@
           "+fun addOne(value: Int): Int = value + 0"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_PLUS",
+        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
         "testCount": 0,
         "suppressions": []
       },
@@ -657,7 +657,7 @@
           "+fun addOne(value: Int): Int = value + 2"
         ],
         "language": "kotlin",
-        "mutation": "PLUS_TO_MINUS",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -670,7 +670,7 @@
           "+fun addOne(value: Int): Int = value - 1"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_PLUS",
+        "mutation": "PLUS_TO_MINUS",
         "testCount": 0,
         "suppressions": []
       },
@@ -683,7 +683,7 @@
           "+fun addOne(value: Int): Int = value"
         ],
         "language": "kotlin",
-        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
+        "mutation": "REMOVE_PLUS",
         "testCount": 0,
         "suppressions": []
       },
@@ -709,7 +709,7 @@
           "+  return 0;"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "REMOVE_METHOD",
         "testCount": 1,
         "suppressions": []
       },
@@ -731,7 +731,7 @@
   },
   {
     "published": {
-      "contentHash": "60b41b4e572f978f8ab8099ee9d4c8c1-v2025.8.3",
+      "contentHash": "60b41b4e572f978f8ab8099ee9d4c8c1-v2025.9.0",
       "path": "add-one-class",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -748,7 +748,7 @@
         "kotlin": "<p>Write a function <code>addOne</code> that returns its <code>Int</code> argument plus one.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -1257,11 +1257,11 @@
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 11,
-      "solutionMaxRuntime": 25,
-      "bootstrapLength": 6774,
-      "mutationLength": 46,
-      "incorrectLength": 1536,
-      "calibrationLength": 195,
+      "solutionMaxRuntime": 71,
+      "bootstrapLength": 5880,
+      "mutationLength": 73,
+      "incorrectLength": 1703,
+      "calibrationLength": 124,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -1432,7 +1432,7 @@
   },
   {
     "published": {
-      "contentHash": "05e3220fb2a6cccf89cce606059ba94a-v2025.8.3",
+      "contentHash": "05e3220fb2a6cccf89cce606059ba94a-v2025.9.0",
       "path": "bad-extra-private-variable",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -1449,7 +1449,7 @@
         "kotlin": "<p>Test bad use of superclass method.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -2483,10 +2483,10 @@
       "requiredTestCount": 123,
       "mutationCount": 30,
       "solutionMaxRuntime": 20,
-      "bootstrapLength": 6760,
-      "mutationLength": 421,
-      "incorrectLength": 4141,
-      "calibrationLength": 133,
+      "bootstrapLength": 7102,
+      "mutationLength": 265,
+      "incorrectLength": 4012,
+      "calibrationLength": 156,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -2518,7 +2518,7 @@
           "+    return firstName + \"i\" + getLastName();"
         ],
         "language": "java",
-        "incorrectIndex": 1,
+        "mutation": "STRING_LITERAL",
         "testCount": 3,
         "suppressions": []
       },
@@ -2531,7 +2531,7 @@
           "+  override fun toString() = \"$firstName lastName\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 3,
         "suppressions": []
       },
@@ -2557,7 +2557,7 @@
           "+    return \"\";"
         ],
         "language": "java",
-        "incorrectIndex": 0,
+        "mutation": "REMOVE_METHOD",
         "testCount": 3,
         "suppressions": []
       },
@@ -2570,7 +2570,7 @@
           "+    return getLastName();"
         ],
         "language": "java",
-        "mutation": "REMOVE_STATEMENT",
+        "mutation": "REMOVE_PLUS",
         "testCount": 3,
         "suppressions": []
       },
@@ -2596,7 +2596,7 @@
           "+  override fun toString() = \"$firstName $6astName\""
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_PLUS",
+        "mutation": "STRING_LITERAL",
         "testCount": 3,
         "suppressions": []
       },
@@ -2609,7 +2609,7 @@
           "+    return \" \" + getLastName();"
         ],
         "language": "java",
-        "mutation": "NULL_RETURN",
+        "mutation": "REMOVE_PLUS",
         "testCount": 3,
         "suppressions": []
       },
@@ -2622,7 +2622,7 @@
           "+    return firstName + \"B\" + getLastName();"
         ],
         "language": "java",
-        "mutation": "REMOVE_PLUS",
+        "mutation": "STRING_LITERAL",
         "testCount": 3,
         "suppressions": []
       },
@@ -2635,7 +2635,7 @@
           "+  override fun toString() = \"$firstName $1astName\""
         ],
         "language": "kotlin",
-        "mutation": "PLUS_TO_MINUS",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
         "testCount": 3,
         "suppressions": []
       },
@@ -2661,7 +2661,7 @@
           "+    return firstName + getLastName();"
         ],
         "language": "java",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "REMOVE_PLUS",
         "testCount": 3,
         "suppressions": []
       },
@@ -2674,7 +2674,7 @@
           "+    return null;"
         ],
         "language": "java",
-        "mutation": "REMOVE_PLUS",
+        "mutation": "NULL_RETURN",
         "testCount": 3,
         "suppressions": []
       },
@@ -2687,7 +2687,7 @@
           "+    return firstName + \" \";"
         ],
         "language": "java",
-        "mutation": "REMOVE_STATEMENT",
+        "mutation": "REMOVE_PLUS",
         "testCount": 7,
         "suppressions": []
       }
@@ -2696,7 +2696,7 @@
   },
   {
     "published": {
-      "contentHash": "59f3453763803120e38f9719ce636c7f-v2025.8.3",
+      "contentHash": "59f3453763803120e38f9719ce636c7f-v2025.9.0",
       "path": "classroom-getters-and-setters",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -2711,7 +2711,7 @@
         "java": "<p>Getter and setter testing.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -3762,11 +3762,11 @@
       "seed": 124,
       "requiredTestCount": 75,
       "mutationCount": 17,
-      "solutionMaxRuntime": 13,
-      "bootstrapLength": 2906,
-      "mutationLength": 74,
-      "incorrectLength": 1170,
-      "calibrationLength": 26,
+      "solutionMaxRuntime": 31,
+      "bootstrapLength": 1912,
+      "mutationLength": 268,
+      "incorrectLength": 1840,
+      "calibrationLength": 50,
       "solutionCoverage": {
         "covered": 12,
         "total": 12,
@@ -3808,7 +3808,7 @@
           "+    assert setName == null;"
         ],
         "language": "java",
-        "mutation": "CONDITIONAL_BOUNDARY",
+        "mutation": "NEGATE_CONDITIONAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -3821,7 +3821,7 @@
           "+    assert setEnrollment < 0;"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "NEGATE_CONDITIONAL",
         "testCount": 1,
         "suppressions": []
       },
@@ -3847,7 +3847,7 @@
           "+    return 0;"
         ],
         "language": "java",
-        "mutation": "REMOVE_STATEMENT",
+        "mutation": "REMOVE_METHOD",
         "testCount": 3,
         "suppressions": []
       },
@@ -3873,7 +3873,7 @@
           "+    assert setEnrollment >= 1;"
         ],
         "language": "java",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 4,
         "suppressions": []
       },
@@ -3899,7 +3899,7 @@
           "+    assert setEnrollment > 0;"
         ],
         "language": "java",
-        "mutation": "REMOVE_STATEMENT",
+        "mutation": "CONDITIONAL_BOUNDARY",
         "testCount": 6,
         "suppressions": []
       },
@@ -3925,7 +3925,7 @@
           "+    return;"
         ],
         "language": "java",
-        "mutation": "REMOVE_RUNTIME_CHECK",
+        "mutation": "REMOVE_METHOD",
         "testCount": 8,
         "suppressions": []
       },
@@ -3950,7 +3950,7 @@
           "+    return \"\";"
         ],
         "language": "java",
-        "mutation": "NEGATE_CONDITIONAL",
+        "mutation": "REMOVE_METHOD",
         "testCount": 22,
         "suppressions": []
       },
@@ -3962,7 +3962,7 @@
           "-    capacity = setEnrollment;"
         ],
         "language": "java",
-        "mutation": "REMOVE_RUNTIME_CHECK",
+        "mutation": "REMOVE_STATEMENT",
         "testCount": 30,
         "suppressions": []
       },
@@ -3974,7 +3974,7 @@
           "-    assert setEnrollment >= 0;"
         ],
         "language": "java",
-        "mutation": "NEGATE_CONDITIONAL",
+        "mutation": "REMOVE_RUNTIME_CHECK",
         "testCount": 39,
         "suppressions": []
       },
@@ -3986,7 +3986,7 @@
           "-    assert setName != null;"
         ],
         "language": "java",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "REMOVE_RUNTIME_CHECK",
         "testCount": 74,
         "suppressions": []
       }
@@ -3995,7 +3995,7 @@
   },
   {
     "published": {
-      "contentHash": "a4c371d9d36e6dd818a07d69d2faebb8-v2025.8.3",
+      "contentHash": "a4c371d9d36e6dd818a07d69d2faebb8-v2025.9.0",
       "path": "cougar-feliform",
       "author": "challen@illinois.edu",
       "version": "2021.7.0",
@@ -4010,7 +4010,7 @@
         "java": "<p>Create and complete the implementation of the <code>Cougar</code> class.\nYour class should be public, not final and not abstract, inherit from the <code>Feliform</code> class,\nand provide the following methods:</p><ol><li>Constructor that takes a <code>int</code> parameter <code>speed</code> and a second <code>weight</code>.\nCreates a new <code>Cougar</code> with the passed speed and weight.\nYou should call the <code>Feliform</code> constructor and pass it the <code>String</code> &quot;cougar&quot; to identify the type\nof this feliform.</li><li>Public instance method <code>dangerousness</code> that takes no arguments and returns an <code>int</code>.\nReturn the dangerousness of this cougar which equals its speed times its weight.</li><li>Override <code>public boolean equals(Object other)</code>.\nReturn <code>true</code> if <code>other</code> is a <code>Cougar</code> with the same speed and weight, and <code>false</code> otherwise.\nNote that <code>other</code> may be <code>null</code> or not a <code>Housecat</code>.</li></ol><p>Finally, note that your class should not expose any of its internal state publicly.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -5094,11 +5094,11 @@
       "seed": 124,
       "requiredTestCount": 117,
       "mutationCount": 28,
-      "solutionMaxRuntime": 17,
-      "bootstrapLength": 1818,
-      "mutationLength": 464,
-      "incorrectLength": 2048,
-      "calibrationLength": 39,
+      "solutionMaxRuntime": 15,
+      "bootstrapLength": 3058,
+      "mutationLength": 212,
+      "incorrectLength": 1712,
+      "calibrationLength": 26,
       "solutionCoverage": {
         "covered": 8,
         "total": 8,
@@ -5127,7 +5127,7 @@
           "+    super(\"c0ugar\");"
         ],
         "language": "java",
-        "mutation": "SWAP_AND_OR",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
         "testCount": 18,
         "suppressions": []
       },
@@ -5153,7 +5153,7 @@
           "+    super(\"coTgar\");"
         ],
         "language": "java",
-        "mutation": "NEGATE_CONDITIONAL",
+        "mutation": "STRING_LITERAL",
         "testCount": 18,
         "suppressions": []
       },
@@ -5166,7 +5166,7 @@
           "+    super(\"Cougar\");"
         ],
         "language": "java",
-        "mutation": "NEGATE_CONDITIONAL",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 18,
         "suppressions": []
       },
@@ -5179,7 +5179,7 @@
           "+    super(\"co7gar\");"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL",
         "testCount": 18,
         "suppressions": []
       },
@@ -5192,7 +5192,7 @@
           "+    super(\"coCgar\");"
         ],
         "language": "java",
-        "mutation": "REMOVE_AND_OR",
+        "mutation": "STRING_LITERAL",
         "testCount": 18,
         "suppressions": []
       },
@@ -5205,7 +5205,7 @@
           "+    super(\"ougar\");"
         ],
         "language": "java",
-        "mutation": "REMOVE_STATEMENT",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 18,
         "suppressions": []
       },
@@ -5218,7 +5218,7 @@
           "+    super(\"couga\");"
         ],
         "language": "java",
-        "mutation": "REMOVE_STATEMENT",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 18,
         "suppressions": []
       },
@@ -5231,7 +5231,7 @@
           "+    return true;"
         ],
         "language": "java",
-        "mutation": "CHANGE_EQUALS",
+        "mutation": "TRUE_RETURN",
         "testCount": 19,
         "suppressions": []
       },
@@ -5244,7 +5244,7 @@
           "+    return 0;"
         ],
         "language": "java",
-        "mutation": "REMOVE_IF",
+        "mutation": "REMOVE_METHOD",
         "testCount": 20,
         "suppressions": []
       },
@@ -5257,7 +5257,7 @@
           "+    return weight;"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL",
+        "mutation": "REMOVE_BINARY",
         "testCount": 20,
         "suppressions": []
       },
@@ -5270,7 +5270,7 @@
           "+      return true;"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_CASE",
+        "mutation": "TRUE_RETURN",
         "testCount": 21,
         "suppressions": []
       },
@@ -5283,7 +5283,7 @@
           "+    return speed == housecat.speed || weight == housecat.weight;"
         ],
         "language": "java",
-        "mutation": "REMOVE_BINARY",
+        "mutation": "SWAP_AND_OR",
         "testCount": 27,
         "suppressions": []
       },
@@ -5296,7 +5296,7 @@
           "+    return speed == housecat.speed && weight != housecat.weight;"
         ],
         "language": "java",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "NEGATE_CONDITIONAL",
         "testCount": 27,
         "suppressions": []
       },
@@ -5309,7 +5309,7 @@
           "+    return speed == housecat.speed;"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL",
+        "mutation": "REMOVE_AND_OR",
         "testCount": 27,
         "suppressions": []
       },
@@ -5322,7 +5322,7 @@
           "+    return false;"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "mutation": "FALSE_RETURN",
         "testCount": 30,
         "suppressions": []
       },
@@ -5335,7 +5335,7 @@
           "+    return speed != housecat.speed && weight == housecat.weight;"
         ],
         "language": "java",
-        "mutation": "TRUE_RETURN",
+        "mutation": "NEGATE_CONDITIONAL",
         "testCount": 30,
         "suppressions": []
       },
@@ -5351,7 +5351,7 @@
           "+    return false;"
         ],
         "language": "java",
-        "mutation": "NEGATE_IF",
+        "mutation": "REMOVE_METHOD",
         "testCount": 30,
         "suppressions": []
       },
@@ -5364,7 +5364,7 @@
           "+    return weight == housecat.weight;"
         ],
         "language": "java",
-        "mutation": "CHANGE_EQUALS",
+        "mutation": "REMOVE_AND_OR",
         "testCount": 34,
         "suppressions": []
       },
@@ -5377,7 +5377,7 @@
           "+    return speed;"
         ],
         "language": "java",
-        "mutation": "MATH",
+        "mutation": "REMOVE_BINARY",
         "testCount": 116,
         "suppressions": []
       },
@@ -5390,7 +5390,7 @@
           "+    return speed / weight;"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "MATH",
         "testCount": 116,
         "suppressions": []
       }
@@ -5399,7 +5399,7 @@
   },
   {
     "published": {
-      "contentHash": "f4e3e9056d1f6093687b994d7b59953b-v2025.8.3",
+      "contentHash": "f4e3e9056d1f6093687b994d7b59953b-v2025.9.0",
       "path": "equals-88",
       "author": "challen@illinois.edu",
       "version": "2021.6.0",
@@ -5414,7 +5414,7 @@
         "java": "<p>Write a method named <code>equals88</code> that returns <code>true</code> if its <code>int</code> argument is equal to 88,\nour magic number.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -5742,11 +5742,11 @@
       "seed": 124,
       "requiredTestCount": 6,
       "mutationCount": 7,
-      "solutionMaxRuntime": 30,
-      "bootstrapLength": 2218,
-      "mutationLength": 42,
-      "incorrectLength": 338,
-      "calibrationLength": 38,
+      "solutionMaxRuntime": 26,
+      "bootstrapLength": 2020,
+      "mutationLength": 35,
+      "incorrectLength": 1241,
+      "calibrationLength": 45,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -5775,7 +5775,7 @@
           "+  return false;"
         ],
         "language": "java",
-        "mutation": "CHANGE_EQUALS",
+        "mutation": "REMOVE_METHOD",
         "testCount": 0,
         "suppressions": []
       },
@@ -5814,7 +5814,7 @@
           "+  return value == 89;"
         ],
         "language": "java",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -5849,7 +5849,7 @@
   },
   {
     "published": {
-      "contentHash": "bf70754a624fcd0a3d682d5f2d7b3c2a-v2025.8.3",
+      "contentHash": "bf70754a624fcd0a3d682d5f2d7b3c2a-v2025.9.0",
       "path": "input-interleaving-test",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -5866,7 +5866,7 @@
         "kotlin": "<p>Testing STDIN generation and interleaving. In Kotlin!</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -7663,11 +7663,11 @@
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 77,
-      "solutionMaxRuntime": 3,
-      "bootstrapLength": 6742,
-      "mutationLength": 858,
-      "incorrectLength": 10277,
-      "calibrationLength": 90,
+      "solutionMaxRuntime": 4,
+      "bootstrapLength": 6732,
+      "mutationLength": 701,
+      "incorrectLength": 10785,
+      "calibrationLength": 100,
       "solutionCoverage": {
         "covered": 8,
         "total": 8,
@@ -7712,7 +7712,7 @@
           "+  println(\"He1lo!\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
         "testCount": 0,
         "suppressions": []
       },
@@ -7725,7 +7725,7 @@
           "+  println(\"first: $first\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 0,
         "suppressions": []
       },
@@ -7777,7 +7777,7 @@
           "+    System.out.println(\"Hel1o!\");"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
         "testCount": 0,
         "suppressions": []
       },
@@ -7789,7 +7789,7 @@
           "-  println(\"Hello!\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "REMOVE_STATEMENT",
         "testCount": 0,
         "suppressions": []
       },
@@ -7802,7 +7802,7 @@
           "+    System.out.println(second);"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_CASE",
+        "mutation": "REMOVE_PLUS",
         "testCount": 0,
         "suppressions": []
       },
@@ -7815,7 +7815,7 @@
           "+  println(\"FirWt: $first\")"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_STATEMENT",
+        "mutation": "STRING_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -7854,7 +7854,7 @@
           "+  println(\"HeTlo!\")"
         ],
         "language": "kotlin",
-        "mutation": "PLUS_TO_MINUS",
+        "mutation": "STRING_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -7867,7 +7867,7 @@
           "+  println(\"Second; $second\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
         "testCount": 0,
         "suppressions": []
       },
@@ -7957,7 +7957,7 @@
           "+  println(\"S1cond: $second\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -7983,7 +7983,7 @@
           "+    System.out.println(\"second: \" + second);"
         ],
         "language": "java",
-        "mutation": "PLUS_TO_MINUS",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 0,
         "suppressions": []
       },
@@ -8027,7 +8027,7 @@
           "+    return;"
         ],
         "language": "java",
-        "mutation": "REMOVE_PLUS",
+        "mutation": "REMOVE_METHOD",
         "testCount": 0,
         "suppressions": []
       },
@@ -8040,7 +8040,7 @@
           "+  println(\"First; $first\")"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_STATEMENT",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
         "testCount": 0,
         "suppressions": []
       },
@@ -8079,7 +8079,7 @@
           "+  println(\"ello!\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 0,
         "suppressions": []
       },
@@ -8092,7 +8092,7 @@
           "+  println(\"Secons: $second\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_CASE",
+        "mutation": "STRING_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -8131,7 +8131,7 @@
           "+  println(\"Second: Xsecond\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "mutation": "STRING_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -8144,7 +8144,7 @@
           "+  println(\"He7lo!\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "mutation": "STRING_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -8156,7 +8156,7 @@
           "-  println(\"First: $first\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "REMOVE_STATEMENT",
         "testCount": 0,
         "suppressions": []
       },
@@ -8169,7 +8169,7 @@
           "+  println(\"Hello?\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_CASE",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
         "testCount": 0,
         "suppressions": []
       },
@@ -8182,7 +8182,7 @@
           "+    System.out.println(\"Heilo!\");"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "mutation": "STRING_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -8195,7 +8195,7 @@
           "+  println(\"HeClo!\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "mutation": "STRING_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -8233,7 +8233,7 @@
           "+  println(\"Hello\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 0,
         "suppressions": []
       },
@@ -8246,7 +8246,7 @@
           "+    System.out.println(\"FUrst: \" + first);"
         ],
         "language": "java",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "STRING_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -8259,7 +8259,7 @@
           "+  println(\"irst: $first\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 0,
         "suppressions": []
       },
@@ -8272,7 +8272,7 @@
           "+  println(\"hello!\")"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 0,
         "suppressions": []
       },
@@ -8285,7 +8285,7 @@
           "+  println(\"SeconG: $second\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -8310,7 +8310,7 @@
           "-  println(\"Second: $second\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "REMOVE_STATEMENT",
         "testCount": 0,
         "suppressions": []
       },
@@ -8362,7 +8362,7 @@
           "+  println(\"Second: second\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 0,
         "suppressions": []
       },
@@ -8375,7 +8375,7 @@
           "+  println(\"econd: $second\")"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_STATEMENT",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 0,
         "suppressions": []
       },
@@ -8388,7 +8388,7 @@
           "+  println(\"Sec0nd: $second\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
         "testCount": 0,
         "suppressions": []
       },
@@ -8458,7 +8458,7 @@
           "+  return"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "mutation": "REMOVE_METHOD",
         "testCount": 0,
         "suppressions": []
       },
@@ -8522,7 +8522,7 @@
           "+  println(\"Hel1o!\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
         "testCount": 0,
         "suppressions": []
       },
@@ -8535,7 +8535,7 @@
           "+  println(\"second: $second\")"
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 0,
         "suppressions": []
       }
@@ -8544,7 +8544,7 @@
   },
   {
     "published": {
-      "contentHash": "a99bf381d8f7b41afb3261dbc6c03dbc-v2025.8.3",
+      "contentHash": "a99bf381d8f7b41afb3261dbc6c03dbc-v2025.9.0",
       "path": "kotlin-faux-property-testing",
       "author": "challen@illinois.edu",
       "version": "2023.7.0",
@@ -8561,7 +8561,7 @@
         "kotlin": "<p>Question to test detection of Kotlin faux properties in Jenisol 2023.7.0.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -9395,11 +9395,11 @@
       "seed": 124,
       "requiredTestCount": 21,
       "mutationCount": 4,
-      "solutionMaxRuntime": 24,
-      "bootstrapLength": 5801,
-      "mutationLength": 36,
-      "incorrectLength": 803,
-      "calibrationLength": 91,
+      "solutionMaxRuntime": 20,
+      "bootstrapLength": 5902,
+      "mutationLength": 20,
+      "incorrectLength": 976,
+      "calibrationLength": 101,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -9430,7 +9430,7 @@
           "+    return \"\";"
         ],
         "language": "java",
-        "incorrectIndex": 0,
+        "mutation": "REMOVE_METHOD",
         "testCount": 2,
         "suppressions": []
       },
@@ -9443,7 +9443,7 @@
           "+    return;"
         ],
         "language": "java",
-        "mutation": "NULL_RETURN",
+        "mutation": "REMOVE_METHOD",
         "testCount": 2,
         "suppressions": []
       },
@@ -9456,7 +9456,7 @@
           "+    return null;"
         ],
         "language": "java",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "NULL_RETURN",
         "testCount": 2,
         "suppressions": []
       },
@@ -9471,7 +9471,7 @@
           "+  public void setName(String setName) {}"
         ],
         "language": "java",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "REMOVE_STATEMENT",
         "testCount": 2,
         "suppressions": []
       }
@@ -9480,7 +9480,7 @@
   },
   {
     "published": {
-      "contentHash": "67850bb6b73a3a28de10c685bb17626b-v2025.8.3",
+      "contentHash": "67850bb6b73a3a28de10c685bb17626b-v2025.9.0",
       "path": "private-recursive-helper",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -9495,7 +9495,7 @@
         "java": "<p>Testing question for recursion checks on private methods.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -10391,19 +10391,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 88048128,
-        "kotlin": 88048128
+        "java": 88058752,
+        "kotlin": 88058752
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 23,
-      "solutionMaxRuntime": 28,
-      "bootstrapLength": 3158,
-      "mutationLength": 178,
-      "incorrectLength": 2052,
-      "calibrationLength": 47,
+      "solutionMaxRuntime": 8,
+      "bootstrapLength": 2327,
+      "mutationLength": 165,
+      "incorrectLength": 2661,
+      "calibrationLength": 23,
       "solutionCoverage": {
         "covered": 7,
         "total": 7,
@@ -10435,7 +10435,7 @@
           "+    return 0;"
         ],
         "language": "java",
-        "mutation": "CHANGE_EQUALS",
+        "mutation": "REMOVE_METHOD",
         "testCount": 0,
         "suppressions": []
       },
@@ -10448,7 +10448,7 @@
           "+      return 1;"
         ],
         "language": "java",
-        "mutation": "PRIMITIVE_RETURN",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 1,
         "suppressions": []
       },
@@ -10461,7 +10461,7 @@
           "+    return rangeSumHelper(range - 1);"
         ],
         "language": "java",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "REMOVE_PLUS",
         "testCount": 1,
         "suppressions": []
       },
@@ -10474,7 +10474,7 @@
           "+    return 0;"
         ],
         "language": "java",
-        "mutation": "NEGATE_IF",
+        "mutation": "PRIMITIVE_RETURN",
         "testCount": 1,
         "suppressions": []
       },
@@ -10487,7 +10487,7 @@
           "+    return 0;"
         ],
         "language": "java",
-        "mutation": "PLUS_TO_MINUS",
+        "mutation": "PRIMITIVE_RETURN",
         "testCount": 1,
         "suppressions": []
       },
@@ -10503,7 +10503,7 @@
           "+    return 0;"
         ],
         "language": "java",
-        "mutation": "REMOVE_IF",
+        "mutation": "REMOVE_METHOD",
         "testCount": 1,
         "suppressions": []
       },
@@ -10516,7 +10516,7 @@
           "+    if (range == 1) {"
         ],
         "language": "java",
-        "mutation": "NEGATE_IF",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 1,
         "suppressions": []
       },
@@ -10529,7 +10529,7 @@
           "+    if (!(range == 0)) {"
         ],
         "language": "java",
-        "mutation": "NEGATE_CONDITIONAL",
+        "mutation": "NEGATE_IF",
         "testCount": 1,
         "suppressions": []
       },
@@ -10542,7 +10542,7 @@
           "+    if (range != 0) {"
         ],
         "language": "java",
-        "incorrectIndex": 0,
+        "mutation": "NEGATE_CONDITIONAL",
         "testCount": 1,
         "suppressions": []
       },
@@ -10555,7 +10555,7 @@
           "+    if (range <= 0) {"
         ],
         "language": "java",
-        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
+        "mutation": "CONDITIONAL_BOUNDARY",
         "testCount": 2,
         "suppressions": []
       },
@@ -10568,7 +10568,7 @@
           "+    if (range < 1) {"
         ],
         "language": "java",
-        "mutation": "REMOVE_PLUS",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 2,
         "suppressions": []
       },
@@ -10581,7 +10581,7 @@
           "+    return range - rangeSumHelper(range - 1);"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "PLUS_TO_MINUS",
         "testCount": 4,
         "suppressions": []
       },
@@ -10594,7 +10594,7 @@
           "+    return range;"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "REMOVE_PLUS",
         "testCount": 4,
         "suppressions": []
       }
@@ -10603,7 +10603,7 @@
   },
   {
     "published": {
-      "contentHash": "a44f4165ba8ab545558ac4865e9249fa-v2025.8.3",
+      "contentHash": "a44f4165ba8ab545558ac4865e9249fa-v2025.9.0",
       "path": "pure-null-check",
       "author": "challen@illinois.edu",
       "version": "2024.10.0",
@@ -10620,7 +10620,7 @@
         "kotlin": "<p>Test Kotlin alignment with Java null checks.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -11236,11 +11236,11 @@
       "seed": 124,
       "requiredTestCount": 19,
       "mutationCount": 5,
-      "solutionMaxRuntime": 30,
-      "bootstrapLength": 6791,
-      "mutationLength": 31,
-      "incorrectLength": 407,
-      "calibrationLength": 208,
+      "solutionMaxRuntime": 14,
+      "bootstrapLength": 7149,
+      "mutationLength": 48,
+      "incorrectLength": 513,
+      "calibrationLength": 135,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -11332,7 +11332,7 @@
   },
   {
     "published": {
-      "contentHash": "218e2ccf7e9cf8ca63dc5966ef403834-v2025.8.3",
+      "contentHash": "218e2ccf7e9cf8ca63dc5966ef403834-v2025.9.0",
       "path": "read-hello-world",
       "author": "challen@illinois.edu",
       "version": "2023.11.0",
@@ -11347,7 +11347,7 @@
         "java": "<p>Question to test filesystem generation.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -11895,11 +11895,11 @@
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 4,
-      "solutionMaxRuntime": 20,
-      "bootstrapLength": 3088,
-      "mutationLength": 12,
-      "incorrectLength": 173,
-      "calibrationLength": 40,
+      "solutionMaxRuntime": 27,
+      "bootstrapLength": 2797,
+      "mutationLength": 15,
+      "incorrectLength": 214,
+      "calibrationLength": 39,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -11977,7 +11977,7 @@
   },
   {
     "published": {
-      "contentHash": "569c84817e65063ba59cf01e22724df2-v2025.8.3",
+      "contentHash": "569c84817e65063ba59cf01e22724df2-v2025.9.0",
       "path": "recursive-factorial",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -11994,7 +11994,7 @@
         "kotlin": "<p>Write a method that provides a recursive implementation of factorial, accepting and returning <code>Long</code> arguments.\nThrow an <code>IllegalArgumentException</code> on invalid inputs.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -13364,19 +13364,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 2863360,
-        "kotlin": 2863360
+        "java": 2856832,
+        "kotlin": 2856832
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 6,
       "mutationCount": 44,
-      "solutionMaxRuntime": 11,
-      "bootstrapLength": 7310,
-      "mutationLength": 364,
-      "incorrectLength": 8377,
-      "calibrationLength": 171,
+      "solutionMaxRuntime": 14,
+      "bootstrapLength": 7601,
+      "mutationLength": 512,
+      "incorrectLength": 8214,
+      "calibrationLength": 185,
       "solutionCoverage": {
         "covered": 6,
         "total": 6,
@@ -13393,7 +13393,7 @@
       "outputAmount": 0,
       "canTestTest": true,
       "testTestingIncorrectCount": {
-        "java": 16,
+        "java": 15,
         "kotlin": 15
       }
     },
@@ -13414,7 +13414,7 @@
           "+    return 0L;"
         ],
         "language": "java",
-        "incorrectIndex": 0,
+        "mutation": "REMOVE_METHOD",
         "testCount": 0,
         "suppressions": []
       },
@@ -13431,7 +13431,7 @@
           "+  return 0L"
         ],
         "language": "kotlin",
-        "mutation": "NEGATE_IF",
+        "mutation": "REMOVE_METHOD",
         "testCount": 0,
         "suppressions": []
       },
@@ -13444,7 +13444,7 @@
           "+    return 0"
         ],
         "language": "kotlin",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "PRIMITIVE_RETURN",
         "testCount": 3,
         "suppressions": []
       },
@@ -13458,7 +13458,7 @@
           "-    }"
         ],
         "language": "java",
-        "mutation": "PRIMITIVE_RETURN",
+        "mutation": "REMOVE_IF",
         "testCount": 3,
         "suppressions": []
       },
@@ -13471,7 +13471,7 @@
           "+  if (input != 1L) {"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "NEGATE_CONDITIONAL",
         "testCount": 3,
         "suppressions": []
       },
@@ -13497,7 +13497,7 @@
           "+    return 2"
         ],
         "language": "kotlin",
-        "mutation": "MATH",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 3,
         "suppressions": []
       },
@@ -13510,7 +13510,7 @@
           "+  if (input == 9L) {"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_PLUS",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 3,
         "suppressions": []
       },
@@ -13523,7 +13523,7 @@
           "+    if (input <= 1) { // mutate-disable-conditional-boundary"
         ],
         "language": "java",
-        "mutation": "REMOVE_BINARY",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 3,
         "suppressions": []
       },
@@ -13535,7 +13535,7 @@
           "-    return 1"
         ],
         "language": "kotlin",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "REMOVE_STATEMENT",
         "testCount": 3,
         "suppressions": []
       },
@@ -13548,7 +13548,7 @@
           "+  require(input > 1)"
         ],
         "language": "kotlin",
-        "mutation": "CONDITIONAL_BOUNDARY",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 3,
         "suppressions": []
       },
@@ -13562,7 +13562,7 @@
           "-  }"
         ],
         "language": "kotlin",
-        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
+        "mutation": "REMOVE_IF",
         "testCount": 3,
         "suppressions": []
       },
@@ -13575,7 +13575,7 @@
           "+    if (input == 0) {"
         ],
         "language": "java",
-        "mutation": "REMOVE_BINARY",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 3,
         "suppressions": []
       },
@@ -13588,7 +13588,7 @@
           "+    if (input != 1) {"
         ],
         "language": "java",
-        "mutation": "MATH",
+        "mutation": "NEGATE_CONDITIONAL",
         "testCount": 3,
         "suppressions": []
       },
@@ -13601,7 +13601,7 @@
           "+      return 0;"
         ],
         "language": "java",
-        "mutation": "REMOVE_IF",
+        "mutation": "PRIMITIVE_RETURN",
         "testCount": 3,
         "suppressions": []
       },
@@ -13627,7 +13627,7 @@
           "+    if (!(input == 1)) {"
         ],
         "language": "java",
-        "mutation": "REMOVE_IF",
+        "mutation": "NEGATE_IF",
         "testCount": 3,
         "suppressions": []
       },
@@ -13640,7 +13640,7 @@
           "+  if (!(input == 1L)) {"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_STATEMENT",
+        "mutation": "NEGATE_IF",
         "testCount": 3,
         "suppressions": []
       },
@@ -13653,7 +13653,7 @@
           "+    if (input == 2) {"
         ],
         "language": "java",
-        "mutation": "NEGATE_IF",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 3,
         "suppressions": []
       },
@@ -13666,7 +13666,7 @@
           "+  return 0"
         ],
         "language": "kotlin",
-        "mutation": "CHANGE_EQUALS",
+        "mutation": "PRIMITIVE_RETURN",
         "testCount": 4,
         "suppressions": []
       },
@@ -13679,20 +13679,7 @@
           "+    return 0;"
         ],
         "language": "java",
-        "mutation": "REMOVE_METHOD",
-        "testCount": 4,
-        "suppressions": []
-      },
-      {
-        "deltas": [
-          "--- Correct.kt",
-          "+++ Incorrect.kt",
-          "@@ -6,1 +6,1 @@",
-          "-  return input * factorial(input - 1)",
-          "+  return input * factorial(input - 0)"
-        ],
-        "language": "kotlin",
-        "mutation": "REMOVE_BINARY",
+        "mutation": "PRIMITIVE_RETURN",
         "testCount": 4,
         "suppressions": []
       },
@@ -13705,7 +13692,20 @@
           "+  return input * factorial(input - 2)"
         ],
         "language": "kotlin",
-        "mutation": "NEGATE_CONDITIONAL",
+        "mutation": "NUMBER_LITERAL",
+        "testCount": 4,
+        "suppressions": []
+      },
+      {
+        "deltas": [
+          "--- Correct.kt",
+          "+++ Incorrect.kt",
+          "@@ -6,1 +6,1 @@",
+          "-  return input * factorial(input - 1)",
+          "+  return input * factorial(input)"
+        ],
+        "language": "kotlin",
+        "mutation": "REMOVE_PLUS",
         "testCount": 4,
         "suppressions": []
       },
@@ -13728,23 +13728,10 @@
           "+++ Incorrect.java",
           "@@ -9,1 +9,1 @@",
           "-    return input * factorial(input - 1);",
-          "+    return input * factorial(input - 0);"
-        ],
-        "language": "java",
-        "mutation": "NUMBER_LITERAL",
-        "testCount": 4,
-        "suppressions": []
-      },
-      {
-        "deltas": [
-          "--- Correct.java",
-          "+++ Incorrect.java",
-          "@@ -9,1 +9,1 @@",
-          "-    return input * factorial(input - 1);",
           "+    return factorial(input - 1);"
         ],
         "language": "java",
-        "mutation": "NEGATE_CONDITIONAL",
+        "mutation": "REMOVE_BINARY",
         "testCount": 4,
         "suppressions": []
       },
@@ -13757,7 +13744,7 @@
           "+    return input * factorial(1);"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "REMOVE_BINARY",
         "testCount": 5,
         "suppressions": []
       },
@@ -13770,7 +13757,7 @@
           "+    return input;"
         ],
         "language": "java",
-        "mutation": "PRIMITIVE_RETURN",
+        "mutation": "REMOVE_BINARY",
         "testCount": 5,
         "suppressions": []
       },
@@ -13783,7 +13770,7 @@
           "+  return input * factorial(1)"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_BINARY",
+        "mutation": "REMOVE_PLUS",
         "testCount": 5,
         "suppressions": []
       },
@@ -13796,7 +13783,7 @@
           "+  return input / factorial(input - 1)"
         ],
         "language": "kotlin",
-        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
+        "mutation": "MATH",
         "testCount": 5,
         "suppressions": []
       },
@@ -13809,7 +13796,7 @@
           "+    return input / factorial(input - 1);"
         ],
         "language": "java",
-        "mutation": "NEGATE_CONDITIONAL",
+        "mutation": "MATH",
         "testCount": 5,
         "suppressions": []
       }
@@ -13818,7 +13805,7 @@
   },
   {
     "published": {
-      "contentHash": "1933eb154d0af63b7af722e30dc6437f-v2025.8.3",
+      "contentHash": "1933eb154d0af63b7af722e30dc6437f-v2025.9.0",
       "path": "test-bad-kotlin-getter-setter",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -13835,7 +13822,7 @@
         "kotlin": "<p>Test to ensure that we can detect unnecessary Kotlin setter or getter overrides.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -14685,11 +14672,11 @@
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 5,
-      "solutionMaxRuntime": 19,
-      "bootstrapLength": 6808,
-      "mutationLength": 18,
-      "incorrectLength": 1493,
-      "calibrationLength": 79,
+      "solutionMaxRuntime": 10,
+      "bootstrapLength": 7027,
+      "mutationLength": 23,
+      "incorrectLength": 1832,
+      "calibrationLength": 86,
       "solutionCoverage": {
         "covered": 6,
         "total": 6,
@@ -14720,7 +14707,7 @@
           "+    return \"\";"
         ],
         "language": "java",
-        "mutation": "REMOVE_STATEMENT",
+        "mutation": "REMOVE_METHOD",
         "testCount": 1,
         "suppressions": []
       },
@@ -14733,7 +14720,7 @@
           "+    return null;"
         ],
         "language": "java",
-        "incorrectIndex": 1,
+        "mutation": "NULL_RETURN",
         "testCount": 1,
         "suppressions": []
       },
@@ -14748,7 +14735,7 @@
           "+  public Example(String setName) {}"
         ],
         "language": "java",
-        "incorrectIndex": 0,
+        "mutation": "REMOVE_STATEMENT",
         "testCount": 1,
         "suppressions": []
       },
@@ -14761,7 +14748,7 @@
           "+    return;"
         ],
         "language": "java",
-        "mutation": "NULL_RETURN",
+        "mutation": "REMOVE_METHOD",
         "testCount": 6,
         "suppressions": []
       },
@@ -14776,7 +14763,7 @@
           "+  public void setName(String setName) {}"
         ],
         "language": "java",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "REMOVE_STATEMENT",
         "testCount": 6,
         "suppressions": []
       }
@@ -14785,7 +14772,7 @@
   },
   {
     "published": {
-      "contentHash": "caa4922981779dbc69b038999e5b6a16-v2025.8.3",
+      "contentHash": "caa4922981779dbc69b038999e5b6a16-v2025.9.0",
       "path": "test-constructor-notnull",
       "author": "challen@illinois.edu",
       "version": "2022.10.0",
@@ -14800,7 +14787,7 @@
         "java": "<p>Testing @NotNull annotation on constructor parameters.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -15355,11 +15342,11 @@
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 4,
-      "solutionMaxRuntime": 21,
-      "bootstrapLength": 2469,
-      "mutationLength": 23,
-      "incorrectLength": 233,
-      "calibrationLength": 32,
+      "solutionMaxRuntime": 16,
+      "bootstrapLength": 1963,
+      "mutationLength": 84,
+      "incorrectLength": 1050,
+      "calibrationLength": 27,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -15388,7 +15375,7 @@
           "+    stringLength = value.length() - 1;"
         ],
         "language": "java",
-        "mutation": "REMOVE_STATEMENT",
+        "mutation": "MODIFY_LENGTH_AND_SIZE",
         "testCount": 1,
         "suppressions": []
       },
@@ -15423,7 +15410,7 @@
   },
   {
     "published": {
-      "contentHash": "99edd2570f09907ad4b8f37d339ef6b4-v2025.8.3",
+      "contentHash": "99edd2570f09907ad4b8f37d339ef6b4-v2025.9.0",
       "path": "test-empty-constructor",
       "author": "challen@illinois.edu",
       "version": "2022.9.0",
@@ -15438,7 +15425,7 @@
         "java": "<p>Test to make sure we can parse the empty constructor.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -15999,19 +15986,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 5632,
-        "kotlin": 5632
+        "java": 6016,
+        "kotlin": 6016
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 8,
       "mutationCount": 3,
-      "solutionMaxRuntime": 35,
-      "bootstrapLength": 3171,
-      "mutationLength": 12,
-      "incorrectLength": 202,
-      "calibrationLength": 78,
+      "solutionMaxRuntime": 148,
+      "bootstrapLength": 3078,
+      "mutationLength": 16,
+      "incorrectLength": 210,
+      "calibrationLength": 357,
       "solutionCoverage": {
         "covered": 3,
         "total": 3,
@@ -16075,7 +16062,7 @@
   },
   {
     "published": {
-      "contentHash": "00c2c0d452cdc275a3b0d69d34034246-v2025.8.3",
+      "contentHash": "00c2c0d452cdc275a3b0d69d34034246-v2025.9.0",
       "path": "test-memoization-defense",
       "author": "challen@illinois.edu",
       "version": "2023.10.0",
@@ -16090,7 +16077,7 @@
         "java": "<p>Testing class size based memoization defense.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -16389,19 +16376,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 6016,
-        "kotlin": 6016
+        "java": 5632,
+        "kotlin": 5632
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 12,
       "mutationCount": 1,
-      "solutionMaxRuntime": 18,
-      "bootstrapLength": 2230,
-      "mutationLength": 25,
-      "incorrectLength": 218,
-      "calibrationLength": 156,
+      "solutionMaxRuntime": 55,
+      "bootstrapLength": 3200,
+      "mutationLength": 21,
+      "incorrectLength": 126,
+      "calibrationLength": 103,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -16430,7 +16417,7 @@
           "+  return 0;"
         ],
         "language": "java",
-        "incorrectIndex": 0,
+        "mutation": "REMOVE_METHOD",
         "testCount": 0,
         "suppressions": []
       }
@@ -16439,7 +16426,7 @@
   },
   {
     "published": {
-      "contentHash": "51ba370a3098f7354b7a659ce0e68542-v2025.8.3",
+      "contentHash": "51ba370a3098f7354b7a659ce0e68542-v2025.9.0",
       "path": "test-raw-types",
       "author": "challen@illinois.edu",
       "version": "2023.11.0",
@@ -16454,7 +16441,7 @@
         "java": "<p>Test support for raw type error filtering.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -16861,19 +16848,19 @@
         "kotlin": 1024
       },
       "allocationLimit": {
-        "java": 1580672,
-        "kotlin": 1580672
+        "java": 1580032,
+        "kotlin": 1580032
       }
     },
     "validationResults": {
       "seed": 124,
       "requiredTestCount": 1,
       "mutationCount": 1,
-      "solutionMaxRuntime": 44,
-      "bootstrapLength": 2223,
-      "mutationLength": 14,
-      "incorrectLength": 263,
-      "calibrationLength": 127,
+      "solutionMaxRuntime": 13,
+      "bootstrapLength": 1877,
+      "mutationLength": 173,
+      "incorrectLength": 726,
+      "calibrationLength": 68,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -16911,7 +16898,7 @@
   },
   {
     "published": {
-      "contentHash": "c14d76df7271c791ccc5c93981b5d1c8-v2025.8.3",
+      "contentHash": "c14d76df7271c791ccc5c93981b5d1c8-v2025.9.0",
       "path": "with-common-code",
       "author": "challen@illinois.edu",
       "version": "2023.12.0",
@@ -16926,7 +16913,7 @@
         "java": "<p>Test loading common code.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -17305,11 +17292,11 @@
       "seed": 124,
       "requiredTestCount": 11,
       "mutationCount": 1,
-      "solutionMaxRuntime": 53,
-      "bootstrapLength": 1995,
-      "mutationLength": 111,
-      "incorrectLength": 332,
-      "calibrationLength": 85,
+      "solutionMaxRuntime": 30,
+      "bootstrapLength": 1846,
+      "mutationLength": 144,
+      "incorrectLength": 723,
+      "calibrationLength": 45,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -17347,7 +17334,7 @@
   },
   {
     "published": {
-      "contentHash": "3247a24e43fa77810da0ee41da0d8e7d-v2025.8.3",
+      "contentHash": "3247a24e43fa77810da0ee41da0d8e7d-v2025.9.0",
       "path": "with-dead-code-annotation",
       "author": "challen@illinois.edu",
       "version": "2023.2.0",
@@ -17364,7 +17351,7 @@
         "kotlin": "<p>Testing dead code comments.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -18506,10 +18493,10 @@
       "requiredTestCount": 11,
       "mutationCount": 36,
       "solutionMaxRuntime": 7,
-      "bootstrapLength": 7225,
-      "mutationLength": 412,
-      "incorrectLength": 7364,
-      "calibrationLength": 230,
+      "bootstrapLength": 6354,
+      "mutationLength": 503,
+      "incorrectLength": 7268,
+      "calibrationLength": 227,
       "solutionCoverage": {
         "covered": 4,
         "total": 5,
@@ -18546,7 +18533,7 @@
           "+  return 0"
         ],
         "language": "kotlin",
-        "mutation": "MATH",
+        "mutation": "REMOVE_METHOD",
         "testCount": 0,
         "suppressions": []
       },
@@ -18572,7 +18559,7 @@
           "+    if (!(value % 2 == 0)) {"
         ],
         "language": "java",
-        "mutation": "REMOVE_BINARY",
+        "mutation": "NEGATE_IF",
         "testCount": 0,
         "suppressions": []
       },
@@ -18585,7 +18572,7 @@
           "+    assert true;"
         ],
         "language": "java",
-        "mutation": "CHANGE_EQUALS",
+        "mutation": "BOOLEAN_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -18598,7 +18585,7 @@
           "+    if (value % 2 != 0) {"
         ],
         "language": "java",
-        "mutation": "REMOVE_BINARY",
+        "mutation": "NEGATE_CONDITIONAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -18611,7 +18598,7 @@
           "+    if (value % 1 == 0) {"
         ],
         "language": "java",
-        "mutation": "MATH",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -18623,7 +18610,7 @@
           "-    assert false;"
         ],
         "language": "java",
-        "mutation": "REMOVE_BINARY",
+        "mutation": "REMOVE_RUNTIME_CHECK",
         "testCount": 0,
         "suppressions": []
       },
@@ -18635,7 +18622,7 @@
           "-  assert(false)"
         ],
         "language": "kotlin",
-        "mutation": "CHANGE_EQUALS",
+        "mutation": "REMOVE_RUNTIME_CHECK",
         "testCount": 0,
         "suppressions": []
       },
@@ -18648,7 +18635,7 @@
           "+  if (value % 2 != 0) {"
         ],
         "language": "kotlin",
-        "mutation": "INVERT_NEGATION",
+        "mutation": "NEGATE_CONDITIONAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -18661,7 +18648,7 @@
           "+  if (!(value % 2 == 0)) {"
         ],
         "language": "kotlin",
-        "mutation": "PRIMITIVE_RETURN",
+        "mutation": "NEGATE_IF",
         "testCount": 0,
         "suppressions": []
       },
@@ -18674,7 +18661,7 @@
           "+  assert(true)"
         ],
         "language": "kotlin",
-        "mutation": "NEGATE_IF",
+        "mutation": "BOOLEAN_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -18700,7 +18687,7 @@
           "+    if (value % 2 == 1) {"
         ],
         "language": "java",
-        "mutation": "REMOVE_IF",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 1,
         "suppressions": []
       },
@@ -18726,7 +18713,7 @@
           "+    if (2 == 0) {"
         ],
         "language": "java",
-        "mutation": "NEGATE_IF",
+        "mutation": "REMOVE_BINARY",
         "testCount": 2,
         "suppressions": []
       },
@@ -18740,7 +18727,7 @@
           "-    }"
         ],
         "language": "java",
-        "mutation": "NEGATE_CONDITIONAL",
+        "mutation": "REMOVE_IF",
         "testCount": 2,
         "suppressions": []
       },
@@ -18752,7 +18739,7 @@
           "-    return value * 2"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "REMOVE_STATEMENT",
         "testCount": 2,
         "suppressions": []
       },
@@ -18766,7 +18753,7 @@
           "-  }"
         ],
         "language": "kotlin",
-        "mutation": "NEGATE_CONDITIONAL",
+        "mutation": "REMOVE_IF",
         "testCount": 2,
         "suppressions": []
       },
@@ -18792,7 +18779,7 @@
           "+    if (value * 2 == 0) {"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "MATH",
         "testCount": 4,
         "suppressions": []
       },
@@ -18818,7 +18805,7 @@
           "+    return value / 2"
         ],
         "language": "kotlin",
-        "mutation": "PRIMITIVE_RETURN",
+        "mutation": "MATH",
         "testCount": 4,
         "suppressions": []
       },
@@ -18831,7 +18818,7 @@
           "+      return value / 2;"
         ],
         "language": "java",
-        "mutation": "PRIMITIVE_RETURN",
+        "mutation": "MATH",
         "testCount": 4,
         "suppressions": []
       },
@@ -18844,7 +18831,7 @@
           "+      return value;"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "REMOVE_BINARY",
         "testCount": 4,
         "suppressions": []
       },
@@ -18857,7 +18844,7 @@
           "+    if (value == 0) {"
         ],
         "language": "java",
-        "mutation": "MATH",
+        "mutation": "REMOVE_BINARY",
         "testCount": 4,
         "suppressions": []
       },
@@ -18870,7 +18857,7 @@
           "+    return 0"
         ],
         "language": "kotlin",
-        "mutation": "MATH",
+        "mutation": "PRIMITIVE_RETURN",
         "testCount": 4,
         "suppressions": []
       },
@@ -18883,7 +18870,7 @@
           "+      return 0;"
         ],
         "language": "java",
-        "mutation": "BOOLEAN_LITERAL",
+        "mutation": "PRIMITIVE_RETURN",
         "testCount": 4,
         "suppressions": []
       },
@@ -18896,7 +18883,7 @@
           "+  if (value * 2 == 0) {"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_RUNTIME_CHECK",
+        "mutation": "MATH",
         "testCount": 4,
         "suppressions": []
       },
@@ -18909,7 +18896,7 @@
           "+  if (value % 3 == 0) {"
         ],
         "language": "kotlin",
-        "mutation": "BOOLEAN_LITERAL",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 4,
         "suppressions": []
       },
@@ -18922,7 +18909,7 @@
           "+    return value * 3"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_STATEMENT",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 4,
         "suppressions": []
       }
@@ -18931,7 +18918,7 @@
   },
   {
     "published": {
-      "contentHash": "736308f223c73871743d16c35e1dff2c-v2025.8.3",
+      "contentHash": "736308f223c73871743d16c35e1dff2c-v2025.9.0",
       "path": "with-feature-check",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -18948,7 +18935,7 @@
         "kotlin": "<p>For testing features.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -19520,11 +19507,11 @@
       "seed": 124,
       "requiredTestCount": 475,
       "mutationCount": 21,
-      "solutionMaxRuntime": 65,
-      "bootstrapLength": 5953,
-      "mutationLength": 242,
-      "incorrectLength": 3465,
-      "calibrationLength": 310,
+      "solutionMaxRuntime": 67,
+      "bootstrapLength": 7428,
+      "mutationLength": 89,
+      "incorrectLength": 3281,
+      "calibrationLength": 204,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -19556,7 +19543,7 @@
           "+fun sumTo(range: Int): Int = range * (range) / 2"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "REMOVE_PLUS",
         "testCount": 0,
         "suppressions": []
       },
@@ -19569,7 +19556,7 @@
           "+  return (range * (range + 0)) / 2;"
         ],
         "language": "java",
-        "mutation": "REMOVE_PLUS",
+        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
         "testCount": 0,
         "suppressions": []
       },
@@ -19582,7 +19569,7 @@
           "+  return (range * (range - 1)) / 2;"
         ],
         "language": "java",
-        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
+        "mutation": "PLUS_TO_MINUS",
         "testCount": 0,
         "suppressions": []
       },
@@ -19595,7 +19582,7 @@
           "+  return (range * (range)) / 2;"
         ],
         "language": "java",
-        "incorrectIndex": 0,
+        "mutation": "REMOVE_PLUS",
         "testCount": 0,
         "suppressions": []
       },
@@ -19608,7 +19595,7 @@
           "+fun sumTo(range: Int): Int = range * (range - 1) / 2"
         ],
         "language": "kotlin",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "PLUS_TO_MINUS",
         "testCount": 0,
         "suppressions": []
       },
@@ -19621,7 +19608,7 @@
           "+  return (range / (range + 1)) / 2;"
         ],
         "language": "java",
-        "mutation": "REMOVE_PLUS",
+        "mutation": "MATH",
         "testCount": 0,
         "suppressions": []
       },
@@ -19647,7 +19634,7 @@
           "+fun sumTo(range: Int): Int = range * (range + 0) / 2"
         ],
         "language": "kotlin",
-        "mutation": "PLUS_TO_MINUS",
+        "mutation": "PLUS_OR_MINUS_ONE_TO_ZERO",
         "testCount": 0,
         "suppressions": []
       },
@@ -19660,7 +19647,7 @@
           "+fun sumTo(range: Int): Int = range * (range + 1) * 2"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_BINARY",
+        "mutation": "MATH",
         "testCount": 0,
         "suppressions": []
       },
@@ -19673,7 +19660,7 @@
           "+fun sumTo(range: Int): Int = range * (range + 1) / 3"
         ],
         "language": "kotlin",
-        "mutation": "MATH",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -19699,7 +19686,7 @@
           "+  return (range * (range + 1));"
         ],
         "language": "java",
-        "mutation": "MATH",
+        "mutation": "REMOVE_BINARY",
         "testCount": 0,
         "suppressions": []
       },
@@ -19712,7 +19699,7 @@
           "+  return 0;"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "REMOVE_METHOD",
         "testCount": 0,
         "suppressions": []
       },
@@ -19725,7 +19712,7 @@
           "+  return 2;"
         ],
         "language": "java",
-        "mutation": "MATH",
+        "mutation": "REMOVE_BINARY",
         "testCount": 0,
         "suppressions": []
       },
@@ -19738,7 +19725,7 @@
           "+  return (range * (1)) / 2;"
         ],
         "language": "java",
-        "mutation": "REMOVE_BINARY",
+        "mutation": "REMOVE_PLUS",
         "testCount": 0,
         "suppressions": []
       },
@@ -19751,7 +19738,7 @@
           "+fun sumTo(range: Int): Int = range / (range + 1) / 2"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_PLUS",
+        "mutation": "MATH",
         "testCount": 0,
         "suppressions": []
       },
@@ -19764,7 +19751,7 @@
           "+  return (range * (range + 1)) * 2;"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "MATH",
         "testCount": 0,
         "suppressions": []
       },
@@ -19777,7 +19764,7 @@
           "+  return (range * (range + 1)) / 3;"
         ],
         "language": "java",
-        "incorrectIndex": 1,
+        "mutation": "NUMBER_LITERAL",
         "testCount": 0,
         "suppressions": []
       },
@@ -19790,7 +19777,7 @@
           "+fun sumTo(range: Int): Int = range * (range + 2) / 2"
         ],
         "language": "kotlin",
-        "mutation": "MATH",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 3,
         "suppressions": []
       },
@@ -19803,7 +19790,7 @@
           "+  return ((range + 1)) / 2;"
         ],
         "language": "java",
-        "mutation": "PLUS_TO_MINUS",
+        "mutation": "REMOVE_BINARY",
         "testCount": 3,
         "suppressions": []
       },
@@ -19816,7 +19803,7 @@
           "+  return (range * (range + 2)) / 2;"
         ],
         "language": "java",
-        "mutation": "REMOVE_BINARY",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 3,
         "suppressions": []
       }
@@ -19825,7 +19812,7 @@
   },
   {
     "published": {
-      "contentHash": "c0e60adbcb8d6e6d1ad0088a3a1271da-v2025.8.3",
+      "contentHash": "c0e60adbcb8d6e6d1ad0088a3a1271da-v2025.9.0",
       "path": "with-feature-dead-code",
       "author": "challen@illinois.edu",
       "version": "2023.2.0",
@@ -19845,7 +19832,7 @@
         "java.util.ArrayList",
         "java.util.List"
       ],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -21222,11 +21209,11 @@
       "seed": 124,
       "requiredTestCount": 4,
       "mutationCount": 19,
-      "solutionMaxRuntime": 22,
-      "bootstrapLength": 4635,
-      "mutationLength": 362,
-      "incorrectLength": 4959,
-      "calibrationLength": 338,
+      "solutionMaxRuntime": 18,
+      "bootstrapLength": 4622,
+      "mutationLength": 561,
+      "incorrectLength": 4657,
+      "calibrationLength": 340,
       "solutionCoverage": {
         "covered": 4,
         "total": 4,
@@ -21301,7 +21288,7 @@
           "+  for (i in 0 until value step 1) {"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_STATEMENT",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 1,
         "suppressions": []
       },
@@ -21340,7 +21327,7 @@
           "+    break"
         ],
         "language": "kotlin",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "ADD_BREAK",
         "testCount": 1,
         "suppressions": []
       },
@@ -21419,7 +21406,7 @@
           "-  }"
         ],
         "language": "kotlin",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "REMOVE_STATEMENT",
         "testCount": 1,
         "suppressions": []
       },
@@ -21445,7 +21432,7 @@
           "+  for (i in 1 until value step 2) {"
         ],
         "language": "kotlin",
-        "mutation": "NEGATE_CONDITIONAL",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 1,
         "suppressions": []
       }
@@ -21454,7 +21441,7 @@
   },
   {
     "published": {
-      "contentHash": "7e1641997386c3e3f1f5592632470def-v2025.8.3",
+      "contentHash": "7e1641997386c3e3f1f5592632470def-v2025.9.0",
       "path": "with-java-switch",
       "author": "challen@illinois.edu",
       "version": "2023.12.0",
@@ -21471,7 +21458,7 @@
         "kotlin": "<p>Test feature check using Java 14 switch expression, Kotlin equivalent.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -23094,11 +23081,11 @@
       "seed": 124,
       "requiredTestCount": 27,
       "mutationCount": 120,
-      "solutionMaxRuntime": 12,
-      "bootstrapLength": 4301,
-      "mutationLength": 1147,
-      "incorrectLength": 11451,
-      "calibrationLength": 71,
+      "solutionMaxRuntime": 7,
+      "bootstrapLength": 4292,
+      "mutationLength": 1270,
+      "incorrectLength": 11493,
+      "calibrationLength": 69,
       "solutionCoverage": {
         "covered": 9,
         "total": 9,
@@ -23139,7 +23126,7 @@
           "+  return \"\";"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_CASE",
+        "mutation": "REMOVE_METHOD",
         "testCount": 0,
         "suppressions": []
       },
@@ -23161,7 +23148,7 @@
           "+  return null;"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "NULL_RETURN",
         "testCount": 0,
         "suppressions": []
       },
@@ -23174,7 +23161,7 @@
           "+  0 -> \"monday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 1,
         "suppressions": []
       },
@@ -23187,7 +23174,7 @@
           "+    case 0 -> \"monday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 1,
         "suppressions": []
       },
@@ -23200,7 +23187,7 @@
           "+  0 -> \"MoTday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL",
         "testCount": 1,
         "suppressions": []
       },
@@ -23226,7 +23213,7 @@
           "+    case 0 -> \"Moiday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL",
         "testCount": 1,
         "suppressions": []
       },
@@ -23239,7 +23226,7 @@
           "+  0 -> \"M0nday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
         "testCount": 1,
         "suppressions": []
       },
@@ -23291,7 +23278,7 @@
           "+    case 0 -> \"onday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 1,
         "suppressions": []
       },
@@ -23304,7 +23291,7 @@
           "+  0 -> \"Monda\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 1,
         "suppressions": []
       },
@@ -23317,7 +23304,7 @@
           "+    case 0 -> \"MoTday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL",
         "testCount": 1,
         "suppressions": []
       },
@@ -23330,7 +23317,7 @@
           "+    case 0 -> \"Monda\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 1,
         "suppressions": []
       },
@@ -23343,7 +23330,7 @@
           "+  0 -> \"Moiday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL",
         "testCount": 1,
         "suppressions": []
       },
@@ -23356,7 +23343,7 @@
           "+  0 -> \"onday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 1,
         "suppressions": []
       },
@@ -23369,7 +23356,7 @@
           "+    case 0 -> \"M0nday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_LOOKALIKE",
         "testCount": 1,
         "suppressions": []
       },
@@ -23382,7 +23369,7 @@
           "+    case 0 -> \"MoCday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL",
         "testCount": 1,
         "suppressions": []
       },
@@ -23408,7 +23395,7 @@
           "+    case 6 -> \"Sunda\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 2,
         "suppressions": []
       },
@@ -23421,7 +23408,7 @@
           "+  6 -> \"Sutday\""
         ],
         "language": "kotlin",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL",
         "testCount": 2,
         "suppressions": []
       },
@@ -23434,7 +23421,7 @@
           "+  6 -> \"Sunda\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 2,
         "suppressions": []
       },
@@ -23447,7 +23434,7 @@
           "+  6 -> \"sunday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 2,
         "suppressions": []
       },
@@ -23460,7 +23447,7 @@
           "+    case 6 -> \"Sutday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL",
         "testCount": 2,
         "suppressions": []
       },
@@ -23473,7 +23460,7 @@
           "+  6 -> \"Suntay\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_CASE",
+        "mutation": "STRING_LITERAL",
         "testCount": 2,
         "suppressions": []
       },
@@ -23525,7 +23512,7 @@
           "+  6 -> \"Saturday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 2,
         "suppressions": []
       },
@@ -23538,7 +23525,7 @@
           "+  6 -> \"unday\""
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_METHOD",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 2,
         "suppressions": []
       },
@@ -23551,7 +23538,7 @@
           "+  5 -> \"Sunday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 2,
         "suppressions": []
       },
@@ -23564,7 +23551,7 @@
           "+    case 7 -> \"Sunday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_CASE",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 2,
         "suppressions": []
       },
@@ -23577,7 +23564,7 @@
           "+    case 6 -> \"sunday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 2,
         "suppressions": []
       },
@@ -23590,7 +23577,7 @@
           "+  6 -> \"SuSday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL",
         "testCount": 2,
         "suppressions": []
       },
@@ -23603,7 +23590,7 @@
           "+    case 6 -> \"unday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 2,
         "suppressions": []
       },
@@ -23616,7 +23603,7 @@
           "+  7 -> \"Sunday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 2,
         "suppressions": []
       },
@@ -23642,7 +23629,7 @@
           "+  4 -> \"friday\""
         ],
         "language": "kotlin",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 4,
         "suppressions": []
       },
@@ -23655,7 +23642,7 @@
           "+    case 4 -> \"Uriday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL",
         "testCount": 4,
         "suppressions": []
       },
@@ -23668,7 +23655,7 @@
           "+    case 4 -> \"FrGday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL",
         "testCount": 4,
         "suppressions": []
       },
@@ -23681,7 +23668,7 @@
           "+  5 -> \"Friday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 4,
         "suppressions": []
       },
@@ -23707,7 +23694,7 @@
           "+  4 -> \"Uriday\""
         ],
         "language": "kotlin",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL",
         "testCount": 4,
         "suppressions": []
       },
@@ -23720,7 +23707,7 @@
           "+  4 -> \"zriday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL",
         "testCount": 4,
         "suppressions": []
       },
@@ -23733,7 +23720,7 @@
           "+  4 -> \"FriXay\""
         ],
         "language": "kotlin",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL",
         "testCount": 4,
         "suppressions": []
       },
@@ -23746,7 +23733,7 @@
           "+  4 -> \"Thursday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 4,
         "suppressions": []
       },
@@ -23759,7 +23746,7 @@
           "+  4 -> \"Frida\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 4,
         "suppressions": []
       },
@@ -23772,7 +23759,7 @@
           "+    case 4 -> \"friday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 4,
         "suppressions": []
       },
@@ -23785,7 +23772,7 @@
           "+    case 4 -> \"Frida\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 4,
         "suppressions": []
       },
@@ -23798,7 +23785,7 @@
           "+    case 4 -> \"zriday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_CASE",
+        "mutation": "STRING_LITERAL",
         "testCount": 4,
         "suppressions": []
       },
@@ -23824,7 +23811,7 @@
           "+  2 -> \"ednesday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_CASE",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 9,
         "suppressions": []
       },
@@ -23837,7 +23824,7 @@
           "+    case 2 -> \"ednesday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "incorrectIndex": 0,
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 9,
         "suppressions": []
       },
@@ -23850,7 +23837,7 @@
           "+    case 2 -> \"WednesMay\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL",
         "testCount": 9,
         "suppressions": []
       },
@@ -23889,7 +23876,7 @@
           "+  2 -> \"Tuesday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 9,
         "suppressions": []
       },
@@ -23902,7 +23889,7 @@
           "+  3 -> \"Wednesday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 9,
         "suppressions": []
       },
@@ -23915,7 +23902,7 @@
           "+  2 -> \"Wednesda\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 9,
         "suppressions": []
       },
@@ -23928,7 +23915,7 @@
           "+    case 2 -> \"Wednesdgy\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL",
         "testCount": 9,
         "suppressions": []
       },
@@ -23941,7 +23928,7 @@
           "+    case 2 -> \"Wednesda3\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_CASE",
+        "mutation": "STRING_LITERAL",
         "testCount": 9,
         "suppressions": []
       },
@@ -23954,7 +23941,7 @@
           "+  2 -> \"WednesMay\""
         ],
         "language": "kotlin",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL",
         "testCount": 9,
         "suppressions": []
       },
@@ -23967,7 +23954,7 @@
           "+  2 -> \"wednesday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 9,
         "suppressions": []
       },
@@ -23980,7 +23967,7 @@
           "+    case 2 -> \"Wednesda\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 9,
         "suppressions": []
       },
@@ -23993,7 +23980,7 @@
           "+  2 -> \"Wednesda3\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_CASE",
+        "mutation": "STRING_LITERAL",
         "testCount": 9,
         "suppressions": []
       },
@@ -24006,7 +23993,7 @@
           "+    case 2 -> \"wednesday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 9,
         "suppressions": []
       },
@@ -24019,7 +24006,7 @@
           "+    case 2 -> \"Wednesdey\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_LOOKALIKE",
+        "mutation": "STRING_LITERAL",
         "testCount": 9,
         "suppressions": []
       },
@@ -24032,7 +24019,7 @@
           "+  4 -> \"Saturday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_CASE",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 12,
         "suppressions": []
       },
@@ -24058,7 +24045,7 @@
           "+    case 5 -> \"Caturday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "NULL_RETURN",
+        "mutation": "STRING_LITERAL",
         "testCount": 12,
         "suppressions": []
       },
@@ -24084,7 +24071,7 @@
           "+    case 5 -> \"Saturda\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 12,
         "suppressions": []
       },
@@ -24097,7 +24084,7 @@
           "+  5 -> \"saturday\""
         ],
         "language": "kotlin",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 12,
         "suppressions": []
       },
@@ -24110,7 +24097,7 @@
           "+  5 -> \"SaturdaK\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_CASE",
+        "mutation": "STRING_LITERAL",
         "testCount": 12,
         "suppressions": []
       },
@@ -24162,7 +24149,7 @@
           "+  5 -> \"Caturday\""
         ],
         "language": "kotlin",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL",
         "testCount": 12,
         "suppressions": []
       },
@@ -24188,7 +24175,7 @@
           "+    case 5 -> \"saturday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 12,
         "suppressions": []
       },
@@ -24201,7 +24188,7 @@
           "+  5 -> \"Saturda\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 12,
         "suppressions": []
       },
@@ -24240,7 +24227,7 @@
           "+  1 -> \"Thesday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL",
         "testCount": 20,
         "suppressions": []
       },
@@ -24253,7 +24240,7 @@
           "+  1 -> \"Tudsday\""
         ],
         "language": "kotlin",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL",
         "testCount": 20,
         "suppressions": []
       },
@@ -24266,7 +24253,7 @@
           "+  1 -> \"Tuesdar\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL",
         "testCount": 20,
         "suppressions": []
       },
@@ -24279,7 +24266,7 @@
           "+    case 1 -> \"uesday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 20,
         "suppressions": []
       },
@@ -24305,7 +24292,7 @@
           "+  0 -> \"Tuesday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_CASE",
+        "mutation": "NUMBER_LITERAL",
         "testCount": 20,
         "suppressions": []
       },
@@ -24331,7 +24318,7 @@
           "+    case 1 -> \"tuesday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 20,
         "suppressions": []
       },
@@ -24357,7 +24344,7 @@
           "+  1 -> \"uesday\""
         ],
         "language": "kotlin",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 20,
         "suppressions": []
       },
@@ -24370,7 +24357,7 @@
           "+  1 -> \"tuesday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 20,
         "suppressions": []
       },
@@ -24396,7 +24383,7 @@
           "+  3 -> \"whursday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL_CASE",
+        "mutation": "STRING_LITERAL",
         "testCount": 25,
         "suppressions": []
       },
@@ -24409,7 +24396,7 @@
           "+  3 -> \"hursday\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 25,
         "suppressions": []
       },
@@ -24435,7 +24422,7 @@
           "+    case 3 -> \"thursday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 25,
         "suppressions": []
       },
@@ -24448,7 +24435,7 @@
           "+    case 3 -> \"Thursda\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_CASE",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 25,
         "suppressions": []
       },
@@ -24461,7 +24448,7 @@
           "+    case 3 -> \"whursday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_CASE",
+        "mutation": "STRING_LITERAL",
         "testCount": 25,
         "suppressions": []
       },
@@ -24487,7 +24474,7 @@
           "+    case 3 -> \"ThuIsday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL",
         "testCount": 25,
         "suppressions": []
       },
@@ -24500,7 +24487,7 @@
           "+  3 -> \"thursday\""
         ],
         "language": "kotlin",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL_CASE",
         "testCount": 25,
         "suppressions": []
       },
@@ -24513,7 +24500,7 @@
           "+  3 -> \"Txursday\""
         ],
         "language": "kotlin",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL",
         "testCount": 25,
         "suppressions": []
       },
@@ -24526,7 +24513,7 @@
           "+  3 -> \"Thursda\""
         ],
         "language": "kotlin",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 25,
         "suppressions": []
       },
@@ -24539,7 +24526,7 @@
           "+    case 3 -> \"Txursday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL_TRIM",
+        "mutation": "STRING_LITERAL",
         "testCount": 25,
         "suppressions": []
       },
@@ -24552,7 +24539,7 @@
           "+  3 -> \"Thursdak\""
         ],
         "language": "kotlin",
-        "mutation": "NUMBER_LITERAL",
+        "mutation": "STRING_LITERAL",
         "testCount": 25,
         "suppressions": []
       },
@@ -24565,7 +24552,7 @@
           "+    case 3 -> \"hursday\"; // mutate-disable-remove-statement"
         ],
         "language": "java",
-        "mutation": "STRING_LITERAL",
+        "mutation": "STRING_LITERAL_TRIM",
         "testCount": 25,
         "suppressions": []
       }
@@ -24574,7 +24561,7 @@
   },
   {
     "published": {
-      "contentHash": "698a87ee8a0d8c4960d859c396ea1d22-v2025.8.3",
+      "contentHash": "698a87ee8a0d8c4960d859c396ea1d22-v2025.9.0",
       "path": "with-map-extras",
       "author": "challen@illinois.edu",
       "version": "2023.9.0",
@@ -24592,7 +24579,7 @@
         "java.util.Map",
         "java.util.Set"
       ],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -24981,11 +24968,11 @@
       "seed": 124,
       "requiredTestCount": 13,
       "mutationCount": 3,
-      "solutionMaxRuntime": 14,
-      "bootstrapLength": 1408,
-      "mutationLength": 13,
-      "incorrectLength": 167,
-      "calibrationLength": 42,
+      "solutionMaxRuntime": 17,
+      "bootstrapLength": 954,
+      "mutationLength": 20,
+      "incorrectLength": 212,
+      "calibrationLength": 33,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -25049,7 +25036,7 @@
   },
   {
     "published": {
-      "contentHash": "f25b5f918f2cb3cb8f04a0ee4a9babf2-v2025.8.3",
+      "contentHash": "f25b5f918f2cb3cb8f04a0ee4a9babf2-v2025.9.0",
       "path": "with-template-imports",
       "author": "challen@illinois.edu",
       "version": "2022.7.0",
@@ -25070,7 +25057,7 @@
         "java.util.List",
         "java.util.ArrayList"
       ],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [
@@ -25759,11 +25746,11 @@
       "seed": 124,
       "requiredTestCount": 18,
       "mutationCount": 1,
-      "solutionMaxRuntime": 31,
-      "bootstrapLength": 3999,
-      "mutationLength": 98,
-      "incorrectLength": 78,
-      "calibrationLength": 294,
+      "solutionMaxRuntime": 49,
+      "bootstrapLength": 3619,
+      "mutationLength": 245,
+      "incorrectLength": 55,
+      "calibrationLength": 196,
       "solutionCoverage": {
         "covered": 1,
         "total": 1,
@@ -25803,7 +25790,7 @@
   },
   {
     "published": {
-      "contentHash": "1ed0415f62a57a3bc14f0082e6697487-v2025.8.3",
+      "contentHash": "1ed0415f62a57a3bc14f0082e6697487-v2025.9.0",
       "path": "with-null-assert",
       "author": "challen@illinois.edu",
       "version": "2024.9.0",
@@ -25820,7 +25807,7 @@
         "kotlin": "<p>For test correctness testing to ensure AssertionErrors pop through.</p>"
       },
       "templateImports": [],
-      "questionerVersion": "2025.8.3",
+      "questionerVersion": "2025.9.0",
       "authorName": "",
       "tags": [],
       "kotlinImports": [],
@@ -26682,11 +26669,11 @@
       "seed": 124,
       "requiredTestCount": 14,
       "mutationCount": 11,
-      "solutionMaxRuntime": 18,
-      "bootstrapLength": 3506,
-      "mutationLength": 231,
-      "incorrectLength": 2173,
-      "calibrationLength": 176,
+      "solutionMaxRuntime": 14,
+      "bootstrapLength": 3581,
+      "mutationLength": 286,
+      "incorrectLength": 2162,
+      "calibrationLength": 171,
       "solutionCoverage": {
         "covered": 2,
         "total": 2,
@@ -26745,7 +26732,7 @@
           "+  return 0"
         ],
         "language": "kotlin",
-        "mutation": "REMOVE_STATEMENT",
+        "mutation": "PRIMITIVE_RETURN",
         "testCount": 0,
         "suppressions": []
       },
