@@ -80,4 +80,4 @@ The project follows a multi-module structure:
 
 - Always specify exact dependencies in package.json files, avoiding ~ or ^ version prefixes
 
-- We're currently ignoring dependency updates from Kotlin, ktor, and kotest.
+- We're currently ignoring dependency updates from Kotlin, ktor, KSP, and kotest.
