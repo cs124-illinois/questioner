@@ -5,9 +5,9 @@ plugins {
     kotlin("jvm")
     application
     id("org.jmailen.kotlinter")
-    id("com.gradleup.shadow") version "9.0.2"
+    id("com.gradleup.shadow") version "9.2.1"
     id("com.google.devtools.ksp")
-    id("com.ryandens.javaagent-test") version "0.9.1"
+    id("com.ryandens.javaagent-test") version "0.10.0"
 }
 dependencies {
     val ktorVersion = "3.1.3"
@@ -29,7 +29,7 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-    testImplementation("com.google.truth:truth:1.4.4")
+    testImplementation("com.google.truth:truth:1.4.5")
 }
 tasks.shadowJar {
     manifest {

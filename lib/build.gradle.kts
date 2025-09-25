@@ -8,7 +8,7 @@ plugins {
     `maven-publish`
     signing
     id("com.google.devtools.ksp")
-    id("com.ryandens.javaagent-test") version "0.9.1"
+    id("com.ryandens.javaagent-test") version "0.10.0"
 }
 dependencies {
     ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.2")
@@ -27,13 +27,13 @@ dependencies {
     api("com.beyondgrader.resource-agent:virtualfsplugin:2024.7.0") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2025.8.4")
+    api("org.cs124.jeed:core:2025.9.0")
     api("org.cs124:jenisol:2025.6.0")
     api("org.cs124:libcs1:2025.8.0")
-    api("com.fasterxml.jackson.core:jackson-databind:2.19.2")
+    api("com.fasterxml.jackson.core:jackson-databind:2.20.0")
 
     api("io.kotest:kotest-runner-junit5:5.9.1")
-    api("com.google.truth:truth:1.4.4")
+    api("com.google.truth:truth:1.4.5")
 
     api("io.github.cdimascio:dotenv-kotlin:6.5.1")
 
