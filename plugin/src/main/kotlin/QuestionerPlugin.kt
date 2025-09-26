@@ -8,7 +8,6 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.sherter.googlejavaformatgradleplugin.GoogleJavaFormatExtension
 import com.github.sherter.googlejavaformatgradleplugin.GoogleJavaFormatPlugin
 import edu.illinois.cs.cs125.questioner.lib.VERSION
-import io.github.cdimascio.dotenv.Dotenv
 import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin
@@ -29,8 +28,6 @@ import java.util.Locale
 data class QuestionerConfig(val endpoints: List<EndPoint> = listOf()) {
     data class EndPoint(val name: String, val token: String, val url: String, val label: String? = null)
 }
-
-val dotenv: Dotenv = Dotenv.configure().ignoreIfMissing().load()
 
 private val testFiles = listOf("TestAllQuestions.kt", "TestUnvalidatedQuestions.kt", "TestFocusedQuestions.kt")
 

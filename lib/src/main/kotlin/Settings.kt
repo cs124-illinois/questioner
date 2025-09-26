@@ -1,13 +1,13 @@
 package edu.illinois.cs.cs125.questioner.lib
 
-import io.github.cdimascio.dotenv.Dotenv
+import io.github.cdimascio.dotenv.dotenv
 import kotlinx.coroutines.sync.Semaphore
 
 internal const val MAX_INDIVIDUAL_ALLOCATION_BYTES: Long = 1024 * 1024
 internal const val MIN_ALLOCATION_FAILURE_BYTES: Long = 2 * 1024 // Account for nondeterminism due to JIT
 internal const val MIN_ALLOCATION_LIMIT_BYTES: Long = 2 * 1024 * 1024 // Leave room for concat in println debugging
 
-internal val dotenv: Dotenv = Dotenv.configure().ignoreIfMissing().load()
+val dotenv = dotenv { ignoreIfMissing = true }
 internal val questionerMaxConcurrency = dotenv.get("QUESTIONER_MAX_CONCURRENCY")?.toInt() ?: Int.MAX_VALUE
 internal val testingLimiter = Semaphore(questionerMaxConcurrency)
 

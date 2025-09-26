@@ -3,6 +3,7 @@ package edu.illinois.cs.cs125.questioner.plugin
 import edu.illinois.cs.cs125.jeed.core.KtLintArguments
 import edu.illinois.cs.cs125.jeed.core.ktFormat
 import edu.illinois.cs.cs125.questioner.lib.Question
+import edu.illinois.cs.cs125.questioner.lib.dotenv
 import edu.illinois.cs.cs125.questioner.lib.loadQuestionList
 import edu.illinois.cs.cs125.questioner.lib.verifiers.toBase64
 import io.kotest.common.runBlocking

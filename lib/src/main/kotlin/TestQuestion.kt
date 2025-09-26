@@ -38,7 +38,7 @@ suspend fun Question.test(
     contents: String,
     language: Language,
     settings: Question.TestingSettings = testingSettings!!,
-    isSolution: Boolean = false
+    isSolution: Boolean = false,
 ): TestResults {
     try {
         testingLimiter.acquire()

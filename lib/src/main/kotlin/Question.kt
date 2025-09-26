@@ -248,7 +248,7 @@ data class Question(
         val recordTrace: Boolean = false,
         val followTrace: List<Int>? = null,
         val timeoutMultiplier: Double? = null,
-        val solutionOutputAmount: Int? = null
+        val solutionOutputAmount: Int? = null,
     )
 
     @JsonClass(generateAdapter = true)
