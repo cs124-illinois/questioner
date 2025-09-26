@@ -19,8 +19,8 @@ open class CheckQuestionerVersion : DefaultTask() {
                 it.connect()
                 it.getInputStream().close()
             }
-            if (!isLatestVersion(project)) {
-                val latestVersion = getLatestQuestionerVersion(project)
+            if (!isLatestVersion()) {
+                val latestVersion = getLatestQuestionerVersion()
                 project.logger.warn("\nPlease upgrade your build.gradle.kts to use the latest version of Questioner: $latestVersion\n")
             }
         } catch (_: Exception) {

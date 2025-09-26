@@ -2,9 +2,10 @@ package edu.illinois.cs.cs125.questioner.plugin
 
 import edu.illinois.cs.cs125.questioner.lib.VERSION
 import io.github.z4kn4fein.semver.toVersion
-import org.gradle.api.Project
+import org.gradle.testfixtures.ProjectBuilder
 
-fun getLatestQuestionerVersion(project: Project): String? {
+fun getLatestQuestionerVersion(): String? {
+    val project = ProjectBuilder.builder().build()
     val queryConfig = project.configurations.create("tempVersionQuery").apply {
         isTransitive = false
         isCanBeResolved = true
@@ -25,9 +26,9 @@ fun getLatestQuestionerVersion(project: Project): String? {
     }
 }
 
-fun isLatestVersion(project: Project): Boolean {
+fun isLatestVersion(): Boolean {
     val currentVersion = VERSION
-    val latestVersion = getLatestQuestionerVersion(project)
+    val latestVersion = getLatestQuestionerVersion()
     check(latestVersion != null) { "Unable to determine latest Questioner version" }
     return currentVersion.toVersion() >= latestVersion.toVersion()
 }
