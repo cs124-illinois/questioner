@@ -1,33 +1,33 @@
 package edu.illinois.cs.cs125.questioner.plugin
 
-import com.beust.klaxon.Klaxon
-import com.beust.klaxon.PathMatcher
 import edu.illinois.cs.cs125.questioner.lib.VERSION
 import io.github.z4kn4fein.semver.toVersion
-import java.io.StringReader
-import java.net.URI
+import org.gradle.api.Project
 
-private val pattern = "\$.response.docs[0].latestVersion"
-
-fun getLatestQuestionerVersion(): String {
-    var version = ""
-    try {
-        val url = "https://search.maven.org/solrsearch/select?q=g:org.cs124.questioner+AND+a:plugin&wt=json"
-        val response = URI(url).toURL().readText()
-        Klaxon().pathMatcher(object : PathMatcher {
-            override fun pathMatches(path: String) = path == pattern
-            override fun onMatch(path: String, value: Any) {
-                version = value as String
-            }
-        }).parseJsonObject(StringReader(response))
-    } catch (_: Exception) {
+fun getLatestQuestionerVersion(project: Project): String? {
+    val queryConfig = project.configurations.create("tempVersionQuery").apply {
+        isTransitive = false
+        isCanBeResolved = true
     }
-    return version
+    project.repositories.apply { mavenCentral() }
+    try {
+        // Add dependency with "+" to query for latest version
+        val queryDependency = project.dependencies.create("org.cs124.questioner:plugin:+")
+        queryConfig.dependencies.add(queryDependency)
+
+        // Resolve and return the version
+        val resolved = queryConfig.resolvedConfiguration.lenientConfiguration.firstLevelModuleDependencies
+        return resolved.firstOrNull()?.moduleVersion
+    } catch (_: Exception) {
+        return null
+    } finally {
+        project.configurations.remove(queryConfig)
+    }
 }
 
-fun isLatestVersion(): Boolean {
+fun isLatestVersion(project: Project): Boolean {
     val currentVersion = VERSION
-    val latestVersion = getLatestQuestionerVersion()
-    check(latestVersion != "") { "Unable to determine latest Questioner version" }
+    val latestVersion = getLatestQuestionerVersion(project)
+    check(latestVersion != null) { "Unable to determine latest Questioner version" }
     return currentVersion.toVersion() >= latestVersion.toVersion()
 }
