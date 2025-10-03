@@ -5,7 +5,7 @@ plugins {
     kotlin("jvm")
     application
     id("org.jmailen.kotlinter")
-    id("com.gradleup.shadow") version "9.2.1"
+    id("com.gradleup.shadow") version "9.2.2"
     id("com.google.devtools.ksp")
     id("com.ryandens.javaagent-test") version "0.10.0"
 }
