@@ -204,6 +204,16 @@ fun ValidationReport.report(): String {
 }
 
 fun ValidationFailed.report(question: Question): String {
+    val testingSequence = if (testingSequence != null) {
+        """
+        |<h2>Testing Sequence</h2>
+        |<pre><code class="text">
+        |${testingSequence.joinToString("\n")}
+        |</code></pre>
+        """.trimMargin()
+    } else {
+        ""
+    }
     val body = when (this) {
         is SolutionFailed -> {
             """
@@ -392,6 +402,6 @@ fun ValidationFailed.report(question: Question): String {
         }
 
         else -> error("Invalid error: $this")
-    }
+    } + testingSequence
     return wrapDocument(question, body)
 }
