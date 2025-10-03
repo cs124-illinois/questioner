@@ -46,17 +46,22 @@ suspend fun Question.validate(
             ?: 0.0) / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT < RETRY_THRESHOLD)
 
     fun TestResults.checkCorrect(file: Question.FlatFile, finalChecks: Boolean = false) {
+        val testingSequence = try {
+            jenisolResults!!.solutionTestingSequence()
+        } catch (_: Exception) {
+            null
+        }
         if (taskResults?.threw != null) {
-            throw SolutionTestingThrew(file, taskResults!!.threw!!, taskResults!!.output)
+            throw SolutionTestingThrew(file, taskResults!!.threw!!, taskResults!!.output, testingSequence)
         }
         if (!succeeded) {
             if (failed.checkExecutedSubmission != null) {
-                throw SolutionFailed(file, failed.checkExecutedSubmission!!, retry)
+                throw SolutionFailed(file, failed.checkExecutedSubmission!!, retry, testingSequence)
             }
 
             val exception = when {
-                complete.testing?.passed == false -> SolutionFailed(file, summary, retry)
-                complete.testing?.failedReceiverGeneration == true -> SolutionReceiverGeneration(file, retry)
+                complete.testing?.passed == false -> SolutionFailed(file, summary, retry, testingSequence)
+                complete.testing?.failedReceiverGeneration == true -> SolutionReceiverGeneration(file, retry, testingSequence)
                 else -> {
                     val message = when {
                         failedSteps.contains(TestResults.Step.compileSubmission) -> {
@@ -91,7 +96,7 @@ suspend fun Question.validate(
 
                         else -> summary
                     }
-                    SolutionFailed(file, message, retry)
+                    SolutionFailed(file, message, retry, testingSequence)
                 }
             }
             if (badTimeout()) {
@@ -106,7 +111,7 @@ suspend fun Question.validate(
             } else {
                 complete.ktlint!!.errors.joinToString("\n") { "Line ${it.location.line}: ${it.message}" }
             }
-            throw SolutionFailedLinting(file, errors)
+            throw SolutionFailedLinting(file, errors, testingSequence)
         }
         val solutionThrew = tests()?.filter {
             it.jenisol!!.solution.threw != null
@@ -115,7 +120,7 @@ suspend fun Question.validate(
             exception !is AssertionError && exception !is IllegalArgumentException && exception !is IllegalStateException
         }
         if (!control.solutionThrows!! && solutionThrew != null) {
-            throw SolutionThrew(file, solutionThrew.jenisol!!.solution.threw!!, solutionThrew.jenisol.parameters)
+            throw SolutionThrew(file, solutionThrew.jenisol!!.solution.threw!!, solutionThrew.jenisol.parameters, testingSequence)
         }
         tests()
             ?.filter {
@@ -145,7 +150,8 @@ suspend fun Question.validate(
                             values.distinct().size,
                             executable,
                             solution.fauxStatic,
-                            values.first()
+                            values.first(),
+                            testingSequence
                         )
                     }
                 }
@@ -153,7 +159,7 @@ suspend fun Question.validate(
 
         val size = toJson().length
         if (finalChecks && (size > Question.DEFAULT_MAX_OUTPUT_SIZE || complete.testing!!.truncatedLines > 0)) {
-            throw TooMuchOutput(file.contents, file.path, size, Question.DEFAULT_MAX_OUTPUT_SIZE, file.language)
+            throw TooMuchOutput(file.contents, file.path, size, Question.DEFAULT_MAX_OUTPUT_SIZE, file.language, testingSequence)
         }
 
         if (finalChecks && (complete.coverage!!.failed)) {
@@ -161,7 +167,8 @@ suspend fun Question.validate(
                 file,
                 complete.coverage!!.submission.missed,
                 complete.coverage!!.limit,
-                complete.coverage!!.missed
+                complete.coverage!!.missed,
+                testingSequence
             )
         }
         check(failedSteps.isEmpty()) { "Failed steps: $failedSteps" }
@@ -181,6 +188,11 @@ suspend fun Question.validate(
     }
 
     fun TestResults.checkIncorrect(file: Question.IncorrectFile, mutated: Boolean) {
+        val testingSequence = try {
+            jenisolResults!!.solutionTestingSequence()
+        } catch (_: Exception) {
+            null
+        }
         if (!mutated && failedLinting == true && !listOf(
                 Question.IncorrectFile.Reason.CHECKSTYLE,
                 Question.IncorrectFile.Reason.KTLINT
@@ -190,7 +202,7 @@ suspend fun Question.validate(
                 Language.java -> complete.checkstyle!!.errors.joinToString("\n") { it.message }
                 Language.kotlin -> complete.ktlint!!.errors.joinToString("\n") { it.message }
             }
-            throw IncorrectFailedLinting(file, javaSolution, errors)
+            throw IncorrectFailedLinting(file, javaSolution, errors, testingSequence)
         }
 
         if (mutated) {
@@ -198,7 +210,7 @@ suspend fun Question.validate(
                 // Only fail validation for Java mutations that pass tests
                 // Kotlin mutations that pass are silently discarded (assumed to be unsuppressed valid mutations)
                 if (file.mutationSourceLanguage != Language.kotlin) {
-                    throw RetryValidation(IncorrectPassed(file, javaSolution, this, verbose), badTimeout())
+                    throw RetryValidation(IncorrectPassed(file, javaSolution, this, verbose, testingSequence), badTimeout())
                 }
             }
         } else {
@@ -206,8 +218,8 @@ suspend fun Question.validate(
                 validate(file.reason)
             } catch (e: Exception) {
                 val exception = when (succeeded && file.reason == Question.IncorrectFile.Reason.TEST) {
-                    true -> RetryValidation(IncorrectPassed(file, javaSolution, this, verbose), badTimeout())
-                    else -> IncorrectWrongReason(file, e.message!!, summary)
+                    true -> RetryValidation(IncorrectPassed(file, javaSolution, this, verbose, testingSequence), badTimeout())
+                    else -> IncorrectWrongReason(file, e.message!!, summary, testingSequence)
                 }
                 if (badTimeout()) {
                     throw RetryValidation(exception, true)
@@ -220,7 +232,7 @@ suspend fun Question.validate(
             && tests()?.size?.let { it > control.maxTestCount!! } == true
         ) {
             val failingInput = tests()!!.find { !it.passed }?.arguments
-            throw IncorrectTooManyTests(file, javaSolution, tests()!!.size, control.maxTestCount!!, failingInput)
+            throw IncorrectTooManyTests(file, javaSolution, tests()!!.size, control.maxTestCount!!, failingInput, testingSequence)
         }
         val solutionThrew = tests()?.filter {
             it.jenisol!!.solution.threw != null
@@ -234,15 +246,16 @@ suspend fun Question.validate(
             throw SolutionThrew(
                 javaSolution,
                 solutionThrew.jenisol!!.solution.threw!!,
-                solutionThrew.jenisol.parameters
+                solutionThrew.jenisol.parameters,
+                testingSequence
             )
         }
         val size = toJson().length
         if (toJson().length > Question.DEFAULT_MAX_OUTPUT_SIZE) {
-            throw TooMuchOutput(file.contents, file.path, size, Question.DEFAULT_MAX_OUTPUT_SIZE, file.language)
+            throw TooMuchOutput(file.contents, file.path, size, Question.DEFAULT_MAX_OUTPUT_SIZE, file.language, testingSequence)
         }
         if (failed.checkCompiledSubmission == null && failed.checkExecutedSubmission == null && taskResults?.threw != null) {
-            throw IncorrectTestingThrew(file, taskResults!!.threw!!, taskResults!!.output)
+            throw IncorrectTestingThrew(file, taskResults!!.threw!!, taskResults!!.output, testingSequence)
         }
     }
 
@@ -697,7 +710,11 @@ data class ValidationReport(
     val summary = Summary(incorrect.size, requiredTestCount, requiredTime, hasKotlin)
 }
 
-sealed class ValidationFailed(cause: Exception? = null, val retries: Int = 0) : Exception(cause) {
+sealed class ValidationFailed(
+    cause: Exception? = null,
+    val retries: Int = 0,
+    val testingSequence: List<String>? = null
+) : Exception(cause) {
     fun printContents(contents: String, path: String?) = """
 ${path?.let { "file://${Path(gradleRootDirectory ?: "/").resolve(path)}\n" } ?: ""}---
 $contents
@@ -706,15 +723,15 @@ $contents
 
 class RetryValidation(cause: Exception, val timeout: Boolean) : ValidationFailed(cause)
 
-class SolutionFailed(val solution: Question.FlatFile, val explanation: String, retries: Int) :
-    ValidationFailed(retries = retries) {
+class SolutionFailed(val solution: Question.FlatFile, val explanation: String, retries: Int, testingSequence: List<String>? = null) :
+    ValidationFailed(retries = retries, testingSequence = testingSequence) {
     override val message = """
         |Solution failed the test suites after $retries retries: $explanation
         |${printContents(solution.contents, solution.path)}
         """.trimMargin()
 }
 
-class SolutionReceiverGeneration(val solution: Question.FlatFile, retries: Int) : ValidationFailed(retries = retries) {
+class SolutionReceiverGeneration(val solution: Question.FlatFile, retries: Int, testingSequence: List<String>? = null) : ValidationFailed(retries = retries, testingSequence = testingSequence) {
     override val message = """
         |Solution failed the test suites after $retries retries: Couldn't generate enough receivers during testing.
         |Examine any @FilterParameters methods you might be using, or exceptions thrown in your constructor.
@@ -723,7 +740,7 @@ class SolutionReceiverGeneration(val solution: Question.FlatFile, retries: Int) 
         """.trimMargin()
 }
 
-class SolutionFailedLinting(val solution: Question.FlatFile, val errors: String) : ValidationFailed() {
+class SolutionFailedLinting(val solution: Question.FlatFile, val errors: String, testingSequence: List<String>? = null) : ValidationFailed(testingSequence = testingSequence) {
     override val message = """
         |Solution failed linting with ${
         if (solution.language == Language.kotlin) {
@@ -736,8 +753,8 @@ class SolutionFailedLinting(val solution: Question.FlatFile, val errors: String)
         """.trimMargin()
 }
 
-class SolutionThrew(val solution: Question.FlatFile, val threw: Throwable, val parameters: ParameterGroup) :
-    ValidationFailed() {
+class SolutionThrew(val solution: Question.FlatFile, val threw: Throwable, val parameters: ParameterGroup, testingSequence: List<String>? = null) :
+    ValidationFailed(testingSequence = testingSequence) {
     override val message = """
         |Solution was not expected to throw an unusual exception, but threw $threw on parameters $parameters
         |If it should throw, allow it using @Correct(solutionThrows = true)
@@ -746,8 +763,8 @@ class SolutionThrew(val solution: Question.FlatFile, val threw: Throwable, val p
         """.trimMargin()
 }
 
-class SolutionTestingThrew(val solution: Question.FlatFile, val threw: Throwable, val output: String = "") :
-    ValidationFailed() {
+class SolutionTestingThrew(val solution: Question.FlatFile, val threw: Throwable, val output: String = "", testingSequence: List<String>? = null) :
+    ValidationFailed(testingSequence = testingSequence) {
     override val message = """
         |Solution testing threw an exception $threw
         |${threw.stackTraceToString()}${
@@ -761,8 +778,8 @@ class SolutionTestingThrew(val solution: Question.FlatFile, val threw: Throwable
         """.trimMargin()
 }
 
-class IncorrectTestingThrew(val incorrect: Question.IncorrectFile, val threw: Throwable, val output: String = "") :
-    ValidationFailed() {
+class IncorrectTestingThrew(val incorrect: Question.IncorrectFile, val threw: Throwable, val output: String = "", testingSequence: List<String>? = null) :
+    ValidationFailed(testingSequence = testingSequence) {
     override val message = """
         |Testing threw an unexpected exception $threw
         |${threw.stackTraceToString()}${
@@ -782,9 +799,10 @@ class SolutionLacksEntropy(
     val amount: Int,
     val executable: Executable,
     val fauxStatic: Boolean,
-    val result: Any?
+    val result: Any?,
+    testingSequence: List<String>?
 ) :
-    ValidationFailed() {
+    ValidationFailed(testingSequence = testingSequence) {
     override val message = """
         |$count inputs to the solution method ${executable.fullName()} only generated $amount distinct results: $result
         |${
@@ -803,9 +821,10 @@ class SolutionDeadCode(
     val solution: Question.FlatFile,
     val amount: Int,
     val maximum: Int,
-    val dead: List<Int>
+    val dead: List<Int>,
+    testingSequence: List<String>? = null
 ) :
-    ValidationFailed() {
+    ValidationFailed(testingSequence = testingSequence) {
     override val message = """
         |Solution contains $amount lines of dead code, more than the maximum of $maximum
         |Dead lines: ${dead.joinToString(", ")}
@@ -833,8 +852,9 @@ class TooMuchOutput(
     val path: String?,
     val size: Int,
     val maxSize: Int,
-    val language: Language
-) : ValidationFailed() {
+    val language: Language,
+    testingSequence: List<String>? = null
+) : ValidationFailed(testingSequence = testingSequence) {
     override val message = """
         |Submission generated too much output($size > $maxSize):
         |Maybe reduce the number of tests using @Correct(minTestCount = NUM)
@@ -843,8 +863,8 @@ class TooMuchOutput(
 }
 
 class IncorrectFailedLinting(
-    val incorrect: Question.IncorrectFile, val correct: Question.FlatFile, val errors: String
-) : ValidationFailed() {
+    val incorrect: Question.IncorrectFile, val correct: Question.FlatFile, val errors: String, testingSequence: List<String>? = null
+) : ValidationFailed(testingSequence = testingSequence) {
     override val message: String
         get() {
             val contents = incorrect.mutation?.marked()?.contents ?: incorrect.contents
@@ -865,8 +885,9 @@ class IncorrectPassed(
     val incorrect: Question.IncorrectFile,
     val correct: Question.FlatFile,
     val results: TestResults,
-    val verbose: Boolean
-) : ValidationFailed() {
+    val verbose: Boolean,
+    testingSequence: List<String>? = null
+) : ValidationFailed(testingSequence = testingSequence) {
     override val message: String
         get() {
             val contents = incorrect.mutation?.marked()?.contents ?: incorrect.contents
@@ -900,8 +921,9 @@ class IncorrectPassed(
 
 class IncorrectTooManyTests(
     val incorrect: Question.IncorrectFile, val correct: Question.FlatFile,
-    val testsRequired: Int, val testsLimit: Int, val failingInput: String?
-) : ValidationFailed() {
+    val testsRequired: Int, val testsLimit: Int, val failingInput: String?,
+    testingSequence: List<String>? = null
+) : ValidationFailed(testingSequence = testingSequence) {
     override val message: String
         get() {
             val contents = incorrect.mutation?.marked()?.contents ?: incorrect.contents
@@ -922,8 +944,8 @@ class IncorrectTooManyTests(
         }
 }
 
-class IncorrectWrongReason(val incorrect: Question.IncorrectFile, val expected: String, val explanation: String) :
-    ValidationFailed() {
+class IncorrectWrongReason(val incorrect: Question.IncorrectFile, val expected: String, val explanation: String, testingSequence: List<String>? = null) :
+    ValidationFailed(testingSequence = testingSequence) {
     override val message: String
         get() {
             check(incorrect.mutation == null) { "Mutated sources failed for the wrong reason" }
