@@ -62,6 +62,7 @@ tasks {
     val sourcesJar by registering(Jar::class) {
         archiveClassifier.set("sources")
         from(sourceSets["main"].allSource)
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
         dependsOn(getTasksByName("generateGrammarSource", false))
     }
     artifacts {
