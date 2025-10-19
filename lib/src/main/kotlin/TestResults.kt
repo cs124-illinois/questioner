@@ -248,7 +248,7 @@ data class TestResults(
             val runnerID: Int,
             val stepCount: Int,
             val methodCall: String,
-            val differs: Set<edu.illinois.cs.cs125.jenisol.core.TestResult.Differs>,
+            val differs: Set<TestResult.Differs>,
             val message: String? = null,
             val arguments: String? = null,
             val expected: String? = null,
@@ -336,7 +336,7 @@ data class TestResults(
         val testingTimePercent = totalTestTimeNanos.toDouble() / executionTimeNanos.toDouble()
 
         init {
-            check(0.0 <= testingTimePercent && testingTimePercent < 1.0) { "Bad value for testingTimePercent: $testingTimePercent" }
+            check(testingTimePercent in 0.0..<1.0) { "Bad value for testingTimePercent: $testingTimePercent" }
         }
     }
 }
@@ -365,14 +365,18 @@ fun TestResult<*, *>.asTestResult(source: Source, questionType: Question.Type) =
         ""
     },
     complexity,
-    submission.threw?.getStackTraceForSource(
-        source,
-        boundaries = listOf(
-            "at edu.illinois.cs.cs125.jenisol.core.TestRunner",
-            "at jdk.internal.reflect.",
-            "at java.base"
+    try {
+        submission.threw?.getStackTraceForSource(
+            source,
+            boundaries = listOf(
+                "at edu.illinois.cs.cs125.jenisol.core.TestRunner",
+                "at jdk.internal.reflect.",
+                "at java.base"
+            )
         )
-    ),
+    } catch (e: Exception) {
+        "Cannot print stack trace: $e"
+    },
     submission.stdin,
     submission.truncatedLines,
     this,
