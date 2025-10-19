@@ -28,7 +28,7 @@ dependencies {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
     api("org.cs124.jeed:core:2025.10.0")
-    api("org.cs124:jenisol:2025.10.1")
+    api("org.cs124:jenisol:2025.10.2")
     api("org.cs124:libcs1:2025.8.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.20.0")
 
