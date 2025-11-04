@@ -25,7 +25,7 @@ import edu.illinois.cs.cs125.questioner.lib.Tags
 import edu.illinois.cs.cs125.questioner.lib.TemplateImports
 import edu.illinois.cs.cs125.questioner.lib.Whitelist
 import edu.illinois.cs.cs125.questioner.lib.Wrap
-import io.kotest.common.runBlocking
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import org.antlr.v4.runtime.BaseErrorListener
@@ -713,7 +713,7 @@ data class ParsedJavaContent(
 private val parserLimiter = Semaphore(1)
 internal fun String.parseJava() = runBlocking {
     parserLimiter.withPermit {
-        CharStreams.fromStream(StringInputStream(this)).let { stream ->
+        CharStreams.fromStream(StringInputStream(this@parseJava)).let { stream ->
             JavaLexer(stream).also { it.removeErrorListeners() }.let { lexer ->
                 CommonTokenStream(lexer).let { tokens ->
                     JavaParser(tokens).also { parser ->

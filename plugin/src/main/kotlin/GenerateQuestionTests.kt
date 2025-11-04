@@ -6,7 +6,7 @@ import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.dotenv
 import edu.illinois.cs.cs125.questioner.lib.loadQuestionList
 import edu.illinois.cs.cs125.questioner.lib.verifiers.toBase64
-import io.kotest.common.runBlocking
+import kotlinx.coroutines.runBlocking
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
