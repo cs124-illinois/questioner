@@ -35,7 +35,7 @@ dependencies {
     implementation("io.github.z4kn4fein:semver:3.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
-    testImplementation("io.kotest:kotest-runner-junit5:6.0.4")
+    testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
 }
 tasks.compileKotlin {
     dependsOn(tasks.generateGrammarSource)

@@ -32,7 +32,7 @@ dependencies {
     api("org.cs124:libcs1:2025.8.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.20.1")
 
-    api("io.kotest:kotest-runner-junit5:6.0.4")
+    api("io.kotest:kotest-runner-junit5:5.9.1")
     api("com.google.truth:truth:1.4.5")
 
     api("io.github.cdimascio:dotenv-kotlin:6.5.1")

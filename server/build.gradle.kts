@@ -26,7 +26,7 @@ dependencies {
     implementation("org.mongodb:mongodb-driver:3.12.14")
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.3")
 
-    testImplementation("io.kotest:kotest-runner-junit5:6.0.4")
+    testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     testImplementation("com.google.truth:truth:1.4.5")
