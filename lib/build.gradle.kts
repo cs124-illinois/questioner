@@ -19,26 +19,26 @@ dependencies {
     implementation("io.github.java-diff-utils:java-diff-utils:4.16")
     implementation("org.ow2.asm:asm:9.9")
     implementation("org.mongodb:mongodb-driver:3.12.14")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:2.2.0")
-    implementation("org.jetbrains.kotlin:kotlin-metadata-jvm:2.2.0")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.2.21")
+    implementation("org.jetbrains.kotlin:kotlin-metadata-jvm:2.2.21")
 
     api("com.squareup.moshi:moshi-kotlin:1.15.2")
     api("com.beyondgrader.resource-agent:agent:2024.7.0")
     api("com.beyondgrader.resource-agent:virtualfsplugin:2024.7.0") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2025.10.0")
+    api("org.cs124.jeed:core:2025.11.0")
     api("org.cs124:jenisol:2025.10.2")
     api("org.cs124:libcs1:2025.8.0")
-    api("com.fasterxml.jackson.core:jackson-databind:2.20.0")
+    api("com.fasterxml.jackson.core:jackson-databind:2.20.1")
 
-    api("io.kotest:kotest-runner-junit5:5.9.1")
+    api("io.kotest:kotest-runner-junit5:6.0.4")
     api("com.google.truth:truth:1.4.5")
 
     api("io.github.cdimascio:dotenv-kotlin:6.5.1")
 
     api("org.slf4j:slf4j-api:2.0.17")
-    api("ch.qos.logback:logback-classic:1.5.19")
+    api("ch.qos.logback:logback-classic:1.5.20")
     api("io.github.microutils:kotlin-logging:3.0.5")
 }
 tasks {

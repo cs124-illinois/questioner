@@ -10,7 +10,7 @@ plugins {
     id("com.ryandens.javaagent-test") version "0.10.0"
 }
 dependencies {
-    val ktorVersion = "3.1.3"
+    val ktorVersion = "3.3.1"
 
     testJavaagent("com.beyondgrader.resource-agent:agent:2024.7.0")
 
@@ -24,9 +24,9 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     implementation("org.cs124:ktor-moshi:2025.8.0")
     implementation("org.mongodb:mongodb-driver:3.12.14")
-    implementation("com.github.ben-manes.caffeine:caffeine:3.2.2")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.2.3")
 
-    testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
+    testImplementation("io.kotest:kotest-runner-junit5:6.0.4")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     testImplementation("com.google.truth:truth:1.4.5")
