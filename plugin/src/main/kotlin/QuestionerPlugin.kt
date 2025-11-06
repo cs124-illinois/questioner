@@ -102,6 +102,8 @@ class QuestionerPlugin : Plugin<Project> {
             testTask.useJUnitPlatform()
             testTask.enableAssertions = true
             testTask.environment["JEED_USE_CACHE"] = true
+            testTask.environment["JEED_USE_DISK_CACHE"] = true
+            testTask.environment["JEED_DISK_CACHE_DIR"] = project.layout.buildDirectory.dir("jeed").get().asFile.absolutePath
             @Suppress("SpellCheckingInspection")
             testTask.jvmArgs(
                 "-ea", "--enable-preview", "-Dfile.encoding=UTF-8", "-Djava.security.manager=allow",
