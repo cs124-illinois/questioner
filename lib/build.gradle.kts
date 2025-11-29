@@ -27,8 +27,8 @@ dependencies {
     api("com.beyondgrader.resource-agent:virtualfsplugin:2024.7.0") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2025.11.1")
-    api("org.cs124:jenisol:2025.10.2")
+    api("org.cs124.jeed:core:2025.11.3")
+    api("org.cs124:jenisol:2025.11.0")
     api("org.cs124:libcs1:2025.8.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.20.1")
 
@@ -38,7 +38,7 @@ dependencies {
     api("io.github.cdimascio:dotenv-kotlin:6.5.1")
 
     api("org.slf4j:slf4j-api:2.0.17")
-    api("ch.qos.logback:logback-classic:1.5.20")
+    api("ch.qos.logback:logback-classic:1.5.21")
     api("io.github.microutils:kotlin-logging:3.0.5")
 }
 tasks {
