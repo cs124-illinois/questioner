@@ -345,6 +345,7 @@ internal data class ParsedJavaFile(val path: String, val contents: String) {
         val questionType = cleanContent.getType()
         val source = when (questionType) {
             Question.Type.KLASS -> Source(mapOf("$className.java" to cleanContent))
+
             Question.Type.METHOD -> Source(
                 mapOf(
                     "$className.java" to """public class $className {
@@ -483,6 +484,7 @@ $cleanContent
         val questionType = cleanContent.getType()
         val source = when (questionType) {
             Question.Type.KLASS -> Source(mapOf("$className.java" to cleanContent))
+
             Question.Type.METHOD -> Source(
                 mapOf(
                     "$className.java" to """public class $className {
@@ -694,6 +696,7 @@ $cleanContent
         }
 
         !hasTemplate -> this
+
         else -> {
             val lines = split("\n")
             val start = lines.indexOfFirst { it.contains("TEMPLATE_START") }

@@ -3,26 +3,24 @@ import org.jmailen.gradle.kotlinter.tasks.LintTask
 
 plugins {
     kotlin("jvm")
+    kotlin("plugin.serialization")
     application
     id("org.jmailen.kotlinter")
     id("com.gradleup.shadow") version "9.2.2"
-    id("com.google.devtools.ksp")
     id("com.ryandens.javaagent-test") version "0.10.0"
 }
 dependencies {
-    val ktorVersion = "3.3.2"
+    val ktorVersion = "3.3.3"
 
     testJavaagent("com.beyondgrader.resource-agent:agent:2024.7.0")
-
-    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.2")
 
     implementation(project(":lib"))
 
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-    implementation("org.cs124:ktor-moshi:2025.8.0")
     implementation("org.mongodb:mongodb-driver:3.12.14")
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.3")
 

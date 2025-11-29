@@ -5,12 +5,12 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import com.github.benmanes.caffeine.cache.stats.CacheStats
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Sorts
-import com.squareup.moshi.JsonClass
 import edu.illinois.cs.cs125.questioner.lib.Question
-import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
+import edu.illinois.cs.cs125.questioner.lib.serialization.json
 import edu.illinois.cs.cs125.questioner.lib.server.Submission
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class CacheStats(val hits: Long, val misses: Long) {
     constructor(caffeineStats: CacheStats) : this(caffeineStats.hitCount(), caffeineStats.missCount())
 }
@@ -27,7 +27,7 @@ internal fun getQuestionByPath(path: String): Question? = questionerCollection.f
         return null
     }
     check(results.count() == 1) { "Found multiple path matches" }
-    return moshi.adapter(Question::class.java).fromJson(results.first()!!.toJson())?.also { question ->
+    return json.decodeFromString<Question>(results.first()!!.toJson()).also { question ->
         question.warm()
     }
 }
@@ -44,7 +44,7 @@ internal fun Submission.getQuestion(testingQuestions: Map<String, Question>? = n
         }
         check(results.count() == 1) { "Found multiple contentHash matches" }
         try {
-            moshi.adapter(Question::class.java).fromJson(results.first()!!.toJson())
+            json.decodeFromString<Question>(results.first()!!.toJson())
         } catch (e: Exception) {
             logger.warn { "Couldn't load question $contentHash, which might use an old schema: $e" }
             null

@@ -29,7 +29,7 @@ import edu.illinois.cs.cs125.jeed.core.getEmptyJavaClassSize
 import edu.illinois.cs.cs125.jeed.core.getEmptyKotlinClassSize
 import edu.illinois.cs.cs125.jeed.core.kompile
 import edu.illinois.cs.cs125.jeed.core.ktLint
-import edu.illinois.cs.cs125.jeed.core.moshi.CompiledSourceResult
+import edu.illinois.cs.cs125.jeed.core.server.CompiledSourceResult
 import edu.illinois.cs.cs125.jeed.core.stripComments
 import edu.illinois.cs.cs125.jenisol.core.CaptureOutputControlInput
 import edu.illinois.cs.cs125.jenisol.core.CapturedResult

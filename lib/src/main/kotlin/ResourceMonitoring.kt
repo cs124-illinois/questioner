@@ -1,6 +1,7 @@
 package edu.illinois.cs.cs125.questioner.lib
 
 import com.beyondgrader.resourceagent.*
+import kotlinx.serialization.Serializable
 import com.sun.management.ThreadMXBean
 import edu.illinois.cs.cs125.jeed.core.*
 import org.objectweb.asm.ClassReader
@@ -380,6 +381,7 @@ data class ResourceMonitoringResults(
     val allAllocatedMemory: Long, // Includes warmups
     val invokedRecursiveFunctions: Set<MethodInfo>
 ) {
+    @Serializable
     data class MethodInfo(val className: String, val methodName: String, val descriptor: String)
 }
 

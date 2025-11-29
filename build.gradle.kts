@@ -3,9 +3,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "2.2.21" apply false
-    id("org.jmailen.kotlinter") version "5.2.0" apply false
+    kotlin("plugin.serialization") version "2.2.21" apply false
+    id("org.jmailen.kotlinter") version "5.3.0" apply false
     id("com.github.ben-manes.versions") version "0.53.0"
-    id("com.google.devtools.ksp").version("2.3.2") apply false
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 allprojects {

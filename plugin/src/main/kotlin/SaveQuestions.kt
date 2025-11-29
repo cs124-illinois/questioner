@@ -1,7 +1,6 @@
 package edu.illinois.cs.cs125.questioner.plugin
 
-import com.squareup.moshi.Types
-import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
+import edu.illinois.cs.cs125.questioner.lib.serialization.json
 import edu.illinois.cs.cs125.questioner.lib.writeToFile
 import edu.illinois.cs.cs125.questioner.plugin.parse.ParsedJavaFile
 import edu.illinois.cs.cs125.questioner.plugin.parse.ParsedKotlinFile
@@ -110,10 +109,4 @@ abstract class ParseDirectory : WorkAction<ParseDirectoryWorkParameters> {
     }
 }
 
-private fun File.readFromFile(): Map<String, List<String>> = moshi.adapter<Map<String, List<String>>>(
-    Types.newParameterizedType(
-        Map::class.java,
-        String::class.java,
-        Types.newParameterizedType(List::class.java, String::class.java),
-    ),
-).fromJson(readText())!!
+private fun File.readFromFile(): Map<String, List<String>> = json.decodeFromString(readText())

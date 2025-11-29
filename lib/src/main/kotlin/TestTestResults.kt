@@ -1,6 +1,5 @@
 package edu.illinois.cs.cs125.questioner.lib
 
-import com.squareup.moshi.JsonClass
 import edu.illinois.cs.cs125.jeed.core.CheckstyleFailed
 import edu.illinois.cs.cs125.jeed.core.CheckstyleResults
 import edu.illinois.cs.cs125.jeed.core.CompilationFailed
@@ -8,11 +7,18 @@ import edu.illinois.cs.cs125.jeed.core.KtLintFailed
 import edu.illinois.cs.cs125.jeed.core.KtLintResults
 import edu.illinois.cs.cs125.jeed.core.Sandbox
 import edu.illinois.cs.cs125.jeed.core.TemplatingFailed
-import edu.illinois.cs.cs125.jeed.core.moshi.CompiledSourceResult
-import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
+import edu.illinois.cs.cs125.jeed.core.serializers.CheckstyleFailedSerializer
+import edu.illinois.cs.cs125.jeed.core.serializers.CompilationFailedSerializer
+import edu.illinois.cs.cs125.jeed.core.serializers.KtLintFailedSerializer
+import edu.illinois.cs.cs125.jeed.core.serializers.TemplatingFailedSerializer
+import edu.illinois.cs.cs125.jeed.core.server.CompiledSourceResult
+import edu.illinois.cs.cs125.questioner.lib.serialization.json
 import edu.illinois.cs.cs125.questioner.lib.server.Submission
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
+import kotlinx.serialization.encodeToString
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class TestTestResults(
     var language: Language,
     val completedSteps: MutableSet<Step> = mutableSetOf(),
@@ -44,7 +50,7 @@ data class TestTestResults(
         testTesting
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class CompletedTasks(
         // templateSubmission doesn't complete
         var compileSubmission: CompiledSourceResult? = null,
@@ -54,13 +60,13 @@ data class TestTestResults(
         var testTesting: TestTestingResults? = null
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class FailedTasks(
         var checkInitialSubmission: String? = null,
-        var templateSubmission: TemplatingFailed? = null,
-        var compileSubmission: CompilationFailed? = null,
-        var checkstyle: CheckstyleFailed? = null,
-        var ktlint: KtLintFailed? = null,
+        @Serializable(with = TemplatingFailedSerializer::class) var templateSubmission: TemplatingFailed? = null,
+        @Serializable(with = CompilationFailedSerializer::class) var compileSubmission: CompilationFailed? = null,
+        @Serializable(with = CheckstyleFailedSerializer::class) var checkstyle: CheckstyleFailed? = null,
+        @Serializable(with = KtLintFailedSerializer::class) var ktlint: KtLintFailed? = null,
         var checkCompiledSubmission: String? = null,
         var checkExecutedSubmission: String? = null
     )
@@ -85,9 +91,9 @@ data class TestTestResults(
     }
 
     @Suppress("unused")
-    fun toJson(): String = moshi.adapter(TestTestResults::class.java).toJson(this)
+    fun toJson(): String = json.encodeToString(this)
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class TestTestingResults(
         val selectionStrategy: Question.TestTestingSettings.SelectionStrategy,
         val correct: Int,

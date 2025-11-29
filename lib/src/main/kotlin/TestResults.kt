@@ -1,6 +1,5 @@
 package edu.illinois.cs.cs125.questioner.lib
 
-import com.squareup.moshi.JsonClass
 import edu.illinois.cs.cs125.jeed.core.CheckstyleFailed
 import edu.illinois.cs.cs125.jeed.core.CheckstyleResults
 import edu.illinois.cs.cs125.jeed.core.CompilationFailed
@@ -11,14 +10,21 @@ import edu.illinois.cs.cs125.jeed.core.Sandbox
 import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.TemplatingFailed
 import edu.illinois.cs.cs125.jeed.core.getStackTraceForSource
-import edu.illinois.cs.cs125.jeed.core.moshi.CompiledSourceResult
+import edu.illinois.cs.cs125.jeed.core.serializers.CheckstyleFailedSerializer
+import edu.illinois.cs.cs125.jeed.core.serializers.CompilationFailedSerializer
+import edu.illinois.cs.cs125.jeed.core.serializers.KtLintFailedSerializer
+import edu.illinois.cs.cs125.jeed.core.serializers.TemplatingFailedSerializer
+import edu.illinois.cs.cs125.jeed.core.server.CompiledSourceResult
 import edu.illinois.cs.cs125.jenisol.core.TestResult
 import edu.illinois.cs.cs125.jenisol.core.safePrint
-import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
+import edu.illinois.cs.cs125.questioner.lib.serialization.json
 import edu.illinois.cs.cs125.questioner.lib.server.Submission
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
+import kotlinx.serialization.encodeToString
 import edu.illinois.cs.cs125.jenisol.core.TestResult as JenisolTestResult
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class TestResults(
     var language: Language,
     val completedSteps: MutableSet<Step> = mutableSetOf(),
@@ -73,7 +79,7 @@ data class TestResults(
         extraOutput
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class CompletedTasks(
         // templateSubmission doesn't complete
         var compileSubmission: CompiledSourceResult? = null,
@@ -113,13 +119,13 @@ data class TestResults(
         check(complete.extraOutput?.failed == false)
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class FailedTasks(
         var checkInitialSubmission: String? = null,
-        var templateSubmission: TemplatingFailed? = null,
-        var compileSubmission: CompilationFailed? = null,
-        var checkstyle: CheckstyleFailed? = null,
-        var ktlint: KtLintFailed? = null,
+        @Serializable(with = TemplatingFailedSerializer::class) var templateSubmission: TemplatingFailed? = null,
+        @Serializable(with = CompilationFailedSerializer::class) var compileSubmission: CompilationFailed? = null,
+        @Serializable(with = CheckstyleFailedSerializer::class) var checkstyle: CheckstyleFailed? = null,
+        @Serializable(with = KtLintFailedSerializer::class) var ktlint: KtLintFailed? = null,
         var checkCompiledSubmission: String? = null,
         var classSize: String? = null,
         var complexity: String? = null,
@@ -133,7 +139,7 @@ data class TestResults(
         // coverage doesn't fail
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class ComplexityComparison(
         val solution: Int,
         val submission: Int,
@@ -142,7 +148,7 @@ data class TestResults(
         val failed: Boolean = increase > limit
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class LineCountComparison(
         val solution: LineCounts,
         val submission: LineCounts,
@@ -152,7 +158,7 @@ data class TestResults(
         val failed: Boolean = increase > allowance && submission.source > limit
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class CoverageComparison(
         val solution: LineCoverage,
         val submission: LineCoverage,
@@ -161,7 +167,7 @@ data class TestResults(
         val increase: Int = submission.missed - solution.missed,
         val failed: Boolean = increase > limit
     ) {
-        @JsonClass(generateAdapter = true)
+        @Serializable
         data class LineCoverage(val covered: Int, val total: Int, val missed: Int = total - covered) {
             init {
                 check(covered <= total) { "Invalid coverage result" }
@@ -169,7 +175,7 @@ data class TestResults(
         }
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class OutputComparison(
         val solution: Int,
         val submission: Int,
@@ -182,7 +188,7 @@ data class TestResults(
         }
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class ResourceUsageComparison(
         val solution: Long,
         val submission: Long,
@@ -197,22 +203,22 @@ data class TestResults(
         }
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class FeaturesComparison(
         val errors: List<String>,
         val failed: Boolean = errors.isNotEmpty()
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class RecursionComparison(val missingMethods: List<String>, val failed: Boolean = missingMethods.isNotEmpty())
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class PartialCredit(
         val passedSteps: PassedSteps = PassedSteps(),
         var passedTestCount: PassedTestCount? = null,
         var passedMutantCount: PassedMutantCount? = null
     ) {
-        @JsonClass(generateAdapter = true)
+        @Serializable
         data class PassedSteps(
             var compiled: Boolean = false,
             var design: Boolean = false,
@@ -221,14 +227,14 @@ data class TestResults(
             var quality: Boolean = false
         )
 
-        @JsonClass(generateAdapter = true)
+        @Serializable
         data class PassedTestCount(val passed: Int, val total: Int, val completed: Boolean)
 
-        @JsonClass(generateAdapter = true)
+        @Serializable
         data class PassedMutantCount(val passed: Int, val total: Int, val completed: Boolean)
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class TestingResult(
         val tests: List<TestResult>,
         val testCount: Int,
@@ -240,7 +246,7 @@ data class TestResults(
         val outputAmount: Int = tests.sumOf { it.outputAmount },
         val truncatedLines: Int = tests.sumOf { it.truncatedLines ?: 0 }
     ) {
-        @JsonClass(generateAdapter = true)
+        @Serializable
         data class TestResult(
             val name: String,
             val passed: Boolean,
@@ -327,7 +333,7 @@ data class TestResults(
             "Passed"
         }
 
-    fun toJson(): String = moshi.adapter(TestResults::class.java).toJson(this)
+    fun toJson(): String = json.encodeToString(this)
 
     @Transient
     val canCache = !(timeout && !lineCountTimeout)

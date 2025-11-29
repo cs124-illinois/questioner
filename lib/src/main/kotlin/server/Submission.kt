@@ -1,10 +1,10 @@
 package edu.illinois.cs.cs125.questioner.lib.server
 
-import com.squareup.moshi.JsonClass
 import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class Submission(
     val type: SubmissionType,
     val contentHash: String,

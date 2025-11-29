@@ -11,7 +11,6 @@ plugins {
     `maven-publish`
     signing
     id("org.jmailen.kotlinter")
-    id("com.google.devtools.ksp")
 }
 dependencies {
     antlr("org.antlr:antlr4:4.13.2")
@@ -29,7 +28,7 @@ dependencies {
     implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.2.21")
     implementation("gradle.plugin.com.github.sherter.google-java-format:google-java-format-gradle-plugin:0.9")
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.8")
-    implementation("org.jmailen.gradle:kotlinter-gradle:5.2.0")
+    implementation("org.jmailen.gradle:kotlinter-gradle:5.3.0")
 
     implementation("com.beust:klaxon:5.6")
     implementation("io.github.z4kn4fein:semver:3.0.0")

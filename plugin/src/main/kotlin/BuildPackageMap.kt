@@ -1,8 +1,8 @@
 package edu.illinois.cs.cs125.questioner.plugin
 
-import com.squareup.moshi.Types
-import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
+import edu.illinois.cs.cs125.questioner.lib.serialization.json
 import edu.illinois.cs.cs125.questioner.plugin.parse.buildPackageMap
+import kotlinx.serialization.encodeToString
 import org.gradle.api.DefaultTask
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.InputFiles
@@ -37,15 +37,7 @@ abstract class BuildPackageMap : DefaultTask() {
 }
 
 private fun Map<String, List<String>>.writeToFile(file: File) {
-    file.writeText(
-        moshi.adapter<Map<String, List<String>>>(
-            Types.newParameterizedType(
-                Map::class.java,
-                String::class.java,
-                Types.newParameterizedType(List::class.java, String::class.java),
-            ),
-        ).indent("  ").toJson(this),
-    )
+    file.writeText(json.encodeToString(this))
 }
 
 internal fun Collection<File>.otherFiles() = filter { file ->

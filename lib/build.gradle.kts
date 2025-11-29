@@ -5,14 +5,12 @@ import java.util.Properties
 
 plugins {
     kotlin("jvm")
+    kotlin("plugin.serialization")
     `maven-publish`
     signing
-    id("com.google.devtools.ksp")
     id("com.ryandens.javaagent-test") version "0.10.0"
 }
 dependencies {
-    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.2")
-
     testJavaagent("com.beyondgrader.resource-agent:agent:2024.7.0")
 
     implementation("org.apache.commons:commons-text:1.14.0")
@@ -22,12 +20,12 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:2.2.21")
     implementation("org.jetbrains.kotlin:kotlin-metadata-jvm:2.2.21")
 
-    api("com.squareup.moshi:moshi-kotlin:1.15.2")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
     api("com.beyondgrader.resource-agent:agent:2024.7.0")
     api("com.beyondgrader.resource-agent:virtualfsplugin:2024.7.0") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2025.11.3")
+    api("org.cs124.jeed:core:2025.11.4")
     api("org.cs124:jenisol:2025.11.0")
     api("org.cs124:libcs1:2025.8.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.20.1")

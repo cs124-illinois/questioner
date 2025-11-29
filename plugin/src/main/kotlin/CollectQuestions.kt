@@ -1,12 +1,12 @@
 package edu.illinois.cs.cs125.questioner.plugin
 
-import com.squareup.moshi.Types
 import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.loadQuestion
-import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
+import edu.illinois.cs.cs125.questioner.lib.serialization.json
 import edu.illinois.cs.cs125.questioner.plugin.parse.ParsedJavaFile
 import io.kotest.inspectors.forAll
+import kotlinx.serialization.encodeToString
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
 import org.gradle.api.plugins.JavaPluginExtension
@@ -90,9 +90,5 @@ abstract class CollectQuestions : DefaultTask() {
 }
 
 private fun Collection<Question>.writeToFile(file: File) {
-    file.writeText(
-        moshi.adapter<List<Question>>(
-            Types.newParameterizedType(List::class.java, Question::class.java),
-        ).indent("  ").toJson(this.toList()),
-    )
+    file.writeText(json.encodeToString(this.toList()))
 }

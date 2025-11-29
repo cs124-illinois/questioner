@@ -2,16 +2,16 @@ package edu.illinois.cs.cs125.questioner.server
 
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext
-import com.ryanharter.ktor.moshi.moshi
 import com.sun.management.HotSpotDiagnosticMXBean
+import edu.illinois.cs.cs125.jeed.core.serializers.JeedSerializersModule
 import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.ResourceMonitoring
 import edu.illinois.cs.cs125.questioner.lib.VERSION
-import edu.illinois.cs.cs125.questioner.lib.moshi.Adapters
 import edu.illinois.cs.cs125.questioner.lib.server.Submission
 import edu.illinois.cs.cs125.questioner.lib.warm
 import io.ktor.http.HttpStatusCode
+import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCallPipeline
 import io.ktor.server.application.call
@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 import org.slf4j.LoggerFactory
 import java.lang.management.ManagementFactory
@@ -54,7 +55,6 @@ import kotlin.math.pow
 import kotlin.system.exitProcess
 import kotlin.system.measureTimeMillis
 import kotlin.time.Duration.Companion.seconds
-import edu.illinois.cs.cs125.jeed.core.moshi.Adapters as JeedAdapters
 import edu.illinois.cs.cs125.jeed.core.warm as warmJeed
 import kotlin.math.round as kotlinRound
 
@@ -99,10 +99,13 @@ fun Application.questioner(testingQuestions: Map<String, Question>? = null) {
         }
     }
     install(ContentNegotiation) {
-        moshi {
-            Adapters.forEach { adapter -> add(adapter) }
-            JeedAdapters.forEach { adapter -> add(adapter) }
-        }
+        json(
+            Json {
+                serializersModule = JeedSerializersModule
+                ignoreUnknownKeys = true
+                encodeDefaults = true
+            },
+        )
     }
     routing {
         get("/") {

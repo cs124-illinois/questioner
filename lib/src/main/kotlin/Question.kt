@@ -2,8 +2,6 @@ package edu.illinois.cs.cs125.questioner.lib
 
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
-import com.squareup.moshi.JsonClass
-import com.squareup.moshi.Types
 import edu.illinois.cs.cs125.jeed.core.CompilationArguments
 import edu.illinois.cs.cs125.jeed.core.Features
 import edu.illinois.cs.cs125.jeed.core.JeedFileManager
@@ -14,7 +12,10 @@ import edu.illinois.cs.cs125.jeed.core.Mutation
 import edu.illinois.cs.cs125.jeed.core.Source
 import edu.illinois.cs.cs125.jeed.core.compile
 import edu.illinois.cs.cs125.jeed.core.kompile
-import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
+import edu.illinois.cs.cs125.questioner.lib.serialization.json
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
+import kotlinx.serialization.encodeToString
 import java.io.File
 import java.lang.reflect.ReflectPermission
 import java.util.PropertyPermission
@@ -35,19 +36,19 @@ private val sharedClassWhitelist = setOf(
 enum class Language { java, kotlin }
 
 @Suppress("MemberVisibilityCanBePrivate", "LargeClass", "TooManyFunctions")
-@JsonClass(generateAdapter = true)
+@Serializable
 data class Question(
     val published: Published,
     val classification: Classification,
-    var metadata: Metadata?,
-    val annotatedControls: TestingControl,
+    var metadata: Metadata? = null,
+    val annotatedControls: TestingControl = TestingControl(),
     val question: FlatFile,
     val solutionByLanguage: Map<Language, FlatFile>,
-    val alternativeSolutions: List<FlatFile>,
-    val incorrectExamples: List<IncorrectFile>,
-    val common: List<String>?,
-    var commonFiles: List<CommonFile>?,
-    val templateByLanguage: Map<Language, String>?,
+    val alternativeSolutions: List<FlatFile> = listOf(),
+    val incorrectExamples: List<IncorrectFile> = listOf(),
+    val common: List<String>? = null,
+    var commonFiles: List<CommonFile>? = null,
+    val templateByLanguage: Map<Language, String>? = null,
     val importWhitelist: Set<String>,
     val importBlacklist: Set<String>,
     @Suppress("unused")
@@ -74,9 +75,9 @@ data class Question(
 
     enum class Type { KLASS, METHOD, SNIPPET }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class CorrectData(
-        val path: String?,
+        val path: String? = null,
         val name: String,
         val version: String,
         val author: String,
@@ -87,7 +88,7 @@ data class Question(
         val control: TestingControl
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class Published(
         val contentHash: String,
         val path: String,
@@ -95,13 +96,13 @@ data class Question(
         val version: String,
         val name: String,
         val type: Type,
-        val citation: Citation?,
+        val citation: Citation? = null,
         val packageName: String,
         val klass: String,
         val languages: Set<Language>,
         val descriptions: Map<Language, String>,
-        val starters: Map<Language, String>?,
-        val templateImports: Set<String>,
+        val starters: Map<Language, String>? = null,
+        val templateImports: Set<String> = setOf(),
         val questionerVersion: String,
         val authorName: String,
         val tags: MutableSet<String> = mutableSetOf(),
@@ -110,7 +111,7 @@ data class Question(
         val kotlinTestingImports: Set<String>? = null
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class Classification(
         val featuresByLanguage: Map<Language, Features>,
         val lineCounts: Map<Language, LineCounts>,
@@ -119,7 +120,7 @@ data class Question(
         var loadedClassesByLanguage: Map<Language, Set<String>>? = null,
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class Metadata(
         val allFiles: Set<String> = setOf(),
         val unusedFiles: Set<String> = setOf(),
@@ -132,32 +133,32 @@ data class Question(
         }
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class TestingControl(
-        val solutionThrows: Boolean?,
-        val minTestCount: Int?,
-        val maxTestCount: Int?,
-        val timeoutMultiplier: Double?,
-        val testTestingtimeoutMultiplier: Double?,
-        val minMutationCount: Int?,
-        val maxMutationCount: Int?,
-        val outputMultiplier: Double?,
-        val maxExtraComplexity: Int?,
-        val maxDeadCode: Int?,
-        val maxExecutionCountMultiplier: Double?,
-        val executionFailureMultiplier: Double?,
-        val executionTimeoutMultiplier: Double?,
-        val allocationFailureMultiplier: Double?,
-        val allocationLimitMultiplier: Double?,
-        val minExtraSourceLines: Int?,
-        val sourceLinesMultiplier: Double?,
-        val seed: Int?,
-        val maxComplexityMultiplier: Double?,
-        val maxLineCountMultiplier: Double?,
-        val maxClassSizeMultiplier: Double?,
-        val questionerWarmTimeoutMultiplier: Double?,
-        val canTestTest: Boolean?,
-        val fullDesignErrors: Boolean?
+        val solutionThrows: Boolean? = null,
+        val minTestCount: Int? = null,
+        val maxTestCount: Int? = null,
+        val timeoutMultiplier: Double? = null,
+        val testTestingtimeoutMultiplier: Double? = null,
+        val minMutationCount: Int? = null,
+        val maxMutationCount: Int? = null,
+        val outputMultiplier: Double? = null,
+        val maxExtraComplexity: Int? = null,
+        val maxDeadCode: Int? = null,
+        val maxExecutionCountMultiplier: Double? = null,
+        val executionFailureMultiplier: Double? = null,
+        val executionTimeoutMultiplier: Double? = null,
+        val allocationFailureMultiplier: Double? = null,
+        val allocationLimitMultiplier: Double? = null,
+        val minExtraSourceLines: Int? = null,
+        val sourceLinesMultiplier: Double? = null,
+        val seed: Int? = null,
+        val maxComplexityMultiplier: Double? = null,
+        val maxLineCountMultiplier: Double? = null,
+        val maxClassSizeMultiplier: Double? = null,
+        val questionerWarmTimeoutMultiplier: Double? = null,
+        val canTestTest: Boolean? = null,
+        val fullDesignErrors: Boolean? = null
     ) {
         companion object {
             const val DEFAULT_SOLUTION_THROWS = false
@@ -220,14 +221,14 @@ data class Question(
         TestingControl.DEFAULTS merge annotatedControls
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class TestingSettings(
         val seed: Int,
         val testCount: Int = -1,
         val outputLimit: Int,
         val perTestOutputLimit: Int,
-        val javaWhitelist: Set<String>?,
-        val kotlinWhitelist: Set<String>?,
+        val javaWhitelist: Set<String>? = null,
+        val kotlinWhitelist: Set<String>? = null,
         val shrink: Boolean,
         val executionCountLimit: LanguagesResourceUsage,
         val allocationLimit: LanguagesResourceUsage? = null,
@@ -251,7 +252,7 @@ data class Question(
         val solutionOutputAmount: Int? = null,
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class TestTestingSettings(
         val shortCircuit: Boolean? = null,
         val limit: Int? = null,
@@ -272,14 +273,14 @@ data class Question(
         }
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class TestTestingLimits(
         val outputLimit: Int,
         val executionCountLimit: LanguagesResourceUsage,
         val allocationLimit: LanguagesResourceUsage
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class ValidationResults(
         val seed: Int,
         val requiredTestCount: Int,
@@ -298,7 +299,7 @@ data class Question(
         val testTestingIncorrectCount: Map<Language, Int>? = null
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class LanguagesResourceUsage(val java: Long, val kotlin: Long? = null) {
         operator fun get(language: Language): Long = when (language) {
             Language.java -> java
@@ -310,21 +311,21 @@ data class Question(
         }
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class LanguagesSolutionClassSize(
         val java: Int,
         val kotlin: Int? = null
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class Citation(val source: String, val link: String? = null)
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class FlatFile(
         val klass: String,
         val contents: String,
         val language: Language,
-        val path: String?,
+        val path: String? = null,
         val complexity: Int? = null,
         val features: Features? = null,
         val lineCount: LineCounts? = null,
@@ -332,20 +333,20 @@ data class Question(
         val suppressions: Set<String> = setOf()
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class CommonFile(
         val klass: String,
         val contents: String,
         val language: Language
     )
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class IncorrectFile(
         val klass: String,
         val contents: String,
         val reason: Reason,
         val language: Language,
-        var path: String?,
+        var path: String? = null,
         val starter: Boolean,
         var needed: Boolean = true,
         var testCount: Int = -1,
@@ -360,12 +361,12 @@ data class Question(
         }
     }
 
-    @JsonClass(generateAdapter = true)
+    @Serializable
     data class TestTestingMutation(
         val deltas: List<String>,
         val language: Language,
-        val incorrectIndex: Int?,
-        val mutation: Mutation.Type?,
+        val incorrectIndex: Int? = null,
+        val mutation: Mutation.Type? = null,
         val testCount: Int,
         val suppressions: Set<String> = setOf()
     ) {
@@ -413,7 +414,6 @@ data class Question(
 
     data class CompiledCommon(val classLoader: ClassLoader, val fileManager: JeedFileManager)
 
-    @delegate:Transient
     val compiledCommon by lazy {
         commonFiles?.associate { "${it.klass}.java" to it.contents }?.let { commonMap ->
             if (commonMap.isNotEmpty()) {
@@ -431,7 +431,6 @@ data class Question(
         }
     }
 
-    @delegate:Transient
     val compiledSolution by lazy {
         Source(mapOf("${question.klass}.java" to question.contents)).let { questionSource ->
             try {
@@ -463,7 +462,6 @@ ${question.contents}
 
     data class TestTestingSource(val contents: String, val classloader: ClassLoader, val fileManager: JeedFileManager)
 
-    @delegate:Transient
     val javaSolutionForTesting by lazy {
         // End-of-source comment to prevent cache collisions on actual solution but still enable caching
         val contents = """${question.contents}
@@ -501,7 +499,6 @@ $contents
         }
     }
 
-    @delegate:Transient
     val kotlinSolutionForTesting by lazy {
         if (solutionByLanguage[Language.kotlin] == null) {
             null
@@ -543,7 +540,6 @@ $contents
         }
     }
 
-    @delegate:Transient
     val compilationDefinedClass by lazy {
         compiledSolution.classLoader.definedClasses.topLevelClasses().let {
             require(it.size == 1)
@@ -555,12 +551,10 @@ $contents
         }
     }
 
-    @delegate:Transient
     val solution by lazy {
         jenisol(compiledSolution.classLoader.loadClass(published.klass))
     }
 
-    @delegate:Transient
     val featureChecker by lazy {
         compiledSolution.classLoader.loadClass(published.klass).declaredMethods.filter { it.isCheckFeatures() }.let {
             require(it.size <= 1) { "Can only use @CheckFeatures once" }
@@ -685,23 +679,18 @@ fun String.deTemplate(template: String?): String {
     }
 }
 
-fun Collection<Question>.toJSON(): String =
-    moshi.adapter<List<Question>>(Types.newParameterizedType(List::class.java, Question::class.java))
-        .toJson(this.toList())
+fun Collection<Question>.toJSON(): String = json.encodeToString(this.toList())
 
-
-fun File.loadQuestionList() =
-    moshi.adapter<List<Question>>(Types.newParameterizedType(List::class.java, Question::class.java))
-        .fromJson(readText())!!
+fun File.loadQuestionList(): List<Question> = json.decodeFromString(readText())
 
 fun File.loadQuestion() = try {
-    moshi.adapter(Question::class.java).fromJson(readText())!!
+    json.decodeFromString<Question>(readText())
 } catch (_: Exception) {
     null
 }
 
 fun Question.writeToFile(file: File) = try {
-    file.writeText(moshi.adapter(Question::class.java).indent("  ").toJson(this))
+    file.writeText(json.encodeToString(this))
 } catch (_: Exception) {
     null
 }

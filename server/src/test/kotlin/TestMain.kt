@@ -2,7 +2,7 @@ package edu.illinois.cs.cs125.questioner.server
 
 import com.google.common.truth.Truth.assertThat
 import edu.illinois.cs.cs125.questioner.lib.Language
-import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
+import edu.illinois.cs.cs125.questioner.lib.serialization.json
 import edu.illinois.cs.cs125.questioner.lib.server.Submission
 import io.kotest.core.spec.style.StringSpec
 import io.ktor.client.request.header
@@ -11,6 +11,7 @@ import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.testApplication
+import kotlinx.serialization.encodeToString
 
 class TestMain :
     StringSpec({
@@ -28,13 +29,13 @@ class TestMain :
                 val correctSolution = question.getCorrect(Language.java)
                     ?: error("add-one question should have Java solution")
 
-                // Create a submission JSON manually (simpler than complex Moshi setup)
+                // Create a submission JSON manually
                 val submissionJson = """
 {
   "type": "SOLVE",
   "contentHash": "${question.published.contentHash}",
   "language": "java",
-  "contents": ${moshi.adapter(String::class.java).toJson(correctSolution)}
+  "contents": ${json.encodeToString(correctSolution)}
 }
             """.trim()
 
@@ -49,7 +50,7 @@ class TestMain :
 
                 // Parse the response manually
                 val responseText = response.bodyAsText()
-                val serverResponse = moshi.adapter(ServerResponse::class.java).fromJson(responseText)!!
+                val serverResponse = json.decodeFromString<ServerResponse>(responseText)
 
                 assertThat(serverResponse.type).isEqualTo(Submission.SubmissionType.SOLVE)
                 assertThat(serverResponse.solveResults).isNotNull()
@@ -89,7 +90,7 @@ int addOne(int value) {
   "type": "SOLVE",
   "contentHash": "${question.published.contentHash}",
   "language": "java",
-  "contents": ${moshi.adapter(String::class.java).toJson(incorrectSolution)}
+  "contents": ${json.encodeToString(incorrectSolution)}
 }
             """.trim()
 
@@ -103,7 +104,7 @@ int addOne(int value) {
                 assertThat(response.status).isEqualTo(HttpStatusCode.OK)
 
                 val responseText = response.bodyAsText()
-                val serverResponse = moshi.adapter(ServerResponse::class.java).fromJson(responseText)!!
+                val serverResponse = json.decodeFromString<ServerResponse>(responseText)
 
                 assertThat(serverResponse.type).isEqualTo(Submission.SubmissionType.SOLVE)
                 assertThat(serverResponse.solveResults).isNotNull()

@@ -3,7 +3,7 @@ package edu.illinois.cs.cs124.stumperd
 import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Projections
 import edu.illinois.cs.cs125.questioner.lib.Question
-import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
+import edu.illinois.cs.cs125.questioner.lib.serialization.json
 import io.ktor.util.collections.ConcurrentMap
 import org.bson.BsonBoolean
 import org.bson.BsonDocument
@@ -28,7 +28,7 @@ suspend fun Stumper.identify(questionCollection: MongoCollection<BsonDocument>) 
 
     val contentHash = matchingQuestion.getDocument("published").getString("contentHash").value
     question = jsonCache.getOrPut(contentHash) {
-        moshi.adapter(Question::class.java).fromJson(matchingQuestion.toJson())!!
+        json.decodeFromString<Question>(matchingQuestion.toJson())
     }
 }
 

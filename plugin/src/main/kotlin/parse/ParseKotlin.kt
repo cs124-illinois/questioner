@@ -374,24 +374,43 @@ internal data class ParsedKotlinFile(val path: String, val contents: String) {
         val arrayRegex = """Array<(\w+)>""".toRegex()
         val starterReturn = when {
             returnType == "Unit" -> ""
+
             returnType.endsWith("?") -> "null"
+
             returnType == "Byte" -> "0"
+
             returnType == "Short" -> "0"
+
             returnType == "Int" -> "0"
+
             returnType == "Long" -> "0"
+
             returnType == "Float" -> "0.0"
+
             returnType == "Double" -> "0.0"
+
             returnType == "Char" -> "' '"
+
             returnType == "Boolean" -> "false"
+
             returnType == "String" -> "\"\""
+
             returnType == "ByteArray" -> "byteArrayOf()"
+
             returnType == "ShortArray" -> "shortArrayOf()"
+
             returnType == "IntArray" -> "intArrayOf()"
+
             returnType == "LongArray" -> "longArrayOf()"
+
             returnType == "FloatArray" -> "floatArrayOf()"
+
             returnType == "DoubleArray" -> "doubleArrayOf()"
+
             returnType == "BooleanArray" -> "booleanArrayOf()"
+
             returnType == "CharArray" -> "charArrayOf()"
+
             returnType.matches(arrayRegex) -> arrayRegex.find(returnType)?.let {
                 "arrayOf<${it.groups[1]!!.value}>()"
             } ?: error("regex only matched the first time")
@@ -465,6 +484,7 @@ internal data class ParsedKotlinFile(val path: String, val contents: String) {
             }
 
         !hasTemplate -> this
+
         else -> {
             val lines = split("\n")
             val start = lines.indexOfFirst { it.contains("TEMPLATE_START") }

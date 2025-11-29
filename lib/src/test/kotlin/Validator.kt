@@ -1,12 +1,10 @@
 package edu.illinois.cs.cs125.questioner.lib
 
-import com.squareup.moshi.Types
-import edu.illinois.cs.cs125.questioner.lib.moshi.moshi
+import edu.illinois.cs.cs125.questioner.lib.serialization.json
 
 object Validator {
     private val questions =
-        moshi.adapter<List<Question>>(Types.newParameterizedType(List::class.java, Question::class.java))
-            .fromJson(object {}::class.java.getResource("/questions.json")!!.readText())!!
+        json.decodeFromString<List<Question>>(object {}::class.java.getResource("/questions.json")!!.readText())
             .associateBy { question -> question.published.name }
 
     suspend fun validate(name: String): Pair<Question, ValidationReport?> {
