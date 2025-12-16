@@ -168,7 +168,7 @@ suspend fun doWarm() {
 }
 
 @OptIn(DelicateCoroutinesApi::class, ObsoleteCoroutinesApi::class)
-fun main(@Suppress("unused") unused: Array<String>): Unit = runBlocking {
+fun main(@Suppress("unused") unused: Array<String>) {
     ResourceMonitoring.ensureAgentActivated()
 
     check(System.getenv("QUESTIONER_MAX_CONCURRENCY") != null) {
@@ -211,11 +211,13 @@ fun main(@Suppress("unused") unused: Array<String>): Unit = runBlocking {
         } ?: logger.warn("Memory management interface not found")
 
     logger.info("Warming Jeed")
-    try {
-        warmJeed(2, failLint = false)
-    } catch (e: Exception) {
-        logger.error("Warming Jeed failed: $e")
-        exitProcess(-1)
+    runBlocking {
+        try {
+            warmJeed(2, failLint = false)
+        } catch (e: Exception) {
+            logger.error("Warming Jeed failed: $e")
+            exitProcess(-1)
+        }
     }
 
     (LoggerFactory.getILoggerFactory() as LoggerContext).getLogger(logger.name).also { logLevel ->
@@ -231,7 +233,7 @@ fun main(@Suppress("unused") unused: Array<String>): Unit = runBlocking {
     }.map { index ->
         val warmTime = measureTimeMillis {
             try {
-                doWarm()
+                runBlocking { doWarm() }
             } catch (e: Exception) {
                 logger.error("Questioner heartbeat failed: $e. Restarting.")
                 exitProcess(-1)
