@@ -547,7 +547,7 @@ fun KotlinParser.ClassDeclarationContext.getAnnotation(annotation: Class<*>): Ko
 fun KotlinParser.ClassDeclarationContext.getAnnotation(vararg toFind: String): KotlinParser.AnnotationContext? = modifierList()?.annotations()?.find { toFind.contains(it.annotation()?.LabelReference()?.text) }?.annotation()
 
 fun KotlinParser.KotlinFileContext.comment() = topLevelObject().find { it.DelimitedComment() != null }?.DelimitedComment()?.text
-    ?.toString()?.split("\n")?.joinToString(separator = "\n") { line ->
+    ?.split("\n")?.joinToString(separator = "\n") { line ->
         line.trim()
             .removePrefix("""/*""")
             .removePrefix("""*/""")
@@ -563,7 +563,7 @@ fun KotlinParser.KotlinFileContext.comment() = topLevelObject().find { it.Delimi
     }?.trim()
 
 fun KotlinParser.ClassDeclarationContext.comment() = DelimitedComment()?.text
-    ?.toString()?.split("\n")?.joinToString(separator = "\n") { line ->
+    ?.split("\n")?.joinToString(separator = "\n") { line ->
         line.trim()
             .removePrefix("""/*""")
             .removePrefix("""*/""")

@@ -300,7 +300,7 @@ suspend fun Question.testTests(
                 } else {
                     logger.debug {
                         """${published.path}/${published.author}/${published.version}: missed incorrect mutation
-                            |---${testingMutationOrSolution!!.deltas.joinToString("\n")}
+                            |---${testingMutationOrSolution.deltas.joinToString("\n")}
                             |---"""
                     }
                 }

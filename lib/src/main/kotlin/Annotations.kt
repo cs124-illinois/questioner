@@ -90,6 +90,7 @@ annotation class CheckFeatures {
                 "@$name methods must return List<String>!"
             }
             (method.genericReturnType as ParameterizedType).also { collectionType ->
+                @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
                 check(collectionType.rawType == java.util.List::class.java) {
                     "@$name methods must return List<String>"
                 }

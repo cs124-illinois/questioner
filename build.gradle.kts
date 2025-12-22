@@ -2,15 +2,15 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "2.2.21" apply false
-    kotlin("plugin.serialization") version "2.2.21" apply false
+    kotlin("jvm") version "2.3.0" apply false
+    kotlin("plugin.serialization") version "2.3.0" apply false
     id("org.jmailen.kotlinter") version "5.3.0" apply false
     id("com.github.ben-manes.versions") version "0.53.0"
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 allprojects {
     group = "org.cs124.questioner"
-    version = "2025.11.2"
+    version = "2025.12.0"
 }
 subprojects {
     tasks.withType<KotlinCompile> {

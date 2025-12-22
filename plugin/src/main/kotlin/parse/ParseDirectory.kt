@@ -142,7 +142,7 @@ fun Path.parseDirectory(
     }
 
     if (hasKotlinTemplate && kotlinTemplate == null && solution.wrapWith == null) {
-        kotlinTemplate = parsedKotlinSolution!!.extractTemplate(importNames) ?: error(
+        kotlinTemplate = parsedKotlinSolution.extractTemplate(importNames) ?: error(
             """Can't extract Kotlin template: file://${parsedKotlinSolution.path}""",
         )
     }

@@ -57,7 +57,7 @@ class TestMain :
                 assertThat(serverResponse.solveResults!!.complete).isNotNull()
 
                 // Verify that the correct solution passes
-                val testingResults = serverResponse.solveResults!!.complete!!.testing!!
+                val testingResults = serverResponse.solveResults.complete.testing!!
                 assertThat(testingResults.passed).isTrue()
                 assertThat(testingResults.tests).isNotEmpty()
 
