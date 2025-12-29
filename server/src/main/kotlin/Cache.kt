@@ -25,34 +25,42 @@ internal fun getStats() = CacheStats(questionCache.stats())
 internal fun getQuestionByPath(
     path: String,
     collection: MongoCollection<BsonDocument> = questionerCollection,
-): Question? = collection.find(
-    Filters.and(Filters.eq("published.path", path), Filters.eq("latest", true)),
-).sort(Sorts.descending("updated")).let { results ->
-    if (results.count() == 0) {
+): Question? {
+    val results = collection.find(
+        Filters.and(Filters.eq("published.path", path), Filters.eq("latest", true)),
+    ).sort(Sorts.descending("updated")).toList()
+
+    if (results.isEmpty()) {
+        logger.debug { "Question not found by path: $path" }
         return null
     }
-    check(results.count() == 1) { "Found multiple path matches" }
-    return json.decodeFromString<Question>(results.first()!!.toJson()).also { question ->
+    check(results.size == 1) { "Found multiple path matches for: $path" }
+    return json.decodeFromString<Question>(results.first().toJson()).also { question ->
         question.warm()
     }
 }
 
-internal fun Submission.getQuestion(testingQuestions: Map<String, Question>? = null) = questionCache.get(contentHash) {
+internal fun Submission.getQuestion(
+    testingQuestions: Map<String, Question>? = null,
+    collection: MongoCollection<BsonDocument>? = null,
+) = questionCache.get(contentHash) {
     if (testingQuestions != null) {
         return@get testingQuestions.values.find { it.published.contentHash == contentHash }
     }
-    questionerCollection.find(
+    val coll = collection ?: questionerCollection
+    val results = coll.find(
         Filters.and(Filters.eq("published.contentHash", contentHash)),
-    ).sort(Sorts.descending("updated")).let { results ->
-        if (results.count() == 0) {
-            return@get null
-        }
-        check(results.count() == 1) { "Found multiple contentHash matches" }
-        try {
-            json.decodeFromString<Question>(results.first()!!.toJson())
-        } catch (e: Exception) {
-            logger.warn { "Couldn't load question $contentHash, which might use an old schema: $e" }
-            null
-        }
+    ).sort(Sorts.descending("updated")).toList()
+
+    if (results.isEmpty()) {
+        logger.debug { "Question not found by contentHash: $contentHash" }
+        return@get null
+    }
+    check(results.size == 1) { "Found multiple contentHash matches for: $contentHash" }
+    try {
+        json.decodeFromString<Question>(results.first().toJson())
+    } catch (e: Exception) {
+        logger.warn { "Couldn't load question $contentHash, which might use an old schema: $e" }
+        null
     }
 }

@@ -2,6 +2,7 @@ package edu.illinois.cs.cs125.questioner.server
 
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.LoggerContext
+import com.mongodb.client.MongoCollection
 import com.sun.management.HotSpotDiagnosticMXBean
 import edu.illinois.cs.cs125.jeed.core.serializers.JeedSerializersModule
 import edu.illinois.cs.cs125.questioner.lib.Language
@@ -39,6 +40,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
+import org.bson.BsonDocument
 import org.slf4j.LoggerFactory
 import java.lang.management.ManagementFactory
 import java.lang.management.MemoryNotificationInfo
@@ -75,7 +77,10 @@ private fun Double.round(decimals: Int) = 10.0.pow(decimals)
     .let { multiplier -> kotlinRound(this * multiplier) / multiplier }
 
 @Suppress("LongMethod")
-fun Application.questioner(testingQuestions: Map<String, Question>? = null) {
+fun Application.questioner(
+    testingQuestions: Map<String, Question>? = null,
+    testingCollection: MongoCollection<BsonDocument>? = null,
+) {
     val callStartTime = AttributeKey<Long>("CallStartTime")
     val counter = AtomicInteger()
 
@@ -104,6 +109,7 @@ fun Application.questioner(testingQuestions: Map<String, Question>? = null) {
                 serializersModule = JeedSerializersModule
                 ignoreUnknownKeys = true
                 encodeDefaults = true
+                explicitNulls = false
             },
         )
     }
@@ -119,13 +125,18 @@ fun Application.questioner(testingQuestions: Map<String, Question>? = null) {
             val runCount = counter.incrementAndGet()
 
             val submission = call.receive<Submission>()
-            val question = submission.getQuestion(testingQuestions) ?: return@post call.respond(HttpStatusCode.NotFound)
+            val question = submission.getQuestion(testingQuestions, testingCollection)
+            if (question == null) {
+                logger.warn { "$runCount: Question not found for contentHash: ${submission.contentHash}" }
+                return@post call.respond(HttpStatusCode.NotFound)
+            }
 
             val validated = when (submission.type) {
                 Submission.SubmissionType.SOLVE -> question.validated
                 Submission.SubmissionType.TESTTESTING -> question.testTestingValidated && question.validationResults?.canTestTest == true
             }
             if (!validated) {
+                logger.warn { "$runCount: Question not validated: ${question.fullPath} (type: ${submission.type})" }
                 return@post call.respond(HttpStatusCode.BadRequest)
             }
 
@@ -142,17 +153,14 @@ fun Application.questioner(testingQuestions: Map<String, Question>? = null) {
                 )
                 logger.trace("Cache hit rate: ${questionCache.stats().hitRate()} (Size $questionCacheSize)")
             } catch (e: StackOverflowError) {
-                e.printStackTrace()
+                logger.error(e) { "$runCount: StackOverflowError testing ${question.fullPath}" }
                 call.respond(HttpStatusCode.BadRequest)
             } catch (e: Error) {
-                e.printStackTrace()
-                logger.warn { submission }
-                logger.error(e.toString())
+                logger.error(e) { "$runCount: Fatal error testing ${question.fullPath}, halting: $submission" }
                 // Firm shutdown
                 Runtime.getRuntime().halt(-1)
             } catch (e: Throwable) {
-                e.printStackTrace()
-                logger.warn(e.toString())
+                logger.warn(e) { "$runCount: Exception testing ${question.fullPath}" }
                 call.respond(HttpStatusCode.BadRequest)
             }
         }
