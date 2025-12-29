@@ -1,5 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jmailen.gradle.kotlinter.tasks.FormatTask
+import org.jmailen.gradle.kotlinter.tasks.LintTask
 
 plugins {
     kotlin("jvm") version "2.3.0" apply false
@@ -10,7 +12,7 @@ plugins {
 }
 allprojects {
     group = "org.cs124.questioner"
-    version = "2025.12.0"
+    version = "2025.12.1"
 }
 subprojects {
     tasks.withType<KotlinCompile> {
@@ -39,6 +41,9 @@ subprojects {
             "--add-exports", "jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
             "--add-exports", "java.management/sun.management=ALL-UNNAMED"
         )
+    }
+    tasks.withType<LintTask> {
+        dependsOn(tasks.withType<FormatTask>())
     }
 }
 allprojects {

@@ -3,12 +3,14 @@ package edu.illinois.cs.cs125.questioner.server
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
 import com.github.benmanes.caffeine.cache.stats.CacheStats
+import com.mongodb.client.MongoCollection
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.Sorts
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.serialization.json
 import edu.illinois.cs.cs125.questioner.lib.server.Submission
 import kotlinx.serialization.Serializable
+import org.bson.BsonDocument
 
 @Serializable
 data class CacheStats(val hits: Long, val misses: Long) {
@@ -20,7 +22,10 @@ internal val questionCache: Cache<String, Question?> =
 
 internal fun getStats() = CacheStats(questionCache.stats())
 
-internal fun getQuestionByPath(path: String): Question? = questionerCollection.find(
+internal fun getQuestionByPath(
+    path: String,
+    collection: MongoCollection<BsonDocument> = questionerCollection,
+): Question? = collection.find(
     Filters.and(Filters.eq("published.path", path), Filters.eq("latest", true)),
 ).sort(Sorts.descending("updated")).let { results ->
     if (results.count() == 0) {

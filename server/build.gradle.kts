@@ -21,13 +21,14 @@ dependencies {
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-    implementation("org.mongodb:mongodb-driver:3.12.14")
+    implementation("org.mongodb:mongodb-driver-sync:5.6.2")
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.3")
 
     testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     testImplementation("com.google.truth:truth:1.4.5")
+    testImplementation("org.testcontainers:testcontainers-mongodb:2.0.3")
 }
 tasks.shadowJar {
     manifest {

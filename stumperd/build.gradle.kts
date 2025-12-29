@@ -20,7 +20,7 @@ dependencies {
 
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-    implementation("org.mongodb:mongodb-driver:3.12.14")
+    implementation("org.mongodb:mongodb-driver-sync:5.6.2")
 }
 tasks.withType<Test> {
     enableAssertions = true

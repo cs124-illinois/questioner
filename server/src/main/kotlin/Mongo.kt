@@ -1,8 +1,8 @@
 package edu.illinois.cs.cs125.questioner.server
 
-import com.mongodb.MongoClient
-import com.mongodb.MongoClientOptions
-import com.mongodb.MongoClientURI
+import com.mongodb.ConnectionString
+import com.mongodb.MongoClientSettings
+import com.mongodb.client.MongoClients
 import com.mongodb.client.MongoCollection
 import org.bson.BsonDocument
 import java.security.SecureRandom
@@ -22,7 +22,24 @@ private val sslContext = SSLContext.getInstance("SSL").apply {
     )
 }
 
-internal val questionerCollection: MongoCollection<BsonDocument> = run {
+internal fun createMongoCollection(
+    connectionString: String,
+    collectionName: String,
+    sslContext: SSLContext? = null,
+): MongoCollection<BsonDocument> {
+    val connString = ConnectionString(connectionString)
+    val settingsBuilder = MongoClientSettings.builder()
+        .applyConnectionString(connString)
+    if (sslContext != null) {
+        settingsBuilder.applyToSslSettings { it.context(sslContext) }
+    }
+    val database = connString.database ?: error("Connection string must specify database")
+    return MongoClients.create(settingsBuilder.build())
+        .getDatabase(database)
+        .getCollection(collectionName, BsonDocument::class.java)
+}
+
+internal val questionerCollection: MongoCollection<BsonDocument> by lazy {
     require(System.getenv("MONGODB") != null) { "MONGODB environment variable not set" }
     val keystore = System.getenv("KEYSTORE_FILE")
     if (keystore != null) {
@@ -30,8 +47,6 @@ internal val questionerCollection: MongoCollection<BsonDocument> = run {
         System.setProperty("javax.net.ssl.trustStore", keystore)
         System.setProperty("javax.net.ssl.trustStorePassword", System.getenv("KEYSTORE_PASSWORD"))
     }
-    val collection = System.getenv("MONGODB_COLLECTION") ?: error("Must set MONGODB_COLLECTION")
-    val mongoUri = MongoClientURI(System.getenv("MONGODB")!!, MongoClientOptions.builder().sslContext(sslContext))
-    val database = mongoUri.database ?: error("MONGODB must specify database to use")
-    MongoClient(mongoUri).getDatabase(database).getCollection(collection, BsonDocument::class.java)
+    val collectionName = System.getenv("MONGODB_COLLECTION") ?: error("Must set MONGODB_COLLECTION")
+    createMongoCollection(System.getenv("MONGODB")!!, collectionName, sslContext)
 }

@@ -16,7 +16,6 @@ dependencies {
     implementation("org.apache.commons:commons-text:1.15.0")
     implementation("io.github.java-diff-utils:java-diff-utils:4.16")
     implementation("org.ow2.asm:asm:9.9.1")
-    implementation("org.mongodb:mongodb-driver:3.12.14")
     implementation("org.jetbrains.kotlin:kotlin-reflect:2.3.0")
     implementation("org.jetbrains.kotlin:kotlin-metadata-jvm:2.3.0")
 
