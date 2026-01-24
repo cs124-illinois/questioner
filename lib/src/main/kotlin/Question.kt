@@ -300,9 +300,7 @@ data class Question(
         // Temporary: allocation records for debugging memory discrepancies
         val solutionAllocations: Map<Language, List<AllocationRecord>>? = null,
         // Temporary: memory breakdown for debugging memory discrepancies
-        val solutionMemoryBreakdown: Map<Language, TestResults.MemoryBreakdown>? = null,
-        // Temporary: calibration settings for debugging memory discrepancies
-        val calibrationSettings: TestingSettings? = null
+        val solutionMemoryBreakdown: Map<Language, TestResults.MemoryBreakdown>? = null
     )
 
     @Serializable
@@ -546,73 +544,6 @@ $contents
         }
     }
 
-    // Counter for generating unique fresh solution classloaders
-    private var freshSolutionCounter = 0
-
-    /**
-     * Creates a fresh solution classloader that bypasses the cached version.
-     * This is useful for calibration to measure pre-JIT memory usage.
-     */
-    fun freshJavaSolutionForTesting(): TestTestingSource {
-        val uniqueId = freshSolutionCounter++
-        val contents = """${question.contents}
-// Fresh Java solution for testing #$uniqueId
-"""
-        return Source(mapOf("${question.klass}.java" to contents)).let { questionSource ->
-            if (compiledCommon == null) {
-                questionSource.compile(
-                    CompilationArguments(isolatedClassLoader = true, parameters = true)
-                )
-            } else {
-                questionSource.compile(
-                    CompilationArguments(
-                        parentClassLoader = compiledCommon!!.classLoader,
-                        parentFileManager = compiledCommon!!.fileManager,
-                        parameters = true,
-                    )
-                )
-            }
-        }.let { compiledSource ->
-            val (newClassLoader, newFileManager) = fixTestingMethods(compiledSource, Language.java)
-            TestTestingSource(question.contents, newClassLoader, newFileManager)
-        }
-    }
-
-    /**
-     * Creates a fresh Kotlin solution classloader that bypasses the cached version.
-     */
-    fun freshKotlinSolutionForTesting(): TestTestingSource? {
-        if (solutionByLanguage[Language.kotlin] == null) {
-            return null
-        }
-        val uniqueId = freshSolutionCounter++
-        val contents = """${templateSubmission(solutionByLanguage[Language.kotlin]!!.contents, Language.kotlin).contents}
-// Fresh Kotlin solution for testing #$uniqueId
-"""
-        return Source(mapOf("${question.klass}.kt" to contents)).let { questionSource ->
-            if (compiledCommon == null) {
-                questionSource.kompile(
-                    KompilationArguments(isolatedClassLoader = true, parameters = true)
-                )
-            } else {
-                questionSource.kompile(
-                    KompilationArguments(
-                        parentClassLoader = compiledCommon!!.classLoader,
-                        parentFileManager = compiledCommon!!.fileManager,
-                        parameters = true,
-                    )
-                )
-            }
-        }.let { compiledSource ->
-            val (newClassLoader, newFileManager) = fixTestingMethods(compiledSource, Language.kotlin)
-            TestTestingSource(
-                templateSubmission(solutionByLanguage[Language.kotlin]!!.contents, Language.kotlin).contents,
-                newClassLoader,
-                newFileManager
-            )
-        }
-    }
-
     val compilationDefinedClass by lazy {
         compiledSolution.classLoader.definedClasses.topLevelClasses().let {
             require(it.size == 1)
@@ -626,33 +557,6 @@ $contents
 
     val solution by lazy {
         jenisol(compiledSolution.classLoader.loadClass(published.klass))
-    }
-
-    /**
-     * Creates a fresh solution object from a fresh classloader.
-     * This bypasses JIT compilation to measure pre-JIT memory usage.
-     */
-    fun freshSolution(): edu.illinois.cs.cs125.jenisol.core.Solution {
-        val uniqueId = freshSolutionCounter++
-        val contents = """${question.contents}
-// Fresh solution for calibration #$uniqueId
-"""
-        val freshCompiled = Source(mapOf("${question.klass}.java" to contents)).let { questionSource ->
-            if (compiledCommon == null) {
-                questionSource.compile(
-                    CompilationArguments(isolatedClassLoader = true, parameters = true)
-                )
-            } else {
-                questionSource.compile(
-                    CompilationArguments(
-                        parentClassLoader = compiledCommon!!.classLoader,
-                        parentFileManager = compiledCommon!!.fileManager,
-                        parameters = true,
-                    )
-                )
-            }
-        }
-        return jenisol(freshCompiled.classLoader.loadClass(published.klass))
     }
 
     val featureChecker by lazy {

@@ -208,10 +208,6 @@ object ResourceMonitoring : SandboxPlugin<ResourceMonitoringArguments, ResourceM
     @JvmStatic
     private fun checkArrayAllocation(bytes: Long): Boolean {
         val data = threadData.get()
-
-        // Record all allocations for debugging (adds ~500 bytes overhead per tracked allocation)
-        data.individualAllocations.add(AllocationRecord(bytes, ""))
-
         if (bytes < MAX_ALWAYS_PERMITTED_ALLOCATION) return true // Allow error message construction
         if (data.arguments.individualAllocationLimit != null && bytes > data.arguments.individualAllocationLimit) return false
         if (data.arguments.allocatedMemoryLimit == null) return true
@@ -219,19 +215,8 @@ object ResourceMonitoring : SandboxPlugin<ResourceMonitoringArguments, ResourceM
         return data.checkpointAllocatedMemory + data.allocatedMemory + bytes < data.arguments.allocatedMemoryLimit
     }
 
-    // Debug: track thread IDs during warmup
-    @Volatile private var sandboxThreadId: Long = -1
-    @Volatile private var warmupThreadMismatchCount: Int = 0
-
-    fun getSandboxThreadId() = sandboxThreadId
-    fun getWarmupThreadMismatchCount() = warmupThreadMismatchCount
-
     @JvmStatic
     private fun beforeWarmup() {
-        val currentThreadId = Thread.currentThread().id
-        if (sandboxThreadId != -1L && currentThreadId != sandboxThreadId) {
-            warmupThreadMismatchCount++
-        }
         val data = threadData.get()
         data.preWarmupAllocatedMemory = mxBean.currentThreadAllocatedBytes
     }
@@ -244,12 +229,6 @@ object ResourceMonitoring : SandboxPlugin<ResourceMonitoringArguments, ResourceM
         data.checkpointWarmupMemory += warmupAllocatedBytes
         data.preWarmupAllocatedMemory = 0
         data.warmups++
-    }
-
-    // Call this when sandbox starts to record the sandbox thread
-    fun markSandboxThread() {
-        sandboxThreadId = Thread.currentThread().id
-        warmupThreadMismatchCount = 0
     }
 
     object TracingSink {

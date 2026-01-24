@@ -96,9 +96,7 @@ data class TestResults(
         var recursion: RecursionComparison? = null,
         var executionCount: ResourceUsageComparison? = null,
         var memoryAllocation: ResourceUsageComparison? = null,
-        // Temporary: individual allocation records for debugging memory discrepancies
-        var submissionAllocationRecords: List<AllocationRecord>? = null,
-        // Temporary: memory component breakdown for debugging
+        // Memory component breakdown for diagnostics
         var memoryBreakdown: MemoryBreakdown? = null,
         var testing: TestingResult? = null,
         var coverage: CoverageComparison? = null,
@@ -207,7 +205,7 @@ data class TestResults(
         }
     }
 
-    // Temporary: breakdown of memory components for debugging
+    // Memory component breakdown for diagnostics
     @Serializable
     data class MemoryBreakdown(
         val heapAllocatedMemory: Long,

@@ -10,5 +10,4 @@ val json = Json {
     ignoreUnknownKeys = true
     encodeDefaults = true
     explicitNulls = false
-    prettyPrint = true
 }

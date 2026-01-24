@@ -39,7 +39,6 @@ suspend fun Question.test(
     language: Language,
     settings: Question.TestingSettings = testingSettings!!,
     isSolution: Boolean = false,
-    useFreshSolution: Boolean = false,
 ): TestResults {
     try {
         testingLimiter.acquire()
@@ -246,8 +245,7 @@ suspend fun Question.test(
                 }
             }
             try {
-                val solutionToUse = if (useFreshSolution) freshSolution() else solution
-                solutionToUse.submission(classLoader.loadClass(klassName))
+                solution.submission(classLoader.loadClass(klassName))
                     .test(
                         jenisolSettings,
                         captureOutputControlInput,
@@ -426,9 +424,7 @@ suspend fun Question.test(
             ((solutionAllocation.toDouble() * control.allocationFailureMultiplier!!)).toLong()
                 .coerceAtLeast(MIN_ALLOCATION_FAILURE_BYTES)
         )
-        // Temporary: include individual allocation records for debugging
-        results.complete.submissionAllocationRecords = resourceUsage.individualAllocations
-        // Temporary: include memory component breakdown for debugging
+        // Memory component breakdown for diagnostics
         results.complete.memoryBreakdown = TestResults.MemoryBreakdown(
             heapAllocatedMemory = resourceUsage.heapAllocatedMemory,
             maxCallStackSize = resourceUsage.maxCallStackSize,
