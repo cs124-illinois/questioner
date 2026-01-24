@@ -144,14 +144,15 @@ object ResourceMonitoring : SandboxPlugin<ResourceMonitoringArguments, ResourceM
 
     override fun createFinalData(workingData: Any?): ResourceMonitoringResults {
         workingData as ResourceMonitoringWorkingData
-        workingData.checkpoint()
+        val checkpoint = workingData.checkpoint()
         return ResourceMonitoringResults(
             arguments = workingData.arguments,
             submissionLines = workingData.checkpointSubmissionLines,
             totalLines = workingData.checkpointSubmissionLines + workingData.checkpointLibraryLines,
             allocatedMemory = workingData.checkpointAllocatedMemory,
             allAllocatedMemory = workingData.checkpointAllocatedMemory + workingData.checkpointWarmupMemory,
-            invokedRecursiveFunctions = workingData.checkpointRecursiveFunctions.map { it.toResult() }.toSet()
+            invokedRecursiveFunctions = workingData.checkpointRecursiveFunctions.map { it.toResult() }.toSet(),
+            individualAllocations = checkpoint.individualAllocations
         )
     }
 
@@ -202,18 +203,12 @@ object ResourceMonitoring : SandboxPlugin<ResourceMonitoringArguments, ResourceM
 
     @JvmStatic
     private fun checkArrayAllocation(bytes: Long): Boolean {
-        if (bytes < MAX_ALWAYS_PERMITTED_ALLOCATION) return true // Allow error message construction
         val data = threadData.get()
 
-        // Record allocation with caller class for debugging
-        val callerClass = stackWalker.walk { frames ->
-            frames.map { it.className }
-                .filter { !it.startsWith("java.lang.") && it != ResourceMonitoring::class.java.name }
-                .findFirst()
-                .orElse("unknown")
-        }
-        data.individualAllocations.add(AllocationRecord(bytes, callerClass))
+        // Record all allocations for debugging (adds ~500 bytes overhead per tracked allocation)
+        data.individualAllocations.add(AllocationRecord(bytes, ""))
 
+        if (bytes < MAX_ALWAYS_PERMITTED_ALLOCATION) return true // Allow error message construction
         if (data.arguments.individualAllocationLimit != null && bytes > data.arguments.individualAllocationLimit) return false
         if (data.arguments.allocatedMemoryLimit == null) return true
         updateExternalMeasurements(data)
@@ -394,7 +389,9 @@ data class ResourceMonitoringResults(
     val totalLines: Long,
     val allocatedMemory: Long,
     val allAllocatedMemory: Long, // Includes warmups
-    val invokedRecursiveFunctions: Set<MethodInfo>
+    val invokedRecursiveFunctions: Set<MethodInfo>,
+    // Temporary: individual allocation records for debugging memory discrepancies
+    val individualAllocations: List<AllocationRecord> = emptyList()
 ) {
     @Serializable
     data class MethodInfo(val className: String, val methodName: String, val descriptor: String)
@@ -402,4 +399,5 @@ data class ResourceMonitoringResults(
 
 class AllocationLimitExceeded(limit: Long) : OutOfMemoryError("allocated too much memory: more than $limit bytes")
 
+@Serializable
 data class AllocationRecord(val bytes: Long, val callerClass: String)

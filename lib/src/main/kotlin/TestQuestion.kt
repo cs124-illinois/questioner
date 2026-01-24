@@ -424,6 +424,8 @@ suspend fun Question.test(
             ((solutionAllocation.toDouble() * control.allocationFailureMultiplier!!)).toLong()
                 .coerceAtLeast(MIN_ALLOCATION_FAILURE_BYTES)
         )
+        // Temporary: include individual allocation records for debugging
+        results.complete.submissionAllocationRecords = resourceUsage.individualAllocations
         results.completedSteps.add(TestResults.Step.memoryAllocation)
 
         // coverage

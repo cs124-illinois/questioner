@@ -587,6 +587,17 @@ suspend fun Question.validate(
         countMap.ifEmpty { null }
     }
 
+    // Temporary: extract allocation records from calibration results for debugging
+    val solutionAllocations = calibrationResults.associate { correctResults ->
+        val tests = correctResults.results.tests()
+        logger.debug { "Calibration ${correctResults.results.language}: tests=${tests?.size}, resourceUsages=${tests?.map { it.submissionResourceUsage?.individualAllocations?.size }}" }
+        val allocations = tests
+            ?.flatMap { it.submissionResourceUsage?.individualAllocations ?: emptyList() }
+            ?: emptyList()
+        correctResults.results.language to allocations
+    }
+    logger.debug { "solutionAllocations: $solutionAllocations" }
+
     validationResults = Question.ValidationResults(
         seed = seed,
         requiredTestCount = requiredTestCount,
@@ -601,7 +612,8 @@ suspend fun Question.validate(
         memoryAllocation = solutionAllocation,
         outputAmount = solutionOutputAmount,
         canTestTest = canTestTest,
-        testTestingIncorrectCount = testTestingIncorrectCount
+        testTestingIncorrectCount = testTestingIncorrectCount,
+        solutionAllocations = solutionAllocations
     )
 
     classification.recursiveMethodsByLanguage = solutionRecursiveMethods!!

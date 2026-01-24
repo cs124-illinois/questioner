@@ -96,6 +96,8 @@ data class TestResults(
         var recursion: RecursionComparison? = null,
         var executionCount: ResourceUsageComparison? = null,
         var memoryAllocation: ResourceUsageComparison? = null,
+        // Temporary: individual allocation records for debugging memory discrepancies
+        var submissionAllocationRecords: List<AllocationRecord>? = null,
         var testing: TestingResult? = null,
         var coverage: CoverageComparison? = null,
         var extraOutput: OutputComparison? = null
