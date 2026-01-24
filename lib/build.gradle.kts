@@ -11,7 +11,7 @@ plugins {
     id("com.ryandens.javaagent-test") version "0.10.0"
 }
 dependencies {
-    testJavaagent("com.beyondgrader.resource-agent:agent:2024.7.0")
+    testJavaagent("com.beyondgrader.resource-agent:agent:2026.1.0")
 
     implementation("org.apache.commons:commons-text:1.15.0")
     implementation("io.github.java-diff-utils:java-diff-utils:4.16")
@@ -20,8 +20,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-metadata-jvm:2.3.0")
 
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
-    api("com.beyondgrader.resource-agent:agent:2024.7.0")
-    api("com.beyondgrader.resource-agent:virtualfsplugin:2024.7.0") {
+    api("com.beyondgrader.resource-agent:agent:2026.1.0")
+    api("com.beyondgrader.resource-agent:virtualfsplugin:2026.1.0") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
     api("org.cs124.jeed:core:2026.1.2")

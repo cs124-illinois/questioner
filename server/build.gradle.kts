@@ -12,7 +12,7 @@ plugins {
 dependencies {
     val ktorVersion = "3.3.3"
 
-    testJavaagent("com.beyondgrader.resource-agent:agent:2024.7.0")
+    testJavaagent("com.beyondgrader.resource-agent:agent:2026.1.0")
 
     implementation(project(":lib"))
 
