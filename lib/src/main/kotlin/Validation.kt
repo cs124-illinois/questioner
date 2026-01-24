@@ -617,7 +617,7 @@ suspend fun Question.validate(
         calibrationLength = calibrationLength,
         solutionCoverage = solutionCoverage,
         executionCounts = solutionExecutionCounts,
-        memoryAllocation = bootstrapSolutionAllocation,
+        memoryAllocation = solutionAllocation,
         outputAmount = solutionOutputAmount,
         canTestTest = canTestTest,
         testTestingIncorrectCount = testTestingIncorrectCount,
