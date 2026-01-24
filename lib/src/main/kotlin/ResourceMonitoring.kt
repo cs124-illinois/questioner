@@ -190,7 +190,8 @@ object ResourceMonitoring : SandboxPlugin<ResourceMonitoringArguments, ResourceM
                 maxCallStackSize = 0,
                 allocatedMemory = 0,
                 invokedRecursiveFunctions = setOf(),
-                warmups = 0
+                warmups = 0,
+                individualAllocations = data.individualAllocations.toList()
             )
         }
         updateExternalMeasurements(data)
@@ -203,6 +204,16 @@ object ResourceMonitoring : SandboxPlugin<ResourceMonitoringArguments, ResourceM
     private fun checkArrayAllocation(bytes: Long): Boolean {
         if (bytes < MAX_ALWAYS_PERMITTED_ALLOCATION) return true // Allow error message construction
         val data = threadData.get()
+
+        // Record allocation with caller class for debugging
+        val callerClass = stackWalker.walk { frames ->
+            frames.map { it.className }
+                .filter { !it.startsWith("java.lang.") && it != ResourceMonitoring::class.java.name }
+                .findFirst()
+                .orElse("unknown")
+        }
+        data.individualAllocations.add(AllocationRecord(bytes, callerClass))
+
         if (data.arguments.individualAllocationLimit != null && bytes > data.arguments.individualAllocationLimit) return false
         if (data.arguments.allocatedMemoryLimit == null) return true
         updateExternalMeasurements(data)
@@ -337,7 +348,8 @@ private class ResourceMonitoringWorkingData(
     var maxCallStackSize: Long = 0,
     var warmups: Int = 0,
     val checkpointRecursiveFunctions: MutableSet<ResourceMonitoringInstrumentationData.MethodInfo> = mutableSetOf(),
-    val recursiveFunctions: MutableSet<ResourceMonitoringInstrumentationData.MethodInfo> = mutableSetOf()
+    val recursiveFunctions: MutableSet<ResourceMonitoringInstrumentationData.MethodInfo> = mutableSetOf(),
+    val individualAllocations: MutableList<AllocationRecord> = mutableListOf()
 ) {
     fun checkpoint(): ResourceMonitoringCheckpoint {
         val result = ResourceMonitoringCheckpoint(
@@ -346,7 +358,8 @@ private class ResourceMonitoringWorkingData(
             maxCallStackSize = maxCallStackSize,
             allocatedMemory = allocatedMemory + maxCallStackSize,
             invokedRecursiveFunctions = recursiveFunctions.map { it.toResult() }.toSet(),
-            warmups = warmups
+            warmups = warmups,
+            individualAllocations = individualAllocations.toList()
         )
         checkpointSubmissionLines += submissionLines
         checkpointLibraryLines += libraryLines
@@ -360,6 +373,7 @@ private class ResourceMonitoringWorkingData(
         callStackSize = 0
         maxCallStackSize = 0
         warmups = 0
+        individualAllocations.clear()
         return result
     }
 }
@@ -370,7 +384,8 @@ data class ResourceMonitoringCheckpoint(
     val maxCallStackSize: Long,
     val allocatedMemory: Long,
     val invokedRecursiveFunctions: Set<ResourceMonitoringResults.MethodInfo>,
-    val warmups: Int
+    val warmups: Int,
+    val individualAllocations: List<AllocationRecord> = emptyList()
 )
 
 data class ResourceMonitoringResults(
@@ -386,3 +401,5 @@ data class ResourceMonitoringResults(
 }
 
 class AllocationLimitExceeded(limit: Long) : OutOfMemoryError("allocated too much memory: more than $limit bytes")
+
+data class AllocationRecord(val bytes: Long, val callerClass: String)
