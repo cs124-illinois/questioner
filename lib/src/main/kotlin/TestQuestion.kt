@@ -426,6 +426,13 @@ suspend fun Question.test(
         )
         // Temporary: include individual allocation records for debugging
         results.complete.submissionAllocationRecords = resourceUsage.individualAllocations
+        // Temporary: include memory component breakdown for debugging
+        results.complete.memoryBreakdown = TestResults.MemoryBreakdown(
+            heapAllocatedMemory = resourceUsage.heapAllocatedMemory,
+            maxCallStackSize = resourceUsage.maxCallStackSize,
+            warmupMemory = resourceUsage.warmupMemory,
+            warmupCount = resourceUsage.warmupCount
+        )
         results.completedSteps.add(TestResults.Step.memoryAllocation)
 
         // coverage

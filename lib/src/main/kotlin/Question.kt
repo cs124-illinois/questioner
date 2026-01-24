@@ -298,7 +298,9 @@ data class Question(
         val canTestTest: Boolean = false,
         val testTestingIncorrectCount: Map<Language, Int>? = null,
         // Temporary: allocation records for debugging memory discrepancies
-        val solutionAllocations: Map<Language, List<AllocationRecord>>? = null
+        val solutionAllocations: Map<Language, List<AllocationRecord>>? = null,
+        // Temporary: memory breakdown for debugging memory discrepancies
+        val solutionMemoryBreakdown: Map<Language, TestResults.MemoryBreakdown>? = null
     )
 
     @Serializable

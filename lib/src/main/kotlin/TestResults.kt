@@ -98,6 +98,8 @@ data class TestResults(
         var memoryAllocation: ResourceUsageComparison? = null,
         // Temporary: individual allocation records for debugging memory discrepancies
         var submissionAllocationRecords: List<AllocationRecord>? = null,
+        // Temporary: memory component breakdown for debugging
+        var memoryBreakdown: MemoryBreakdown? = null,
         var testing: TestingResult? = null,
         var coverage: CoverageComparison? = null,
         var extraOutput: OutputComparison? = null
@@ -204,6 +206,17 @@ data class TestResults(
             require(limit >= 0) { "Invalid resource limit: $limit" }
         }
     }
+
+    // Temporary: breakdown of memory components for debugging
+    @Serializable
+    data class MemoryBreakdown(
+        val heapAllocatedMemory: Long,
+        val maxCallStackSize: Long,
+        val warmupMemory: Long,
+        val warmupCount: Int,
+        val totalWithStack: Long = heapAllocatedMemory + maxCallStackSize,
+        val totalWithWarmup: Long = heapAllocatedMemory + maxCallStackSize + warmupMemory
+    )
 
     @Serializable
     data class FeaturesComparison(

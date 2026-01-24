@@ -715,11 +715,7 @@ fun bindJeedCaptureOutputControlInput(
             try {
                 run()
             } finally {
-                resourceUsage = ResourceMonitoring.finishSubmissionCall().also { usage ->
-                    if (usage.individualAllocations.isNotEmpty()) {
-                        logger.debug { "Allocations (${usage.allocatedMemory} bytes): ${usage.individualAllocations}" }
-                    }
-                }
+                resourceUsage = ResourceMonitoring.finishSubmissionCall()
             }
         }
         return CapturedResult(

@@ -144,7 +144,7 @@ object ResourceMonitoring : SandboxPlugin<ResourceMonitoringArguments, ResourceM
 
     override fun createFinalData(workingData: Any?): ResourceMonitoringResults {
         workingData as ResourceMonitoringWorkingData
-        val checkpoint = workingData.checkpoint()
+        workingData.checkpoint()
         return ResourceMonitoringResults(
             arguments = workingData.arguments,
             submissionLines = workingData.checkpointSubmissionLines,
@@ -152,7 +152,11 @@ object ResourceMonitoring : SandboxPlugin<ResourceMonitoringArguments, ResourceM
             allocatedMemory = workingData.checkpointAllocatedMemory,
             allAllocatedMemory = workingData.checkpointAllocatedMemory + workingData.checkpointWarmupMemory,
             invokedRecursiveFunctions = workingData.checkpointRecursiveFunctions.map { it.toResult() }.toSet(),
-            individualAllocations = checkpoint.individualAllocations
+            individualAllocations = workingData.checkpointIndividualAllocations.toList(),
+            heapAllocatedMemory = workingData.checkpointHeapAllocatedMemory,
+            maxCallStackSize = workingData.checkpointMaxCallStackSize,
+            warmupMemory = workingData.checkpointWarmupMemory,
+            warmupCount = workingData.checkpointWarmupCount
         )
     }
 
@@ -344,7 +348,13 @@ private class ResourceMonitoringWorkingData(
     var warmups: Int = 0,
     val checkpointRecursiveFunctions: MutableSet<ResourceMonitoringInstrumentationData.MethodInfo> = mutableSetOf(),
     val recursiveFunctions: MutableSet<ResourceMonitoringInstrumentationData.MethodInfo> = mutableSetOf(),
-    val individualAllocations: MutableList<AllocationRecord> = mutableListOf()
+    val individualAllocations: MutableList<AllocationRecord> = mutableListOf(),
+    val checkpointIndividualAllocations: MutableList<AllocationRecord> = mutableListOf(),
+    var allocationCallbackCount: Int = 0,
+    // Temporary: separate component tracking for debugging
+    var checkpointHeapAllocatedMemory: Long = 0,
+    var checkpointMaxCallStackSize: Long = 0,
+    var checkpointWarmupCount: Int = 0
 ) {
     fun checkpoint(): ResourceMonitoringCheckpoint {
         val result = ResourceMonitoringCheckpoint(
@@ -360,6 +370,11 @@ private class ResourceMonitoringWorkingData(
         checkpointLibraryLines += libraryLines
         checkpointAllocatedMemory += allocatedMemory
         checkpointRecursiveFunctions.addAll(recursiveFunctions)
+        checkpointIndividualAllocations.addAll(individualAllocations)
+        // Temporary: accumulate separate components for debugging
+        checkpointHeapAllocatedMemory += allocatedMemory
+        checkpointMaxCallStackSize += maxCallStackSize
+        checkpointWarmupCount += warmups
         submissionLines = 0
         libraryLines = 0
         allocatedMemory = 0
@@ -391,7 +406,12 @@ data class ResourceMonitoringResults(
     val allAllocatedMemory: Long, // Includes warmups
     val invokedRecursiveFunctions: Set<MethodInfo>,
     // Temporary: individual allocation records for debugging memory discrepancies
-    val individualAllocations: List<AllocationRecord> = emptyList()
+    val individualAllocations: List<AllocationRecord> = emptyList(),
+    // Temporary: separate components for debugging memory discrepancies
+    val heapAllocatedMemory: Long = 0, // Raw heap allocation without stack
+    val maxCallStackSize: Long = 0,
+    val warmupMemory: Long = 0,
+    val warmupCount: Int = 0
 ) {
     @Serializable
     data class MethodInfo(val className: String, val methodName: String, val descriptor: String)

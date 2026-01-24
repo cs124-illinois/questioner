@@ -439,6 +439,44 @@ class TestResourceMonitoring : StringSpec({
         result.stdout shouldBe "2"
         recursiveMethods shouldHaveSize 0
     }
+
+    "should show memory allocation pattern over iterations" {
+        val allocations = mutableListOf<Long>()
+        val warmups = mutableListOf<Int>()
+
+        val result = runJava("""
+            public static void test(int value) {
+                if (value > 0) {
+                    System.out.println("positive");
+                } else {
+                    System.out.println("non-positive");
+                }
+            }
+        """.trimIndent(), ResourceMonitoringArguments()) { m ->
+            repeat(100) { i ->
+                ResourceMonitoring.beginSubmissionCall()
+                m(null, i % 2)
+                val checkpoint = ResourceMonitoring.finishSubmissionCall()
+                allocations.add(checkpoint.allocatedMemory)
+                warmups.add(checkpoint.warmups)
+            }
+        }
+
+        result.timeout shouldBe false
+        result.completed shouldBe true
+
+        println("=== Memory Allocation Pattern ===")
+        allocations.forEachIndexed { i, alloc ->
+            println("Iteration $i: allocatedMemory=$alloc, warmups=${warmups[i]}")
+        }
+
+        println("\n=== Summary ===")
+        println("First 5: ${allocations.take(5)}")
+        println("Last 5: ${allocations.takeLast(5)}")
+        println("Min: ${allocations.minOrNull()}")
+        println("Max: ${allocations.maxOrNull()}")
+        println("Average: ${allocations.average()}")
+    }
 })
 
 private suspend fun runJava(

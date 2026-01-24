@@ -473,6 +473,8 @@ suspend fun Question.validate(
             (testCount * control.maxExecutionCountMultiplier!!).toLong() * 1024,
             (testCount * control.maxExecutionCountMultiplier!!).toLong() * 1024
         ),
+        // Set a large allocation limit to trigger the same code paths as server testing
+        allocationLimit = Question.LanguagesResourceUsage.both(Long.MAX_VALUE / 2),
         solutionRecursiveMethods = solutionRecursiveMethods,
         solutionDeadCode = solutionDeadCode,
         solutionClassSize = bootstrapClassSize,
@@ -598,6 +600,12 @@ suspend fun Question.validate(
     }
     logger.debug { "solutionAllocations: $solutionAllocations" }
 
+    // Temporary: extract memory breakdown from calibration results for debugging
+    val solutionMemoryBreakdown = calibrationResults.associate { correctResults ->
+        correctResults.results.language to correctResults.results.complete.memoryBreakdown
+    }.filterValues { it != null }.mapValues { it.value!! }
+    logger.debug { "solutionMemoryBreakdown: $solutionMemoryBreakdown" }
+
     validationResults = Question.ValidationResults(
         seed = seed,
         requiredTestCount = requiredTestCount,
@@ -609,11 +617,12 @@ suspend fun Question.validate(
         calibrationLength = calibrationLength,
         solutionCoverage = solutionCoverage,
         executionCounts = solutionExecutionCounts,
-        memoryAllocation = solutionAllocation,
+        memoryAllocation = bootstrapSolutionAllocation,
         outputAmount = solutionOutputAmount,
         canTestTest = canTestTest,
         testTestingIncorrectCount = testTestingIncorrectCount,
-        solutionAllocations = solutionAllocations
+        solutionAllocations = solutionAllocations,
+        solutionMemoryBreakdown = solutionMemoryBreakdown.ifEmpty { null }
     )
 
     classification.recursiveMethodsByLanguage = solutionRecursiveMethods!!

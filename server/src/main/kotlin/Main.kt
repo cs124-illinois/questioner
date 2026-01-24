@@ -144,6 +144,8 @@ fun Application.questioner(
             try {
                 val startMemory = freeMemoryMB()
                 val response = submission.test(question)
+                // Temporary: debug allocation records
+                logger.warn { "submissionAllocationRecords: ${response.solveResults?.complete?.submissionAllocationRecords}" }
                 call.respond(response)
                 val endMemory = freeMemoryMB()
                 logger.trace(
