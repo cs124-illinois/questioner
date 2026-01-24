@@ -53,13 +53,20 @@ class TestQuestionerPlugin : StringSpec({
             .withProjectDir(fixturesDir)
             .withArguments(
                 "--init-script", initScript.absolutePath,
-                "collectQuestions",
+                "clean", "collectQuestions",
                 "--stacktrace"
             )
             .forwardOutput()
             .build()
 
         result.task(":collectQuestions")?.outcome shouldBe TaskOutcome.SUCCESS
-        File(fixturesDir, "build/questioner/questions.json").exists() shouldBe true
+
+        val questionsJson = File(fixturesDir, "build/questioner/questions.json")
+        questionsJson.exists() shouldBe true
+
+        // Copy to lib test resources
+        val destination = File("../lib/src/test/resources/questions.json")
+        questionsJson.copyTo(destination, overwrite = true)
+        destination.exists() shouldBe true
     }
 })
