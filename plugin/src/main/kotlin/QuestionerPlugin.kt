@@ -109,7 +109,8 @@ class QuestionerPlugin : Plugin<Project> {
                 "-ea", "--enable-preview", "-Dfile.encoding=UTF-8", "-Djava.security.manager=allow",
                 "-XX:+UseZGC", "-XX:+ZGenerational", "-XX:-OmitStackTraceInFastThrow",
                 "-XX:+UnlockExperimentalVMOptions", "-XX:-VMContinuations",
-                "-Xmx512M", // TEMPORARY: reduced to match server heap size for debugging
+                "-XX:-TieredCompilation", "-XX:CompileThreshold=100000", // Disable JIT during validation
+                "-Xmx512M",
                 "--add-opens", "java.base/java.lang=ALL-UNNAMED",
                 "--add-opens", "java.base/java.util=ALL-UNNAMED",
                 "--add-exports", "jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",

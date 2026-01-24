@@ -1,10 +1,87 @@
 package edu.illinois.cs.cs125.questioner.lib
 
+import edu.illinois.cs.cs125.questioner.lib.serialization.json
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
+// Direct loader like server's Loader - no validation, no warm()
+object DirectLoader {
+    val questions =
+        json.decodeFromString<List<Question>>(object {}::class.java.getResource("/questions.json")!!.readText())
+            .associateBy { question -> question.published.path }
+
+    fun getByPath(path: String) = questions[path]
+}
+
 class TestSimpleIfElse : StringSpec({
+    "should test with DirectLoader (like server) to compare" {
+        // Force deserialization by loading fresh
+        val freshQuestions = json.decodeFromString<List<Question>>(
+            object {}::class.java.getResource("/questions.json")!!.readText()
+        ).associateBy { it.published.path }
+
+        val question = freshQuestions["simple-if-else"]
+            ?: error("simple-if-else question should exist")
+
+        val validationResults = question.validationResults!!
+        val validationMemory = validationResults.memoryAllocation.java
+        val correctSolution = question.getCorrect(Language.java)!!
+
+        println("=== Lib Test with fresh deserialization (NO validate) ===")
+        println("Validation memoryAllocation (Java): $validationMemory")
+        println()
+
+        // Run test multiple times WITHOUT calling validate()
+        println("Running question.test() multiple times (no validate):")
+        for (i in 1..5) {
+            val results = question.test(correctSolution, Language.java)
+            val memory = results.complete.memoryAllocation?.submission ?: -1
+            println("  Run $i: heapAllocatedMemory=${results.complete.memoryBreakdown?.heapAllocatedMemory}, submission=$memory")
+        }
+    }
+
+    "should check if validate() changes the stored memoryAllocation" {
+        // Force deserialization by loading fresh
+        val freshQuestions = json.decodeFromString<List<Question>>(
+            object {}::class.java.getResource("/questions.json")!!.readText()
+        ).associateBy { it.published.path }
+
+        val question = freshQuestions["simple-if-else"]
+            ?: error("simple-if-else question should exist")
+
+        println("=== Checking if validate() updates memoryAllocation ===")
+        println("From JSON - memoryAllocation.java: ${question.validationResults!!.memoryAllocation.java}")
+
+        // Call validate() - this should re-calculate memoryAllocation
+        question.warm()
+        question.validate(124, 64)
+
+        println("After validate() - memoryAllocation.java: ${question.validationResults!!.memoryAllocation.java}")
+        println()
+        println("If these differ, validate() is updating the baseline to match current JVM measurements")
+    }
+
+    "should test using Validator questions map directly" {
+        // Use the SAME question object that Validator uses (already deserialized at class load time)
+        val (question, _) = Validator.validate("Simple If Else")
+
+        val validationMemory = question.validationResults!!.memoryAllocation.java
+        val correctSolution = question.getCorrect(Language.java)!!
+
+        println("=== Lib Test with Validator's pre-loaded question ===")
+        println("Validation memoryAllocation (Java): $validationMemory")
+        println()
+
+        // Run test multiple times
+        println("Running question.test() multiple times:")
+        for (i in 1..5) {
+            val results = question.test(correctSolution, Language.java)
+            val memory = results.complete.memoryAllocation?.submission ?: -1
+            println("  Run $i: heapAllocatedMemory=${results.complete.memoryBreakdown?.heapAllocatedMemory}, submission=$memory")
+        }
+    }
+
     "should load and print memory stats for Simple If Else" {
         val (question, report) = Validator.validate("Simple If Else")
 

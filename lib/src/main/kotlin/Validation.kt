@@ -622,7 +622,8 @@ suspend fun Question.validate(
         canTestTest = canTestTest,
         testTestingIncorrectCount = testTestingIncorrectCount,
         solutionAllocations = solutionAllocations,
-        solutionMemoryBreakdown = solutionMemoryBreakdown.ifEmpty { null }
+        solutionMemoryBreakdown = solutionMemoryBreakdown.ifEmpty { null },
+        calibrationSettings = calibrationSettings
     )
 
     classification.recursiveMethodsByLanguage = solutionRecursiveMethods!!

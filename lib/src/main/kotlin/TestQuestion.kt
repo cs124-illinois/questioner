@@ -39,6 +39,7 @@ suspend fun Question.test(
     language: Language,
     settings: Question.TestingSettings = testingSettings!!,
     isSolution: Boolean = false,
+    useFreshSolution: Boolean = false,
 ): TestResults {
     try {
         testingLimiter.acquire()
@@ -245,7 +246,8 @@ suspend fun Question.test(
                 }
             }
             try {
-                solution.submission(classLoader.loadClass(klassName))
+                val solutionToUse = if (useFreshSolution) freshSolution() else solution
+                solutionToUse.submission(classLoader.loadClass(klassName))
                     .test(
                         jenisolSettings,
                         captureOutputControlInput,
