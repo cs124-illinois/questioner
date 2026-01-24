@@ -53,13 +53,13 @@ class TestQuestionerPlugin : StringSpec({
             .withProjectDir(fixturesDir)
             .withArguments(
                 "--init-script", initScript.absolutePath,
-                "clean", "collectQuestions",
+                "clean", "testAllQuestions",
                 "--stacktrace"
             )
             .forwardOutput()
             .build()
 
-        result.task(":collectQuestions")?.outcome shouldBe TaskOutcome.SUCCESS
+        result.task(":testAllQuestions")?.outcome shouldBe TaskOutcome.SUCCESS
 
         val questionsJson = File(fixturesDir, "build/questioner/questions.json")
         questionsJson.exists() shouldBe true
