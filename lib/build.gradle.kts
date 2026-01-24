@@ -9,6 +9,7 @@ plugins {
     `maven-publish`
     signing
     id("com.ryandens.javaagent-test") version "0.10.0"
+    id("com.autonomousapps.testkit")
 }
 dependencies {
     testJavaagent("com.beyondgrader.resource-agent:agent:2026.1.1")

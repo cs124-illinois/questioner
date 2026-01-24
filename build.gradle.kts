@@ -9,6 +9,7 @@ plugins {
     id("org.jmailen.kotlinter") version "5.3.0" apply false
     id("com.github.ben-manes.versions") version "0.53.0"
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
+    id("com.autonomousapps.testkit") version "0.17" apply false
 }
 allprojects {
     group = "org.cs124.questioner"

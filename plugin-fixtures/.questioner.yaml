@@ -1,0 +1,4 @@
+endpoints:
+  - name: local
+    token: j8Y0mMaKcOkNlywlHOZkBa4XJ8w
+    url: http://localhost:8893/update/questions

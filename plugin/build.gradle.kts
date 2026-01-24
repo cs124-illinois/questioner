@@ -11,6 +11,7 @@ plugins {
     `maven-publish`
     signing
     id("org.jmailen.kotlinter")
+    id("com.autonomousapps.testkit")
 }
 dependencies {
     antlr("org.antlr:antlr4:4.13.2")
@@ -35,6 +36,11 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
     testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
+    testImplementation(gradleTestKit())
+    testImplementation("com.autonomousapps:gradle-testkit-support:0.17")
+
+    "functionalTestImplementation"("io.kotest:kotest-runner-junit5:5.9.1")
+    "functionalTestImplementation"(project(":lib"))
 }
 tasks.compileKotlin {
     dependsOn(tasks.generateGrammarSource)

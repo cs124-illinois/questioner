@@ -1,5 +1,5 @@
 !gradle-wrapper.jar
-/.gradle
+**/.gradle
 /out/
 build/
 /test-output/
@@ -16,3 +16,7 @@ build/
 gen/
 /dumps
 .kotlin
+
+# Generated question artifacts
+**/.question.json
+**/report.html
