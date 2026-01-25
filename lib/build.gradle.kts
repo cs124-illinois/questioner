@@ -31,6 +31,8 @@ dependencies {
     api("com.fasterxml.jackson.core:jackson-databind:2.21.0")
 
     api("io.kotest:kotest-runner-junit5:5.9.1")
+    api("org.junit.jupiter:junit-jupiter-api:5.11.4")
+    api("org.junit.platform:junit-platform-engine:1.11.4")
     api("com.google.truth:truth:1.4.5")
 
     api("io.github.cdimascio:dotenv-kotlin:6.5.1")

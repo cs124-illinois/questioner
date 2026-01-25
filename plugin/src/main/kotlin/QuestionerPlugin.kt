@@ -23,19 +23,11 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jmailen.gradle.kotlinter.KotlinterPlugin
 import java.net.URI
-import java.util.Locale
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class QuestionerConfig(val endpoints: List<EndPoint> = listOf()) {
     data class EndPoint(val name: String, val token: String, val url: String, val label: String? = null)
 }
-
-private val testFiles = listOf(
-    "TestValidateQuestions.kt",
-    "TestCalibrateQuestions.kt",
-    "TestValidateFocusedQuestions.kt",
-    "TestCalibrateFocusedQuestions.kt",
-)
 
 // Additional JVM args to disable JIT for consistent memory measurements (calibration phase)
 private val noJitJvmArgs = listOf(
@@ -51,7 +43,6 @@ class QuestionerPlugin : Plugin<Project> {
             toolchain.apply {
                 languageVersion.set(JavaLanguageVersion.of(21))
             }
-            sourceSets.getByName("test").java.srcDirs(layout.buildDirectory.dir("questioner").get().asFile)
         }
 
         pluginManager.apply("org.jetbrains.kotlin.jvm")
@@ -71,7 +62,7 @@ class QuestionerPlugin : Plugin<Project> {
         pluginManager.apply(KotlinterPlugin::class.java)
     }
 
-    private fun Project.finalizeConfiguration() {
+    private fun Project.finalizeConfiguration(config: QuestionerConfigExtension) {
         project.configurations.getByName("implementation").dependencies.find { dependency ->
             (dependency.group == "org.cs124" && dependency.name == "questioner") || (dependency.group == "org.cs124.questioner")
         }?.let {
@@ -82,10 +73,7 @@ class QuestionerPlugin : Plugin<Project> {
         tasks.withType(SourceTask::class.java) { sourceTask ->
             // Note: .question.json no longer written to source tree (now in build/questioner/questions/)
             sourceTask.exclude("**/report.html")
-            sourceTask.exclude("questions.json", "packageMap.json", *testFiles.toTypedArray())
-        }
-        tasks.withType(Test::class.java).forEach { testTask ->
-            testTask.dependsOn("generateQuestionTests")
+            sourceTask.exclude("questions.json", "packageMap.json")
         }
 
         tasks.withType(KotlinCompile::class.java) { kompileTask ->
@@ -132,19 +120,24 @@ class QuestionerPlugin : Plugin<Project> {
             "-javaagent:$agentJarPath",
         )
 
+        // Common configuration for all test tasks
         tasks.withType(Test::class.java) { testTask ->
             testTask.useJUnitPlatform()
             testTask.enableAssertions = true
-            testTask.environment["JEED_USE_CACHE"] = true
-            testTask.environment["JEED_USE_DISK_CACHE"] = true
-            testTask.environment["JEED_DISK_CACHE_DIR"] = project.layout.buildDirectory.dir("jeed").get().asFile.absolutePath
-
             testTask.jvmArgs(commonJvmArgs)
-            testTask.outputs.upToDateWhen { false }
-            testTask.dependsOn("reconfigureForTesting")
-            testTask.finalizedBy("recollectQuestions")
             testTask.logging.captureStandardError(LogLevel.DEBUG)
         }
+
+        // Initialize the validation server manager with config values
+        ValidationServerManager.initialize(
+            project = project,
+            commonJvmArgs = commonJvmArgs,
+            noJitJvmArgs = noJitJvmArgs,
+            rootDir = project.rootProject.projectDir.absolutePath,
+            maxMutationCount = config.maxMutationCount,
+            retries = config.retries,
+            verbose = config.verbose,
+        )
 
         configurations.getByName("checkstyle").apply {
             resolutionStrategy.capabilitiesResolution.withCapability("com.google.collections:google-collections") {
@@ -220,69 +213,53 @@ class QuestionerPlugin : Plugin<Project> {
             recollectQuestions.dependsOn("saveQuestions")
         }
 
-        val officialTestTask = project.tasks.getByName("test") as Test
-        officialTestTask.setTestNameIncludePatterns(listOf("TestValidateQuestions"))
-
-        // Phase 1: Validate (bootstrap, mutation, incorrect testing) - with JIT for speed
-        project.tasks.register("validateQuestions", Test::class.java) { testTask ->
-            testTask.testClassesDirs = officialTestTask.testClassesDirs
-            testTask.classpath = officialTestTask.classpath
-            testTask.setTestNameIncludePatterns(listOf("TestValidateQuestions"))
-            testTask.description = "Phase 1: Run bootstrap, mutation, and incorrect testing (with JIT)"
+        // Aggregate validation tasks that depend on all subproject validation tasks
+        project.tasks.register("validateQuestions") { task ->
+            task.group = "questioner"
+            task.description = "Phase 1: Run bootstrap, mutation, and incorrect testing (with JIT)"
+            task.dependsOn("saveQuestions")
+            task.finalizedBy("recollectQuestions")
+            project.subprojects { subproject ->
+                if (subproject.name.startsWith("question-")) {
+                    task.dependsOn(subproject.tasks.named("validateQuestion"))
+                }
+            }
         }
 
-        // Phase 2: Calibrate - without JIT for consistent memory measurements
-        project.tasks.register("calibrateQuestions", Test::class.java) { testTask ->
-            testTask.testClassesDirs = officialTestTask.testClassesDirs
-            testTask.classpath = officialTestTask.classpath
-            testTask.setTestNameIncludePatterns(listOf("TestCalibrateQuestions"))
-            testTask.jvmArgs(noJitJvmArgs) // Add no-JIT flags for consistent memory measurements
-            testTask.mustRunAfter("validateQuestions") // Calibration must run after validation
-            testTask.description = "Phase 2: Run calibration (without JIT for consistent memory)"
+        project.tasks.register("calibrateQuestions") { task ->
+            task.group = "questioner"
+            task.description = "Phase 2: Run calibration (without JIT for consistent memory)"
+            task.mustRunAfter("validateQuestions")
+            task.finalizedBy("recollectQuestions")
+            project.subprojects { subproject ->
+                if (subproject.name.startsWith("question-")) {
+                    task.dependsOn(subproject.tasks.named("calibrateQuestion"))
+                }
+            }
         }
 
-        // Focused question validation tasks
-        project.tasks.register("validateFocusedQuestions", Test::class.java) { testTask ->
-            testTask.testClassesDirs = officialTestTask.testClassesDirs
-            testTask.classpath = officialTestTask.classpath
-            testTask.setTestNameIncludePatterns(listOf("TestValidateFocusedQuestions"))
-            testTask.description = "Phase 1 for focused questions only (with JIT)"
-        }
-
-        project.tasks.register("calibrateFocusedQuestions", Test::class.java) { testTask ->
-            testTask.testClassesDirs = officialTestTask.testClassesDirs
-            testTask.classpath = officialTestTask.classpath
-            testTask.setTestNameIncludePatterns(listOf("TestCalibrateFocusedQuestions"))
-            testTask.jvmArgs(noJitJvmArgs) // Add no-JIT flags for consistent memory measurements
-            testTask.mustRunAfter("validateFocusedQuestions")
-            testTask.description = "Phase 2 for focused questions only (without JIT)"
-        }
-
-        // Two-phase validation tasks - run validation then calibration in separate JVMs
-        // This ensures calibration always runs without JIT for consistent memory measurements
         project.tasks.register("testAllQuestions") { task ->
+            task.group = "questioner"
             task.dependsOn("validateQuestions", "calibrateQuestions")
             task.description = "Run full validation: phase 1 (with JIT) then phase 2 calibration (without JIT)"
         }
 
         project.tasks.register("testUnvalidatedQuestions") { task ->
+            task.group = "questioner"
             task.dependsOn("validateQuestions", "calibrateQuestions")
             task.description = "Run validation for unvalidated questions (two-phase)"
         }
 
+        // TODO: Add focused question filtering via metadata check
         project.tasks.register("testFocusedQuestions") { task ->
-            task.dependsOn("validateFocusedQuestions", "calibrateFocusedQuestions")
+            task.group = "questioner"
+            task.dependsOn("validateQuestions", "calibrateQuestions")
             task.description = "Run validation for focused questions only (two-phase)"
         }
 
         project.tasks.register("collectQuestions", CollectQuestions::class.java) { collectQuestions ->
             collectQuestions.dependsOn("saveQuestions")
             collectQuestions.outputs.upToDateWhen { false }
-        }
-
-        project.tasks.register("generateQuestionTests", GenerateQuestionTests::class.java) { generateQuestionTests ->
-            generateQuestionTests.dependsOn("collectQuestions")
-            project.tasks.getByName("compileTestKotlin").dependsOn(generateQuestionTests)
         }
 
         val uploadConfiguration = project.file(".questioner.yaml").let { questionerConfigFile ->
@@ -346,14 +323,7 @@ class QuestionerPlugin : Plugin<Project> {
             }.get()
 
         project.afterEvaluate {
-            project.finalizeConfiguration()
-
-            project.tasks.withType(GenerateQuestionTests::class.java) { generateQuestionTests ->
-                generateQuestionTests.maxMutationCount = config.maxMutationCount
-                generateQuestionTests.retries = config.retries
-                generateQuestionTests.verbose = config.verbose
-                generateQuestionTests.shuffleTests = config.shuffleTests
-            }
+            project.finalizeConfiguration(config)
 
             publishingTasks.forEach { task ->
                 task.publishIncludes = config.publishIncludes
@@ -367,12 +337,5 @@ class QuestionerPlugin : Plugin<Project> {
             printSlowQuestions.ignorePackages = config.ignorePackages
             showUpdatedSeeds.ignorePackages = config.ignorePackages
         }
-    }
-}
-
-private fun String.capitalized() = replaceFirstChar { firstChar ->
-    when {
-        firstChar.isLowerCase() -> firstChar.titlecase(Locale.getDefault())
-        else -> firstChar.toString()
     }
 }

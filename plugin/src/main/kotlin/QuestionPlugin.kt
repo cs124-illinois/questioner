@@ -65,6 +65,65 @@ class QuestionPlugin : Plugin<Project> {
             // Depend on package map being built
             task.dependsOn(":buildPackageMap")
         }
+
+        // Get the question hash and output file path for validation tasks
+        val hash = project.name.removePrefix("question-")
+        val questionFile = project.rootProject.layout.buildDirectory
+            .file("questioner/questions/$hash.question.json").get().asFile
+
+        // Phase 1: Validate this question
+        project.tasks.register("validateQuestion", ValidateQuestionTask::class.java) { task ->
+            task.group = "questioner"
+            task.description = "Validate this question (phase 1)"
+            task.questionFilePath.set(questionFile.absolutePath)
+            task.mode.set("validate")
+            task.dependsOn(project.tasks.named("saveQuestion"))
+        }
+
+        // Phase 2: Calibrate this question
+        project.tasks.register("calibrateQuestion", ValidateQuestionTask::class.java) { task ->
+            task.group = "questioner"
+            task.description = "Calibrate this question (phase 2, no JIT)"
+            task.questionFilePath.set(questionFile.absolutePath)
+            task.mode.set("calibrate")
+            task.mustRunAfter(project.tasks.named("validateQuestion"))
+            task.dependsOn(project.tasks.named("saveQuestion"))
+        }
+
+        // Combined task to run both phases
+        project.tasks.register("testQuestion") { task ->
+            task.group = "questioner"
+            task.description = "Run full validation for this question (both phases)"
+            task.dependsOn("validateQuestion", "calibrateQuestion")
+        }
+    }
+}
+
+/**
+ * Task that sends a validation request to the ValidationServer.
+ */
+abstract class ValidateQuestionTask : DefaultTask() {
+    @get:Input
+    abstract val questionFilePath: Property<String>
+
+    @get:Input
+    abstract val mode: Property<String>
+
+    @TaskAction
+    fun validate() {
+        val serverManager = ValidationServerManager.getInstance(project.rootProject)
+            ?: throw RuntimeException("ValidationServerManager not initialized. Run from root project.")
+
+        val port = when (mode.get()) {
+            "validate" -> serverManager.getValidatePort()
+            "calibrate" -> serverManager.getCalibratePort()
+            else -> throw IllegalArgumentException("Unknown mode: ${mode.get()}")
+        }
+
+        val result = ValidationClient.sendRequest(port, questionFilePath.get())
+        result.onFailure { e ->
+            throw RuntimeException("${mode.get()} failed for ${questionFilePath.get()}: ${e.message}", e)
+        }
     }
 }
 
