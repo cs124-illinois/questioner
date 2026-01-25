@@ -31,17 +31,14 @@ data class QuestionerConfig(val endpoints: List<EndPoint> = listOf()) {
 }
 
 private val testFiles = listOf(
-    "TestAllQuestions.kt",
-    "TestUnvalidatedQuestions.kt",
-    "TestFocusedQuestions.kt",
     "TestValidateQuestions.kt",
-    "TestCalibrateQuestions.kt"
+    "TestCalibrateQuestions.kt",
 )
 
 // Additional JVM args to disable JIT for consistent memory measurements (calibration phase)
 private val noJitJvmArgs = listOf(
     "-XX:-TieredCompilation",
-    "-XX:CompileThreshold=100000"
+    "-XX:CompileThreshold=100000",
 )
 
 @Suppress("unused")
@@ -202,15 +199,6 @@ class QuestionerPlugin : Plugin<Project> {
         val officialTestTask = project.tasks.getByName("test") as Test
         officialTestTask.setTestNameIncludePatterns(listOf("TestUnvalidatedQuestions"))
 
-        // Combined validation tasks (use JIT for backward compatibility with single-phase validation)
-        listOf("testAllQuestions", "testUnvalidatedQuestions", "testFocusedQuestions").map { testName ->
-            project.tasks.register(testName, Test::class.java) { testTask ->
-                testTask.testClassesDirs = officialTestTask.testClassesDirs
-                testTask.classpath = officialTestTask.classpath
-                testTask.setTestNameIncludePatterns(listOf(testName.capitalized()))
-            }
-        }
-
         // Phase 1: Validate (bootstrap, mutation, incorrect testing) - with JIT for speed
         project.tasks.register("validateQuestions", Test::class.java) { testTask ->
             testTask.testClassesDirs = officialTestTask.testClassesDirs
@@ -229,10 +217,21 @@ class QuestionerPlugin : Plugin<Project> {
             testTask.description = "Phase 2: Run calibration (without JIT for consistent memory)"
         }
 
-        // Two-phase validation: runs validateQuestions then calibrateQuestions
-        project.tasks.register("validateAndCalibrateQuestions") { task ->
+        // Two-phase validation tasks - these run validateQuestions then calibrateQuestions in separate JVMs
+        // This ensures calibration always runs without JIT for consistent memory measurements
+        project.tasks.register("testAllQuestions") { task ->
             task.dependsOn("validateQuestions", "calibrateQuestions")
-            task.description = "Run two-phase validation: phase 1 (with JIT) then phase 2 (without JIT)"
+            task.description = "Run full validation: phase 1 (with JIT) then phase 2 calibration (without JIT)"
+        }
+
+        project.tasks.register("testUnvalidatedQuestions") { task ->
+            task.dependsOn("validateQuestions", "calibrateQuestions")
+            task.description = "Run validation for unvalidated questions only (two-phase)"
+        }
+
+        project.tasks.register("testFocusedQuestions") { task ->
+            task.dependsOn("validateQuestions", "calibrateQuestions")
+            task.description = "Run validation for focused questions only (two-phase)"
         }
 
         project.tasks.register("collectQuestions", CollectQuestions::class.java) { collectQuestions ->

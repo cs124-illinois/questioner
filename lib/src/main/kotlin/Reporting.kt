@@ -420,6 +420,52 @@ fun ValidationFailed.report(question: Question): String {
            """.trimMargin()
         }
 
+        is SolutionTestingThrew -> {
+            """
+               |<h2>Solution Testing Threw Exception</h2>
+               |<p>Testing the solution threw an unexpected exception: <code>${StringEscapeUtils.escapeHtml4(threw.toString())}</code></p>
+               |<pre><code class="${
+                if (solution.language == Language.java) {
+                    "java"
+                } else {
+                    "kotlin"
+                }
+            }"> ${StringEscapeUtils.escapeHtml4(solution.contents)}</code></pre>
+               |<pre>${StringEscapeUtils.escapeHtml4(threw.stackTraceToString())}</pre>
+               |${if (output.isNotEmpty()) "<h3>Output</h3><pre>${StringEscapeUtils.escapeHtml4(output)}</pre>" else ""}
+           """.trimMargin()
+        }
+
+        is IncorrectTestingThrew -> {
+            """
+               |<h2>Incorrect Testing Threw Exception</h2>
+               |<p>Testing incorrect code threw an unexpected exception: <code>${StringEscapeUtils.escapeHtml4(threw.toString())}</code></p>
+               |<pre><code class="${
+                if (incorrect.language == Language.java) {
+                    "java"
+                } else {
+                    "kotlin"
+                }
+            }"> ${StringEscapeUtils.escapeHtml4(incorrect.contents)}</code></pre>
+               |<pre>${StringEscapeUtils.escapeHtml4(threw.stackTraceToString())}</pre>
+               |${if (output.isNotEmpty()) "<h3>Output</h3><pre>${StringEscapeUtils.escapeHtml4(output)}</pre>" else ""}
+           """.trimMargin()
+        }
+
+        is IncorrectFailedLinting -> {
+            """
+               |<h2>Incorrect Code Failed Linting</h2>
+               |<p>Incorrect code failed linting with this message: $errors</p>
+               |<pre><code class="${
+                if (incorrect.language == Language.java) {
+                    "java"
+                } else {
+                    "kotlin"
+                }
+            }"> ${StringEscapeUtils.escapeHtml4(incorrect.contents)}</code></pre>
+           """.trimMargin()
+        }
+
         else -> error("Invalid error: $this")
     } + testingSequence
     return wrapDocument(question, body)

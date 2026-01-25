@@ -179,7 +179,7 @@ private fun TestResults.badTimeout() = timeout && !lineCountTimeout &&
 
 // Phase 1: Bootstrap, mutation, and incorrect testing (fast, with JIT)
 @Suppress("LongMethod", "ComplexMethod")
-suspend fun Question.validatePhase1(
+suspend fun Question.validate(
     seed: Int,
     maxMutationCount: Int,
     retry: Int = 0,
@@ -506,6 +506,9 @@ suspend fun Question.calibrate(): CalibrationReport {
     // Rerun solutions to set timeouts and output limits
     // sets solution runtime, output lines, executed lines, and allocation
     val calibrationStart = Instant.now()
+    // Use a high timeout multiplier for calibration since it may run without JIT
+    // (no-JIT execution is 10-50x slower than JIT-optimized code)
+    val calibrationTimeoutMultiplier = 50.0
     val calibrationSettings = Question.TestingSettings(
         seed = phase1.seed,
         testCount = phase1.testCount,
@@ -525,6 +528,7 @@ suspend fun Question.calibrate(): CalibrationReport {
         solutionClassSize = phase1.bootstrapClassSize,
         suppressions = javaSolution.suppressions,
         kotlinSuppressions = kotlinSolution?.suppressions,
+        timeoutMultiplier = calibrationTimeoutMultiplier,
     )
     val calibrationResults = allSolutions.map { right ->
         val results = calibrationLimiter.withPermit {
@@ -698,32 +702,6 @@ suspend fun Question.calibrate(): CalibrationReport {
         solutionMaxRuntime,
         hasKotlin,
         solutionTestingSequence
-    )
-}
-
-// Combined validation for backward compatibility
-@Suppress("LongMethod", "ComplexMethod")
-suspend fun Question.validate(
-    seed: Int,
-    maxMutationCount: Int,
-    retry: Int = 0,
-    verbose: Boolean = false
-): ValidationReport {
-    // Run phase 1
-    validatePhase1(seed, maxMutationCount, retry, verbose)
-
-    // Run phase 2 (calibration)
-    val calibrationReport = calibrate()
-
-    // Return combined report
-    return ValidationReport(
-        this,
-        calibrationReport.correct,
-        emptyList(), // Incorrect results are not available in combined mode
-        calibrationReport.requiredTestCount,
-        calibrationReport.requiredTime,
-        calibrationReport.hasKotlin,
-        calibrationReport.solutionTestingSequence
     )
 }
 

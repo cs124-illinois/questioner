@@ -35,7 +35,7 @@ const val KOTLIN_EMPTY_SUITE = """fun test() {
 
 class TestTestTesting : StringSpec({
     "should test test suites for classes" {
-        val (question) = Validator.validate("Add One Class").also { (question, report) ->
+        val (question) = Validator.validateAndCalibrate("Add One Class").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
@@ -122,7 +122,7 @@ fun test() {
         }
     }
     "should timeout test test suites for classes" {
-        val (question) = Validator.validate("Add One Class").also { (question, report) ->
+        val (question) = Validator.validateAndCalibrate("Add One Class").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
@@ -161,7 +161,7 @@ public class TestQuestion {
         lineCountTime shouldBeLessThan questionerTestTestTimeoutMS * questionerWallClockTimeoutMultiplier
     }
     "should fail fields" {
-        val (question) = Validator.validate("Add One Class").also { (question, report) ->
+        val (question) = Validator.validateAndCalibrate("Add One Class").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
@@ -178,7 +178,7 @@ public class TestQuestion {
         }
     }
     "should collect output" {
-        val (question) = Validator.validate("Add One Class").also { (question, report) ->
+        val (question) = Validator.validateAndCalibrate("Add One Class").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
@@ -206,7 +206,7 @@ public class TestQuestion {
         }
     }
     "should test test suites for methods" {
-        val (question) = Validator.validate("Add One").also { (question, report) ->
+        val (question) = Validator.validateAndCalibrate("Add One").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
@@ -246,7 +246,7 @@ public class TestQuestion {
         }
     }
     "should test test suites for methods that use template imports" {
-        val (question) = Validator.validate("With Template Imports").also { (question, report) ->
+        val (question) = Validator.validateAndCalibrate("With Template Imports").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
@@ -267,7 +267,7 @@ public class TestQuestion {
         }
     }
     "should test test suites for methods that use null assert" {
-        val (question) = Validator.validate("With null assert").also { (question, report) ->
+        val (question) = Validator.validateAndCalibrate("With null assert").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
@@ -321,7 +321,7 @@ public class TestQuestion {
         }
     }
     "original incorrect examples should recover and fail" {
-        val (question) = Validator.validate("Add One Class").also { (question, report) ->
+        val (question) = Validator.validateAndCalibrate("Add One Class").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
@@ -354,7 +354,7 @@ public class TestQuestion {
         }
     }
     "should defeat alternate testing implementations" {
-        val (question) = Validator.validate("Add One Class").also { (question, report) ->
+        val (question) = Validator.validateAndCalibrate("Add One Class").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }
@@ -363,7 +363,7 @@ public class TestQuestion {
         }
     }
     "should handle Kotlin null properly" {
-        val (question) = Validator.validate("Pure null check").also { (question, report) ->
+        val (question) = Validator.validateAndCalibrate("Pure null check").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
         }

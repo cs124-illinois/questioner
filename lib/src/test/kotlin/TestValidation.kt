@@ -7,28 +7,28 @@ import io.kotest.matchers.shouldNotBe
 
 class TestValidation : StringSpec({
     "it should validate a question" {
-        Validator.validate("Equals 88").also { (question, report) ->
+        Validator.validateAndCalibrate("Equals 88").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
             report!!.requiredTestCount shouldBeGreaterThan 0
         }
     }
     "it should validate a class question" {
-        Validator.validate("Add One").also { (question, report) ->
+        Validator.validateAndCalibrate("Add One").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
             report!!.requiredTestCount shouldBeGreaterThan 0
         }
     }
     "it should validate a recursive question" {
-        Validator.validate("Recursive Factorial").also { (question, report) ->
+        Validator.validateAndCalibrate("Recursive Factorial").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
             report!!.requiredTestCount shouldBeGreaterThan 0
         }
     }
     "recursion with private helper should work" {
-        val (question, _) = Validator.validate("Private Recursive Helper")
+        val (question, _) = Validator.validateAndCalibrate("Private Recursive Helper")
             .also { (question, report) ->
                 question.validated shouldBe true
                 report shouldNotBe null
@@ -41,7 +41,7 @@ class TestValidation : StringSpec({
         }
     }
     "equals with both and filter should work" {
-        Validator.validate("Cougar Feliform")
+        Validator.validateAndCalibrate("Cougar Feliform")
             .also { (question, report) ->
                 question.validated shouldBe true
                 report shouldNotBe null
@@ -49,7 +49,7 @@ class TestValidation : StringSpec({
             }
     }
     "stdin interleaving should work" {
-        Validator.validate("Input Interleaving Test")
+        Validator.validateAndCalibrate("Input Interleaving Test")
             .also { (question, report) ->
                 question.validated shouldBe true
                 report shouldNotBe null
@@ -57,7 +57,7 @@ class TestValidation : StringSpec({
             }
     }
     "filesystem access should work" {
-        Validator.validate("Read Hello World!")
+        Validator.validateAndCalibrate("Read Hello World!")
             .also { (question, report) ->
                 question.validated shouldBe true
                 report shouldNotBe null
@@ -65,7 +65,7 @@ class TestValidation : StringSpec({
             }
     }
     "constructor @NotNull should work" {
-        Validator.validate("Test Constructor NotNull")
+        Validator.validateAndCalibrate("Test Constructor NotNull")
             .also { (question, report) ->
                 question.validated shouldBe true
                 report shouldNotBe null
@@ -73,7 +73,7 @@ class TestValidation : StringSpec({
             }
     }
     "empty constructor should work" {
-        Validator.validate("Test Empty Constructor")
+        Validator.validateAndCalibrate("Test Empty Constructor")
             .also { (question, report) ->
                 question.validated shouldBe true
                 report shouldNotBe null
@@ -81,7 +81,7 @@ class TestValidation : StringSpec({
             }
     }
     "feature checks should work" {
-        Validator.validate("With Feature Check")
+        Validator.validateAndCalibrate("With Feature Check")
             .also { (question, report) ->
                 question.validated shouldBe true
                 report shouldNotBe null
@@ -89,7 +89,7 @@ class TestValidation : StringSpec({
             }
     }
     "getters and setters should work" {
-        Validator.validate("Classroom Getters and Setters")
+        Validator.validateAndCalibrate("Classroom Getters and Setters")
             .also { (question, report) ->
                 question.validated shouldBe true
                 report shouldNotBe null
@@ -97,7 +97,7 @@ class TestValidation : StringSpec({
             }
     }
     "template imports should work" {
-        Validator.validate("With Template Imports")
+        Validator.validateAndCalibrate("With Template Imports")
             .also { (question, report) ->
                 question.validated shouldBe true
                 report shouldNotBe null
@@ -105,7 +105,7 @@ class TestValidation : StringSpec({
             }
     }
     "it should validate a question testing Kotlin faux properties" {
-        Validator.validate("Kotlin Faux Property Testing").also { (question, report) ->
+        Validator.validateAndCalibrate("Kotlin Faux Property Testing").also { (question, report) ->
             question.validated shouldBe true
             report shouldNotBe null
             report!!.requiredTestCount shouldBeGreaterThan 0

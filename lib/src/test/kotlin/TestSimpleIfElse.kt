@@ -6,7 +6,7 @@ import io.kotest.matchers.shouldNotBe
 
 class TestSimpleIfElse : StringSpec({
     "should validate Simple If Else" {
-        val (question, report) = Validator.validate("Simple If Else")
+        val (question, report) = Validator.validateAndCalibrate("Simple If Else")
 
         question.validated shouldBe true
         report shouldNotBe null
@@ -16,7 +16,7 @@ class TestSimpleIfElse : StringSpec({
     }
 
     "should test correct solution" {
-        val (question, _) = Validator.validate("Simple If Else")
+        val (question, _) = Validator.validateAndCalibrate("Simple If Else")
         question.validated shouldBe true
 
         val correctSolution = question.getCorrect(Language.java)!!

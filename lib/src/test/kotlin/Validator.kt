@@ -7,9 +7,12 @@ object Validator {
         json.decodeFromString<List<Question>>(object {}::class.java.getResource("/questions.json")!!.readText())
             .associateBy { question -> question.published.name }
 
-    suspend fun validate(name: String): Pair<Question, ValidationReport?> {
+    // For unit testing: runs both validation and calibration in sequence
+    // Note: This is only for testing - production use should run calibration in a no-JIT JVM
+    suspend fun validateAndCalibrate(name: String): Pair<Question, CalibrationReport?> {
         val question = questions[name] ?: error("no question named $name")
         question.warm()
-        return Pair(question, question.validate(124, 64))
+        question.validate(124, 64, 0, false)
+        return Pair(question, question.calibrate())
     }
 }

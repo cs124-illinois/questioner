@@ -4,7 +4,7 @@ import edu.illinois.cs.cs125.questioner.lib.verifiers.fromBase64
 import java.nio.file.Path
 import kotlin.io.path.deleteIfExists
 
-private inline fun retryOnPhase1(
+private inline fun retryOnValidation(
     retries: Int,
     startSeed: Int,
     method: (retries: Int, currentSeed: Int) -> Unit
@@ -27,33 +27,11 @@ private inline fun retryOnPhase1(
     error("Shouldn't get here")
 }
 
-private inline fun retryOn(
-    retries: Int,
-    startSeed: Int,
-    method: (retries: Int, currentSeed: Int) -> ValidationReport
-): Pair<ValidationReport, Int> {
-    var currentSeed = startSeed
-    for (retry in 0..retries) {
-        try {
-            return Pair(method(retry, currentSeed), retry)
-        } catch (e: Exception) {
-            if (e is RetryValidation && retry != retries) {
-                if (!e.timeout) {
-                    currentSeed++
-                }
-                continue
-            }
-            throw e
-        }
-    }
-    error("Shouldn't get here")
-}
-
 data class ValidatorOptions(val maxMutationCount: Int, val retries: Int, val verbose: Boolean, val rootDirectory: String)
 
 // Phase 1: Bootstrap, mutation, and incorrect testing (runs with JIT for speed)
 @Suppress("unused")
-suspend fun String.validatePhase1(options: ValidatorOptions) {
+suspend fun String.validate(options: ValidatorOptions) {
     val (maxMutationCount, retries, verbose, rootDirectory) = options
 
     gradleRootDirectory = rootDirectory.fromBase64()
@@ -64,9 +42,9 @@ suspend fun String.validatePhase1(options: ValidatorOptions) {
     val question = file.loadQuestion()
     check(question != null)
 
-    // Skip if already completed phase 1
+    // Skip if already completed validation (phase 1)
     if (question.phase1Completed) {
-        println("SKIPPED ${question.published.name}: Phase 1 already complete")
+        println("SKIPPED ${question.published.name}: Validation already complete")
         return
     }
 
@@ -79,17 +57,17 @@ suspend fun String.validatePhase1(options: ValidatorOptions) {
     }
 
     val retried = try {
-        retryOnPhase1(retries, startSeed) { retry, seed ->
-            question.validatePhase1(seed, maxMutationCount, retry, verbose)
+        retryOnValidation(retries, startSeed) { retry, seed ->
+            question.validate(seed, maxMutationCount, retry, verbose)
         }
     } catch (wrap: RetryValidation) {
         val e = wrap.cause as ValidationFailed
         reportPath.toFile().writeText(e.report(question))
-        println("FAILED ${question.published.name}: Phase 1 (${e.retries} retries, final requested retry)")
+        println("FAILED ${question.published.name}: Validation (${e.retries} retries, final requested retry)")
         throw e
     } catch (e: ValidationFailed) {
         reportPath.toFile().writeText(e.report(question))
-        println("FAILED ${question.published.name}: Phase 1 (${e.retries} retries)")
+        println("FAILED ${question.published.name}: Validation (${e.retries} retries)")
         throw e
     } catch (e: Exception) {
         reportPath.deleteIfExists()
@@ -98,8 +76,8 @@ suspend fun String.validatePhase1(options: ValidatorOptions) {
         question.writeToFile(file)
     }
 
-    check(question.phase1Completed) { "Question should have phase 1 completed" }
-    println("${question.published.name}: Phase 1 complete ($retried retries)")
+    check(question.phase1Completed) { "Question should have validation complete" }
+    println("${question.published.name}: Validation complete ($retried retries)")
 }
 
 // Phase 2: Calibration only (runs without JIT for consistent memory measurements)
@@ -115,21 +93,26 @@ suspend fun String.calibrate(options: ValidatorOptions) {
     val question = file.loadQuestion()
     check(question != null)
 
-    // Skip if already validated
+    // Skip if already calibrated (fully validated)
     if (question.validated) {
-        println("SKIPPED ${question.published.name}: Already validated")
+        println("SKIPPED ${question.published.name}: Already calibrated")
         return
     }
 
-    // Check phase 1 is complete
+    // Check validation (phase 1) is complete
     if (!question.phase1Completed) {
-        error("Phase 1 must be completed before calibration for ${question.published.name}")
+        error("Validation must be completed before calibration for ${question.published.name}")
     }
 
     val reportPath = Path.of(this).parent.resolve("report.html")
 
     val report = try {
         question.calibrate()
+    } catch (wrap: RetryValidation) {
+        val e = wrap.cause as ValidationFailed
+        reportPath.toFile().writeText(e.report(question))
+        println("FAILED ${question.published.name}: Calibration (${e.retries} retries, retry requested)")
+        throw e
     } catch (e: ValidationFailed) {
         reportPath.toFile().writeText(e.report(question))
         println("FAILED ${question.published.name}: Calibration (${e.retries} retries)")
@@ -141,51 +124,7 @@ suspend fun String.calibrate(options: ValidatorOptions) {
         question.writeToFile(file)
     }
 
-    check(question.validated) { "Question should be validated" }
+    check(question.validated) { "Question should be calibrated" }
     reportPath.toFile().writeText(report.report())
     println("${question.published.name}: ${report.summary}")
-}
-
-// Combined validation (for backward compatibility)
-@Suppress("unused")
-suspend fun String.validate(options: ValidatorOptions) {
-    val (maxMutationCount, retries, verbose, rootDirectory) = options
-
-    gradleRootDirectory = rootDirectory.fromBase64()
-
-    val file = Path.of(this).toFile()
-    check(file.exists())
-
-    val question = file.loadQuestion()
-    check(question != null)
-
-    val reportPath = Path.of(this).parent.resolve("report.html")
-
-    val startSeed = if (question.control.seed!! != -1) {
-        question.control.seed!!
-    } else {
-        Question.TestingControl.DEFAULT_SEED
-    }
-
-    val (report, retried) = try {
-        retryOn(retries, startSeed) { retry, seed -> question.validate(seed, maxMutationCount, retry, verbose) }
-    } catch (wrap: RetryValidation) {
-        val e = wrap.cause as ValidationFailed
-        reportPath.toFile().writeText(e.report(question))
-        println("FAILED ${question.published.name}: (${e.retries} retries, final requested retry)")
-        throw e
-    } catch (e: ValidationFailed) {
-        reportPath.toFile().writeText(e.report(question))
-        println("FAILED ${question.published.name}: (${e.retries} retries)")
-        throw e
-    } catch (e: Exception) {
-        reportPath.deleteIfExists()
-        throw e
-    } finally {
-        question.writeToFile(file)
-    }
-
-    check(question.validated) { "Question should be validated" }
-    reportPath.toFile().writeText(report.report())
-    println("${question.published.name}: ${report.summary} ($retried retries)")
 }

@@ -11,11 +11,10 @@ import kotlin.time.Duration.Companion.seconds
 class TestQuestionerPlugin :
     StringSpec({
 
-        fun createInitScript(repoPath: String): File {
-            return File.createTempFile("init", ".gradle.kts").apply {
-                deleteOnExit()
-                writeText(
-                    """
+        fun createInitScript(repoPath: String): File = File.createTempFile("init", ".gradle.kts").apply {
+            deleteOnExit()
+            writeText(
+                """
                 beforeSettings {
                     pluginManagement {
                         repositories {
@@ -42,9 +41,8 @@ class TestQuestionerPlugin :
                         maven(url = uri("https://maven.codeawakening.com"))
                     }
                 }
-                    """.trimIndent(),
-                )
-            }
+                """.trimIndent(),
+            )
         }
 
         "plugin-fixtures should build successfully with combined validation".config(timeout = 600.seconds) {
@@ -115,5 +113,11 @@ class TestQuestionerPlugin :
 
             val questionsJson = File(fixturesDir, "build/questioner/questions.json")
             questionsJson.exists() shouldBe true
+
+            // Copy to lib test resources - use two-phase validation results since they have
+            // accurate no-JIT calibration measurements
+            val destination = File("../lib/src/test/resources/questions.json")
+            questionsJson.copyTo(destination, overwrite = true)
+            destination.exists() shouldBe true
         }
     })
