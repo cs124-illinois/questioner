@@ -8,6 +8,7 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.github.sherter.googlejavaformatgradleplugin.GoogleJavaFormatExtension
 import com.github.sherter.googlejavaformatgradleplugin.GoogleJavaFormatPlugin
 import edu.illinois.cs.cs125.questioner.lib.VERSION
+import edu.illinois.cs.cs125.questioner.lib.dotenv
 import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin
@@ -98,6 +99,10 @@ class QuestionerPlugin : Plugin<Project> {
                 artifact.moduleVersion.id.group == "com.beyondgrader.resource-agent" &&
                     artifact.moduleVersion.id.name == "agent"
             }!!.file.absolutePath
+
+        // Allow heap size to be configured via environment variable or .env file (default: 1G)
+        val heapSize = dotenv["QUESTIONER_HEAP_SIZE"] ?: "1G"
+
         tasks.withType(Test::class.java) { testTask ->
             testTask.useJUnitPlatform()
             testTask.enableAssertions = true
@@ -110,7 +115,7 @@ class QuestionerPlugin : Plugin<Project> {
                 "-XX:+UseZGC", "-XX:+ZGenerational", "-XX:-OmitStackTraceInFastThrow",
                 "-XX:+UnlockExperimentalVMOptions", "-XX:-VMContinuations",
                 "-XX:-TieredCompilation", "-XX:CompileThreshold=100000", // Disable JIT during validation
-                "-Xmx512M",
+                "-Xmx$heapSize",
                 "--add-opens", "java.base/java.lang=ALL-UNNAMED",
                 "--add-opens", "java.base/java.util=ALL-UNNAMED",
                 "--add-exports", "jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",

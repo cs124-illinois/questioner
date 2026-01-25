@@ -22,14 +22,14 @@ dependencies {
         exclude(module = "kotlin-runtime")
         exclude(module = "kotlin-js")
     }
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.20.1")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.20.1")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.21.0")
     implementation("com.github.slugify:slugify:3.0.7")
 
     implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.3.0")
     implementation("gradle.plugin.com.github.sherter.google-java-format:google-java-format-gradle-plugin:0.9")
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.8")
-    implementation("org.jmailen.gradle:kotlinter-gradle:5.3.0")
+    implementation("org.jmailen.gradle:kotlinter-gradle:5.4.0")
 
     implementation("com.beust:klaxon:5.6")
     implementation("io.github.z4kn4fein:semver:3.0.0")
@@ -37,7 +37,7 @@ dependencies {
 
     testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
     testImplementation(gradleTestKit())
-    testImplementation("com.autonomousapps:gradle-testkit-support:0.17")
+    testImplementation("com.autonomousapps:gradle-testkit-support:0.22")
 
     "functionalTestImplementation"("io.kotest:kotest-runner-junit5:5.9.1")
     "functionalTestImplementation"(project(":lib"))

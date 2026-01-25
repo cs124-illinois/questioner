@@ -20,7 +20,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:2.3.0")
     implementation("org.jetbrains.kotlin:kotlin-metadata-jvm:2.3.0")
 
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
     api("com.beyondgrader.resource-agent:agent:2026.1.1")
     api("com.beyondgrader.resource-agent:virtualfsplugin:2026.1.1") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
@@ -28,7 +28,7 @@ dependencies {
     api("org.cs124.jeed:core:2026.1.2")
     api("org.cs124:jenisol:2026.1.0")
     api("org.cs124:libcs1:2026.1.0")
-    api("com.fasterxml.jackson.core:jackson-databind:2.20.1")
+    api("com.fasterxml.jackson.core:jackson-databind:2.21.0")
 
     api("io.kotest:kotest-runner-junit5:5.9.1")
     api("com.google.truth:truth:1.4.5")
@@ -36,7 +36,7 @@ dependencies {
     api("io.github.cdimascio:dotenv-kotlin:6.5.1")
 
     api("org.slf4j:slf4j-api:2.0.17")
-    api("ch.qos.logback:logback-classic:1.5.24")
+    api("ch.qos.logback:logback-classic:1.5.25")
     api("io.github.microutils:kotlin-logging:3.0.5")
 }
 tasks {

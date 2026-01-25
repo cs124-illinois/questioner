@@ -12,7 +12,7 @@ plugins {
     id("com.ryandens.javaagent-test") version "0.10.0"
 }
 dependencies {
-    val ktorVersion = "3.3.3"
+    val ktorVersion = "3.4.0"
 
     testJavaagent("com.beyondgrader.resource-agent:agent:2026.1.1")
 
