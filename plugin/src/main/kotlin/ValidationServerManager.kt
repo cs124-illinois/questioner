@@ -18,6 +18,7 @@ class ValidationServerManager(
     private val maxMutationCount: Int,
     private val retries: Int,
     private val verbose: Boolean,
+    private val concurrency: Int,
 ) {
     private var validateServerPort: Int? = null
     private var validateServerProcess: Process? = null
@@ -69,6 +70,7 @@ class ValidationServerManager(
                 maxMutationCount.toString(),
                 retries.toString(),
                 verbose.toString(),
+                concurrency.toString(),
             )
 
         project.logger.info("Starting $mode server: ${command.joinToString(" ")}")
@@ -127,6 +129,7 @@ class ValidationServerManager(
             maxMutationCount: Int,
             retries: Int,
             verbose: Boolean,
+            concurrency: Int,
         ): ValidationServerManager = managers.getOrPut(project.rootProject) {
             ValidationServerManager(
                 project.rootProject,
@@ -136,6 +139,7 @@ class ValidationServerManager(
                 maxMutationCount,
                 retries,
                 verbose,
+                concurrency,
             )
         }
 

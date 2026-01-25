@@ -128,6 +128,9 @@ class QuestionerPlugin : Plugin<Project> {
             testTask.logging.captureStandardError(LogLevel.DEBUG)
         }
 
+        // Concurrency for validation (how many questions to validate in parallel)
+        val validationConcurrency = dotenv["QUESTIONER_VALIDATION_CONCURRENCY"]?.toIntOrNull() ?: 8
+
         // Initialize the validation server manager with config values
         ValidationServerManager.initialize(
             project = project,
@@ -137,6 +140,7 @@ class QuestionerPlugin : Plugin<Project> {
             maxMutationCount = config.maxMutationCount,
             retries = config.retries,
             verbose = config.verbose,
+            concurrency = validationConcurrency,
         )
 
         configurations.getByName("checkstyle").apply {

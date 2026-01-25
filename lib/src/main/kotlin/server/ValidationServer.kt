@@ -6,13 +6,15 @@ import edu.illinois.cs.cs125.questioner.lib.validate
 import edu.illinois.cs.cs125.questioner.lib.verifiers.toBase64
 import edu.illinois.cs.cs125.questioner.lib.warm
 import kotlinx.coroutines.runBlocking
-import java.io.BufferedReader
 import java.io.PrintWriter
 import java.net.ServerSocket
 import java.net.Socket
+import java.util.concurrent.Executors
+import java.util.concurrent.Semaphore
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
- * Simple socket server that processes validation/calibration requests.
+ * Socket server that processes validation/calibration requests concurrently.
  *
  * Protocol:
  * - Client sends: file path to .question.json
@@ -22,10 +24,12 @@ import java.net.Socket
  * Start with: java -cp <classpath> edu.illinois.cs.cs125.questioner.lib.server.ValidationServerKt <mode> <port> <rootDir> [options]
  */
 object ValidationServer {
+    private val shuttingDown = AtomicBoolean(false)
+
     @JvmStatic
     fun main(args: Array<String>) {
         if (args.size < 3) {
-            System.err.println("Usage: ValidationServer <mode> <port> <rootDir> [maxMutationCount] [retries] [verbose]")
+            System.err.println("Usage: ValidationServer <mode> <port> <rootDir> [maxMutationCount] [retries] [verbose] [concurrency]")
             System.exit(1)
         }
 
@@ -35,6 +39,7 @@ object ValidationServer {
         val maxMutationCount = args.getOrNull(3)?.toIntOrNull() ?: 256
         val retries = args.getOrNull(4)?.toIntOrNull() ?: 4
         val verbose = args.getOrNull(5)?.toBooleanStrictOrNull() ?: false
+        val concurrency = args.getOrNull(6)?.toIntOrNull() ?: 8
 
         val options = ValidatorOptions(
             maxMutationCount = maxMutationCount,
@@ -43,24 +48,67 @@ object ValidationServer {
             rootDirectory = rootDir.toBase64(),
         )
 
+        // Semaphore to limit concurrent validations
+        val semaphore = Semaphore(concurrency)
+
+        // Thread pool for handling clients
+        val executor = Executors.newCachedThreadPool()
+
         // Warm up before accepting requests
         println("ValidationServer ($mode) warming up...")
         runBlocking { warm() }
-        println("ValidationServer ($mode) ready on port $port")
+        println("ValidationServer ($mode) ready, concurrency=$concurrency")
 
         ServerSocket(port).use { serverSocket ->
             // Write port to stdout so Gradle can read it (in case port was 0 for auto-select)
             println("PORT:${serverSocket.localPort}")
             System.out.flush()
 
-            while (true) {
-                val client = serverSocket.accept()
-                handleClient(client, mode, options)
+            while (!shuttingDown.get()) {
+                try {
+                    val client = serverSocket.accept()
+                    executor.submit {
+                        handleClient(client, mode, options, semaphore)
+                    }
+                } catch (e: Exception) {
+                    if (!shuttingDown.get()) {
+                        System.err.println("Error accepting client: ${e.message}")
+                    }
+                }
             }
         }
     }
 
-    private fun handleClient(client: Socket, mode: String, options: ValidatorOptions) {
+    private fun buildErrorMessage(e: Throwable): String {
+        val messages = mutableListOf<String>()
+
+        // Walk the cause chain to find all messages
+        var current: Throwable? = e
+        while (current != null) {
+            val msg = current.message
+            if (!msg.isNullOrBlank()) {
+                messages.add(msg)
+            } else {
+                // Include class name if no message
+                messages.add(current::class.simpleName ?: "Unknown")
+            }
+            current = current.cause
+            if (current == e) break // Prevent infinite loop
+        }
+
+        // If we still have nothing useful, include stack trace location
+        if (messages.isEmpty() || messages.all { it == e::class.simpleName }) {
+            val location = e.stackTrace.firstOrNull()?.let { "${it.fileName}:${it.lineNumber}" } ?: "unknown location"
+            messages.add("${e::class.simpleName} at $location")
+        }
+
+        return messages.joinToString(" -> ")
+            .replace("\n", " ")
+            .replace("\r", "")
+            .take(1000)
+    }
+
+    private fun handleClient(client: Socket, mode: String, options: ValidatorOptions, semaphore: Semaphore) {
         client.use { socket ->
             val reader = socket.getInputStream().bufferedReader()
             val writer = PrintWriter(socket.getOutputStream(), true)
@@ -69,11 +117,17 @@ object ValidationServer {
 
             if (line == "shutdown") {
                 writer.println("ok")
+                shuttingDown.set(true)
+                // Give time for response to be sent
+                Thread.sleep(100)
                 System.exit(0)
             }
 
             // Line is a file path
             val filePath = line.trim()
+
+            // Acquire semaphore to limit concurrency
+            semaphore.acquire()
             try {
                 runBlocking {
                     when (mode) {
@@ -84,8 +138,10 @@ object ValidationServer {
                 }
                 writer.println("ok")
             } catch (e: Throwable) {
-                val message = e.message?.replace("\n", " ")?.take(500) ?: "Unknown error"
+                val message = buildErrorMessage(e)
                 writer.println("error:$message")
+            } finally {
+                semaphore.release()
             }
         }
     }
