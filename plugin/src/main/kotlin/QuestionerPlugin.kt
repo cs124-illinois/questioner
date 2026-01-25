@@ -30,7 +30,19 @@ data class QuestionerConfig(val endpoints: List<EndPoint> = listOf()) {
     data class EndPoint(val name: String, val token: String, val url: String, val label: String? = null)
 }
 
-private val testFiles = listOf("TestAllQuestions.kt", "TestUnvalidatedQuestions.kt", "TestFocusedQuestions.kt")
+private val testFiles = listOf(
+    "TestAllQuestions.kt",
+    "TestUnvalidatedQuestions.kt",
+    "TestFocusedQuestions.kt",
+    "TestValidateQuestions.kt",
+    "TestCalibrateQuestions.kt"
+)
+
+// Additional JVM args to disable JIT for consistent memory measurements (calibration phase)
+private val noJitJvmArgs = listOf(
+    "-XX:-TieredCompilation",
+    "-XX:CompileThreshold=100000"
+)
 
 @Suppress("unused")
 class QuestionerPlugin : Plugin<Project> {
@@ -103,6 +115,24 @@ class QuestionerPlugin : Plugin<Project> {
         // Allow heap size to be configured via environment variable or .env file (default: 1G)
         val heapSize = dotenv["QUESTIONER_HEAP_SIZE"] ?: "1G"
 
+        // Common JVM args for all test tasks (with JIT enabled for speed)
+        val commonJvmArgs = listOf(
+            "-ea", "--enable-preview", "-Dfile.encoding=UTF-8", "-Djava.security.manager=allow",
+            "-XX:+UseZGC", "-XX:+ZGenerational", "-XX:-OmitStackTraceInFastThrow",
+            "-XX:+UnlockExperimentalVMOptions", "-XX:-VMContinuations",
+            "-Xmx$heapSize",
+            "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+            "--add-opens", "java.base/java.util=ALL-UNNAMED",
+            "--add-exports", "jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
+            "--add-exports", "jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
+            "--add-exports", "jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
+            "--add-exports", "jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
+            "--add-exports", "jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
+            "--add-exports", "java.management/sun.management=ALL-UNNAMED",
+            "-Dslf4j.internal.verbosity=WARN",
+            "-javaagent:$agentJarPath",
+        )
+
         tasks.withType(Test::class.java) { testTask ->
             testTask.useJUnitPlatform()
             testTask.enableAssertions = true
@@ -110,23 +140,7 @@ class QuestionerPlugin : Plugin<Project> {
             testTask.environment["JEED_USE_DISK_CACHE"] = true
             testTask.environment["JEED_DISK_CACHE_DIR"] = project.layout.buildDirectory.dir("jeed").get().asFile.absolutePath
 
-            testTask.jvmArgs(
-                "-ea", "--enable-preview", "-Dfile.encoding=UTF-8", "-Djava.security.manager=allow",
-                "-XX:+UseZGC", "-XX:+ZGenerational", "-XX:-OmitStackTraceInFastThrow",
-                "-XX:+UnlockExperimentalVMOptions", "-XX:-VMContinuations",
-                "-XX:-TieredCompilation", "-XX:CompileThreshold=100000", // Disable JIT during validation
-                "-Xmx$heapSize",
-                "--add-opens", "java.base/java.lang=ALL-UNNAMED",
-                "--add-opens", "java.base/java.util=ALL-UNNAMED",
-                "--add-exports", "jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
-                "--add-exports", "jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
-                "--add-exports", "jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
-                "--add-exports", "jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
-                "--add-exports", "jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED",
-                "--add-exports", "java.management/sun.management=ALL-UNNAMED",
-                "-Dslf4j.internal.verbosity=WARN",
-                "-javaagent:$agentJarPath",
-            )
+            testTask.jvmArgs(commonJvmArgs)
             testTask.outputs.upToDateWhen { false }
             testTask.dependsOn("reconfigureForTesting")
             testTask.finalizedBy("recollectQuestions")
@@ -188,12 +202,37 @@ class QuestionerPlugin : Plugin<Project> {
         val officialTestTask = project.tasks.getByName("test") as Test
         officialTestTask.setTestNameIncludePatterns(listOf("TestUnvalidatedQuestions"))
 
+        // Combined validation tasks (use JIT for backward compatibility with single-phase validation)
         listOf("testAllQuestions", "testUnvalidatedQuestions", "testFocusedQuestions").map { testName ->
             project.tasks.register(testName, Test::class.java) { testTask ->
                 testTask.testClassesDirs = officialTestTask.testClassesDirs
                 testTask.classpath = officialTestTask.classpath
                 testTask.setTestNameIncludePatterns(listOf(testName.capitalized()))
             }
+        }
+
+        // Phase 1: Validate (bootstrap, mutation, incorrect testing) - with JIT for speed
+        project.tasks.register("validateQuestions", Test::class.java) { testTask ->
+            testTask.testClassesDirs = officialTestTask.testClassesDirs
+            testTask.classpath = officialTestTask.classpath
+            testTask.setTestNameIncludePatterns(listOf("TestValidateQuestions"))
+            testTask.description = "Phase 1: Run bootstrap, mutation, and incorrect testing (with JIT)"
+        }
+
+        // Phase 2: Calibrate - without JIT for consistent memory measurements
+        project.tasks.register("calibrateQuestions", Test::class.java) { testTask ->
+            testTask.testClassesDirs = officialTestTask.testClassesDirs
+            testTask.classpath = officialTestTask.classpath
+            testTask.setTestNameIncludePatterns(listOf("TestCalibrateQuestions"))
+            testTask.jvmArgs(noJitJvmArgs) // Add no-JIT flags for consistent memory measurements
+            testTask.mustRunAfter("validateQuestions") // Calibration must run after validation
+            testTask.description = "Phase 2: Run calibration (without JIT for consistent memory)"
+        }
+
+        // Two-phase validation: runs validateQuestions then calibrateQuestions
+        project.tasks.register("validateAndCalibrateQuestions") { task ->
+            task.dependsOn("validateQuestions", "calibrateQuestions")
+            task.description = "Run two-phase validation: phase 1 (with JIT) then phase 2 (without JIT)"
         }
 
         project.tasks.register("collectQuestions", CollectQuestions::class.java) { collectQuestions ->

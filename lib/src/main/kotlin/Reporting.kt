@@ -203,6 +203,25 @@ fun ValidationReport.report(): String {
     return wrapDocument(question, body)
 }
 
+fun CalibrationReport.report(): String {
+    val testingSequence = if (solutionTestingSequence != null) {
+        """
+        |<h2>Testing Sequence</h2>
+        |<pre><code class="text">
+        |${solutionTestingSequence.joinToString("\n")}
+        |</code></pre>
+        """.trimMargin()
+    } else {
+        ""
+    }
+    val body = """
+        |<h2>Calibration Complete</h2>
+        |<p>Calibration completed successfully with ${requiredTestCount} tests.</p>
+        |$testingSequence
+        |""".trimMargin()
+    return wrapDocument(question, body)
+}
+
 fun ValidationFailed.report(question: Question): String {
     val testingSequence = if (testingSequence != null) {
         """

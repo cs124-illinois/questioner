@@ -26,13 +26,165 @@ private val calibrationLimiter = Semaphore(1)
 private const val RETRY_THRESHOLD = 0.5
 var gradleRootDirectory: String? = null
 
+// Helper function to create checkCorrect validator
+private fun Question.createCheckCorrect(
+    retry: Int,
+    javaClassWhitelist: MutableSet<String>,
+    kotlinClassWhitelist: MutableSet<String>
+): TestResults.(Question.FlatFile, Boolean) -> Unit = { file, finalChecks ->
+    val testingSequence = try {
+        jenisolResults!!.solutionTestingSequence()
+    } catch (_: Exception) {
+        null
+    }
+    if (taskResults?.threw != null) {
+        throw SolutionTestingThrew(file, taskResults!!.threw!!, taskResults!!.output, testingSequence)
+    }
+    if (!succeeded) {
+        if (failed.checkExecutedSubmission != null) {
+            throw SolutionFailed(file, failed.checkExecutedSubmission!!, retry, testingSequence)
+        }
+
+        val exception = when {
+            complete.testing?.passed == false -> SolutionFailed(file, summary, retry, testingSequence)
+            complete.testing?.failedReceiverGeneration == true -> SolutionReceiverGeneration(file, retry, testingSequence)
+            else -> {
+                val message = when {
+                    failedSteps.contains(TestResults.Step.compileSubmission) -> {
+                        val templated = if (getTemplate(file.language) != null) {
+                            templateSubmission(file.contents, language)
+                        } else {
+                            null
+                        }
+                        """Error compiling solution:
+                                    |---
+                                    |${file.contents}
+                                    |${
+                            if (templated != null) {
+                                """
+                                        |--- (After templating)
+                                        |${templated.contents}
+                                        ---
+                                        """.trimMargin()
+                            } else {
+                                ""
+                            }
+                        }
+                                    |---
+                                    |${
+                            failed.compileSubmission!!.message ?: failed.compileSubmission!!.errors.joinToString(
+                                "\n"
+                            )
+                        }
+                                """.trimMargin()
+
+                    }
+
+                    else -> summary
+                }
+                SolutionFailed(file, message, retry, testingSequence)
+            }
+        }
+        if (badTimeout()) {
+            throw RetryValidation(exception, true)
+        } else {
+            throw exception
+        }
+    }
+    if (failedLinting!!) {
+        val errors = if (language == Language.java) {
+            complete.checkstyle!!.errors.joinToString("\n") { "Line ${it.location.line}: ${it.message}" }
+        } else {
+            complete.ktlint!!.errors.joinToString("\n") { "Line ${it.location.line}: ${it.message}" }
+        }
+        throw SolutionFailedLinting(file, errors, testingSequence)
+    }
+    val solutionThrew = tests()?.filter {
+        it.jenisol!!.solution.threw != null
+    }?.find {
+        val exception = it.jenisol!!.solution.threw!!
+        exception !is AssertionError && exception !is IllegalArgumentException && exception !is IllegalStateException
+    }
+    if (!control.solutionThrows!! && solutionThrew != null) {
+        throw SolutionThrew(file, solutionThrew.jenisol!!.solution.threw!!, solutionThrew.jenisol.parameters, testingSequence)
+    }
+    tests()
+        ?.filter {
+            it.jenisol!!.solution.threw == null
+                && it.jenisol.parameters.toList().isNotEmpty()
+                && !(it.jenisol.solutionExecutable is Method && (it.jenisol.solutionExecutable as Method).isBoth())
+        }?.let { results ->
+            val executableReturns = mutableMapOf<Executable, MutableList<Any>>()
+            for (result in results) {
+                result.jenisol!!.solution.returned?.let {
+                    executableReturns[result.jenisol.solutionExecutable] =
+                        executableReturns[result.jenisol.solutionExecutable] ?: mutableListOf()
+                    executableReturns[result.jenisol.solutionExecutable]!!.add(result.jenisol.solution.returned!!)
+                }
+            }
+            executableReturns.forEach { (executable, values) ->
+                if (executable.fullName() == "public boolean equals(java.lang.Object)") {
+                    return@forEach
+                }
+                if (executable is Constructor<*> && fauxStatic) {
+                    return@forEach
+                }
+                if (values.distinct().size == 1) {
+                    throw SolutionLacksEntropy(
+                        file,
+                        values.size,
+                        values.distinct().size,
+                        executable,
+                        solution.fauxStatic,
+                        values.first(),
+                        testingSequence
+                    )
+                }
+            }
+        }
+
+    val size = toJson().length
+    if (finalChecks && (size > Question.DEFAULT_MAX_OUTPUT_SIZE || complete.testing!!.truncatedLines > 0)) {
+        throw TooMuchOutput(file.contents, file.path, size, Question.DEFAULT_MAX_OUTPUT_SIZE, file.language, testingSequence)
+    }
+
+    if (finalChecks && (complete.coverage!!.failed)) {
+        throw SolutionDeadCode(
+            file,
+            complete.coverage!!.submission.missed,
+            complete.coverage!!.limit,
+            complete.coverage!!.missed,
+            testingSequence
+        )
+    }
+    check(failedSteps.isEmpty()) { "Failed steps: $failedSteps" }
+    val classWhiteList = when (file.language) {
+        Language.java -> javaClassWhitelist
+        Language.kotlin -> kotlinClassWhitelist
+    }
+    val newClasses = taskResults!!.sandboxedClassLoader!!.loadedClasses.filter { klass ->
+        !klass.startsWith("edu.illinois.cs.cs125.jeed.core") &&
+            !klass.startsWith("java.lang.invoke.MethodHandles")
+    }.toMutableSet()
+    // HACK HACK: Allow java.util.Set methods when java.util.Map is used
+    if (file.language == Language.java && newClasses.contains("java.util.Map")) {
+        newClasses += "java.util.Set"
+    }
+    classWhiteList.addAll(newClasses)
+}
+
+private fun TestResults.badTimeout() = timeout && !lineCountTimeout &&
+    ((resourceMonitoringResults?.submissionLines?.toDouble()
+        ?: 0.0) / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT < RETRY_THRESHOLD)
+
+// Phase 1: Bootstrap, mutation, and incorrect testing (fast, with JIT)
 @Suppress("LongMethod", "ComplexMethod")
-suspend fun Question.validate(
+suspend fun Question.validatePhase1(
     seed: Int,
     maxMutationCount: Int,
     retry: Int = 0,
     verbose: Boolean = false
-): ValidationReport {
+) {
     fauxStatic = solution.fauxStatic
 
     val javaClassWhitelist = mutableSetOf<String>().apply { addAll(defaultJavaClassWhitelist) }
@@ -41,151 +193,7 @@ suspend fun Question.validate(
     val javaSolution = getSolution(Language.java)!!
     val kotlinSolution = getSolution(Language.kotlin)
 
-    fun TestResults.badTimeout() = timeout && !lineCountTimeout &&
-        ((resourceMonitoringResults?.submissionLines?.toDouble()
-            ?: 0.0) / Question.TestingControl.DEFAULT_MAX_EXECUTION_COUNT < RETRY_THRESHOLD)
-
-    fun TestResults.checkCorrect(file: Question.FlatFile, finalChecks: Boolean = false) {
-        val testingSequence = try {
-            jenisolResults!!.solutionTestingSequence()
-        } catch (_: Exception) {
-            null
-        }
-        if (taskResults?.threw != null) {
-            throw SolutionTestingThrew(file, taskResults!!.threw!!, taskResults!!.output, testingSequence)
-        }
-        if (!succeeded) {
-            if (failed.checkExecutedSubmission != null) {
-                throw SolutionFailed(file, failed.checkExecutedSubmission!!, retry, testingSequence)
-            }
-
-            val exception = when {
-                complete.testing?.passed == false -> SolutionFailed(file, summary, retry, testingSequence)
-                complete.testing?.failedReceiverGeneration == true -> SolutionReceiverGeneration(file, retry, testingSequence)
-                else -> {
-                    val message = when {
-                        failedSteps.contains(TestResults.Step.compileSubmission) -> {
-                            val templated = if (getTemplate(file.language) != null) {
-                                templateSubmission(file.contents, language)
-                            } else {
-                                null
-                            }
-                            """Error compiling solution:
-                                        |---
-                                        |${file.contents}
-                                        |${
-                                if (templated != null) {
-                                    """
-                                            |--- (After templating)
-                                            |${templated.contents}
-                                            ---
-                                            """.trimMargin()
-                                } else {
-                                    ""
-                                }
-                            }
-                                        |---
-                                        |${
-                                failed.compileSubmission!!.message ?: failed.compileSubmission!!.errors.joinToString(
-                                    "\n"
-                                )
-                            }
-                                    """.trimMargin()
-
-                        }
-
-                        else -> summary
-                    }
-                    SolutionFailed(file, message, retry, testingSequence)
-                }
-            }
-            if (badTimeout()) {
-                throw RetryValidation(exception, true)
-            } else {
-                throw exception
-            }
-        }
-        if (failedLinting!!) {
-            val errors = if (language == Language.java) {
-                complete.checkstyle!!.errors.joinToString("\n") { "Line ${it.location.line}: ${it.message}" }
-            } else {
-                complete.ktlint!!.errors.joinToString("\n") { "Line ${it.location.line}: ${it.message}" }
-            }
-            throw SolutionFailedLinting(file, errors, testingSequence)
-        }
-        val solutionThrew = tests()?.filter {
-            it.jenisol!!.solution.threw != null
-        }?.find {
-            val exception = it.jenisol!!.solution.threw!!
-            exception !is AssertionError && exception !is IllegalArgumentException && exception !is IllegalStateException
-        }
-        if (!control.solutionThrows!! && solutionThrew != null) {
-            throw SolutionThrew(file, solutionThrew.jenisol!!.solution.threw!!, solutionThrew.jenisol.parameters, testingSequence)
-        }
-        tests()
-            ?.filter {
-                it.jenisol!!.solution.threw == null
-                    && it.jenisol.parameters.toList().isNotEmpty()
-                    && !(it.jenisol.solutionExecutable is Method && (it.jenisol.solutionExecutable as Method).isBoth())
-            }?.let { results ->
-                val executableReturns = mutableMapOf<Executable, MutableList<Any>>()
-                for (result in results) {
-                    result.jenisol!!.solution.returned?.let {
-                        executableReturns[result.jenisol.solutionExecutable] =
-                            executableReturns[result.jenisol.solutionExecutable] ?: mutableListOf()
-                        executableReturns[result.jenisol.solutionExecutable]!!.add(result.jenisol.solution.returned!!)
-                    }
-                }
-                executableReturns.forEach { (executable, values) ->
-                    if (executable.fullName() == "public boolean equals(java.lang.Object)") {
-                        return@forEach
-                    }
-                    if (executable is Constructor<*> && fauxStatic) {
-                        return@forEach
-                    }
-                    if (values.distinct().size == 1) {
-                        throw SolutionLacksEntropy(
-                            file,
-                            values.size,
-                            values.distinct().size,
-                            executable,
-                            solution.fauxStatic,
-                            values.first(),
-                            testingSequence
-                        )
-                    }
-                }
-            }
-
-        val size = toJson().length
-        if (finalChecks && (size > Question.DEFAULT_MAX_OUTPUT_SIZE || complete.testing!!.truncatedLines > 0)) {
-            throw TooMuchOutput(file.contents, file.path, size, Question.DEFAULT_MAX_OUTPUT_SIZE, file.language, testingSequence)
-        }
-
-        if (finalChecks && (complete.coverage!!.failed)) {
-            throw SolutionDeadCode(
-                file,
-                complete.coverage!!.submission.missed,
-                complete.coverage!!.limit,
-                complete.coverage!!.missed,
-                testingSequence
-            )
-        }
-        check(failedSteps.isEmpty()) { "Failed steps: $failedSteps" }
-        val classWhiteList = when (file.language) {
-            Language.java -> javaClassWhitelist
-            Language.kotlin -> kotlinClassWhitelist
-        }
-        val newClasses = taskResults!!.sandboxedClassLoader!!.loadedClasses.filter { klass ->
-            !klass.startsWith("edu.illinois.cs.cs125.jeed.core") &&
-                !klass.startsWith("java.lang.invoke.MethodHandles")
-        }.toMutableSet()
-        // HACK HACK: Allow java.util.Set methods when java.util.Map is used
-        if (file.language == Language.java && newClasses.contains("java.util.Map")) {
-            newClasses += "java.util.Set"
-        }
-        classWhiteList.addAll(newClasses)
-    }
+    val checkCorrect = createCheckCorrect(retry, javaClassWhitelist, kotlinClassWhitelist)
 
     fun TestResults.checkIncorrect(file: Question.IncorrectFile, mutated: Boolean) {
         val testingSequence = try {
@@ -297,17 +305,15 @@ suspend fun Question.validate(
     val firstCorrectResults = allSolutions.map { solution ->
         test(solution.contents, solution.language, bootstrapSettings, isSolution = true)
             .also { testResults ->
-                testResults.checkCorrect(solution)
+                checkCorrect(testResults, solution, false)
             }
     }
-
-    val bootstrapTrace = firstCorrectResults.first().jenisolResults!!.randomTrace!!
 
     val solutionJavaRecursiveMethods = firstCorrectResults.getRecursiveMethods(Language.java)
     check(solutionJavaRecursiveMethods != null)
     val solutionKotlinRecursiveMethods = firstCorrectResults.getRecursiveMethods(Language.kotlin)
 
-    val solutionRecursiveMethods = makeLanguageMap(solutionJavaRecursiveMethods, solutionKotlinRecursiveMethods)
+    val solutionRecursiveMethods = makeLanguageMap(solutionJavaRecursiveMethods, solutionKotlinRecursiveMethods)!!
 
     val bootstrapSolutionCoverage = firstCorrectResults
         .mapNotNull { it.complete.coverage }
@@ -328,6 +334,7 @@ suspend fun Question.validate(
     }
 
     val bootstrapSolutionOutputAmount = firstCorrectResults.maxOf { it.complete.testing?.outputAmount ?: 0 }
+    val bootstrapTrace = firstCorrectResults.first().jenisolResults!!.randomTrace!!
 
     val bootstrapLength = Instant.now().toEpochMilli() - bootStrapStart.toEpochMilli()
 
@@ -458,26 +465,64 @@ suspend fun Question.validate(
         "Testing requires $testCount tests ($incorrectRequiredTestCount, $bootstrapRandomStartCount) but control class limits to ${control.maxTestCount!!}. Please adjust this limit."
     }
 
+    // Save phase 1 results for use in phase 2 (calibration)
+    phase1Results = Question.Phase1Results(
+        seed = seed,
+        testCount = testCount,
+        mutationCount = mutations.size,
+        bootstrapLength = bootstrapLength,
+        mutationLength = mutationLength,
+        incorrectLength = incorrectLength,
+        javaClassWhitelist = javaClassWhitelist.toSet(),
+        kotlinClassWhitelist = kotlinClassWhitelist.toSet(),
+        solutionRecursiveMethods = solutionRecursiveMethods,
+        solutionDeadCode = solutionDeadCode,
+        bootstrapClassSize = bootstrapClassSize,
+        bootstrapSolutionCoverage = bootstrapSolutionCoverage,
+        bootstrapSolutionOutputAmount = bootstrapSolutionOutputAmount
+    )
+
+    // Store recursive methods in classification for later use
+    classification.recursiveMethodsByLanguage = solutionRecursiveMethods
+}
+
+// Phase 2: Calibration only (no JIT for consistent memory measurements)
+@Suppress("LongMethod", "ComplexMethod")
+suspend fun Question.calibrate(): CalibrationReport {
+    val phase1 = phase1Results ?: error("Phase 1 must be completed before calibration")
+
+    fauxStatic = solution.fauxStatic
+
+    val javaClassWhitelist = phase1.javaClassWhitelist.toMutableSet()
+    val kotlinClassWhitelist = phase1.kotlinClassWhitelist.toMutableSet()
+
+    val javaSolution = getSolution(Language.java)!!
+    val kotlinSolution = getSolution(Language.kotlin)
+
+    val checkCorrect = createCheckCorrect(0, javaClassWhitelist, kotlinClassWhitelist)
+
+    val allSolutions = listOf(javaSolution) + alternativeSolutions
+
     // Rerun solutions to set timeouts and output limits
     // sets solution runtime, output lines, executed lines, and allocation
     val calibrationStart = Instant.now()
     val calibrationSettings = Question.TestingSettings(
-        seed = seed,
-        testCount = testCount,
+        seed = phase1.seed,
+        testCount = phase1.testCount,
         outputLimit = Question.UNLIMITED_OUTPUT_LINES,
         perTestOutputLimit = Question.UNLIMITED_OUTPUT_LINES,
         javaWhitelist = javaClassWhitelist,
         kotlinWhitelist = kotlinClassWhitelist,
         shrink = false,
         executionCountLimit = Question.LanguagesResourceUsage(
-            (testCount * control.maxExecutionCountMultiplier!!).toLong() * 1024,
-            (testCount * control.maxExecutionCountMultiplier!!).toLong() * 1024
+            (phase1.testCount * control.maxExecutionCountMultiplier!!).toLong() * 1024,
+            (phase1.testCount * control.maxExecutionCountMultiplier!!).toLong() * 1024
         ),
         // Set a large allocation limit to trigger the same code paths as server testing
         allocationLimit = Question.LanguagesResourceUsage.both(Long.MAX_VALUE / 2),
-        solutionRecursiveMethods = solutionRecursiveMethods,
-        solutionDeadCode = solutionDeadCode,
-        solutionClassSize = bootstrapClassSize,
+        solutionRecursiveMethods = phase1.solutionRecursiveMethods,
+        solutionDeadCode = phase1.solutionDeadCode,
+        solutionClassSize = phase1.bootstrapClassSize,
         suppressions = javaSolution.suppressions,
         kotlinSuppressions = kotlinSolution?.suppressions,
     )
@@ -485,7 +530,7 @@ suspend fun Question.validate(
         val results = calibrationLimiter.withPermit {
             test(right.contents, right.language, calibrationSettings)
         }
-        results.checkCorrect(right, true)
+        checkCorrect(results, right, true)
         CorrectResults(right, results)
     }
 
@@ -531,8 +576,8 @@ suspend fun Question.validate(
         calibrationResults.maxOf { it.results.complete.testing?.outputAmount ?: 0 }
 
     testingSettings = Question.TestingSettings(
-        seed = seed,
-        testCount = testCount,
+        seed = phase1.seed,
+        testCount = phase1.testCount,
         outputLimit = 0, // solutionMaxOutputLines.coerceAtLeast(testCount * control.outputMultiplier!!),
         perTestOutputLimit = (solutionMaxPerTestOutputLines * control.outputMultiplier!!).toInt()
             .coerceAtLeast(Question.MIN_PER_TEST_LINES),
@@ -547,25 +592,35 @@ suspend fun Question.validate(
             (solutionAllocation.java.toDouble() * control.allocationLimitMultiplier!!).toLong(),
             (solutionAllocation.kotlin?.toDouble()?.times(control.allocationLimitMultiplier!!))?.toLong()
         ),
-        solutionRecursiveMethods = solutionRecursiveMethods,
-        solutionDeadCode = solutionDeadCode,
-        solutionClassSize = bootstrapClassSize,
+        solutionRecursiveMethods = phase1.solutionRecursiveMethods,
+        solutionDeadCode = phase1.solutionDeadCode,
+        solutionClassSize = phase1.bootstrapClassSize,
         suppressions = javaSolution.suppressions,
         kotlinSuppressions = kotlinSolution?.suppressions,
     )
 
-    val incorrectAllocation =
-        useTestingIncorrect.map { it.results }.setResourceUsage(bothJava = true) { it.memoryAllocation }
+    // Use testTestingIncorrect from phase 1 to calculate allocation limits
+    val useTestingIncorrect = testTestingIncorrect?.map { mutation ->
+        // Create a minimal results object for allocation calculation
+        mutation
+    } ?: emptyList()
+
+    // For test testing limits, we need to calculate allocation based on phase 1 data
+    // Use calibration results for Java allocation as a baseline
+    val testTestingAllocation = Question.LanguagesResourceUsage(
+        (solutionAllocation.java.toDouble() * control.allocationFailureMultiplier!!).toLong(),
+        (solutionAllocation.kotlin?.toDouble()?.times(control.allocationFailureMultiplier!!))?.toLong()
+    )
 
     testTestingLimits = Question.TestTestingLimits(
-        outputLimit = (testCount * control.outputMultiplier!!).toInt(),
+        outputLimit = (phase1.testCount * control.outputMultiplier!!).toInt(),
         executionCountLimit = Question.LanguagesResourceUsage(
-            (testCount * control.executionTimeoutMultiplier!!).toLong(),
-            (testCount * control.executionTimeoutMultiplier!!).toLong()
+            (phase1.testCount * control.executionTimeoutMultiplier!!).toLong(),
+            (phase1.testCount * control.executionTimeoutMultiplier!!).toLong()
         ),
         allocationLimit = Question.LanguagesResourceUsage(
-            (incorrectAllocation.java.toDouble() * control.allocationLimitMultiplier!!).toLong(),
-            (incorrectAllocation.kotlin?.toDouble()?.times(control.allocationLimitMultiplier!!))?.toLong()
+            (testTestingAllocation.java.toDouble() * control.allocationLimitMultiplier!!).toLong(),
+            (testTestingAllocation.kotlin?.toDouble()?.times(control.allocationLimitMultiplier!!))?.toLong()
         )
     )
 
@@ -606,14 +661,17 @@ suspend fun Question.validate(
     }.filterValues { it != null }.mapValues { it.value!! }
     logger.debug { "solutionMemoryBreakdown: $solutionMemoryBreakdown" }
 
+    // Compute requiredTestCount from phase1 data
+    val requiredTestCount = phase1.testCount
+
     validationResults = Question.ValidationResults(
-        seed = seed,
+        seed = phase1.seed,
         requiredTestCount = requiredTestCount,
-        mutationCount = mutations.size,
+        mutationCount = phase1.mutationCount,
         solutionMaxRuntime = solutionMaxRuntime,
-        bootstrapLength = bootstrapLength,
-        mutationLength = mutationLength,
-        incorrectLength = incorrectLength,
+        bootstrapLength = phase1.bootstrapLength,
+        mutationLength = phase1.mutationLength,
+        incorrectLength = phase1.incorrectLength,
         calibrationLength = calibrationLength,
         solutionCoverage = solutionCoverage,
         executionCounts = solutionExecutionCounts,
@@ -622,10 +680,10 @@ suspend fun Question.validate(
         canTestTest = canTestTest,
         testTestingIncorrectCount = testTestingIncorrectCount,
         solutionAllocations = solutionAllocations,
-        solutionMemoryBreakdown = solutionMemoryBreakdown.ifEmpty { null }
+        solutionMemoryBreakdown = solutionMemoryBreakdown.ifEmpty { null },
+        phase1Complete = true
     )
 
-    classification.recursiveMethodsByLanguage = solutionRecursiveMethods!!
     classification.loadedClassesByLanguage = makeLanguageMap(solutionLoadedClassesJava, solutionLoadedClassesKotlin)!!
 
     val solutionTestingSequence = try {
@@ -633,14 +691,39 @@ suspend fun Question.validate(
     } catch (_: Exception) {
         null
     }
-    return ValidationReport(
+    return CalibrationReport(
         this,
         calibrationResults,
-        incorrectResults,
         requiredTestCount,
         solutionMaxRuntime,
         hasKotlin,
         solutionTestingSequence
+    )
+}
+
+// Combined validation for backward compatibility
+@Suppress("LongMethod", "ComplexMethod")
+suspend fun Question.validate(
+    seed: Int,
+    maxMutationCount: Int,
+    retry: Int = 0,
+    verbose: Boolean = false
+): ValidationReport {
+    // Run phase 1
+    validatePhase1(seed, maxMutationCount, retry, verbose)
+
+    // Run phase 2 (calibration)
+    val calibrationReport = calibrate()
+
+    // Return combined report
+    return ValidationReport(
+        this,
+        calibrationReport.correct,
+        emptyList(), // Incorrect results are not available in combined mode
+        calibrationReport.requiredTestCount,
+        calibrationReport.requiredTime,
+        calibrationReport.hasKotlin,
+        calibrationReport.solutionTestingSequence
     )
 }
 
@@ -729,6 +812,23 @@ data class ValidationReport(
     )
 
     val summary = Summary(incorrect.size, requiredTestCount, requiredTime, hasKotlin)
+}
+
+data class CalibrationReport(
+    val question: Question,
+    val correct: List<CorrectResults>,
+    val requiredTestCount: Int,
+    val requiredTime: Int,
+    val hasKotlin: Boolean,
+    val solutionTestingSequence: List<String>?
+) {
+    data class Summary(
+        val requiredTestCount: Int,
+        val requiredTime: Int,
+        val kotlin: Boolean
+    )
+
+    val summary = Summary(requiredTestCount, requiredTime, hasKotlin)
 }
 
 sealed class ValidationFailed(

@@ -300,7 +300,27 @@ data class Question(
         // Temporary: allocation records for debugging memory discrepancies
         val solutionAllocations: Map<Language, List<AllocationRecord>>? = null,
         // Temporary: memory breakdown for debugging memory discrepancies
-        val solutionMemoryBreakdown: Map<Language, TestResults.MemoryBreakdown>? = null
+        val solutionMemoryBreakdown: Map<Language, TestResults.MemoryBreakdown>? = null,
+        // Two-phase validation: indicates phase 1 (bootstrap + mutation + incorrect) is complete
+        val phase1Complete: Boolean = false
+    )
+
+    // Intermediate state saved after phase 1 for use in phase 2 (calibration)
+    @Serializable
+    data class Phase1Results(
+        val seed: Int,
+        val testCount: Int,
+        val mutationCount: Int,
+        val bootstrapLength: Long,
+        val mutationLength: Long,
+        val incorrectLength: Long,
+        val javaClassWhitelist: Set<String>,
+        val kotlinClassWhitelist: Set<String>,
+        val solutionRecursiveMethods: Map<Language, Set<ResourceMonitoringResults.MethodInfo>>,
+        val solutionDeadCode: LanguagesResourceUsage,
+        val bootstrapClassSize: LanguagesResourceUsage,
+        val bootstrapSolutionCoverage: TestResults.CoverageComparison.LineCoverage,
+        val bootstrapSolutionOutputAmount: Int
     )
 
     @Serializable
@@ -590,9 +610,13 @@ $contents
     var testTestingLimits: TestTestingLimits? = null
 
     var validationResults: ValidationResults? = null
+    var phase1Results: Phase1Results? = null
 
     val validated: Boolean
         get() = testingSettings != null
+
+    val phase1Completed: Boolean
+        get() = phase1Results != null
 
     val testTestingValidated: Boolean
         get() = testTestingLimits != null

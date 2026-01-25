@@ -17,6 +17,15 @@ import java.nio.file.Path
 import kotlin.io.path.exists
 import kotlin.io.path.pathString
 
+// Supported test file types
+enum class TestType {
+    ALL,            // Combined validate (phase 1 + phase 2)
+    UNVALIDATED,    // Combined validate for unvalidated questions only
+    FOCUSED,        // Combined validate for focused questions only
+    VALIDATE,       // Phase 1 only (bootstrap, mutation, incorrect testing)
+    CALIBRATE       // Phase 2 only (calibration with no JIT)
+}
+
 @Suppress("unused")
 abstract class GenerateQuestionTests : DefaultTask() {
     @get:Input
@@ -36,8 +45,13 @@ abstract class GenerateQuestionTests : DefaultTask() {
 
     @OutputFiles
     val outputs =
-        listOf("TestAllQuestions", "TestUnvalidatedQuestions", "TestFocusedQuestions")
-            .map { testName -> project.layout.buildDirectory.file("questioner/$testName.kt").get().asFile }
+        listOf(
+            "TestAllQuestions",
+            "TestUnvalidatedQuestions",
+            "TestFocusedQuestions",
+            "TestValidateQuestions",
+            "TestCalibrateQuestions"
+        ).map { testName -> project.layout.buildDirectory.file("questioner/$testName.kt").get().asFile }
 
     @TaskAction
     fun generate() = runBlocking {
@@ -55,22 +69,26 @@ abstract class GenerateQuestionTests : DefaultTask() {
             .filter { file ->
                 file.name.startsWith("Test")
             }.forEach { file ->
-                val questionsForFile = when (file.name) {
-                    "TestAllQuestions.kt" -> questions
-                    "TestUnvalidatedQuestions.kt" -> questions.filter { !it.validated }
-                    "TestFocusedQuestions.kt" -> questions.filter { it.metadata?.focused == true }
+                val (testType, questionsForFile) = when (file.name) {
+                    "TestAllQuestions.kt" -> TestType.ALL to questions
+                    "TestUnvalidatedQuestions.kt" -> TestType.UNVALIDATED to questions.filter { !it.validated }
+                    "TestFocusedQuestions.kt" -> TestType.FOCUSED to questions.filter { it.metadata?.focused == true }
+                    "TestValidateQuestions.kt" -> TestType.VALIDATE to questions.filter { !it.phase1Completed }
+                    "TestCalibrateQuestions.kt" -> TestType.CALIBRATE to questions.filter { it.phase1Completed && !it.validated }
                     else -> error("Invalid file name ${file.name}")
                 }
                 val klass = file.name.removeSuffix(".kt")
                 val contents = if (questionsForFile.isNotEmpty()) {
                     questionsForFile.joinToString("\n") { question ->
-                        question.generateSpec(project.rootProject.projectDir.toPath())
+                        question.generateSpec(project.rootProject.projectDir.toPath(), testType)
                     }
                 } else {
                     when (file.name) {
                         "TestAllQuestions.kt" -> "no questions found"
                         "TestUnvalidatedQuestions.kt" -> "no unvalidated questions found"
                         "TestFocusedQuestions.kt" -> "no focused questions"
+                        "TestValidateQuestions.kt" -> "no questions need phase 1 validation"
+                        "TestCalibrateQuestions.kt" -> "no questions need phase 2 calibration"
                         else -> error("Invalid file name ${file.name}")
                     }.let { message ->
                         """"$message" {}"""
@@ -111,27 +129,41 @@ abstract class GenerateQuestionTests : DefaultTask() {
                     |}
                     """.trimMargin()
                 }
-                file.writeText(contents.wrapForFile().ktFormat(KtLintArguments(indent = 2)))
+                file.writeText(contents.wrapForFile(testType).ktFormat(KtLintArguments(indent = 2)))
             }
     }
 }
 
 fun Question.generateSpec(
     rootDirectory: Path,
+    testType: TestType = TestType.ALL
 ): String {
     val correctPath = correctPath
     check(correctPath != null)
     val jsonPath = rootDirectory.resolve(Path.of(correctPath)).parent.resolve(".question.json")
     check(jsonPath.exists())
+
+    val (methodName, actionDescription) = when (testType) {
+        TestType.ALL, TestType.UNVALIDATED, TestType.FOCUSED -> "validate" to "should validate"
+        TestType.VALIDATE -> "validatePhase1" to "should complete phase 1"
+        TestType.CALIBRATE -> "calibrate" to "should complete calibration"
+    }
+
     return """
-        |${"\"\"\""}${published.name} (${published.packageName}) should validate${"\"\"\""} {
-        |    ${"\"\"\""}$jsonPath${"\"\"\""}.validate(options)
+        |${"\"\"\""}${published.name} (${published.packageName}) $actionDescription${"\"\"\""} {
+        |    ${"\"\"\""}$jsonPath${"\"\"\""}.$methodName(options)
         |}
     """.trimMargin()
 }
 
-fun String.wrapForFile(): String = """
-        |import edu.illinois.cs.cs125.questioner.lib.validate
+fun String.wrapForFile(testType: TestType = TestType.ALL): String {
+    val imports = when (testType) {
+        TestType.ALL, TestType.UNVALIDATED, TestType.FOCUSED -> "import edu.illinois.cs.cs125.questioner.lib.validate"
+        TestType.VALIDATE -> "import edu.illinois.cs.cs125.questioner.lib.validatePhase1"
+        TestType.CALIBRATE -> "import edu.illinois.cs.cs125.questioner.lib.calibrate"
+    }
+    return """
+        |$imports
         |import edu.illinois.cs.cs125.questioner.lib.ValidatorOptions
         |import edu.illinois.cs.cs125.questioner.lib.warm
         |import io.kotest.core.spec.style.StringSpec
@@ -143,10 +175,11 @@ fun String.wrapForFile(): String = """
         |/*
         | * THIS FILE IS AUTOGENERATED. DO NOT EDIT BY HAND.
         | */
-        | 
+        |
         |${trim()}
         |
         |/*
         | * THIS FILE IS AUTOGENERATED. DO NOT EDIT BY HAND.
         | */
 """.trimMargin()
+}
