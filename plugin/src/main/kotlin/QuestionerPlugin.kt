@@ -33,6 +33,8 @@ data class QuestionerConfig(val endpoints: List<EndPoint> = listOf()) {
 private val testFiles = listOf(
     "TestValidateQuestions.kt",
     "TestCalibrateQuestions.kt",
+    "TestValidateFocusedQuestions.kt",
+    "TestCalibrateFocusedQuestions.kt",
 )
 
 // Additional JVM args to disable JIT for consistent memory measurements (calibration phase)
@@ -197,7 +199,7 @@ class QuestionerPlugin : Plugin<Project> {
         }
 
         val officialTestTask = project.tasks.getByName("test") as Test
-        officialTestTask.setTestNameIncludePatterns(listOf("TestUnvalidatedQuestions"))
+        officialTestTask.setTestNameIncludePatterns(listOf("TestValidateQuestions"))
 
         // Phase 1: Validate (bootstrap, mutation, incorrect testing) - with JIT for speed
         project.tasks.register("validateQuestions", Test::class.java) { testTask ->
@@ -217,7 +219,24 @@ class QuestionerPlugin : Plugin<Project> {
             testTask.description = "Phase 2: Run calibration (without JIT for consistent memory)"
         }
 
-        // Two-phase validation tasks - these run validateQuestions then calibrateQuestions in separate JVMs
+        // Focused question validation tasks
+        project.tasks.register("validateFocusedQuestions", Test::class.java) { testTask ->
+            testTask.testClassesDirs = officialTestTask.testClassesDirs
+            testTask.classpath = officialTestTask.classpath
+            testTask.setTestNameIncludePatterns(listOf("TestValidateFocusedQuestions"))
+            testTask.description = "Phase 1 for focused questions only (with JIT)"
+        }
+
+        project.tasks.register("calibrateFocusedQuestions", Test::class.java) { testTask ->
+            testTask.testClassesDirs = officialTestTask.testClassesDirs
+            testTask.classpath = officialTestTask.classpath
+            testTask.setTestNameIncludePatterns(listOf("TestCalibrateFocusedQuestions"))
+            testTask.jvmArgs(noJitJvmArgs) // Add no-JIT flags for consistent memory measurements
+            testTask.mustRunAfter("validateFocusedQuestions")
+            testTask.description = "Phase 2 for focused questions only (without JIT)"
+        }
+
+        // Two-phase validation tasks - run validation then calibration in separate JVMs
         // This ensures calibration always runs without JIT for consistent memory measurements
         project.tasks.register("testAllQuestions") { task ->
             task.dependsOn("validateQuestions", "calibrateQuestions")
@@ -226,11 +245,11 @@ class QuestionerPlugin : Plugin<Project> {
 
         project.tasks.register("testUnvalidatedQuestions") { task ->
             task.dependsOn("validateQuestions", "calibrateQuestions")
-            task.description = "Run validation for unvalidated questions only (two-phase)"
+            task.description = "Run validation for unvalidated questions (two-phase)"
         }
 
         project.tasks.register("testFocusedQuestions") { task ->
-            task.dependsOn("validateQuestions", "calibrateQuestions")
+            task.dependsOn("validateFocusedQuestions", "calibrateFocusedQuestions")
             task.description = "Run validation for focused questions only (two-phase)"
         }
 

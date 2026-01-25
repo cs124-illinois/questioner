@@ -45,6 +45,8 @@ abstract class GenerateQuestionTests : DefaultTask() {
         listOf(
             "TestValidateQuestions",
             "TestCalibrateQuestions",
+            "TestValidateFocusedQuestions",
+            "TestCalibrateFocusedQuestions",
         ).map { testName -> project.layout.buildDirectory.file("questioner/$testName.kt").get().asFile }
 
     @TaskAction
@@ -66,6 +68,8 @@ abstract class GenerateQuestionTests : DefaultTask() {
                 val (testType, questionsForFile) = when (file.name) {
                     "TestValidateQuestions.kt" -> TestType.VALIDATE to questions.filter { !it.phase1Completed }
                     "TestCalibrateQuestions.kt" -> TestType.CALIBRATE to questions.filter { it.phase1Completed && !it.validated }
+                    "TestValidateFocusedQuestions.kt" -> TestType.VALIDATE to questions.filter { it.metadata?.focused == true && !it.phase1Completed }
+                    "TestCalibrateFocusedQuestions.kt" -> TestType.CALIBRATE to questions.filter { it.metadata?.focused == true && it.phase1Completed && !it.validated }
                     else -> error("Invalid file name ${file.name}")
                 }
                 val klass = file.name.removeSuffix(".kt")
@@ -77,6 +81,8 @@ abstract class GenerateQuestionTests : DefaultTask() {
                     when (file.name) {
                         "TestValidateQuestions.kt" -> "no questions need phase 1 validation"
                         "TestCalibrateQuestions.kt" -> "no questions need phase 2 calibration"
+                        "TestValidateFocusedQuestions.kt" -> "no focused questions need phase 1 validation"
+                        "TestCalibrateFocusedQuestions.kt" -> "no focused questions need phase 2 calibration"
                         else -> error("Invalid file name ${file.name}")
                     }.let { message ->
                         """"$message" {}"""
