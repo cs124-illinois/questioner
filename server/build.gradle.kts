@@ -78,6 +78,7 @@ java {
 }
 tasks.test {
     useJUnitPlatform()
+    dependsOn(":plugin:functionalTest")
 }
 afterEvaluate {
     tasks.withType<FormatTask> {

@@ -20,3 +20,7 @@ gen/
 # Generated question artifacts
 **/.question.json
 **/report.html
+
+# Generated test resources (created by plugin:functionalTest)
+lib/src/test/resources/questions.json
+server/src/test/resources/questions.json

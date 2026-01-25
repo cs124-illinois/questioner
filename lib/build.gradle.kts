@@ -65,6 +65,9 @@ tasks.register("createProperties") {
 tasks.compileKotlin {
     dependsOn("createProperties")
 }
+tasks.test {
+    dependsOn(":plugin:functionalTest")
+}
 tasks.processResources {
     dependsOn("createProperties")
 }
