@@ -17,8 +17,7 @@ gen/
 /dumps
 .kotlin
 
-# Generated question artifacts
-**/.question.json
+# Generated question artifacts (note: .question.json now in build/questioner/questions/)
 **/report.html
 
 # Generated test resources (created by plugin:functionalTest)

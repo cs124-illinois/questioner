@@ -4,44 +4,36 @@ import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.loadQuestion
 import edu.illinois.cs.cs125.questioner.lib.serialization.json
-import edu.illinois.cs.cs125.questioner.plugin.parse.ParsedJavaFile
 import io.kotest.inspectors.forAll
 import kotlinx.serialization.encodeToString
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
-import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import java.io.File
-import java.nio.file.Path
-import kotlin.io.path.exists
-import kotlin.io.path.relativeTo
 
 abstract class CollectQuestions : DefaultTask() {
     @OutputFile
     val outputFile: File = project.layout.buildDirectory.dir("questioner/questions.json").get().asFile
 
     @InputFiles
-    val inputFiles: FileCollection = project.extensions.getByType(JavaPluginExtension::class.java)
-        .sourceSets.getByName("main")
-        .allSource.filter { file -> file.name == ".question.json" }
+    val inputFiles: FileCollection = project.fileTree(
+        project.layout.buildDirectory.dir("questioner/questions"),
+    ).matching { it.include("*.question.json") }
 
     @TaskAction
     fun collect() {
         val questions = inputFiles.files
-            .map { file ->
-                val question = file.loadQuestion()!!
-                val correctPath = Path.of(file.path).parent.resolve("${question.published.klass}.java")
-                if (!correctPath.exists() || !ParsedJavaFile(correctPath.toFile()).isCorrect) {
-                    logger.warn("Removing question file $file that matches no @Correct annotation")
-                    file.delete()
-                    return@map null
+            .mapNotNull { file ->
+                val question = file.loadQuestion()
+                if (question == null) {
+                    logger.warn("Could not load question from $file")
+                    return@mapNotNull null
                 }
-                question.apply {
-                    this.correctPath = correctPath.relativeTo(project.rootProject.projectDir.toPath()).toString()
-                }
-            }.filterNotNull()
+                // correctPath is already set by SaveQuestion task
+                question
+            }
             .sortedBy { it.published.name }
 
         check(questions.map { q -> q.published.contentHash }.toSet().size == questions.size) {

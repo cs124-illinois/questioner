@@ -81,6 +81,14 @@ gradlePlugin {
             id = "org.cs124.questioner"
             implementationClass = "edu.illinois.cs.cs125.questioner.plugin.QuestionerPlugin"
         }
+        create("settings") {
+            id = "org.cs124.questioner.settings"
+            implementationClass = "edu.illinois.cs.cs125.questioner.plugin.QuestionerSettingsPlugin"
+        }
+        create("question") {
+            id = "org.cs124.questioner.question"
+            implementationClass = "edu.illinois.cs.cs125.questioner.plugin.QuestionPlugin"
+        }
     }
 }
 java {

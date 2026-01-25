@@ -8,6 +8,11 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+plugins {
+    id("org.cs124.questioner.settings") version "2026.1.3"
+}
+
 dependencyResolutionManagement {
     repositories {
         mavenLocal()

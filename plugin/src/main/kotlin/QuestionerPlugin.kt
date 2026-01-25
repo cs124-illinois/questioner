@@ -80,7 +80,7 @@ class QuestionerPlugin : Plugin<Project> {
         project.dependencies.add("implementation", project.dependencies.create("org.cs124.questioner:lib:$VERSION"))
 
         tasks.withType(SourceTask::class.java) { sourceTask ->
-            sourceTask.exclude("**/.question.json")
+            // Note: .question.json no longer written to source tree (now in build/questioner/questions/)
             sourceTask.exclude("**/report.html")
             sourceTask.exclude("questions.json", "packageMap.json", *testFiles.toTypedArray())
         }
@@ -175,17 +175,39 @@ class QuestionerPlugin : Plugin<Project> {
         }
 
         project.tasks.register("cleanQuestions", Delete::class.java) { cleanQuestions ->
+            // Clean build directory artifacts
+            cleanQuestions.delete(
+                project.layout.buildDirectory.dir("questioner/questions"),
+            )
+            // Clean validation artifacts from source tree (still written there)
             cleanQuestions.delete(
                 project.extensions.getByType(JavaPluginExtension::class.java)
                     .sourceSets.getByName("main").allSource
-                    .filter { file -> file.name == ".validation.json" || file.name == "report.html" || file.name == ".question.json" },
+                    .filter { file -> file.name == ".validation.json" || file.name == "report.html" },
             )
         }
         project.tasks.getByName("clean").dependsOn("cleanQuestions")
 
-        project.tasks.register("saveQuestions", SaveQuestions::class.java) { saveQuestions ->
+        // Apply QuestionPlugin to all question subprojects
+        project.subprojects { subproject ->
+            if (subproject.name.startsWith("question-")) {
+                subproject.pluginManager.apply(QuestionPlugin::class.java)
+            }
+        }
+
+        // Aggregate saveQuestions task that depends on all subproject saveQuestion tasks
+        project.tasks.register("saveQuestions") { saveQuestions ->
+            saveQuestions.group = "questioner"
+            saveQuestions.description = "Save all question metadata files"
             saveQuestions.dependsOn("buildPackageMap")
             saveQuestions.mustRunAfter("cleanQuestions")
+
+            // Depend on all subproject saveQuestion tasks
+            project.subprojects { subproject ->
+                if (subproject.name.startsWith("question-")) {
+                    saveQuestions.dependsOn(subproject.tasks.named("saveQuestion"))
+                }
+            }
         }
 
         project.tasks.register("reconfigureForTesting") {

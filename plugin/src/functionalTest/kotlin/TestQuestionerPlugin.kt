@@ -28,7 +28,9 @@ class TestQuestionerPlugin :
                         }
                         resolutionStrategy {
                             eachPlugin {
-                                if (requested.id.id == "org.cs124.questioner") {
+                                if (requested.id.id == "org.cs124.questioner" ||
+                                    requested.id.id == "org.cs124.questioner.settings" ||
+                                    requested.id.id == "org.cs124.questioner.question") {
                                     useVersion("$VERSION")
                                 }
                             }

@@ -4,7 +4,6 @@ import com.github.slugify.Slugify
 import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.VERSION
-import edu.illinois.cs.cs125.questioner.lib.loadQuestion
 import edu.illinois.cs.cs125.questioner.lib.makeLanguageMap
 import org.jetbrains.annotations.NotNull
 import java.io.File
@@ -29,25 +28,13 @@ fun Path.parseDirectory(
 ): Question {
     val packageMap = inputPackageMap ?: baseDirectory.buildPackageMap()
 
-    val outputFile = parent.resolve(".question.json")
-    val existingQuestion = outputFile.toFile().loadQuestion()
-
     fun Set<String>.relativize() = map { Path.of(it).relativeTo(rootDirectory).toString() }
 
     val allFiles = allFiles()
-    if (!force &&
-        existingQuestion != null &&
-        existingQuestion.published.questionerVersion == questionerVersion &&
-        existingQuestion.metadata?.allFiles == allFiles.map { file -> file.path }.toSet().relativize() &&
-        outputFile.toFile().lastModified() > newestFile().lastModified()
-    ) {
-        return existingQuestion
-    }
-
     val contentHash = directoryHash(questionerVersion)
-    if (!force && existingQuestion?.published?.contentHash == contentHash) {
-        return existingQuestion
-    }
+
+    // Note: Manual caching logic removed - Gradle handles change detection via
+    // @InputDirectory/@OutputFile annotations on the SaveQuestion task.
 
     val solution = ParsedJavaFile(toFile())
     check(solution.correct != null) { "Solutions should have @Correct metadata" }

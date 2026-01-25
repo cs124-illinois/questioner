@@ -132,10 +132,11 @@ fun Question.generateSpec(
     rootDirectory: Path,
     testType: TestType,
 ): String {
-    val correctPath = correctPath
-    check(correctPath != null)
-    val jsonPath = rootDirectory.resolve(Path.of(correctPath)).parent.resolve(".question.json")
-    check(jsonPath.exists())
+    // Compute the hash from author/slug to find the question JSON file
+    val fullSlug = "${published.author}/${published.path}"
+    val hash = fullSlug.sha256Take16()
+    val jsonPath = rootDirectory.resolve("build/questioner/questions/$hash.question.json")
+    check(jsonPath.exists()) { "Question JSON not found at $jsonPath for ${published.name}" }
 
     val (methodName, actionDescription) = when (testType) {
         TestType.VALIDATE -> "validate" to "should complete validation"
