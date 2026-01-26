@@ -21,7 +21,7 @@ class ParseProgressManager(
     private var progressLogger: ProgressLogger? = null
     private val started = AtomicBoolean(false)
     private val tasksCompleted = AtomicInteger(0)
-    private val tasksSkipped = AtomicInteger(0)  // UP-TO-DATE tasks
+    private val tasksSkipped = AtomicInteger(0) // UP-TO-DATE tasks
 
     /**
      * Called at the start of each task's @TaskAction.
