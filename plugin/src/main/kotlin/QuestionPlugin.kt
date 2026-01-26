@@ -98,14 +98,12 @@ abstract class TestQuestionTask : DefaultTask() {
 
         // Phase 1: Validate (with JIT)
         ValidationClient.sendRequest(serverManager.getValidatePort(), filePath).onFailure { e ->
-            logger.error("Validation failed for $filePath: ${e.message}")
             serverManager.questionCompleted(false, filePath, "validate", e.message ?: "Unknown error")
             return
         }
 
         // Phase 2: Calibrate (without JIT)
         ValidationClient.sendRequest(serverManager.getCalibratePort(), filePath).onFailure { e ->
-            logger.error("Calibration failed for $filePath: ${e.message}")
             serverManager.questionCompleted(false, filePath, "calibrate", e.message ?: "Unknown error")
             return
         }
