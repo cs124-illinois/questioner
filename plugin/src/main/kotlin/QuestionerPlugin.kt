@@ -18,6 +18,7 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.testing.Test
+import org.gradle.internal.logging.progress.ProgressLoggerFactory
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -131,9 +132,17 @@ class QuestionerPlugin : Plugin<Project> {
         // Concurrency for validation (how many questions to validate in parallel)
         val validationConcurrency = dotenv["QUESTIONER_VALIDATION_CONCURRENCY"]?.toIntOrNull() ?: 8
 
+        // Count total question subprojects
+        val totalQuestions = project.subprojects.count { it.name.startsWith("question-") }
+
+        // Get ProgressLoggerFactory for progress reporting (internal API)
+        val serviceRegistry = (project as org.gradle.api.internal.project.ProjectInternal).services
+        val progressLoggerFactory = serviceRegistry.get(ProgressLoggerFactory::class.java)
+
         // Initialize the validation server manager with config values
         ValidationServerManager.initialize(
             project = project,
+            progressLoggerFactory = progressLoggerFactory,
             commonJvmArgs = commonJvmArgs,
             noJitJvmArgs = noJitJvmArgs,
             rootDir = project.rootProject.projectDir.absolutePath,
@@ -141,6 +150,7 @@ class QuestionerPlugin : Plugin<Project> {
             retries = config.retries,
             verbose = config.verbose,
             concurrency = validationConcurrency,
+            totalQuestions = totalQuestions,
         )
 
         configurations.getByName("checkstyle").apply {
@@ -215,50 +225,68 @@ class QuestionerPlugin : Plugin<Project> {
 
         project.tasks.register("recollectQuestions", CollectQuestions::class.java) { recollectQuestions ->
             recollectQuestions.dependsOn("saveQuestions")
+            recollectQuestions.mustRunAfter("validationReport")
         }
 
-        // Aggregate validation tasks that depend on all subproject validation tasks
-        project.tasks.register("validateQuestions") { task ->
+        // Shutdown validation servers
+        project.tasks.register("shutdownValidationServers") { task ->
+            task.doLast {
+                ValidationServerManager.getInstance(project)?.shutdown()
+            }
+        }
+
+        // Print validation report and fail if there were failures
+        project.tasks.register("validationReport") { task ->
+            task.doLast {
+                val manager = ValidationServerManager.getInstance(project)
+                if (manager != null) {
+                    val success = manager.printReport()
+                    if (!success) {
+                        throw RuntimeException("Validation failed for one or more questions")
+                    }
+                }
+            }
+        }
+
+        // Validate unvalidated questions (server skips already-validated)
+        project.tasks.register("validate") { task ->
             task.group = "questioner"
-            task.description = "Phase 1: Run bootstrap, mutation, and incorrect testing (with JIT)"
+            task.description = "Validate unvalidated questions"
             task.dependsOn("saveQuestions")
-            task.finalizedBy("recollectQuestions")
+            task.finalizedBy("validationReport", "recollectQuestions")
             project.subprojects { subproject ->
                 if (subproject.name.startsWith("question-")) {
-                    task.dependsOn(subproject.tasks.named("validateQuestion"))
+                    task.dependsOn(subproject.tasks.named("validate"))
                 }
             }
         }
 
-        project.tasks.register("calibrateQuestions") { task ->
+        // Validate all questions regardless of status
+        project.tasks.register("validateAll") { task ->
             task.group = "questioner"
-            task.description = "Phase 2: Run calibration (without JIT for consistent memory)"
-            task.mustRunAfter("validateQuestions")
-            task.finalizedBy("recollectQuestions")
+            task.description = "Validate all questions (re-validates already validated)"
+            task.dependsOn("saveQuestions")
+            task.finalizedBy("validationReport", "recollectQuestions")
             project.subprojects { subproject ->
                 if (subproject.name.startsWith("question-")) {
-                    task.dependsOn(subproject.tasks.named("calibrateQuestion"))
+                    task.dependsOn(subproject.tasks.named("validate"))
                 }
             }
+            // TODO: Pass force flag to server to re-validate
         }
 
-        project.tasks.register("testAllQuestions") { task ->
+        // Validate only focused questions
+        project.tasks.register("validateFocused") { task ->
             task.group = "questioner"
-            task.dependsOn("validateQuestions", "calibrateQuestions")
-            task.description = "Run full validation: phase 1 (with JIT) then phase 2 calibration (without JIT)"
-        }
-
-        project.tasks.register("testUnvalidatedQuestions") { task ->
-            task.group = "questioner"
-            task.dependsOn("validateQuestions", "calibrateQuestions")
-            task.description = "Run validation for unvalidated questions (two-phase)"
-        }
-
-        // TODO: Add focused question filtering via metadata check
-        project.tasks.register("testFocusedQuestions") { task ->
-            task.group = "questioner"
-            task.dependsOn("validateQuestions", "calibrateQuestions")
-            task.description = "Run validation for focused questions only (two-phase)"
+            task.description = "Validate focused questions only"
+            task.dependsOn("saveQuestions")
+            task.finalizedBy("validationReport", "recollectQuestions")
+            // TODO: Filter to only focused question subprojects
+            project.subprojects { subproject ->
+                if (subproject.name.startsWith("question-")) {
+                    task.dependsOn(subproject.tasks.named("validate"))
+                }
+            }
         }
 
         project.tasks.register("collectQuestions", CollectQuestions::class.java) { collectQuestions ->

@@ -71,59 +71,46 @@ class QuestionPlugin : Plugin<Project> {
         val questionFile = project.rootProject.layout.buildDirectory
             .file("questioner/questions/$hash.question.json").get().asFile
 
-        // Phase 1: Validate this question
-        project.tasks.register("validateQuestion", ValidateQuestionTask::class.java) { task ->
+        // Validate this question (runs both phases: validate + calibrate)
+        project.tasks.register("validate", TestQuestionTask::class.java) { task ->
             task.group = "questioner"
-            task.description = "Validate this question (phase 1)"
+            task.description = "Validate this question"
             task.questionFilePath.set(questionFile.absolutePath)
-            task.mode.set("validate")
             task.dependsOn(project.tasks.named("saveQuestion"))
-        }
-
-        // Phase 2: Calibrate this question
-        project.tasks.register("calibrateQuestion", ValidateQuestionTask::class.java) { task ->
-            task.group = "questioner"
-            task.description = "Calibrate this question (phase 2, no JIT)"
-            task.questionFilePath.set(questionFile.absolutePath)
-            task.mode.set("calibrate")
-            task.mustRunAfter(project.tasks.named("validateQuestion"))
-            task.dependsOn(project.tasks.named("saveQuestion"))
-        }
-
-        // Combined task to run both phases
-        project.tasks.register("testQuestion") { task ->
-            task.group = "questioner"
-            task.description = "Run full validation for this question (both phases)"
-            task.dependsOn("validateQuestion", "calibrateQuestion")
         }
     }
 }
 
 /**
- * Task that sends a validation request to the ValidationServer.
+ * Task that runs both validation phases (validate + calibrate) for a question.
+ * Does not fail the build on validation errors - failures are tracked and reported at the end.
  */
-abstract class ValidateQuestionTask : DefaultTask() {
+abstract class TestQuestionTask : DefaultTask() {
     @get:Input
     abstract val questionFilePath: Property<String>
 
-    @get:Input
-    abstract val mode: Property<String>
-
     @TaskAction
-    fun validate() {
+    fun test() {
         val serverManager = ValidationServerManager.getInstance(project.rootProject)
             ?: throw RuntimeException("ValidationServerManager not initialized. Run from root project.")
 
-        val port = when (mode.get()) {
-            "validate" -> serverManager.getValidatePort()
-            "calibrate" -> serverManager.getCalibratePort()
-            else -> throw IllegalArgumentException("Unknown mode: ${mode.get()}")
+        val filePath = questionFilePath.get()
+
+        // Phase 1: Validate (with JIT)
+        ValidationClient.sendRequest(serverManager.getValidatePort(), filePath).onFailure { e ->
+            logger.error("Validation failed for $filePath: ${e.message}")
+            serverManager.questionCompleted(false, filePath, "validate", e.message ?: "Unknown error")
+            return
         }
 
-        val result = ValidationClient.sendRequest(port, questionFilePath.get())
-        result.onFailure { e ->
-            throw RuntimeException("${mode.get()} failed for ${questionFilePath.get()}: ${e.message}", e)
+        // Phase 2: Calibrate (without JIT)
+        ValidationClient.sendRequest(serverManager.getCalibratePort(), filePath).onFailure { e ->
+            logger.error("Calibration failed for $filePath: ${e.message}")
+            serverManager.questionCompleted(false, filePath, "calibrate", e.message ?: "Unknown error")
+            return
         }
+
+        serverManager.questionCompleted(true)
     }
 }
 

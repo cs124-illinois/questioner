@@ -11,7 +11,10 @@ import java.net.ServerSocket
 import java.net.Socket
 import java.util.concurrent.Executors
 import java.util.concurrent.Semaphore
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicLong
 
 /**
  * Socket server that processes validation/calibration requests concurrently.
@@ -25,11 +28,30 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 object ValidationServer {
     private val shuttingDown = AtomicBoolean(false)
+    private val lastActivityTime = AtomicLong(System.currentTimeMillis())
+
+    // Default idle timeout: 1 hour in milliseconds
+    private const val DEFAULT_IDLE_TIMEOUT_MS = 60 * 60 * 1000L
+
+    private fun updateLastActivity() {
+        lastActivityTime.set(System.currentTimeMillis())
+    }
+
+    private fun startIdleTimeoutChecker(idleTimeoutMs: Long, scheduler: ScheduledExecutorService) {
+        scheduler.scheduleAtFixedRate({
+            val idleTime = System.currentTimeMillis() - lastActivityTime.get()
+            if (idleTime >= idleTimeoutMs) {
+                println("ValidationServer idle for ${idleTime / 1000}s, shutting down...")
+                shuttingDown.set(true)
+                System.exit(0)
+            }
+        }, 1, 1, TimeUnit.MINUTES)
+    }
 
     @JvmStatic
     fun main(args: Array<String>) {
         if (args.size < 3) {
-            System.err.println("Usage: ValidationServer <mode> <port> <rootDir> [maxMutationCount] [retries] [verbose] [concurrency]")
+            System.err.println("Usage: ValidationServer <mode> <port> <rootDir> [maxMutationCount] [retries] [verbose] [concurrency] [idleTimeoutMinutes]")
             System.exit(1)
         }
 
@@ -40,6 +62,8 @@ object ValidationServer {
         val retries = args.getOrNull(4)?.toIntOrNull() ?: 4
         val verbose = args.getOrNull(5)?.toBooleanStrictOrNull() ?: false
         val concurrency = args.getOrNull(6)?.toIntOrNull() ?: 8
+        val idleTimeoutMinutes = args.getOrNull(7)?.toIntOrNull() ?: 60
+        val idleTimeoutMs = idleTimeoutMinutes * 60 * 1000L
 
         val options = ValidatorOptions(
             maxMutationCount = maxMutationCount,
@@ -57,7 +81,11 @@ object ValidationServer {
         // Warm up before accepting requests
         println("ValidationServer ($mode) warming up...")
         runBlocking { warm() }
-        println("ValidationServer ($mode) ready, concurrency=$concurrency")
+        println("ValidationServer ($mode) ready, concurrency=$concurrency, idleTimeout=${idleTimeoutMinutes}min")
+
+        // Start idle timeout checker
+        val scheduler = Executors.newSingleThreadScheduledExecutor()
+        startIdleTimeoutChecker(idleTimeoutMs, scheduler)
 
         ServerSocket(port).use { serverSocket ->
             // Write port to stdout so Gradle can read it (in case port was 0 for auto-select)
@@ -109,6 +137,7 @@ object ValidationServer {
     }
 
     private fun handleClient(client: Socket, mode: String, options: ValidatorOptions, semaphore: Semaphore) {
+        updateLastActivity()
         client.use { socket ->
             val reader = socket.getInputStream().bufferedReader()
             val writer = PrintWriter(socket.getOutputStream(), true)
