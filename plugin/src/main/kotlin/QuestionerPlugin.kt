@@ -18,7 +18,6 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.testing.Test
-import org.gradle.internal.logging.progress.ProgressLoggerFactory
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -135,21 +134,9 @@ class QuestionerPlugin : Plugin<Project> {
         // Count total question subprojects
         val totalQuestions = project.subprojects.count { it.name.startsWith("question-") }
 
-        // Get ProgressLoggerFactory for progress reporting (internal API)
-        val serviceRegistry = (project as org.gradle.api.internal.project.ProjectInternal).services
-        val progressLoggerFactory = serviceRegistry.get(ProgressLoggerFactory::class.java)
-
-        // Initialize parse progress manager
-        ParseProgressManager.initialize(
-            project = project,
-            progressLoggerFactory = progressLoggerFactory,
-            totalQuestions = totalQuestions,
-        )
-
         // Initialize the validation server manager with config values
         ValidationServerManager.initialize(
             project = project,
-            progressLoggerFactory = progressLoggerFactory,
             commonJvmArgs = commonJvmArgs,
             noJitJvmArgs = noJitJvmArgs,
             rootDir = project.rootProject.projectDir.absolutePath,
@@ -223,21 +210,6 @@ class QuestionerPlugin : Plugin<Project> {
                 }
             }
 
-            parseTask.doLast {
-                ParseProgressManager.getInstance(project)?.finish()
-            }
-        }
-
-        // Start parse progress when first subproject parse task runs
-        project.gradle.taskGraph.whenReady { graph ->
-            val parseTasksInGraph = graph.allTasks.filter {
-                it.name == "parse" && it.project.name.startsWith("question-")
-            }
-            if (parseTasksInGraph.isNotEmpty()) {
-                parseTasksInGraph.first().doFirst {
-                    ParseProgressManager.getInstance(project)?.start()
-                }
-            }
         }
 
         project.tasks.register("reconfigureForTesting") {

@@ -1,8 +1,6 @@
 package edu.illinois.cs.cs125.questioner.plugin
 
 import org.gradle.api.Project
-import org.gradle.internal.logging.progress.ProgressLogger
-import org.gradle.internal.logging.progress.ProgressLoggerFactory
 import java.awt.Desktop
 import java.io.File
 import java.net.URI
@@ -20,7 +18,6 @@ import java.util.concurrent.atomic.AtomicInteger
  */
 class ValidationServerManager(
     private val project: Project,
-    private val progressLoggerFactory: ProgressLoggerFactory,
     private val commonJvmArgs: List<String>,
     private val noJitJvmArgs: List<String>,
     private val rootDir: String,
@@ -37,8 +34,7 @@ class ValidationServerManager(
     private var calibrateServerPort: Int? = null
     private var calibrateServerProcess: Process? = null
 
-    // Single progress tracker for all validation
-    private var progressLogger: ProgressLogger? = null
+    // Track validation results
     private val completed = AtomicInteger(0)
     private val failed = AtomicInteger(0)
     private val failures = ConcurrentLinkedQueue<ValidationFailure>()
@@ -54,7 +50,6 @@ class ValidationServerManager(
                 registerShutdownHook(process, port, "validate")
             }
         }
-        ensureProgressStarted()
         return validateServerPort!!
     }
 
@@ -70,17 +65,6 @@ class ValidationServerManager(
         return calibrateServerPort!!
     }
 
-    @Synchronized
-    private fun ensureProgressStarted() {
-        if (progressLogger == null) {
-            progressLogger = progressLoggerFactory.newOperation(ValidationServerManager::class.java).also {
-                it.description = "Validating questions"
-                it.started()
-                it.progress("0/$totalQuestions")
-            }
-        }
-    }
-
     fun questionCompleted(success: Boolean, filePath: String? = null, phase: String? = null, errorMessage: String? = null) {
         if (success) {
             completed.incrementAndGet()
@@ -90,27 +74,6 @@ class ValidationServerManager(
                 failures.add(ValidationFailure(filePath, phase, errorMessage))
             }
         }
-        updateProgress()
-    }
-
-    private fun updateProgress() {
-        val done = completed.get()
-        val failCount = failed.get()
-        val total = totalQuestions
-
-        val progressBar = buildProgressBar(done + failCount, total, 20)
-        val status = buildString {
-            append("$progressBar ${done + failCount}/$total")
-            if (failCount > 0) append(" ($failCount failed)")
-        }
-        progressLogger?.progress(status)
-    }
-
-    private fun buildProgressBar(current: Int, total: Int, width: Int): String {
-        if (total == 0) return "[${"=".repeat(width)}]"
-        val filled = (current.toDouble() / total * width).toInt().coerceIn(0, width)
-        val empty = width - filled
-        return "[" + "=".repeat(filled) + " ".repeat(empty) + "]"
     }
 
     fun printReport(): Boolean {
@@ -264,9 +227,6 @@ class ValidationServerManager(
 
     @Synchronized
     fun shutdown() {
-        progressLogger?.completed()
-        progressLogger = null
-
         // Shutdown servers
         validateServerPort?.let { port ->
             try {
@@ -457,7 +417,6 @@ class ValidationServerManager(
         @Synchronized
         fun initialize(
             project: Project,
-            progressLoggerFactory: ProgressLoggerFactory,
             commonJvmArgs: List<String>,
             noJitJvmArgs: List<String>,
             rootDir: String,
@@ -470,7 +429,6 @@ class ValidationServerManager(
         ): ValidationServerManager = managers.getOrPut(project.rootProject) {
             ValidationServerManager(
                 project.rootProject,
-                progressLoggerFactory,
                 commonJvmArgs,
                 noJitJvmArgs,
                 rootDir,

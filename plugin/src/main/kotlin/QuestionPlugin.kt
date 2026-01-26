@@ -181,9 +181,6 @@ abstract class ParseQuestion : DefaultTask() {
 
             // Write the question JSON
             question.writeToFile(outputFile.get().asFile)
-
-            // Update progress
-            ParseProgressManager.getInstance(project.rootProject)?.questionCompleted()
         } catch (e: Exception) {
             throw RuntimeException("Problem parsing file://$correctPath", e)
         }
