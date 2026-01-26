@@ -1,0 +1,84 @@
+package edu.illinois.cs.cs125.questioner.plugin
+
+import org.gradle.internal.logging.progress.ProgressLogger
+import org.gradle.internal.logging.progress.ProgressLoggerFactory
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicInteger
+
+/**
+ * Thread-safe progress manager for parse tasks.
+ *
+ * Handles parallel task execution by using atomic operations:
+ * - AtomicBoolean ensures only one task starts the progress bar
+ * - AtomicInteger ensures thread-safe counting
+ *
+ * Only shows progress if at least one task actually runs (not UP-TO-DATE).
+ */
+class ParseProgressManager(
+    private val progressLoggerFactory: ProgressLoggerFactory,
+    private val totalQuestions: Int,
+) {
+    private var progressLogger: ProgressLogger? = null
+    private val started = AtomicBoolean(false)
+    private val completed = AtomicInteger(0)
+
+    /**
+     * Called at the start of each task's @TaskAction.
+     * Only the first caller actually starts the progress bar.
+     */
+    fun taskStarting() {
+        if (started.compareAndSet(false, true)) {
+            progressLogger = progressLoggerFactory.newOperation(ParseProgressManager::class.java).also {
+                it.description = "Parsing questions"
+                it.started()
+                it.progress(formatProgress(0))
+            }
+        }
+    }
+
+    /**
+     * Called after each task completes its work.
+     */
+    fun taskCompleted() {
+        val done = completed.incrementAndGet()
+        progressLogger?.progress(formatProgress(done))
+    }
+
+    private fun formatProgress(current: Int): String {
+        val progressBar = buildProgressBar(current, totalQuestions, 20)
+        return "$progressBar $current/$totalQuestions"
+    }
+
+    private fun buildProgressBar(current: Int, total: Int, width: Int): String {
+        if (total == 0) return "[${"=".repeat(width)}]"
+        val filled = (current.toDouble() / total * width).toInt().coerceIn(0, width)
+        val empty = width - filled
+        return "[" + "=".repeat(filled) + " ".repeat(empty) + "]"
+    }
+
+    /**
+     * Called from root parse task's doLast to complete the progress bar.
+     */
+    fun finish() {
+        progressLogger?.completed()
+        progressLogger = null
+    }
+
+    companion object {
+        private var currentManager: ParseProgressManager? = null
+
+        /**
+         * Initialize a fresh manager for this build.
+         * Must be called at the start of each build (from afterEvaluate).
+         */
+        @Synchronized
+        fun initialize(progressLoggerFactory: ProgressLoggerFactory, totalQuestions: Int) {
+            currentManager = ParseProgressManager(progressLoggerFactory, totalQuestions)
+        }
+
+        /**
+         * Get the current manager instance.
+         */
+        fun getInstance(): ParseProgressManager? = currentManager
+    }
+}

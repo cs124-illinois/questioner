@@ -18,6 +18,7 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.testing.Test
+import org.gradle.internal.logging.progress.ProgressLoggerFactory
 import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -134,6 +135,13 @@ class QuestionerPlugin : Plugin<Project> {
         // Count total question subprojects
         val totalQuestions = project.subprojects.count { it.name.startsWith("question-") }
 
+        // Get ProgressLoggerFactory for progress reporting
+        val serviceRegistry = (project as org.gradle.api.internal.project.ProjectInternal).services
+        val progressLoggerFactory = serviceRegistry.get(ProgressLoggerFactory::class.java)
+
+        // Initialize parse progress manager (fresh instance each build)
+        ParseProgressManager.initialize(progressLoggerFactory, totalQuestions)
+
         // Initialize the validation server manager with config values
         ValidationServerManager.initialize(
             project = project,
@@ -210,6 +218,10 @@ class QuestionerPlugin : Plugin<Project> {
                 }
             }
 
+            // Finish progress bar after all parse tasks complete
+            parseTask.doLast {
+                ParseProgressManager.getInstance()?.finish()
+            }
         }
 
         project.tasks.register("reconfigureForTesting") {

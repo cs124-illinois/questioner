@@ -160,6 +160,9 @@ abstract class ParseQuestion : DefaultTask() {
 
     @TaskAction
     fun save() {
+        // Signal that a parse task is starting (first caller starts progress bar)
+        ParseProgressManager.getInstance()?.taskStarting()
+
         val correctPath = correctFile.get().asFile.toPath()
         val baseDir = baseDirectory.get().asFile.toPath()
         val rootDir = rootDirectory.get().asFile.toPath()
@@ -181,6 +184,9 @@ abstract class ParseQuestion : DefaultTask() {
 
             // Write the question JSON
             question.writeToFile(outputFile.get().asFile)
+
+            // Update progress
+            ParseProgressManager.getInstance()?.taskCompleted()
         } catch (e: Exception) {
             throw RuntimeException("Problem parsing file://$correctPath", e)
         }
