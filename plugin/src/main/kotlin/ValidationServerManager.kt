@@ -43,20 +43,18 @@ class ValidationServerManager(
 
     data class ValidationFailure(val filePath: String, val phase: String, val message: String)
 
-    private fun getQuestionDisplayName(filePath: String): String {
-        return try {
-            val question = json.decodeFromString<Question>(File(filePath).readText())
-            val publishedPath = question.published.path
-            val correctPath = question.correctPath
-            if (correctPath != null) {
-                "$publishedPath ($correctPath)"
-            } else {
-                publishedPath
-            }
-        } catch (e: Exception) {
-            // Fallback to hash if we can't read the file
-            filePath.substringAfterLast("/").removeSuffix(".parsed.json")
+    private fun getQuestionDisplayName(filePath: String): String = try {
+        val question = json.decodeFromString<Question>(File(filePath).readText())
+        val publishedPath = question.published.path
+        val correctPath = question.correctPath
+        if (correctPath != null) {
+            "$publishedPath ($correctPath)"
+        } else {
+            publishedPath
         }
+    } catch (e: Exception) {
+        // Fallback to hash if we can't read the file
+        filePath.substringAfterLast("/").removeSuffix(".parsed.json")
     }
 
     @Synchronized

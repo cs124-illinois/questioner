@@ -152,8 +152,7 @@ abstract class ParseQuestion : DefaultTask() {
     @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val questionDirectory: DirectoryProperty
 
-    @get:InputDirectory
-    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:Internal // Not @InputDirectory - this is just for path resolution, not content tracking
     abstract val baseDirectory: DirectoryProperty
 
     @get:Internal
