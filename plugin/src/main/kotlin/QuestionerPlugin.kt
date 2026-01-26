@@ -151,6 +151,18 @@ class QuestionerPlugin : Plugin<Project> {
             }
         }
 
+        // Initialize validate progress manager (fresh instance each build)
+        ValidateProgressManager.initialize(progressLoggerFactory, totalQuestions)
+
+        // Track UP-TO-DATE validate tasks to adjust progress denominator
+        project.gradle.taskGraph.afterTask { task ->
+            if (task.name == "validate" && task.project.name.startsWith("question-")) {
+                if (task.state.upToDate) {
+                    ValidateProgressManager.getInstance()?.taskSkipped()
+                }
+            }
+        }
+
         // Initialize the validation server manager with config values
         ValidationServerManager.initialize(
             project = project,
@@ -254,6 +266,9 @@ class QuestionerPlugin : Plugin<Project> {
         // Print validation report and fail if there were failures
         project.tasks.register("validationReport") { task ->
             task.doLast {
+                // Finish progress bar before printing report
+                ValidateProgressManager.getInstance()?.finish()
+
                 val manager = ValidationServerManager.getInstance(project)
                 if (manager != null) {
                     val success = manager.printReport()

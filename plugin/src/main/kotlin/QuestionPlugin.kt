@@ -108,6 +108,9 @@ abstract class TestQuestionTask : DefaultTask() {
 
     @TaskAction
     fun test() {
+        // Signal that a validate task is starting (first caller starts progress bar)
+        ValidateProgressManager.getInstance()?.taskStarting()
+
         val serverManager = ValidationServerManager.getInstance(project.rootProject)
             ?: throw RuntimeException("ValidationServerManager not initialized. Run from root project.")
 
@@ -116,16 +119,19 @@ abstract class TestQuestionTask : DefaultTask() {
         // Phase 1: Validate (with JIT)
         ValidationClient.sendRequest(serverManager.getValidatePort(), filePath).onFailure { e ->
             serverManager.questionCompleted(false, filePath, "validate", e.message ?: "Unknown error")
+            ValidateProgressManager.getInstance()?.taskCompleted()
             return
         }
 
         // Phase 2: Calibrate (without JIT)
         ValidationClient.sendRequest(serverManager.getCalibratePort(), filePath).onFailure { e ->
             serverManager.questionCompleted(false, filePath, "calibrate", e.message ?: "Unknown error")
+            ValidateProgressManager.getInstance()?.taskCompleted()
             return
         }
 
         serverManager.questionCompleted(true)
+        ValidateProgressManager.getInstance()?.taskCompleted()
     }
 }
 
