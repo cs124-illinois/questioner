@@ -1,5 +1,7 @@
 package edu.illinois.cs.cs125.questioner.plugin
 
+import edu.illinois.cs.cs125.questioner.lib.Question
+import edu.illinois.cs.cs125.questioner.lib.serialization.json
 import org.gradle.api.Project
 import java.awt.Desktop
 import java.io.File
@@ -40,6 +42,22 @@ class ValidationServerManager(
     private val failures = ConcurrentLinkedQueue<ValidationFailure>()
 
     data class ValidationFailure(val filePath: String, val phase: String, val message: String)
+
+    private fun getQuestionDisplayName(filePath: String): String {
+        return try {
+            val question = json.decodeFromString<Question>(File(filePath).readText())
+            val publishedPath = question.published.path
+            val correctPath = question.correctPath
+            if (correctPath != null) {
+                "$publishedPath ($correctPath)"
+            } else {
+                publishedPath
+            }
+        } catch (e: Exception) {
+            // Fallback to hash if we can't read the file
+            filePath.substringAfterLast("/").removeSuffix(".parsed.json")
+        }
+    }
 
     @Synchronized
     fun getValidatePort(): Int {
@@ -93,8 +111,8 @@ class ValidationServerManager(
             println()
             println("Failures:")
             failures.forEach { failure ->
-                val shortPath = failure.filePath.substringAfterLast("/")
-                println("  - $shortPath (${failure.phase})")
+                val displayName = getQuestionDisplayName(failure.filePath)
+                println("  - $displayName (${failure.phase})")
                 println("    ${failure.message.take(200)}")
             }
 
@@ -161,8 +179,10 @@ class ValidationServerManager(
                 appendLine("    <h2>Failures</h2>")
                 appendLine("    <div class=\"failures\">")
                 failures.forEach { failure ->
-                    val shortPath = failure.filePath.substringAfterLast("/")
-                    val questionName = shortPath.removeSuffix(".question.json")
+                    val questionName = getQuestionDisplayName(failure.filePath)
+                        .replace("&", "&amp;")
+                        .replace("<", "&lt;")
+                        .replace(">", "&gt;")
                     val escapedMessage = failure.message
                         .replace("&", "&amp;")
                         .replace("<", "&lt;")
