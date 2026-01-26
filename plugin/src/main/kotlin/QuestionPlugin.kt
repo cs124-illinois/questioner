@@ -29,9 +29,9 @@ class QuestionPlugin : Plugin<Project> {
         // This plugin is applied to question subprojects (question-<hash>)
         // The root project should have the package map and source directory info
 
-        project.tasks.register("saveQuestion", SaveQuestion::class.java) { task ->
+        project.tasks.register("parse", ParseQuestion::class.java) { task ->
             task.group = "questioner"
-            task.description = "Parse and save this question's metadata"
+            task.description = "Parse this question's metadata"
 
             // Find the @Correct file in this project directory
             val correctFile = project.projectDir.listFiles { file ->
@@ -57,7 +57,7 @@ class QuestionPlugin : Plugin<Project> {
             // Output goes to build directory with hashed filename
             val hash = project.name.removePrefix("question-")
             task.outputFile.set(
-                project.rootProject.layout.buildDirectory.file("questioner/questions/$hash.question.json"),
+                project.rootProject.layout.buildDirectory.file("questioner/questions/$hash.parsed.json"),
             )
 
             task.questionerVersion.set(VERSION)
@@ -68,15 +68,22 @@ class QuestionPlugin : Plugin<Project> {
 
         // Get the question hash and output file path for validation tasks
         val hash = project.name.removePrefix("question-")
-        val questionFile = project.rootProject.layout.buildDirectory
-            .file("questioner/questions/$hash.question.json").get().asFile
+        val parsedFile = project.rootProject.layout.buildDirectory
+            .file("questioner/questions/$hash.parsed.json").get().asFile
 
         // Validate this question (runs both phases: validate + calibrate)
         project.tasks.register("validate", TestQuestionTask::class.java) { task ->
             task.group = "questioner"
             task.description = "Validate this question"
-            task.questionFilePath.set(questionFile.absolutePath)
-            task.dependsOn(project.tasks.named("saveQuestion"))
+            task.questionFilePath.set(parsedFile.absolutePath)
+            task.parsedFile.set(parsedFile)
+            task.validatedFile.set(
+                project.rootProject.layout.buildDirectory.file("questioner/questions/$hash.validated.json"),
+            )
+            task.calibratedFile.set(
+                project.rootProject.layout.buildDirectory.file("questioner/questions/$hash.calibrated.json"),
+            )
+            task.dependsOn(project.tasks.named("parse"))
         }
     }
 }
@@ -86,8 +93,18 @@ class QuestionPlugin : Plugin<Project> {
  * Does not fail the build on validation errors - failures are tracked and reported at the end.
  */
 abstract class TestQuestionTask : DefaultTask() {
-    @get:Input
+    @get:Internal
     abstract val questionFilePath: Property<String>
+
+    @get:InputFile
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    abstract val parsedFile: RegularFileProperty
+
+    @get:OutputFile
+    abstract val validatedFile: RegularFileProperty
+
+    @get:OutputFile
+    abstract val calibratedFile: RegularFileProperty
 
     @TaskAction
     fun test() {
@@ -115,7 +132,7 @@ abstract class TestQuestionTask : DefaultTask() {
 /**
  * Task to parse a single question directory and save its metadata.
  */
-abstract class SaveQuestion : DefaultTask() {
+abstract class ParseQuestion : DefaultTask() {
     @get:InputFile
     @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val correctFile: RegularFileProperty
@@ -164,6 +181,9 @@ abstract class SaveQuestion : DefaultTask() {
 
             // Write the question JSON
             question.writeToFile(outputFile.get().asFile)
+
+            // Update progress
+            ParseProgressManager.getInstance(project.rootProject)?.questionCompleted()
         } catch (e: Exception) {
             throw RuntimeException("Problem parsing file://$correctPath", e)
         }

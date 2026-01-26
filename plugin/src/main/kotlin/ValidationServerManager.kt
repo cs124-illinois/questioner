@@ -241,12 +241,15 @@ class ValidationServerManager(
                 os.contains("mac") -> {
                     Runtime.getRuntime().exec(arrayOf("open", file.absolutePath))
                 }
+
                 os.contains("win") -> {
                     Runtime.getRuntime().exec(arrayOf("cmd", "/c", "start", file.absolutePath))
                 }
+
                 os.contains("nix") || os.contains("nux") -> {
                     Runtime.getRuntime().exec(arrayOf("xdg-open", file.absolutePath))
                 }
+
                 else -> {
                     // Fallback to Desktop API
                     if (Desktop.isDesktopSupported()) {

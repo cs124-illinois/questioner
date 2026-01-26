@@ -2,7 +2,7 @@ package edu.illinois.cs.cs125.questioner.plugin
 
 import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
-import edu.illinois.cs.cs125.questioner.lib.loadQuestion
+import edu.illinois.cs.cs125.questioner.lib.QuestionFiles
 import edu.illinois.cs.cs125.questioner.lib.serialization.json
 import io.kotest.inspectors.forAll
 import kotlinx.serialization.encodeToString
@@ -20,13 +20,14 @@ abstract class CollectQuestions : DefaultTask() {
     @InputFiles
     val inputFiles: FileCollection = project.fileTree(
         project.layout.buildDirectory.dir("questioner/questions"),
-    ).matching { it.include("*.question.json") }
+    ).matching { it.include("*.parsed.json") }
 
     @TaskAction
     fun collect() {
         val questions = inputFiles.files
             .mapNotNull { file ->
-                val question = file.loadQuestion()
+                // Merge parsed question with validation and calibration results
+                val question = QuestionFiles.mergeQuestion(file.absolutePath)
                 if (question == null) {
                     logger.warn("Could not load question from $file")
                     return@mapNotNull null

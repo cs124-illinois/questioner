@@ -97,4 +97,57 @@ class TestQuestionerPlugin :
                 destination.exists() shouldBe true
             }
         }
+
+        "second validate run should be up-to-date".config(timeout = 600.seconds) {
+            val fixturesDir = File("../plugin-fixtures")
+            val repoPath = System.getProperty("com.autonomousapps.plugin-under-test.repo")
+                ?: error("Missing system property: com.autonomousapps.plugin-under-test.repo")
+
+            val initScript = createInitScript(repoPath)
+
+            // First: clean validate to ensure fresh state
+            val cleanResult = GradleRunner.create()
+                .withProjectDir(fixturesDir)
+                .withArguments(
+                    "--init-script",
+                    initScript.absolutePath,
+                    "clean",
+                    "validate",
+                    "--stacktrace",
+                )
+                .forwardOutput()
+                .build()
+
+            cleanResult.task(":validate")?.outcome shouldBe TaskOutcome.SUCCESS
+
+            // Second: run validate again - everything should be up-to-date
+            val secondResult = GradleRunner.create()
+                .withProjectDir(fixturesDir)
+                .withArguments(
+                    "--init-script",
+                    initScript.absolutePath,
+                    "validate",
+                    "--stacktrace",
+                )
+                .forwardOutput()
+                .build()
+
+            // All subproject parse tasks should be up-to-date (split files prevent re-running)
+            val parseTasks = secondResult.tasks.filter {
+                it.path.contains(":question-") && it.path.endsWith(":parse")
+            }
+            parseTasks.size shouldBeGreaterThan 0
+            parseTasks.forEach { task ->
+                task.outcome shouldBe TaskOutcome.UP_TO_DATE
+            }
+
+            // All subproject validate tasks should be up-to-date
+            val validateTasks = secondResult.tasks.filter {
+                it.path.contains(":question-") && it.path.endsWith(":validate")
+            }
+            validateTasks.size shouldBeGreaterThan 0
+            validateTasks.forEach { task ->
+                task.outcome shouldBe TaskOutcome.UP_TO_DATE
+            }
+        }
     })

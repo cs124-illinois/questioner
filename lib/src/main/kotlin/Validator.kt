@@ -30,25 +30,29 @@ private inline fun retryOnValidation(
 data class ValidatorOptions(val maxMutationCount: Int, val retries: Int, val verbose: Boolean, val rootDirectory: String)
 
 // Phase 1: Bootstrap, mutation, and incorrect testing (runs with JIT for speed)
+// Reads from .parsed.json, writes to .validated.json
 @Suppress("unused")
 suspend fun String.validate(options: ValidatorOptions) {
     val (maxMutationCount, retries, verbose, rootDirectory) = options
 
     gradleRootDirectory = rootDirectory.fromBase64()
 
-    val file = Path.of(this).toFile()
-    check(file.exists())
-
-    val question = file.loadQuestion()
-    check(question != null)
+    val parsedPath = this
+    val parsedFile = Path.of(parsedPath).toFile()
+    check(parsedFile.exists()) { "Parsed file not found: $parsedPath" }
 
     // Skip if already completed validation (phase 1)
-    if (question.phase1Completed) {
-        println("SKIPPED ${question.published.name}: Validation already complete")
+    val existingPhase1 = QuestionFiles.loadPhase1Result(parsedPath)
+    if (existingPhase1 != null) {
+        val question = parsedFile.loadQuestion()
+        println("SKIPPED ${question?.published?.name ?: parsedPath}: Validation already complete")
         return
     }
 
-    val reportPath = Path.of(this).parent.resolve("report.html")
+    val question = parsedFile.loadQuestion()
+    check(question != null) { "Could not load question from $parsedPath" }
+
+    val reportPath = Path.of(parsedPath).parent.resolve("report.html")
 
     val startSeed = if (question.control.seed!! != -1) {
         question.control.seed!!
@@ -72,39 +76,45 @@ suspend fun String.validate(options: ValidatorOptions) {
     } catch (e: Exception) {
         reportPath.deleteIfExists()
         throw e
-    } finally {
-        question.writeToFile(file)
     }
 
-    check(question.phase1Completed) { "Question should have validation complete" }
+    // Save phase 1 results to .validated.json
+    check(question.phase1Results != null) { "Question should have phase1Results after validation" }
+    QuestionFiles.savePhase1Result(parsedPath, Phase1ValidationResult(question.phase1Results!!))
+
     println("${question.published.name}: Validation complete ($retried retries)")
 }
 
 // Phase 2: Calibration only (runs without JIT for consistent memory measurements)
+// Reads from .parsed.json + .validated.json, writes to .calibrated.json
 @Suppress("unused")
 suspend fun String.calibrate(options: ValidatorOptions) {
     val (_, _, _, rootDirectory) = options
 
     gradleRootDirectory = rootDirectory.fromBase64()
 
-    val file = Path.of(this).toFile()
-    check(file.exists())
-
-    val question = file.loadQuestion()
-    check(question != null)
+    val parsedPath = this
+    val parsedFile = Path.of(parsedPath).toFile()
+    check(parsedFile.exists()) { "Parsed file not found: $parsedPath" }
 
     // Skip if already calibrated (fully validated)
-    if (question.validated) {
-        println("SKIPPED ${question.published.name}: Already calibrated")
+    val existingPhase2 = QuestionFiles.loadPhase2Result(parsedPath)
+    if (existingPhase2 != null) {
+        val question = parsedFile.loadQuestion()
+        println("SKIPPED ${question?.published?.name ?: parsedPath}: Already calibrated")
         return
     }
 
-    // Check validation (phase 1) is complete
-    if (!question.phase1Completed) {
-        error("Validation must be completed before calibration for ${question.published.name}")
-    }
+    // Load parsed question
+    val question = parsedFile.loadQuestion()
+    check(question != null) { "Could not load question from $parsedPath" }
 
-    val reportPath = Path.of(this).parent.resolve("report.html")
+    // Load phase 1 results and apply to question
+    val phase1Result = QuestionFiles.loadPhase1Result(parsedPath)
+    check(phase1Result != null) { "Validation must be completed before calibration for ${question.published.name}" }
+    question.phase1Results = phase1Result.phase1Results
+
+    val reportPath = Path.of(parsedPath).parent.resolve("report.html")
 
     val report = try {
         question.calibrate()
@@ -120,11 +130,20 @@ suspend fun String.calibrate(options: ValidatorOptions) {
     } catch (e: Exception) {
         reportPath.deleteIfExists()
         throw e
-    } finally {
-        question.writeToFile(file)
     }
 
-    check(question.validated) { "Question should be calibrated" }
+    // Save phase 2 results to .calibrated.json
+    check(question.testingSettings != null) { "Question should have testingSettings after calibration" }
+    check(question.validationResults != null) { "Question should have validationResults after calibration" }
+    QuestionFiles.savePhase2Result(
+        parsedPath,
+        Phase2CalibrationResult(
+            testingSettings = question.testingSettings!!,
+            testTestingLimits = question.testTestingLimits,
+            validationResults = question.validationResults!!,
+        ),
+    )
+
     reportPath.toFile().writeText(report.report())
     println("${question.published.name}: ${report.summary}")
 }

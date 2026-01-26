@@ -86,7 +86,7 @@ class QuestionerPlugin : Plugin<Project> {
         tasks.getByName("check")
             .dependsOn("detekt", "checkstyleMain", "googleJavaFormat", "lintKotlinMain", "formatKotlinMain")
         tasks.getByName("checkstyleMain").mustRunAfter("googleJavaFormat")
-        tasks.getByName("saveQuestions")
+        tasks.getByName("parse")
             .mustRunAfter("detekt", "checkstyleMain", "googleJavaFormat", "lintKotlinMain", "formatKotlinMain")
 
         project.tasks.getByName("compileJava").mustRunAfter("reconfigureForTesting")
@@ -138,6 +138,13 @@ class QuestionerPlugin : Plugin<Project> {
         // Get ProgressLoggerFactory for progress reporting (internal API)
         val serviceRegistry = (project as org.gradle.api.internal.project.ProjectInternal).services
         val progressLoggerFactory = serviceRegistry.get(ProgressLoggerFactory::class.java)
+
+        // Initialize parse progress manager
+        ParseProgressManager.initialize(
+            project = project,
+            progressLoggerFactory = progressLoggerFactory,
+            totalQuestions = totalQuestions,
+        )
 
         // Initialize the validation server manager with config values
         ValidationServerManager.initialize(
@@ -202,17 +209,33 @@ class QuestionerPlugin : Plugin<Project> {
             }
         }
 
-        // Aggregate saveQuestions task that depends on all subproject saveQuestion tasks
-        project.tasks.register("saveQuestions") { saveQuestions ->
-            saveQuestions.group = "questioner"
-            saveQuestions.description = "Save all question metadata files"
-            saveQuestions.dependsOn("buildPackageMap")
-            saveQuestions.mustRunAfter("cleanQuestions")
+        // Aggregate parse task that depends on all subproject parse tasks
+        project.tasks.register("parse") { parseTask ->
+            parseTask.group = "questioner"
+            parseTask.description = "Parse all question files"
+            parseTask.dependsOn("buildPackageMap")
+            parseTask.mustRunAfter("cleanQuestions")
 
-            // Depend on all subproject saveQuestion tasks
+            // Depend on all subproject parse tasks
             project.subprojects { subproject ->
                 if (subproject.name.startsWith("question-")) {
-                    saveQuestions.dependsOn(subproject.tasks.named("saveQuestion"))
+                    parseTask.dependsOn(subproject.tasks.named("parse"))
+                }
+            }
+
+            parseTask.doLast {
+                ParseProgressManager.getInstance(project)?.finish()
+            }
+        }
+
+        // Start parse progress when first subproject parse task runs
+        project.gradle.taskGraph.whenReady { graph ->
+            val parseTasksInGraph = graph.allTasks.filter {
+                it.name == "parse" && it.project.name.startsWith("question-")
+            }
+            if (parseTasksInGraph.isNotEmpty()) {
+                parseTasksInGraph.first().doFirst {
+                    ParseProgressManager.getInstance(project)?.start()
                 }
             }
         }
@@ -224,7 +247,7 @@ class QuestionerPlugin : Plugin<Project> {
         }
 
         project.tasks.register("recollectQuestions", CollectQuestions::class.java) { recollectQuestions ->
-            recollectQuestions.dependsOn("saveQuestions")
+            recollectQuestions.dependsOn("parse")
             recollectQuestions.mustRunAfter("validationReport")
         }
 
@@ -252,7 +275,7 @@ class QuestionerPlugin : Plugin<Project> {
         project.tasks.register("validate") { task ->
             task.group = "questioner"
             task.description = "Validate unvalidated questions"
-            task.dependsOn("saveQuestions")
+            task.dependsOn("parse")
             task.finalizedBy("validationReport", "recollectQuestions")
             project.subprojects { subproject ->
                 if (subproject.name.startsWith("question-")) {
@@ -265,7 +288,7 @@ class QuestionerPlugin : Plugin<Project> {
         project.tasks.register("validateAll") { task ->
             task.group = "questioner"
             task.description = "Validate all questions (re-validates already validated)"
-            task.dependsOn("saveQuestions")
+            task.dependsOn("parse")
             task.finalizedBy("validationReport", "recollectQuestions")
             project.subprojects { subproject ->
                 if (subproject.name.startsWith("question-")) {
@@ -279,7 +302,7 @@ class QuestionerPlugin : Plugin<Project> {
         project.tasks.register("validateFocused") { task ->
             task.group = "questioner"
             task.description = "Validate focused questions only"
-            task.dependsOn("saveQuestions")
+            task.dependsOn("parse")
             task.finalizedBy("validationReport", "recollectQuestions")
             // TODO: Filter to only focused question subprojects
             project.subprojects { subproject ->
@@ -290,7 +313,7 @@ class QuestionerPlugin : Plugin<Project> {
         }
 
         project.tasks.register("collectQuestions", CollectQuestions::class.java) { collectQuestions ->
-            collectQuestions.dependsOn("saveQuestions")
+            collectQuestions.dependsOn("parse")
             collectQuestions.outputs.upToDateWhen { false }
         }
 
