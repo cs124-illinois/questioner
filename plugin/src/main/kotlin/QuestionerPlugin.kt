@@ -142,6 +142,15 @@ class QuestionerPlugin : Plugin<Project> {
         // Initialize parse progress manager (fresh instance each build)
         ParseProgressManager.initialize(progressLoggerFactory, totalQuestions)
 
+        // Track UP-TO-DATE parse tasks to adjust progress denominator
+        project.gradle.taskGraph.afterTask { task ->
+            if (task.name == "parse" && task.project.name.startsWith("question-")) {
+                if (task.state.upToDate) {
+                    ParseProgressManager.getInstance()?.taskSkipped()
+                }
+            }
+        }
+
         // Initialize the validation server manager with config values
         ValidationServerManager.initialize(
             project = project,

@@ -20,18 +20,19 @@ class ParseProgressManager(
 ) {
     private var progressLogger: ProgressLogger? = null
     private val started = AtomicBoolean(false)
-    private val completed = AtomicInteger(0)
+    private val tasksCompleted = AtomicInteger(0)
+    private val tasksSkipped = AtomicInteger(0)  // UP-TO-DATE tasks
 
     /**
      * Called at the start of each task's @TaskAction.
-     * Only the first caller actually starts the progress bar.
+     * Only the first caller starts the progress bar.
      */
     fun taskStarting() {
         if (started.compareAndSet(false, true)) {
             progressLogger = progressLoggerFactory.newOperation(ParseProgressManager::class.java).also {
                 it.description = "Parsing questions"
                 it.started()
-                it.progress(formatProgress(0))
+                it.progress(formatProgress())
             }
         }
     }
@@ -40,13 +41,25 @@ class ParseProgressManager(
      * Called after each task completes its work.
      */
     fun taskCompleted() {
-        val done = completed.incrementAndGet()
-        progressLogger?.progress(formatProgress(done))
+        tasksCompleted.incrementAndGet()
+        progressLogger?.progress(formatProgress())
     }
 
-    private fun formatProgress(current: Int): String {
-        val progressBar = buildProgressBar(current, totalQuestions, 20)
-        return "$progressBar $current/$totalQuestions"
+    /**
+     * Called when a task is UP-TO-DATE (from afterTask callback).
+     */
+    fun taskSkipped() {
+        tasksSkipped.incrementAndGet()
+        // Update progress if bar is already showing
+        progressLogger?.progress(formatProgress())
+    }
+
+    private fun formatProgress(): String {
+        val completed = tasksCompleted.get()
+        val skipped = tasksSkipped.get()
+        val activeTotal = totalQuestions - skipped
+        val progressBar = buildProgressBar(completed, activeTotal, 20)
+        return "$progressBar $completed/$activeTotal"
     }
 
     private fun buildProgressBar(current: Int, total: Int, width: Int): String {
