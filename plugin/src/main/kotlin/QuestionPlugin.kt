@@ -84,6 +84,11 @@ class QuestionPlugin : Plugin<Project> {
                 project.rootProject.layout.buildDirectory.file("questioner/questions/$hash.calibrated.json"),
             )
             task.dependsOn(project.tasks.named("parse"))
+
+            // Re-run if output files don't exist (validation may have failed previously)
+            task.outputs.upToDateWhen {
+                task.validatedFile.get().asFile.exists() && task.calibratedFile.get().asFile.exists()
+            }
         }
     }
 }
