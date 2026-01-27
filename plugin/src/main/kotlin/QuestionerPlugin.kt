@@ -15,17 +15,25 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.plugins.JavaPluginExtension
+import org.gradle.api.services.BuildService
+import org.gradle.api.services.BuildServiceParameters
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.testing.Test
+import org.gradle.build.event.BuildEventsListenerRegistry
 import org.gradle.internal.logging.progress.ProgressLoggerFactory
 import org.gradle.jvm.toolchain.JavaLanguageVersion
+import org.gradle.tooling.events.FinishEvent
+import org.gradle.tooling.events.OperationCompletionListener
+import org.gradle.tooling.events.task.TaskFinishEvent
+import org.gradle.tooling.events.task.TaskSkippedResult
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jmailen.gradle.kotlinter.KotlinterPlugin
 import java.net.URI
 import java.nio.file.FileSystems
 import java.nio.file.Paths
+import javax.inject.Inject
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class QuestionerConfig(val endpoints: List<EndPoint> = listOf()) {
@@ -38,8 +46,38 @@ private val noJitJvmArgs = listOf(
     "-XX:CompileThreshold=100000",
 )
 
+/**
+ * Build service that listens for task completion events to track UP-TO-DATE tasks.
+ * This replaces the deprecated TaskExecutionGraph.afterTask() API for configuration cache compatibility.
+ */
+abstract class TaskCompletionService :
+    BuildService<BuildServiceParameters.None>,
+    OperationCompletionListener {
+    override fun onFinish(event: FinishEvent) {
+        if (event !is TaskFinishEvent) return
+        if (event.result !is TaskSkippedResult) return
+
+        // Task path format is ":question-HASH:taskName"
+        val taskPath = event.descriptor.taskPath
+        val parts = taskPath.split(":")
+        if (parts.size < 3) return
+
+        val projectName = parts[1]
+        val taskName = parts[2]
+
+        if (!projectName.startsWith("question-")) return
+
+        when (taskName) {
+            "parse" -> ParseProgressManager.getInstance()?.taskSkipped()
+            "validate" -> ValidateProgressManager.getInstance()?.taskSkipped()
+        }
+    }
+}
+
 @Suppress("unused")
-class QuestionerPlugin : Plugin<Project> {
+class QuestionerPlugin @Inject constructor(
+    private val buildEventsListenerRegistry: BuildEventsListenerRegistry,
+) : Plugin<Project> {
     private fun Project.configurePlugins() {
         pluginManager.apply("java")
         extensions.getByType(JavaPluginExtension::class.java).apply {
@@ -144,26 +182,15 @@ class QuestionerPlugin : Plugin<Project> {
         // Initialize parse progress manager (fresh instance each build)
         ParseProgressManager.initialize(progressLoggerFactory, totalQuestions)
 
-        // Track UP-TO-DATE parse tasks to adjust progress denominator
-        project.gradle.taskGraph.afterTask { task ->
-            if (task.name == "parse" && task.project.name.startsWith("question-")) {
-                if (task.state.upToDate) {
-                    ParseProgressManager.getInstance()?.taskSkipped()
-                }
-            }
-        }
-
         // Initialize validate progress manager (fresh instance each build)
         ValidateProgressManager.initialize(progressLoggerFactory, totalQuestions)
 
-        // Track UP-TO-DATE validate tasks to adjust progress denominator
-        project.gradle.taskGraph.afterTask { task ->
-            if (task.name == "validate" && task.project.name.startsWith("question-")) {
-                if (task.state.upToDate) {
-                    ValidateProgressManager.getInstance()?.taskSkipped()
-                }
-            }
-        }
+        // Register build service to track UP-TO-DATE tasks (configuration cache compatible)
+        val taskCompletionService = project.gradle.sharedServices.registerIfAbsent(
+            "taskCompletionService",
+            TaskCompletionService::class.java,
+        ) {}
+        buildEventsListenerRegistry.onTaskCompletion(taskCompletionService)
 
         // Check if servers should be restarted (and stopped on exit)
         val restartServers = project.hasProperty("restartServers")
