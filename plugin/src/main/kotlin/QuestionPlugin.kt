@@ -129,19 +129,26 @@ abstract class TestQuestionTask : DefaultTask() {
             return
         }
 
+        // Track question outcome - we only record once per question at the end
+        var questionFailed = false
+        var questionRan = false
+        var failureResult: edu.illinois.cs.cs125.questioner.lib.ValidationResult.Failure? = null
+
         // Handle validation response
         when (val response = validateResponse.getOrThrow()) {
             is ValidationResponse.Completed -> {
-                serverManager.recordResult(response.result)
-                // If validation failed, don't proceed to calibration
+                questionRan = true
                 if (response.result is edu.illinois.cs.cs125.questioner.lib.ValidationResult.Failure) {
+                    questionFailed = true
+                    failureResult = response.result
+                    // Don't proceed to calibration on failure
+                    serverManager.recordResult(response.result)
                     ValidateProgressManager.getInstance()?.taskCompleted()
                     return
                 }
             }
 
             is ValidationResponse.Skipped -> {
-                serverManager.recordSkipped()
                 // Continue to calibration check
             }
         }
@@ -157,12 +164,25 @@ abstract class TestQuestionTask : DefaultTask() {
         // Handle calibration response
         when (val response = calibrateResponse.getOrThrow()) {
             is ValidationResponse.Completed -> {
-                serverManager.recordResult(response.result)
+                questionRan = true
+                if (response.result is edu.illinois.cs.cs125.questioner.lib.ValidationResult.Failure) {
+                    questionFailed = true
+                    failureResult = response.result
+                }
             }
 
             is ValidationResponse.Skipped -> {
-                serverManager.recordSkipped()
+                // Question didn't need calibration
             }
+        }
+
+        // Record one result per question
+        if (questionFailed) {
+            serverManager.recordResult(failureResult!!)
+        } else if (questionRan) {
+            serverManager.recordQuestionSuccess()
+        } else {
+            serverManager.recordSkipped()
         }
 
         ValidateProgressManager.getInstance()?.taskCompleted()

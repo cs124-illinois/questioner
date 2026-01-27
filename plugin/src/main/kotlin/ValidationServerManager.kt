@@ -94,6 +94,13 @@ class ValidationServerManager(
     }
 
     /**
+     * Record a successful question (without storing detailed result).
+     */
+    fun recordQuestionSuccess() {
+        completed.incrementAndGet()
+    }
+
+    /**
      * Record a skipped question.
      */
     fun recordSkipped() {

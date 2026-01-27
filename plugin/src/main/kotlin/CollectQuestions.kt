@@ -4,7 +4,6 @@ import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
 import edu.illinois.cs.cs125.questioner.lib.QuestionFiles
 import edu.illinois.cs.cs125.questioner.lib.serialization.json
-import io.kotest.inspectors.forAll
 import kotlinx.serialization.encodeToString
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
@@ -62,7 +61,7 @@ abstract class CollectQuestions : DefaultTask() {
             .filter { q -> q.published.descriptions[Language.java] != null }
             .groupBy { q -> q.published.descriptions[Language.java] }
             .filterValues { it.size > 1 }
-            .forAll { (_, questions) ->
+            .forEach { (_, questions) ->
                 logger.warn("Found questions with identical Java descriptions: ${questions.joinToString { q -> q.published.name }}")
             }
 
@@ -70,7 +69,7 @@ abstract class CollectQuestions : DefaultTask() {
             .filter { q -> q.published.descriptions[Language.kotlin] != null }
             .groupBy { q -> q.published.descriptions[Language.kotlin] }
             .filterValues { it.size > 1 }
-            .forAll { (_, questions) ->
+            .forEach { (_, questions) ->
                 logger.warn("Found questions with identical Kotlin descriptions: ${questions.joinToString { q -> q.published.name }}")
             }
 
