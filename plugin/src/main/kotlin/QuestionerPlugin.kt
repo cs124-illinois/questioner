@@ -165,6 +165,9 @@ class QuestionerPlugin : Plugin<Project> {
             }
         }
 
+        // Check if servers should be restarted (and stopped on exit)
+        val restartServers = project.hasProperty("restartServers")
+
         // Initialize the validation server manager with config values
         ValidationServerManager.initialize(
             project = project,
@@ -176,6 +179,7 @@ class QuestionerPlugin : Plugin<Project> {
             verbose = config.verbose,
             concurrency = validationConcurrency,
             totalQuestions = totalQuestions,
+            restartServers = restartServers,
         )
 
         configurations.getByName("checkstyle").apply {
@@ -260,6 +264,7 @@ class QuestionerPlugin : Plugin<Project> {
 
         // Shutdown validation servers
         project.tasks.register("shutdownValidationServers") { task ->
+            task.mustRunAfter("validationReport", "recollectQuestions")
             task.doLast {
                 ValidationServerManager.getInstance(project)?.shutdown()
             }
@@ -287,6 +292,11 @@ class QuestionerPlugin : Plugin<Project> {
             task.description = "Validate unvalidated questions"
             task.dependsOn("parse")
             task.finalizedBy("validationReport", "recollectQuestions")
+
+            // Shutdown servers after validation if restartServers flag is set
+            if (project.hasProperty("restartServers")) {
+                task.finalizedBy("shutdownValidationServers")
+            }
 
             // Get filter patterns from project properties
             val filterPattern = if (project.hasProperty("filter")) {
@@ -345,6 +355,11 @@ class QuestionerPlugin : Plugin<Project> {
             task.dependsOn("parse")
             task.finalizedBy("validationReport", "recollectQuestions")
 
+            // Shutdown servers after validation if restartServers flag is set
+            if (project.hasProperty("restartServers")) {
+                task.finalizedBy("shutdownValidationServers")
+            }
+
             // Get filter patterns from project properties
             val filterPattern = if (project.hasProperty("filter")) {
                 project.property("filter") as String
@@ -402,6 +417,11 @@ class QuestionerPlugin : Plugin<Project> {
             task.description = "Validate focused questions only"
             task.dependsOn("parse")
             task.finalizedBy("validationReport", "recollectQuestions")
+
+            // Shutdown servers after validation if restartServers flag is set
+            if (project.hasProperty("restartServers")) {
+                task.finalizedBy("shutdownValidationServers")
+            }
 
             // Get filter patterns from project properties
             val filterPattern = if (project.hasProperty("filter")) {

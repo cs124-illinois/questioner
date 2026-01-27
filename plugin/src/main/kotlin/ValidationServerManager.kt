@@ -316,19 +316,33 @@ class ValidationServerManager(
             concurrency: Int,
             totalQuestions: Int,
             idleTimeoutMinutes: Int = 60,
-        ): ValidationServerManager = managers.getOrPut(project.rootProject) {
-            ValidationServerManager(
-                project.rootProject,
-                commonJvmArgs,
-                noJitJvmArgs,
-                rootDir,
-                maxMutationCount,
-                retries,
-                verbose,
-                concurrency,
-                totalQuestions,
-                idleTimeoutMinutes,
-            )
+            restartServers: Boolean = false,
+        ): ValidationServerManager {
+            val rootProject = project.rootProject
+
+            // If restartServers is true, shutdown any existing manager first
+            if (restartServers) {
+                managers[rootProject]?.let { existing ->
+                    project.logger.lifecycle("Restarting validation servers...")
+                    existing.shutdown()
+                    managers.remove(rootProject)
+                }
+            }
+
+            return managers.getOrPut(rootProject) {
+                ValidationServerManager(
+                    rootProject,
+                    commonJvmArgs,
+                    noJitJvmArgs,
+                    rootDir,
+                    maxMutationCount,
+                    retries,
+                    verbose,
+                    concurrency,
+                    totalQuestions,
+                    idleTimeoutMinutes,
+                )
+            }
         }
 
         @Synchronized
