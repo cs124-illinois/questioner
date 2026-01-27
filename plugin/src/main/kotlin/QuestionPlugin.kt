@@ -122,20 +122,49 @@ abstract class TestQuestionTask : DefaultTask() {
         val filePath = questionFilePath.get()
 
         // Phase 1: Validate (with JIT)
-        ValidationClient.sendRequest(serverManager.getValidatePort(), filePath).onFailure { e ->
+        val validateResponse = ValidationClient.sendRequest(serverManager.getValidatePort(), filePath)
+        validateResponse.onFailure { e ->
             serverManager.questionCompleted(false, filePath, "validate", e.message ?: "Unknown error")
             ValidateProgressManager.getInstance()?.taskCompleted()
             return
         }
 
+        // Handle validation response
+        when (val response = validateResponse.getOrThrow()) {
+            is ValidationResponse.Completed -> {
+                serverManager.recordResult(response.result)
+                // If validation failed, don't proceed to calibration
+                if (response.result is edu.illinois.cs.cs125.questioner.lib.ValidationResult.Failure) {
+                    ValidateProgressManager.getInstance()?.taskCompleted()
+                    return
+                }
+            }
+
+            is ValidationResponse.Skipped -> {
+                serverManager.recordSkipped()
+                // Continue to calibration check
+            }
+        }
+
         // Phase 2: Calibrate (without JIT)
-        ValidationClient.sendRequest(serverManager.getCalibratePort(), filePath).onFailure { e ->
+        val calibrateResponse = ValidationClient.sendRequest(serverManager.getCalibratePort(), filePath)
+        calibrateResponse.onFailure { e ->
             serverManager.questionCompleted(false, filePath, "calibrate", e.message ?: "Unknown error")
             ValidateProgressManager.getInstance()?.taskCompleted()
             return
         }
 
-        serverManager.questionCompleted(true)
+        // Handle calibration response
+        when (val response = calibrateResponse.getOrThrow()) {
+            is ValidationResponse.Completed -> {
+                serverManager.recordResult(response.result)
+            }
+
+            is ValidationResponse.Skipped -> {
+                serverManager.recordSkipped()
+            }
+        }
+
         ValidateProgressManager.getInstance()?.taskCompleted()
     }
 }

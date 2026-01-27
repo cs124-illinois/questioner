@@ -1,17 +1,30 @@
 package edu.illinois.cs.cs125.questioner.lib.server
 
+import edu.illinois.cs.cs125.questioner.lib.CalibrateResult
+import edu.illinois.cs.cs125.questioner.lib.ValidateResult
+import edu.illinois.cs.cs125.questioner.lib.ValidationPhase
+import edu.illinois.cs.cs125.questioner.lib.ValidationResult
+import edu.illinois.cs.cs125.questioner.lib.ValidationResultFormatter
 import edu.illinois.cs.cs125.questioner.lib.ValidatorOptions
-import edu.illinois.cs.cs125.questioner.lib.calibrate
-import edu.illinois.cs.cs125.questioner.lib.validate
+import edu.illinois.cs.cs125.questioner.lib.calibrateWithResult
+import edu.illinois.cs.cs125.questioner.lib.report
+import edu.illinois.cs.cs125.questioner.lib.serialization.json
+import edu.illinois.cs.cs125.questioner.lib.toFailureResult
+import edu.illinois.cs.cs125.questioner.lib.toPhase1SuccessResult
+import edu.illinois.cs.cs125.questioner.lib.toSuccessResult
+import edu.illinois.cs.cs125.questioner.lib.validateWithResult
 import edu.illinois.cs.cs125.questioner.lib.verifiers.toBase64
 import edu.illinois.cs.cs125.questioner.lib.warm
 import kotlinx.coroutines.runBlocking
+import java.io.File
 import java.io.PrintWriter
 import java.net.ServerSocket
 import java.net.Socket
+import java.nio.file.Path
+import java.util.Base64
 import java.util.concurrent.Executors
-import java.util.concurrent.Semaphore
 import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
@@ -21,8 +34,9 @@ import java.util.concurrent.atomic.AtomicLong
  *
  * Protocol:
  * - Client sends: file path to .question.json
- * - Server responds: "ok" or "error:message"
- * - Client sends "shutdown" to stop the server
+ * - Server responds: "result:" + Base64(JSON(ValidationResult))
+ * - For skipped questions: "skipped:" + questionName
+ * - Client sends "shutdown" to stop the server, server responds "ok"
  *
  * Start with: java -cp <classpath> edu.illinois.cs.cs125.questioner.lib.server.ValidationServerKt <mode> <port> <rootDir> [options]
  */
@@ -107,35 +121,6 @@ object ValidationServer {
         }
     }
 
-    private fun buildErrorMessage(e: Throwable): String {
-        val messages = mutableListOf<String>()
-
-        // Walk the cause chain to find all messages
-        var current: Throwable? = e
-        while (current != null) {
-            val msg = current.message
-            if (!msg.isNullOrBlank()) {
-                messages.add(msg)
-            } else {
-                // Include class name if no message
-                messages.add(current::class.simpleName ?: "Unknown")
-            }
-            current = current.cause
-            if (current == e) break // Prevent infinite loop
-        }
-
-        // If we still have nothing useful, include stack trace location
-        if (messages.isEmpty() || messages.all { it == e::class.simpleName }) {
-            val location = e.stackTrace.firstOrNull()?.let { "${it.fileName}:${it.lineNumber}" } ?: "unknown location"
-            messages.add("${e::class.simpleName} at $location")
-        }
-
-        return messages.joinToString(" -> ")
-            .replace("\n", " ")
-            .replace("\r", "")
-            .take(1000)
-    }
-
     private fun handleClient(client: Socket, mode: String, options: ValidatorOptions, semaphore: Semaphore) {
         updateLastActivity()
         client.use { socket ->
@@ -158,20 +143,126 @@ object ValidationServer {
             // Acquire semaphore to limit concurrency
             semaphore.acquire()
             try {
-                runBlocking {
+                val startTime = System.currentTimeMillis()
+                val result = runBlocking {
                     when (mode) {
-                        "validate" -> filePath.validate(options)
-                        "calibrate" -> filePath.calibrate(options)
+                        "validate" -> handleValidation(filePath, options, startTime)
+                        "calibrate" -> handleCalibration(filePath, options, startTime)
                         else -> throw IllegalArgumentException("Unknown mode: $mode")
                     }
                 }
-                writer.println("ok")
+
+                when (result) {
+                    is HandleResult.Result -> {
+                        // Generate per-question report in a subdirectory named after the hash
+                        // filePath is like .../build/questioner/questions/{hash}.parsed.json
+                        val questionFile = File(filePath)
+                        val hash = questionFile.nameWithoutExtension.removeSuffix(".parsed")
+                        val reportDir = questionFile.parentFile.resolve(hash)
+                        reportDir.mkdirs()
+                        val reportPath = reportDir.resolve("report.html")
+                        reportPath.writeText(ValidationResultFormatter.formatHtml(result.validationResult))
+
+                        // Send JSON result
+                        val jsonResult = json.encodeToString(ValidationResult.serializer(), result.validationResult)
+                        val base64Result = Base64.getEncoder().encodeToString(jsonResult.toByteArray(Charsets.UTF_8))
+                        writer.println("result:$base64Result")
+
+                        // Log the result
+                        when (val vr = result.validationResult) {
+                            is ValidationResult.Success -> {
+                                println("${vr.questionName}: ${mode.replaceFirstChar { it.uppercase() }} complete (${vr.summary.retries} retries)")
+                            }
+                            is ValidationResult.Failure -> {
+                                println("FAILED ${vr.questionName}: ${mode.replaceFirstChar { it.uppercase() }} (${vr.error.errorType})")
+                            }
+                        }
+                    }
+                    is HandleResult.Skipped -> {
+                        writer.println("skipped:${result.questionName}")
+                        println("SKIPPED ${result.questionName}: ${mode.replaceFirstChar { it.uppercase() }} already complete")
+                    }
+                }
             } catch (e: Throwable) {
-                val message = buildErrorMessage(e)
-                writer.println("error:$message")
+                // Unexpected error - create a failure result
+                val errorResult = e.toFailureResult(
+                    questionPath = filePath,
+                    questionName = File(filePath).nameWithoutExtension,
+                    questionAuthor = "unknown",
+                    questionSlug = "unknown",
+                    phase = if (mode == "validate") ValidationPhase.VALIDATE else ValidationPhase.CALIBRATE,
+                    startTime = System.currentTimeMillis(),
+                )
+                val jsonResult = json.encodeToString(ValidationResult.serializer(), errorResult)
+                val base64Result = Base64.getEncoder().encodeToString(jsonResult.toByteArray(Charsets.UTF_8))
+                writer.println("result:$base64Result")
+                System.err.println("Unexpected error during $mode: ${e.message}")
             } finally {
                 semaphore.release()
             }
+        }
+    }
+
+    private sealed class HandleResult {
+        data class Result(val validationResult: ValidationResult) : HandleResult()
+        data class Skipped(val questionName: String) : HandleResult()
+    }
+
+    private suspend fun handleValidation(filePath: String, options: ValidatorOptions, startTime: Long): HandleResult {
+        return when (val result = filePath.validateWithResult(options)) {
+            is ValidateResult.Success -> {
+                val validationResult = result.question.toPhase1SuccessResult(
+                    questionPath = filePath,
+                    startTime = startTime,
+                    seed = result.seed,
+                    retries = result.retries,
+                )
+                HandleResult.Result(validationResult)
+            }
+            is ValidateResult.Failure -> {
+                // Also write the old-style report for compatibility
+                val reportPath = Path.of(filePath).parent.resolve("report.html")
+                reportPath.toFile().writeText(result.error.report(result.question))
+
+                val validationResult = result.error.toFailureResult(
+                    questionPath = filePath,
+                    questionName = result.question.published.name,
+                    questionAuthor = result.question.published.author,
+                    questionSlug = result.question.published.path,
+                    phase = ValidationPhase.VALIDATE,
+                    startTime = startTime,
+                )
+                HandleResult.Result(validationResult)
+            }
+            is ValidateResult.Skipped -> HandleResult.Skipped(result.questionName)
+        }
+    }
+
+    private suspend fun handleCalibration(filePath: String, options: ValidatorOptions, startTime: Long): HandleResult {
+        return when (val result = filePath.calibrateWithResult(options)) {
+            is CalibrateResult.Success -> {
+                val validationResult = result.report.toSuccessResult(
+                    questionPath = filePath,
+                    startTime = startTime,
+                )
+                HandleResult.Result(validationResult)
+            }
+            is CalibrateResult.Failure -> {
+                // Also write the old-style report for compatibility
+                val reportPath = Path.of(filePath).parent.resolve("report.html")
+                reportPath.toFile().writeText(result.error.report(result.question))
+
+                val validationResult = result.error.toFailureResult(
+                    questionPath = filePath,
+                    questionName = result.question.published.name,
+                    questionAuthor = result.question.published.author,
+                    questionSlug = result.question.published.path,
+                    phase = ValidationPhase.CALIBRATE,
+                    startTime = startTime,
+                )
+                HandleResult.Result(validationResult)
+            }
+            is CalibrateResult.Skipped -> HandleResult.Skipped(result.questionName)
         }
     }
 }

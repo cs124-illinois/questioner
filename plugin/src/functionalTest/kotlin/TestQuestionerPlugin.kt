@@ -3,8 +3,10 @@ package edu.illinois.cs.cs125.questioner.plugin
 import edu.illinois.cs.cs125.questioner.lib.VERSION
 import edu.illinois.cs.cs125.questioner.lib.loadQuestionList
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import java.io.File
@@ -95,6 +97,43 @@ class TestQuestionerPlugin :
                 val destination = File(path)
                 questionsJson.copyTo(destination, overwrite = true)
                 destination.exists() shouldBe true
+            }
+
+            // Verify report generation
+            val summaryReport = File(fixturesDir, "build/questioner/validation-report.html")
+            summaryReport.exists() shouldBe true
+
+            val summaryContent = summaryReport.readText()
+            summaryContent shouldContain "<!DOCTYPE html>"
+            summaryContent shouldContain "Validation Summary"
+
+            // Check that per-question reports exist and are linked
+            val questionsDir = File(fixturesDir, "build/questioner/questions")
+            questionsDir.exists() shouldBe true
+
+            val questionDirs = questionsDir.listFiles()?.filter { it.isDirectory } ?: emptyList()
+            questionDirs.shouldNotBeEmpty()
+
+            // Verify each question directory has a report.html
+            questionDirs.forEach { dir ->
+                val reportFile = File(dir, "report.html")
+                reportFile.exists() shouldBe true
+
+                val reportContent = reportFile.readText()
+                reportContent shouldContain "<!DOCTYPE html>"
+            }
+
+            // Verify questions are displayed with proper format: "Name (author/slug)"
+            questions.forEach { question ->
+                val displayName = "${question.published.name} (${question.published.author}/${question.published.path})"
+                summaryContent shouldContain question.published.name
+                summaryContent shouldContain question.published.author
+            }
+
+            // Verify links in summary report are relative paths to question reports
+            questionDirs.forEach { dir ->
+                val hash = dir.name
+                summaryContent shouldContain "questions/$hash/report.html"
             }
         }
 
