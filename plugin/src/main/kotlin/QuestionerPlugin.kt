@@ -24,6 +24,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jmailen.gradle.kotlinter.KotlinterPlugin
 import java.net.URI
+import java.nio.file.FileSystems
+import java.nio.file.Paths
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class QuestionerConfig(val endpoints: List<EndPoint> = listOf()) {
@@ -285,9 +287,53 @@ class QuestionerPlugin : Plugin<Project> {
             task.description = "Validate unvalidated questions"
             task.dependsOn("parse")
             task.finalizedBy("validationReport", "recollectQuestions")
+
+            // Get filter patterns from project properties
+            val filterPattern = if (project.hasProperty("filter")) {
+                project.property("filter") as String
+            } else {
+                null
+            }
+            val authorFilter = if (project.hasProperty("author")) {
+                project.property("author") as String
+            } else {
+                null
+            }
+
+            // Get discovered questions from settings phase
+            @Suppress("UNCHECKED_CAST")
+            val discoveredQuestions = project.extensions.extraProperties.let { extra ->
+                if (extra.has("questioner.discoveredQuestions")) {
+                    extra.get("questioner.discoveredQuestions") as? List<DiscoveredQuestion>
+                } else {
+                    null
+                }
+            } ?: emptyList()
+
+            // Build set of hashes to include (null means include all)
+            val includedHashes: Set<String>? = if (filterPattern != null || authorFilter != null) {
+                val glob = filterPattern?.let {
+                    FileSystems.getDefault().getPathMatcher("glob:$it")
+                }
+                discoveredQuestions.filter { q ->
+                    val matchesFilter = glob?.let { matcher ->
+                        matcher.matches(Paths.get(q.slug)) ||
+                            matcher.matches(Paths.get(q.fullSlug)) ||
+                            matcher.matches(Paths.get(q.correctFile.path))
+                    } ?: true
+                    val matchesAuthor = authorFilter?.let { q.author == it } ?: true
+                    matchesFilter && matchesAuthor
+                }.map { it.hash }.toSet()
+            } else {
+                null
+            }
+
             project.subprojects { subproject ->
                 if (subproject.name.startsWith("question-")) {
-                    task.dependsOn(subproject.tasks.named("validate"))
+                    val hash = subproject.name.removePrefix("question-")
+                    if (includedHashes == null || hash in includedHashes) {
+                        task.dependsOn(subproject.tasks.named("validate"))
+                    }
                 }
             }
         }
@@ -298,9 +344,53 @@ class QuestionerPlugin : Plugin<Project> {
             task.description = "Validate all questions (re-validates already validated)"
             task.dependsOn("parse")
             task.finalizedBy("validationReport", "recollectQuestions")
+
+            // Get filter patterns from project properties
+            val filterPattern = if (project.hasProperty("filter")) {
+                project.property("filter") as String
+            } else {
+                null
+            }
+            val authorFilter = if (project.hasProperty("author")) {
+                project.property("author") as String
+            } else {
+                null
+            }
+
+            // Get discovered questions from settings phase
+            @Suppress("UNCHECKED_CAST")
+            val discoveredQuestions = project.extensions.extraProperties.let { extra ->
+                if (extra.has("questioner.discoveredQuestions")) {
+                    extra.get("questioner.discoveredQuestions") as? List<DiscoveredQuestion>
+                } else {
+                    null
+                }
+            } ?: emptyList()
+
+            // Build set of hashes to include (null means include all)
+            val includedHashes: Set<String>? = if (filterPattern != null || authorFilter != null) {
+                val glob = filterPattern?.let {
+                    FileSystems.getDefault().getPathMatcher("glob:$it")
+                }
+                discoveredQuestions.filter { q ->
+                    val matchesFilter = glob?.let { matcher ->
+                        matcher.matches(Paths.get(q.slug)) ||
+                            matcher.matches(Paths.get(q.fullSlug)) ||
+                            matcher.matches(Paths.get(q.correctFile.path))
+                    } ?: true
+                    val matchesAuthor = authorFilter?.let { q.author == it } ?: true
+                    matchesFilter && matchesAuthor
+                }.map { it.hash }.toSet()
+            } else {
+                null
+            }
+
             project.subprojects { subproject ->
                 if (subproject.name.startsWith("question-")) {
-                    task.dependsOn(subproject.tasks.named("validate"))
+                    val hash = subproject.name.removePrefix("question-")
+                    if (includedHashes == null || hash in includedHashes) {
+                        task.dependsOn(subproject.tasks.named("validate"))
+                    }
                 }
             }
             // TODO: Pass force flag to server to re-validate
@@ -312,10 +402,54 @@ class QuestionerPlugin : Plugin<Project> {
             task.description = "Validate focused questions only"
             task.dependsOn("parse")
             task.finalizedBy("validationReport", "recollectQuestions")
+
+            // Get filter patterns from project properties
+            val filterPattern = if (project.hasProperty("filter")) {
+                project.property("filter") as String
+            } else {
+                null
+            }
+            val authorFilter = if (project.hasProperty("author")) {
+                project.property("author") as String
+            } else {
+                null
+            }
+
+            // Get discovered questions from settings phase
+            @Suppress("UNCHECKED_CAST")
+            val discoveredQuestions = project.extensions.extraProperties.let { extra ->
+                if (extra.has("questioner.discoveredQuestions")) {
+                    extra.get("questioner.discoveredQuestions") as? List<DiscoveredQuestion>
+                } else {
+                    null
+                }
+            } ?: emptyList()
+
+            // Build set of hashes to include (null means include all)
+            val includedHashes: Set<String>? = if (filterPattern != null || authorFilter != null) {
+                val glob = filterPattern?.let {
+                    FileSystems.getDefault().getPathMatcher("glob:$it")
+                }
+                discoveredQuestions.filter { q ->
+                    val matchesFilter = glob?.let { matcher ->
+                        matcher.matches(Paths.get(q.slug)) ||
+                            matcher.matches(Paths.get(q.fullSlug)) ||
+                            matcher.matches(Paths.get(q.correctFile.path))
+                    } ?: true
+                    val matchesAuthor = authorFilter?.let { q.author == it } ?: true
+                    matchesFilter && matchesAuthor
+                }.map { it.hash }.toSet()
+            } else {
+                null
+            }
+
             // TODO: Filter to only focused question subprojects
             project.subprojects { subproject ->
                 if (subproject.name.startsWith("question-")) {
-                    task.dependsOn(subproject.tasks.named("validate"))
+                    val hash = subproject.name.removePrefix("question-")
+                    if (includedHashes == null || hash in includedHashes) {
+                        task.dependsOn(subproject.tasks.named("validate"))
+                    }
                 }
             }
         }

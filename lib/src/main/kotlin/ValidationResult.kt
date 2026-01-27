@@ -95,6 +95,9 @@ sealed class ValidationError {
     abstract val message: String
     abstract val testingSequence: List<String>?
 
+    /** Primary source file involved in this error (for console output). */
+    open val sourceFilePath: String? get() = null
+
     /**
      * Solution failed the test suites.
      */
@@ -110,6 +113,7 @@ sealed class ValidationError {
     ) : ValidationError() {
         override val errorType = "SolutionFailed"
         override val message = "Solution failed the test suites after $retries retries: $explanation"
+        override val sourceFilePath: String? get() = solutionPath
     }
 
     /**
@@ -128,6 +132,7 @@ sealed class ValidationError {
         override val message =
             "Couldn't generate enough receivers during testing after $retries retries. " +
                 "Examine any @FilterParameters methods or exceptions thrown in your constructor."
+        override val sourceFilePath: String? get() = solutionPath
     }
 
     /**
@@ -144,6 +149,7 @@ sealed class ValidationError {
     ) : ValidationError() {
         override val errorType = "SolutionFailedLinting"
         override val message = "Solution failed linting: $lintingErrors"
+        override val sourceFilePath: String? get() = solutionPath
     }
 
     /**
@@ -161,6 +167,7 @@ sealed class ValidationError {
     ) : ValidationError() {
         override val errorType = "SolutionThrew"
         override val message = "Solution threw unexpected exception $thrownException on parameters $parameters"
+        override val sourceFilePath: String? get() = solutionPath
     }
 
     /**
@@ -179,6 +186,7 @@ sealed class ValidationError {
     ) : ValidationError() {
         override val errorType = "SolutionTestingThrew"
         override val message = "Solution testing threw an exception: $thrownException"
+        override val sourceFilePath: String? get() = solutionPath
     }
 
     /**
@@ -201,6 +209,7 @@ sealed class ValidationError {
         override val message =
             "$inputCount inputs to $executableName only generated $distinctResults distinct results. " +
                 "You may need to add or adjust your @RandomParameters method."
+        override val sourceFilePath: String? get() = solutionPath
     }
 
     /**
@@ -221,6 +230,7 @@ sealed class ValidationError {
         override val message =
             "Solution contains $deadCodeLines lines of dead code, more than the maximum of $maximumAllowed. " +
                 "Dead lines: ${deadLineNumbers.joinToString(", ")}"
+        override val sourceFilePath: String? get() = solutionPath
     }
 
     /**
@@ -236,6 +246,7 @@ sealed class ValidationError {
         override val errorType = "NoIncorrect"
         override val message = "No incorrect examples found or generated through mutation. Please add some using @Incorrect."
         override val testingSequence: List<String>? = null
+        override val sourceFilePath: String? get() = solutionPath
     }
 
     /**
@@ -255,6 +266,7 @@ sealed class ValidationError {
             "Too few incorrect mutations generated: found $foundCount, needed $neededCount. " +
                 "Please reduce the required number or remove mutation suppressions."
         override val testingSequence: List<String>? = null
+        override val sourceFilePath: String? get() = solutionPath
     }
 
     /**
@@ -274,6 +286,7 @@ sealed class ValidationError {
         override val message =
             "Submission generated too much output ($outputSize > $maxSize). " +
                 "Consider reducing the number of tests using @Correct(minTestCount = NUM)."
+        override val sourceFilePath: String? get() = sourcePath
     }
 
     /**
@@ -292,6 +305,7 @@ sealed class ValidationError {
     ) : ValidationError() {
         override val errorType = "IncorrectFailedLinting"
         override val message = "Incorrect code failed linting: $lintingErrors"
+        override val sourceFilePath: String? get() = incorrectPath
     }
 
     /**
@@ -317,6 +331,7 @@ sealed class ValidationError {
             append(" passed the test suites. ")
             append("If the code is incorrect, add an input to @FixedParameters to handle this case.")
         }
+        override val sourceFilePath: String? get() = incorrectPath
     }
 
     /**
@@ -345,6 +360,7 @@ sealed class ValidationError {
                 ?: append("We were unable to find a failing input. ")
             append("If the code is incorrect, add an input to @FixedParameters to handle this case.")
         }
+        override val sourceFilePath: String? get() = incorrectPath
     }
 
     /**
@@ -364,6 +380,7 @@ sealed class ValidationError {
         override val message =
             "Incorrect code failed but not for the expected reason. " +
                 "Expected: $expectedReason, but found: $actualExplanation"
+        override val sourceFilePath: String? get() = incorrectPath
     }
 
     /**
@@ -382,6 +399,7 @@ sealed class ValidationError {
     ) : ValidationError() {
         override val errorType = "IncorrectTestingThrew"
         override val message = "Testing incorrect code threw an unexpected exception: $thrownException"
+        override val sourceFilePath: String? get() = incorrectPath
     }
 
     /**

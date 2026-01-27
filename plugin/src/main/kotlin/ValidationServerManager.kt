@@ -137,7 +137,12 @@ class ValidationServerManager(
             println()
             println("Failures:")
             failures.forEach { failure ->
-                println("  - ${failure.questionName} (${failure.phase.name.lowercase()})")
+                println("  - ${failure.questionDisplayName()} (${failure.phase.name.lowercase()})")
+                // Show file path as clickable URL
+                failure.error.sourceFilePath?.let { path ->
+                    val fullPath = File(project.rootProject.projectDir, path).absolutePath
+                    println("    file://$fullPath")
+                }
                 println("    ${failure.error.errorType}: ${failure.error.message.take(150)}")
             }
         }
