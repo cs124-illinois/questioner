@@ -85,7 +85,7 @@ class TestQuestionerPlugin :
             questions.forEach { question ->
                 val settings = question.testingSettings
                 check(settings != null) { "Question ${question.published.name} missing testingSettings" }
-                check(settings.executionCountLimit != null) { "Question ${question.published.name} missing executionCountLimit" }
+                // executionCountLimit is non-nullable, so just verify allocationLimit is set
                 check(settings.allocationLimit != null) { "Question ${question.published.name} missing allocationLimit" }
             }
 

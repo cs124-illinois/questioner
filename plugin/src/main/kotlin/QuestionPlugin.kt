@@ -132,15 +132,15 @@ abstract class TestQuestionTask : DefaultTask() {
         // Track question outcome - we only record once per question at the end
         var questionFailed = false
         var questionRan = false
-        var failureResult: edu.illinois.cs.cs125.questioner.lib.ValidationResult.Failure? = null
+        var lastResult: edu.illinois.cs.cs125.questioner.lib.ValidationResult? = null
 
         // Handle validation response
         when (val response = validateResponse.getOrThrow()) {
             is ValidationResponse.Completed -> {
                 questionRan = true
+                lastResult = response.result
                 if (response.result is edu.illinois.cs.cs125.questioner.lib.ValidationResult.Failure) {
                     questionFailed = true
-                    failureResult = response.result
                     // Don't proceed to calibration on failure
                     serverManager.recordResult(response.result)
                     ValidateProgressManager.getInstance()?.taskCompleted()
@@ -165,9 +165,9 @@ abstract class TestQuestionTask : DefaultTask() {
         when (val response = calibrateResponse.getOrThrow()) {
             is ValidationResponse.Completed -> {
                 questionRan = true
+                lastResult = response.result
                 if (response.result is edu.illinois.cs.cs125.questioner.lib.ValidationResult.Failure) {
                     questionFailed = true
-                    failureResult = response.result
                 }
             }
 
@@ -176,11 +176,9 @@ abstract class TestQuestionTask : DefaultTask() {
             }
         }
 
-        // Record one result per question
-        if (questionFailed) {
-            serverManager.recordResult(failureResult!!)
-        } else if (questionRan) {
-            serverManager.recordQuestionSuccess()
+        // Record one result per question (storing the last result for reporting)
+        if (questionFailed || questionRan) {
+            serverManager.recordResult(lastResult!!)
         } else {
             serverManager.recordSkipped()
         }

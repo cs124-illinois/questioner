@@ -94,13 +94,6 @@ class ValidationServerManager(
     }
 
     /**
-     * Record a successful question (without storing detailed result).
-     */
-    fun recordQuestionSuccess() {
-        completed.incrementAndGet()
-    }
-
-    /**
      * Record a skipped question.
      */
     fun recordSkipped() {
@@ -154,8 +147,8 @@ class ValidationServerManager(
             }
         }
 
-        // Always generate the summary report (even with no failures) if we have results
-        if (allResults.isNotEmpty()) {
+        // Always generate the summary report if any validation work was done
+        if (total > 0 || skipCount > 0) {
             val reportFile = generateLinkedHtmlReport(allResults)
             println()
             println("Full report: file://${reportFile.absolutePath}")
