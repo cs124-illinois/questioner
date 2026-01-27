@@ -12,25 +12,26 @@ plugins {
     id("com.autonomousapps.testkit")
 }
 dependencies {
-    testJavaagent("com.beyondgrader.resource-agent:agent:2026.1.1")
+    testJavaagent("com.beyondgrader.resource-agent:agent:2026.1.2")
 
     implementation("org.apache.commons:commons-text:1.15.0")
     implementation("io.github.java-diff-utils:java-diff-utils:4.16")
     implementation("org.ow2.asm:asm:9.9.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect:2.3.0")
     implementation("org.jetbrains.kotlin:kotlin-metadata-jvm:2.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
-    api("com.beyondgrader.resource-agent:agent:2026.1.1")
-    api("com.beyondgrader.resource-agent:virtualfsplugin:2026.1.1") {
+    api("com.beyondgrader.resource-agent:agent:2026.1.2")
+    api("com.beyondgrader.resource-agent:virtualfsplugin:2026.1.2") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2026.1.3")
+    api("org.cs124.jeed:core:2026.1.4")
     api("org.cs124:jenisol:2026.1.0")
     api("org.cs124:libcs1:2026.1.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.21.0")
 
-    api("io.kotest:kotest-runner-junit5:5.9.1")
+    testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
     api("org.junit.jupiter:junit-jupiter-api:5.11.4")
     api("org.junit.platform:junit-platform-engine:1.11.4")
     api("com.google.truth:truth:1.4.5")
@@ -38,7 +39,7 @@ dependencies {
     api("io.github.cdimascio:dotenv-kotlin:6.5.1")
 
     api("org.slf4j:slf4j-api:2.0.17")
-    api("ch.qos.logback:logback-classic:1.5.25")
+    api("ch.qos.logback:logback-classic:1.5.26")
     api("io.github.microutils:kotlin-logging:3.0.5")
 }
 tasks {
