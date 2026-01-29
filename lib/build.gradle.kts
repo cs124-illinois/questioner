@@ -26,9 +26,9 @@ dependencies {
     api("com.beyondgrader.resource-agent:virtualfsplugin:2026.1.2") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2026.1.4")
-    api("org.cs124:jenisol:2026.1.0")
-    api("org.cs124:libcs1:2026.1.0")
+    api("org.cs124.jeed:core:2026.1.5")
+    api("org.cs124:jenisol:2026.1.1")
+    api("org.cs124:libcs1:2026.1.1")
     api("com.fasterxml.jackson.core:jackson-databind:2.21.0")
 
     testImplementation("io.kotest:kotest-runner-junit5:5.9.1")
