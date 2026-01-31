@@ -544,28 +544,6 @@ class QuestionerPlugin @Inject constructor(
             }
         }
 
-        val dumpTasks = uploadConfiguration.endpoints.map { endpoint ->
-            project.tasks.register("dumpQuestionsTo${endpoint.name}", DumpQuestions::class.java) { dumpQuestions ->
-                dumpQuestions.endpoint = endpoint
-                dumpQuestions.dependsOn("collectQuestions")
-                dumpQuestions.outputs.upToDateWhen { false }
-                dumpQuestions.description =
-                    "Dump questions that would be published to ${endpoint.name} (${endpoint.url})"
-            }.get()
-        }
-
-        val printSlowQuestions =
-            project.tasks.register("printSlowQuestions", PrintSlowQuestions::class.java) { printSlowQuestions ->
-                printSlowQuestions.dependsOn("collectQuestions")
-                printSlowQuestions.outputs.upToDateWhen { false }
-            }.get()
-
-        val showUpdatedSeeds =
-            project.tasks.register("showUpdatedSeeds", ShowUpdatedSeeds::class.java) { showUpdatedSeeds ->
-                showUpdatedSeeds.dependsOn("collectQuestions")
-                showUpdatedSeeds.outputs.upToDateWhen { false }
-            }.get()
-
         project.afterEvaluate {
             project.finalizeConfiguration(config)
 
@@ -573,13 +551,6 @@ class QuestionerPlugin @Inject constructor(
                 task.publishIncludes = config.publishIncludes
                 task.ignorePackages = config.ignorePackages
             }
-            dumpTasks.forEach { task ->
-                task.publishIncludes = config.publishIncludes
-                task.ignorePackages = config.ignorePackages
-            }
-
-            printSlowQuestions.ignorePackages = config.ignorePackages
-            showUpdatedSeeds.ignorePackages = config.ignorePackages
         }
     }
 }
