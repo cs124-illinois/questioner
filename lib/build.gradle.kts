@@ -39,7 +39,7 @@ dependencies {
     api("io.github.cdimascio:dotenv-kotlin:6.5.1")
 
     api("org.slf4j:slf4j-api:2.0.17")
-    api("ch.qos.logback:logback-classic:1.5.26")
+    api("ch.qos.logback:logback-classic:1.5.27")
     api("io.github.microutils:kotlin-logging:3.0.5")
 }
 tasks {
