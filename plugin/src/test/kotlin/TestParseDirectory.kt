@@ -1,12 +1,33 @@
 package edu.illinois.cs.cs125.questioner.plugin
 
 import edu.illinois.cs.cs125.questioner.lib.Language
+import edu.illinois.cs.cs125.questioner.plugin.parse.ParsedJavaFile
+import edu.illinois.cs.cs125.questioner.plugin.parse.ParsedKotlinFile
 import edu.illinois.cs.cs125.questioner.plugin.parse.parseDirectory
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
+import java.util.stream.Collectors
+
+fun Path.getCorrectFiles() = Files.walk(this)
+    .filter { path -> path.toString().endsWith(".java") || path.toString().endsWith(".kt") }
+    .map { path -> path.toFile() }
+    .filter { file ->
+        file.readText().lines().any { it.trim().startsWith("import edu.illinois.cs.cs125.questioner.lib.Correct") }
+    }
+    .filter { file ->
+        when {
+            file.name.endsWith(".java") -> ParsedJavaFile(file).isCorrect
+            file.name.endsWith(".kt") -> ParsedKotlinFile(file).isCorrect
+            else -> false
+        }
+    }.map { file ->
+        Paths.get(file.absolutePath)
+    }.collect(Collectors.toList()).filterNotNull().toList()
 
 val fixturesDirectory: Path = Path.of(object {}::class.java.getResource("/src/main/java/")!!.toURI())
 
