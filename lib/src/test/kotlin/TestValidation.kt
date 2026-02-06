@@ -3,6 +3,7 @@ package edu.illinois.cs.cs125.questioner.lib
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldNotBe
 
 class TestValidation : StringSpec({
@@ -109,6 +110,17 @@ class TestValidation : StringSpec({
             question.validated shouldBe true
             report shouldNotBe null
             report!!.requiredTestCount shouldBeGreaterThan 0
+        }
+    }
+    "testTestingIncorrectCount should survive phase1 serialization round-trip" {
+        Validator.validateAndCalibrateWithRoundTrip("Add One").also { (question, _) ->
+            question.validated shouldBe true
+            val results = question.validationResults
+            results.shouldNotBeNull()
+            if (results.canTestTest) {
+                results.testTestingIncorrectCount.shouldNotBeNull()
+                results.testTestingIncorrectCount!!.values.sum() shouldBeGreaterThan 0
+            }
         }
     }
 })

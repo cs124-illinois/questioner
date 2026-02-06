@@ -479,7 +479,8 @@ suspend fun Question.validate(
         solutionDeadCode = solutionDeadCode,
         bootstrapClassSize = bootstrapClassSize,
         bootstrapSolutionCoverage = bootstrapSolutionCoverage,
-        bootstrapSolutionOutputAmount = bootstrapSolutionOutputAmount
+        bootstrapSolutionOutputAmount = bootstrapSolutionOutputAmount,
+        testTestingIncorrect = testTestingIncorrect,
     )
 
     // Store recursive methods in classification for later use
@@ -492,6 +493,7 @@ suspend fun Question.calibrate(): CalibrationReport {
     val phase1 = phase1Results ?: error("Phase 1 must be completed before calibration")
 
     fauxStatic = solution.fauxStatic
+    testTestingIncorrect = phase1.testTestingIncorrect
 
     val javaClassWhitelist = phase1.javaClassWhitelist.toMutableSet()
     val kotlinClassWhitelist = phase1.kotlinClassWhitelist.toMutableSet()

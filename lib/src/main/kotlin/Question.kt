@@ -320,7 +320,8 @@ data class Question(
         val solutionDeadCode: LanguagesResourceUsage,
         val bootstrapClassSize: LanguagesResourceUsage,
         val bootstrapSolutionCoverage: TestResults.CoverageComparison.LineCoverage,
-        val bootstrapSolutionOutputAmount: Int
+        val bootstrapSolutionOutputAmount: Int,
+        val testTestingIncorrect: List<TestTestingMutation>? = null,
     )
 
     @Serializable
