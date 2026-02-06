@@ -36,7 +36,7 @@ object ResourceMonitoring : SandboxPlugin<ResourceMonitoringArguments, ResourceM
     init {
         mxBean.isThreadAllocatedMemoryEnabled = true
         Sandbox.SandboxedClassLoader::class.java.toString() // Ensure loaded, to be instrumented
-        Character.isLetter(' ') // Force java.lang.CharacterData00 static initialization before sandbox use
+        Character.isLetter('\u0100') // Force java.lang.CharacterData00 static initialization before sandbox use
         Agent.activate(countLines = countLibraryLines)
         StaticFailureDetection.recordingFailedClasses = true
         AllocationLimiting.arrayBodySizeValidator = LongFunction(ResourceMonitoring::checkArrayAllocation)

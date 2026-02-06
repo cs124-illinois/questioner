@@ -19,6 +19,11 @@ sealed class ValidationResponse {
      * Validation was skipped because it was already done.
      */
     data class Skipped(val questionName: String) : ValidationResponse()
+
+    /**
+     * Server's JVM is corrupted and restarting. Client should retry.
+     */
+    data class Restart(val message: String) : ValidationResponse()
 }
 
 /**
@@ -48,6 +53,11 @@ object ValidationClient {
                 response.startsWith("skipped:") -> {
                     val questionName = response.removePrefix("skipped:")
                     Result.success(ValidationResponse.Skipped(questionName))
+                }
+
+                response.startsWith("restart:") -> {
+                    val message = response.removePrefix("restart:")
+                    Result.success(ValidationResponse.Restart(message))
                 }
 
                 // Legacy response support (for backward compatibility)

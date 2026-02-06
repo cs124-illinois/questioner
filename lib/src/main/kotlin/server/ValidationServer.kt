@@ -185,7 +185,17 @@ object ValidationServer {
                     }
                 }
             } catch (e: Throwable) {
-                // Unexpected error - create a failure result
+                // CachePoisonedException means the JVM's class cache is permanently corrupted.
+                // Signal the client to retry, then exit so the manager starts a fresh process.
+                if (e is CachePoisonedException) {
+                    writer.println("restart:${e.message}")
+                    System.err.println("JVM class cache poisoned, exiting to allow restart...")
+                    shuttingDown.set(true)
+                    Thread.sleep(100)
+                    System.exit(1)
+                }
+
+                // Other unexpected errors - create a failure result
                 val errorResult = e.toFailureResult(
                     questionPath = filePath,
                     questionName = File(filePath).nameWithoutExtension,
@@ -198,15 +208,6 @@ object ValidationServer {
                 val base64Result = Base64.getEncoder().encodeToString(jsonResult.toByteArray(Charsets.UTF_8))
                 writer.println("result:$base64Result")
                 System.err.println("Unexpected error during $mode: ${e.message}")
-
-                // CachePoisonedException means the JVM's class cache is permanently corrupted.
-                // Exit so the manager can start a fresh server process.
-                if (e is CachePoisonedException) {
-                    System.err.println("JVM class cache poisoned, exiting to allow restart...")
-                    shuttingDown.set(true)
-                    Thread.sleep(100)
-                    System.exit(1)
-                }
             } finally {
                 semaphore.release()
             }

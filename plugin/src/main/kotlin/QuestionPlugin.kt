@@ -111,6 +111,29 @@ abstract class TestQuestionTask : DefaultTask() {
     @get:OutputFile
     abstract val calibratedFile: RegularFileProperty
 
+    /**
+     * Send a request to a server, retrying if the server restarts due to cache poisoning.
+     * [getPort] is called each attempt so it picks up a new server if the old one died.
+     */
+    private fun sendWithRetry(
+        serverManager: ValidationServerManager,
+        getPort: () -> Int,
+        filePath: String,
+    ): Result<ValidationResponse> {
+        repeat(3) {
+            val response = ValidationClient.sendRequest(getPort(), filePath)
+            val value = response.getOrNull()
+            if (value is ValidationResponse.Restart) {
+                // Server is restarting due to cache poisoning — wait for new server and retry
+                project.logger.lifecycle("Validation server restarting (cache poisoned), retrying...")
+                Thread.sleep(1000)
+                return@repeat
+            }
+            return response
+        }
+        return Result.failure(ValidationException("Server restarted too many times for $filePath"))
+    }
+
     @TaskAction
     fun test() {
         // Signal that a validate task is starting (first caller starts progress bar)
@@ -122,7 +145,7 @@ abstract class TestQuestionTask : DefaultTask() {
         val filePath = questionFilePath.get()
 
         // Phase 1: Validate (with JIT)
-        val validateResponse = ValidationClient.sendRequest(serverManager.getValidatePort(), filePath)
+        val validateResponse = sendWithRetry(serverManager, serverManager::getValidatePort, filePath)
         validateResponse.onFailure { e ->
             serverManager.questionCompleted(false, filePath, "validate", e.message ?: "Unknown error")
             ValidateProgressManager.getInstance()?.taskCompleted()
@@ -151,10 +174,17 @@ abstract class TestQuestionTask : DefaultTask() {
             is ValidationResponse.Skipped -> {
                 // Continue to calibration check
             }
+
+            is ValidationResponse.Restart -> {
+                // Should not reach here after sendWithRetry, but handle gracefully
+                serverManager.questionCompleted(false, filePath, "validate", "Server restart failed")
+                ValidateProgressManager.getInstance()?.taskCompleted()
+                return
+            }
         }
 
         // Phase 2: Calibrate (without JIT)
-        val calibrateResponse = ValidationClient.sendRequest(serverManager.getCalibratePort(), filePath)
+        val calibrateResponse = sendWithRetry(serverManager, serverManager::getCalibratePort, filePath)
         calibrateResponse.onFailure { e ->
             serverManager.questionCompleted(false, filePath, "calibrate", e.message ?: "Unknown error")
             ValidateProgressManager.getInstance()?.taskCompleted()
@@ -173,6 +203,12 @@ abstract class TestQuestionTask : DefaultTask() {
 
             is ValidationResponse.Skipped -> {
                 // Question didn't need calibration
+            }
+
+            is ValidationResponse.Restart -> {
+                serverManager.questionCompleted(false, filePath, "calibrate", "Server restart failed")
+                ValidateProgressManager.getInstance()?.taskCompleted()
+                return
             }
         }
 
