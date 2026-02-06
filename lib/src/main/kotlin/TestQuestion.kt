@@ -263,13 +263,16 @@ suspend fun Question.test(
                 .filter { !it.granted }
                 .map { it.permission }
                 .joinToString(", ")
-            val message = "Failed classes: ${failedClassInitializers.joinToString(", ") { it.clazz.name }}.${
-                if (missingPermissions.isNotEmpty()) {
-                    " Missing permissions: $missingPermissions"
-                } else {
-                    ""
-                }
-            }"
+            val failedClasses = failedClassInitializers.joinToString(", ") { it.clazz.name }
+            val message = "JVM class cache poisoned: static initialization failed for $failedClasses. " +
+                "These classes are now permanently broken in this JVM and will cause NoClassDefFoundError on subsequent use. " +
+                "This is a transient sandbox issue, not a problem with the question.${
+                    if (missingPermissions.isNotEmpty()) {
+                        " Missing permissions: $missingPermissions."
+                    } else {
+                        ""
+                    }
+                }"
             throw CachePoisonedException(message)
         }
 

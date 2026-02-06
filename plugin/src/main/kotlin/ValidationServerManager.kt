@@ -60,7 +60,9 @@ class ValidationServerManager(
 
     @Synchronized
     fun getValidatePort(): Int {
-        if (validateServerPort == null) {
+        if (validateServerPort == null || validateServerProcess?.isAlive != true) {
+            validateServerProcess = null
+            validateServerPort = null
             startServer("validate", commonJvmArgs).let { (process, port) ->
                 validateServerProcess = process
                 validateServerPort = port
@@ -72,7 +74,9 @@ class ValidationServerManager(
 
     @Synchronized
     fun getCalibratePort(): Int {
-        if (calibrateServerPort == null) {
+        if (calibrateServerPort == null || calibrateServerProcess?.isAlive != true) {
+            calibrateServerProcess = null
+            calibrateServerPort = null
             startServer("calibrate", commonJvmArgs + noJitJvmArgs).let { (process, port) ->
                 calibrateServerProcess = process
                 calibrateServerPort = port

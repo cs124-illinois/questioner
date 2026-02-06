@@ -593,6 +593,12 @@ fun ValidationFailed.toValidationError(): ValidationError = when (this) {
  */
 fun Throwable.toValidationError(): ValidationError = when (this) {
     is ValidationFailed -> toValidationError()
+    is CachePoisonedException -> ValidationError.UnexpectedError(
+        exceptionType = "CachePoisonedException",
+        stackTrace = stackTraceToString(),
+        testingSequence = null,
+        message = message ?: "JVM class cache poisoned during sandbox execution",
+    )
     else -> ValidationError.UnexpectedError(
         exceptionType = javaClass.simpleName,
         stackTrace = stackTraceToString(),
