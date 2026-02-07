@@ -146,6 +146,7 @@ suspend fun String.calibrate(options: ValidatorOptions) {
             testingSettings = question.testingSettings!!,
             testTestingLimits = question.testTestingLimits,
             validationResults = question.validationResults!!,
+            loadedClassesByLanguage = question.classification.loadedClassesByLanguage,
         ),
     )
 
@@ -283,6 +284,7 @@ suspend fun String.calibrateWithResult(options: ValidatorOptions): CalibrateResu
             testingSettings = question.testingSettings!!,
             testTestingLimits = question.testTestingLimits,
             validationResults = question.validationResults!!,
+            loadedClassesByLanguage = question.classification.loadedClassesByLanguage,
         ),
     )
 

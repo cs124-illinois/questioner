@@ -41,6 +41,13 @@ class ValidationServerManager(
     private val skipped = AtomicInteger(0)
     private val results = ConcurrentLinkedQueue<ValidationResult>()
 
+    fun resetResults() {
+        completed.set(0)
+        failed.set(0)
+        skipped.set(0)
+        results.clear()
+    }
+
     // Legacy type for backward compatibility - can be removed after migration
     data class ValidationFailure(val filePath: String, val phase: String, val message: String)
 
@@ -346,7 +353,7 @@ class ValidationServerManager(
                     totalQuestions,
                     idleTimeoutMinutes,
                 )
-            }
+            }.also { it.resetResults() }
         }
 
         @Synchronized

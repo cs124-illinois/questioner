@@ -23,6 +23,7 @@ data class Phase2CalibrationResult(
     val testingSettings: Question.TestingSettings,
     val testTestingLimits: Question.TestTestingLimits?,
     val validationResults: Question.ValidationResults,
+    val loadedClassesByLanguage: Map<Language, Set<String>>? = null,
 )
 
 /**
@@ -78,6 +79,8 @@ object QuestionFiles {
         // Apply phase 1 results if available
         loadPhase1Result(parsedPath)?.let { phase1 ->
             question.phase1Results = phase1.phase1Results
+            question.classification.recursiveMethodsByLanguage = phase1.phase1Results.solutionRecursiveMethods
+            question.testTestingIncorrect = phase1.phase1Results.testTestingIncorrect
         }
 
         // Apply phase 2 results if available
@@ -85,6 +88,7 @@ object QuestionFiles {
             question.testingSettings = phase2.testingSettings
             question.testTestingLimits = phase2.testTestingLimits
             question.validationResults = phase2.validationResults
+            question.classification.loadedClassesByLanguage = phase2.loadedClassesByLanguage
         }
 
         return question

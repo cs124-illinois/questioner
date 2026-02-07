@@ -683,6 +683,7 @@ suspend fun Question.calibrate(): CalibrationReport {
         executionCounts = solutionExecutionCounts,
         memoryAllocation = solutionAllocation,
         outputAmount = solutionOutputAmount,
+        solutionMaxClassSize = phase1.bootstrapClassSize,
         canTestTest = canTestTest,
         testTestingIncorrectCount = testTestingIncorrectCount,
         solutionAllocations = solutionAllocations,
