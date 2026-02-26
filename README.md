@@ -98,6 +98,21 @@ questioner {
 
 Each path is resolved relative to the project root, and the plugin automatically looks for sources under `<path>/src/main/java`. For example, `external("external/alice")` discovers questions in `external/alice/src/main/java/`.
 
+### Excluding packages
+
+You can exclude specific packages from an external source using the block form of `external()`. Paths are relative to the source root (`src/main/java`):
+
+```kotlin
+questioner {
+    external("external/alice") {
+        exclude("com/github/alice/drafts")
+        exclude("com/github/alice/archived")
+    }
+}
+```
+
+This skips any questions under those package paths during discovery.
+
 ### Example Layout
 
 ```
