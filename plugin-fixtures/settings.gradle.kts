@@ -10,7 +10,11 @@ pluginManagement {
 }
 
 plugins {
-    id("org.cs124.questioner.settings") version "2026.1.4"
+    id("org.cs124.questioner.settings") version "2026.2.2"
+}
+
+questioner {
+    external("external/test")
 }
 
 dependencyResolutionManagement {

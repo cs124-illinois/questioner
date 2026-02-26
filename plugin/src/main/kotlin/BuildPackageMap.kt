@@ -11,29 +11,44 @@ import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskAction
 import java.io.File
-import java.nio.file.Path
 
 abstract class BuildPackageMap : DefaultTask() {
     @Internal
     val sourceSet: SourceSet =
         project.extensions.getByType(JavaPluginExtension::class.java).sourceSets.getByName("main")
 
+    @Suppress("UNCHECKED_CAST")
     @Internal
-    val sourceDirectorySet: MutableSet<File> = sourceSet.java.srcDirs
-
-    @Internal
-    val sourceDirectoryPath: Path = sourceDirectorySet.first().toPath()
+    val allSourceDirs: List<File> = project.extensions.extraProperties.let { extra ->
+        if (extra.has("questioner.sourceDirs")) {
+            extra.get("questioner.sourceDirs") as? List<File>
+        } else {
+            null
+        }
+    } ?: listOf(sourceSet.java.srcDirs.first())
 
     @InputFiles
     @Suppress("unused")
-    val inputFiles: Set<File> =
-        sourceSet.allSource.filter { it.name.endsWith(".java") || it.name.endsWith(".kt") }.files.otherFiles().toSet()
+    val inputFiles: Set<File> = allSourceDirs.flatMap { dir ->
+        dir.walkTopDown()
+            .filter { it.isFile && (it.name.endsWith(".java") || it.name.endsWith(".kt")) }
+            .toList()
+    }.otherFiles().toSet()
 
     @OutputFile
     val outputFile: File = project.layout.buildDirectory.dir("questioner/packageMap.json").get().asFile
 
     @TaskAction
-    fun build() = sourceDirectoryPath.buildPackageMap().writeToFile(outputFile)
+    fun build() {
+        val merged = mutableMapOf<String, List<String>>()
+        for (dir in allSourceDirs) {
+            val packageMap = dir.toPath().buildPackageMap()
+            for ((pkg, files) in packageMap) {
+                merged[pkg] = (merged[pkg] ?: emptyList()) + files
+            }
+        }
+        merged.writeToFile(outputFile)
+    }
 }
 
 private fun Map<String, List<String>>.writeToFile(file: File) {

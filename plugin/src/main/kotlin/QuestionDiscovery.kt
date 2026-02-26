@@ -16,6 +16,7 @@ data class DiscoveredQuestion(
     val slug: String,
     val fullSlug: String,
     val hash: String,
+    val sourceRoot: File,
 )
 
 /**
@@ -23,7 +24,7 @@ data class DiscoveredQuestion(
  * Only extracts author, path, and name - doesn't do full ANTLR parsing.
  * This is used during the settings phase where we need fast discovery.
  */
-fun File.extractCorrectInfo(): DiscoveredQuestion? {
+fun File.extractCorrectInfo(sourceRoot: File): DiscoveredQuestion? {
     val content = readText()
 
     // Quick check - does this file have @Correct?
@@ -54,6 +55,7 @@ fun File.extractCorrectInfo(): DiscoveredQuestion? {
         slug = slug,
         fullSlug = fullSlug,
         hash = hash,
+        sourceRoot = sourceRoot,
     )
 }
 
@@ -73,28 +75,25 @@ fun discoverQuestions(sourceDir: File): List<DiscoveredQuestion> {
 
     return sourceDir.walkTopDown()
         .filter { it.isFile && (it.extension == "java" || it.extension == "kt") }
-        .mapNotNull { it.extractCorrectInfo() }
+        .mapNotNull { it.extractCorrectInfo(sourceDir) }
         .toList()
 }
 
 /**
- * Discover questions and check for collisions.
- * Returns the list of questions or throws if collisions are detected.
+ * Check a list of discovered questions for hash collisions.
+ * Returns the list if no collisions, throws otherwise.
  */
-fun discoverQuestionsWithCollisionCheck(sourceDir: File): List<DiscoveredQuestion> {
-    val questions = discoverQuestions(sourceDir)
-
-    // Check for hash collisions (same author/slug from different locations)
+fun checkForCollisions(questions: List<DiscoveredQuestion>): List<DiscoveredQuestion> {
     val byHash = questions.groupBy { it.hash }
     val collisions = byHash.filter { it.value.size > 1 }
 
     if (collisions.isNotEmpty()) {
         val message = buildString {
             appendLine("Detected question slug collisions:")
-            collisions.forEach { (hash, questions) ->
-                appendLine("  Hash $hash (${questions.first().fullSlug}):")
-                questions.forEach { q ->
-                    appendLine("    - ${q.correctFile.absolutePath}")
+            collisions.forEach { (hash, dupes) ->
+                appendLine("  Hash $hash (${dupes.first().fullSlug}):")
+                dupes.forEach { q ->
+                    appendLine("    - ${q.correctFile.absolutePath} (source root: ${q.sourceRoot.absolutePath})")
                 }
             }
         }
@@ -103,3 +102,13 @@ fun discoverQuestionsWithCollisionCheck(sourceDir: File): List<DiscoveredQuestio
 
     return questions
 }
+
+/**
+ * Discover questions from a single directory and check for collisions.
+ */
+fun discoverQuestionsWithCollisionCheck(sourceDir: File): List<DiscoveredQuestion> = checkForCollisions(discoverQuestions(sourceDir))
+
+/**
+ * Discover questions from multiple source directories and check for collisions across all of them.
+ */
+fun discoverQuestionsFromDirs(sourceDirs: List<File>): List<DiscoveredQuestion> = checkForCollisions(sourceDirs.flatMap { discoverQuestions(it) })

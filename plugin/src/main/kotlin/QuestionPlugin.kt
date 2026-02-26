@@ -47,15 +47,28 @@ class QuestionPlugin : Plugin<Project> {
             // The question directory is the project directory
             task.questionDirectory.set(project.projectDir)
 
-            // Root project provides the base directory and package map
-            task.baseDirectory.set(project.rootProject.layout.projectDirectory.dir("src/main/java"))
+            // Look up per-question source root (set by settings plugin), fall back to src/main/java
+            @Suppress("UNCHECKED_CAST")
+            val questionSourceRoots = project.rootProject.extensions.extraProperties.let { extra ->
+                if (extra.has("questioner.questionSourceRoots")) {
+                    extra.get("questioner.questionSourceRoots") as? Map<String, File>
+                } else {
+                    null
+                }
+            }
+            val hash = project.name.removePrefix("question-")
+            val sourceRoot = questionSourceRoots?.get(hash)
+            if (sourceRoot != null) {
+                task.baseDirectory.set(project.rootProject.layout.projectDirectory.dir(sourceRoot.relativeTo(project.rootProject.projectDir).path))
+            } else {
+                task.baseDirectory.set(project.rootProject.layout.projectDirectory.dir("src/main/java"))
+            }
             task.rootDirectory.set(project.rootProject.layout.projectDirectory)
             task.packageMapFile.set(
                 project.rootProject.layout.buildDirectory.file("questioner/packageMap.json"),
             )
 
             // Output goes to build directory with hashed filename
-            val hash = project.name.removePrefix("question-")
             task.outputFile.set(
                 project.rootProject.layout.buildDirectory.file("questioner/questions/$hash.parsed.json"),
             )

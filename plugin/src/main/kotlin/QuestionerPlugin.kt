@@ -30,6 +30,7 @@ import org.gradle.tooling.events.task.TaskSkippedResult
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jmailen.gradle.kotlinter.KotlinterPlugin
+import java.io.File
 import java.net.URI
 import java.nio.file.FileSystems
 import java.nio.file.Paths
@@ -545,6 +546,24 @@ class QuestionerPlugin @Inject constructor(
         }
 
         project.afterEvaluate {
+            // Add external source directories to the Java source set so compilation and linting see them
+            @Suppress("UNCHECKED_CAST")
+            val sourceDirs = project.extensions.extraProperties.let { extra ->
+                if (extra.has("questioner.sourceDirs")) {
+                    extra.get("questioner.sourceDirs") as? List<File>
+                } else {
+                    null
+                }
+            }
+            if (sourceDirs != null) {
+                val mainSourceSet = project.extensions.getByType(JavaPluginExtension::class.java)
+                    .sourceSets.getByName("main")
+                val defaultDir = File(project.projectDir, "src/main/java")
+                sourceDirs.filter { it != defaultDir }.forEach { dir ->
+                    mainSourceSet.java.srcDir(dir)
+                }
+            }
+
             project.finalizeConfiguration(config)
 
             publishingTasks.forEach { task ->
