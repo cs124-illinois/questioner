@@ -77,6 +77,43 @@ npm run eslint        # Lint code
 npm run tsc           # Type check without emitting
 ```
 
+## External Question Sources
+
+The questioner plugin supports discovering questions from external directories, which is useful for incorporating questions from collaborators via Git submodules or separate repositories.
+
+### Setup
+
+In your `settings.gradle.kts`, use the `questioner {}` block to declare external source directories:
+
+```kotlin
+plugins {
+    id("org.cs124.questioner.settings") version "2026.2.2"
+}
+
+questioner {
+    external("external/alice")
+    external("external/bob")
+}
+```
+
+Each path is resolved relative to the project root, and the plugin automatically looks for sources under `<path>/src/main/java`. For example, `external("external/alice")` discovers questions in `external/alice/src/main/java/`.
+
+### Example Layout
+
+```
+my-questions/
+  settings.gradle.kts          ← declares external("external/alice"), external("external/bob")
+  build.gradle.kts
+  src/main/java/                ← your own questions
+  external/
+    alice/src/main/java/        ← git submodule with Alice's questions
+    bob/src/main/java/          ← git submodule with Bob's questions
+```
+
+All questions from all source directories are discovered, validated, and published together. Each question's `baseDirectory` is correctly resolved to its own source root, so imports and package resolution work as expected.
+
+If a configured external directory doesn't exist, the plugin logs a warning and skips it rather than failing.
+
 ## Architecture
 
 ### Question Validation Pipeline
