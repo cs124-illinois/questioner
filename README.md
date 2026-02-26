@@ -114,6 +114,58 @@ All questions from all source directories are discovered, validated, and publish
 
 If a configured external directory doesn't exist, the plugin logs a warning and skips it rather than failing.
 
+Each question from an external source has its `external` field set to the slug passed to `external()` (e.g., `"external/alice"`). This can be used for [filtering](#question-filtering) and is available as a transient field on the `Question` object for use in `configPublishIncludes`.
+
+## Question Filtering
+
+The `validate`, `validateAll`, and `validateFocused` tasks support filtering questions via Gradle project properties. Filters can be combined — only questions matching all specified filters are included.
+
+### By name or path (`-Pfilter`)
+
+Uses glob matching against the question's slug, full slug (`author/slug`), or file path:
+
+```bash
+./gradlew validate -Pfilter='*add-one*'
+./gradlew validate -Pfilter='challen@illinois.edu/*'
+```
+
+### By author (`-Pauthor`)
+
+Exact match on the question's `@Correct` author:
+
+```bash
+./gradlew validate -Pauthor=challen@illinois.edu
+```
+
+### By external source (`-Pexternal`)
+
+Exact match on the slug passed to `external()` in `settings.gradle.kts`. Only validates questions from that external source:
+
+```bash
+./gradlew validate -Pexternal=external/alice
+```
+
+### Publish filtering with `configPublishIncludes`
+
+For controlling which questions are published to which endpoints, use `configPublishIncludes` in `build.gradle.kts`. This receives the endpoint and each `Question` object, and returns whether to include it:
+
+```kotlin
+plugins {
+    id("org.cs124.questioner")
+}
+questioner {
+    configPublishIncludes { endpoint, question ->
+        when (endpoint.label) {
+            "production" -> question.published.author == "challen@illinois.edu"
+            "staging" -> true
+            else -> false
+        }
+    }
+}
+```
+
+The `Question` object provides fields like `published.author`, `published.name`, `published.tags`, `published.packageName`, and `external` (set for questions from external sources) for filtering decisions.
+
 ## Architecture
 
 ### Question Validation Pipeline
