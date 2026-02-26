@@ -27,6 +27,7 @@ import org.gradle.tooling.events.FinishEvent
 import org.gradle.tooling.events.OperationCompletionListener
 import org.gradle.tooling.events.task.TaskFinishEvent
 import org.gradle.tooling.events.task.TaskSkippedResult
+import org.gradle.tooling.events.task.TaskSuccessResult
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jmailen.gradle.kotlinter.KotlinterPlugin
@@ -56,7 +57,12 @@ abstract class TaskCompletionService :
     OperationCompletionListener {
     override fun onFinish(event: FinishEvent) {
         if (event !is TaskFinishEvent) return
-        if (event.result !is TaskSkippedResult) return
+        val wasSkipped = when (val result = event.result) {
+            is TaskSkippedResult -> true
+            is TaskSuccessResult -> result.isUpToDate || result.isFromCache
+            else -> false
+        }
+        if (!wasSkipped) return
 
         // Task path format is ":question-HASH:taskName"
         val taskPath = event.descriptor.taskPath
@@ -173,19 +179,6 @@ class QuestionerPlugin @Inject constructor(
         // Concurrency for validation (how many questions to validate in parallel)
         val validationConcurrency = dotenv["QUESTIONER_VALIDATION_CONCURRENCY"]?.toIntOrNull() ?: 8
 
-        // Count total question subprojects
-        val totalQuestions = project.subprojects.count { it.name.startsWith("question-") }
-
-        // Get ProgressLoggerFactory for progress reporting
-        val serviceRegistry = (project as org.gradle.api.internal.project.ProjectInternal).services
-        val progressLoggerFactory = serviceRegistry.get(ProgressLoggerFactory::class.java)
-
-        // Initialize parse progress manager (fresh instance each build)
-        ParseProgressManager.initialize(progressLoggerFactory, totalQuestions)
-
-        // Initialize validate progress manager (fresh instance each build)
-        ValidateProgressManager.initialize(progressLoggerFactory, totalQuestions)
-
         // Register build service to track UP-TO-DATE tasks (configuration cache compatible)
         val taskCompletionService = project.gradle.sharedServices.registerIfAbsent(
             "taskCompletionService",
@@ -197,6 +190,7 @@ class QuestionerPlugin @Inject constructor(
         val restartServers = project.hasProperty("restartServers")
 
         // Initialize the validation server manager with config values
+        val totalQuestionSubprojects = project.subprojects.count { it.name.startsWith("question-") }
         ValidationServerManager.initialize(
             project = project,
             commonJvmArgs = commonJvmArgs,
@@ -206,7 +200,7 @@ class QuestionerPlugin @Inject constructor(
             retries = config.retries,
             verbose = config.verbose,
             concurrency = validationConcurrency,
-            totalQuestions = totalQuestions,
+            totalQuestions = totalQuestionSubprojects,
             restartServers = restartServers,
         )
 
@@ -252,26 +246,73 @@ class QuestionerPlugin @Inject constructor(
         }
         project.tasks.getByName("clean").dependsOn("cleanQuestions")
 
-        // Apply QuestionPlugin to all question subprojects
-        project.subprojects { subproject ->
-            if (subproject.name.startsWith("question-")) {
-                subproject.pluginManager.apply(QuestionPlugin::class.java)
+        // Helper: get all discovered questions from the settings phase
+        @Suppress("UNCHECKED_CAST")
+        fun Project.allDiscoveredQuestions(): List<DiscoveredQuestion> = extensions.extraProperties.let { extra ->
+            if (extra.has("questioner.discoveredQuestions")) {
+                extra.get("questioner.discoveredQuestions") as? List<DiscoveredQuestion>
+            } else {
+                null
+            }
+        } ?: emptyList()
+
+        // Helper: apply filter/author/external properties to discovered questions
+        fun Project.filteredDiscoveredQuestions(): List<DiscoveredQuestion>? {
+            val filterPattern = if (hasProperty("filter")) property("filter") as String else null
+            val authorFilter = if (hasProperty("author")) property("author") as String else null
+            val externalFilter = if (hasProperty("external")) property("external") as String else null
+
+            if (filterPattern == null && authorFilter == null && externalFilter == null) return null
+
+            val discoveredQuestions = allDiscoveredQuestions()
+            val glob = filterPattern?.let { FileSystems.getDefault().getPathMatcher("glob:$it") }
+            val externalGlob = externalFilter?.let { FileSystems.getDefault().getPathMatcher("glob:$it") }
+            return discoveredQuestions.filter { q ->
+                val matchesFilter = glob?.let { matcher ->
+                    matcher.matches(Paths.get(q.slug)) ||
+                        matcher.matches(Paths.get(q.fullSlug)) ||
+                        matcher.matches(Paths.get(q.correctFile.path))
+                } ?: true
+                val matchesAuthor = authorFilter?.let { q.author == it } ?: true
+                val matchesExternal = externalGlob?.let { matcher ->
+                    q.external != null && matcher.matches(Paths.get(q.external))
+                } ?: true
+                matchesFilter && matchesAuthor && matchesExternal
             }
         }
 
-        // Aggregate parse task that depends on all subproject parse tasks
+        fun Project.dependOnFilteredSubprojectTasks(task: org.gradle.api.Task, taskName: String) {
+            val includedHashes = filteredDiscoveredQuestions()?.map { it.hash }?.toSet()
+            subprojects { subproject ->
+                if (subproject.name.startsWith("question-")) {
+                    val hash = subproject.name.removePrefix("question-")
+                    if (includedHashes == null || hash in includedHashes) {
+                        task.dependsOn(subproject.tasks.named(taskName))
+                    }
+                }
+            }
+        }
+
+        // Apply QuestionPlugin to question subprojects (filtered when -Pfilter/-Pauthor/-Pexternal is set)
+        val includedHashes = project.filteredDiscoveredQuestions()?.map { it.hash }?.toSet()
+        project.subprojects { subproject ->
+            if (subproject.name.startsWith("question-")) {
+                val hash = subproject.name.removePrefix("question-")
+                if (includedHashes == null || hash in includedHashes) {
+                    subproject.pluginManager.apply(QuestionPlugin::class.java)
+                }
+            }
+        }
+
+        // Aggregate parse task that depends on filtered subproject parse tasks
         project.tasks.register("parse") { parseTask ->
             parseTask.group = "questioner"
             parseTask.description = "Parse all question files"
             parseTask.dependsOn("buildPackageMap")
             parseTask.mustRunAfter("cleanQuestions")
 
-            // Depend on all subproject parse tasks
-            project.subprojects { subproject ->
-                if (subproject.name.startsWith("question-")) {
-                    parseTask.dependsOn(subproject.tasks.named("parse"))
-                }
-            }
+            // Depend on filtered subproject parse tasks
+            project.dependOnFilteredSubprojectTasks(parseTask, "parse")
 
             // Finish progress bar after all parse tasks complete
             parseTask.doLast {
@@ -314,44 +355,18 @@ class QuestionerPlugin @Inject constructor(
             }
         }
 
-        // Helper: compute the set of question hashes to include based on filter/author/external properties
-        fun Project.filteredQuestionHashes(): Set<String>? {
-            val filterPattern = if (hasProperty("filter")) property("filter") as String else null
-            val authorFilter = if (hasProperty("author")) property("author") as String else null
-            val externalFilter = if (hasProperty("external")) property("external") as String else null
-
-            if (filterPattern == null && authorFilter == null && externalFilter == null) return null
-
-            @Suppress("UNCHECKED_CAST")
-            val discoveredQuestions = extensions.extraProperties.let { extra ->
-                if (extra.has("questioner.discoveredQuestions")) {
-                    extra.get("questioner.discoveredQuestions") as? List<DiscoveredQuestion>
-                } else {
-                    null
-                }
-            } ?: emptyList()
-
-            val glob = filterPattern?.let { FileSystems.getDefault().getPathMatcher("glob:$it") }
-            return discoveredQuestions.filter { q ->
-                val matchesFilter = glob?.let { matcher ->
-                    matcher.matches(Paths.get(q.slug)) ||
-                        matcher.matches(Paths.get(q.fullSlug)) ||
-                        matcher.matches(Paths.get(q.correctFile.path))
-                } ?: true
-                val matchesAuthor = authorFilter?.let { q.author == it } ?: true
-                val matchesExternal = externalFilter?.let { q.external == it } ?: true
-                matchesFilter && matchesAuthor && matchesExternal
-            }.map { it.hash }.toSet()
-        }
-
-        fun Project.dependOnFilteredQuestions(task: org.gradle.api.Task) {
-            val includedHashes = filteredQuestionHashes()
-            subprojects { subproject ->
-                if (subproject.name.startsWith("question-")) {
-                    val hash = subproject.name.removePrefix("question-")
-                    if (includedHashes == null || hash in includedHashes) {
-                        task.dependsOn(subproject.tasks.named("validate"))
-                    }
+        // List questions matching current filters (dry-run for testing filters)
+        project.tasks.register("listQuestions") { task ->
+            task.group = "questioner"
+            task.description = "List questions matching current filters"
+            task.doLast {
+                val filtered = project.filteredDiscoveredQuestions()
+                val questions = filtered ?: project.allDiscoveredQuestions()
+                val label = if (filtered != null) "Matched ${questions.size} question(s)" else "All ${questions.size} question(s)"
+                println(label)
+                questions.sortedBy { it.fullSlug }.forEach { q ->
+                    val ext = if (q.external != null) " [${q.external}]" else ""
+                    println("  ${q.fullSlug}$ext")
                 }
             }
         }
@@ -367,7 +382,7 @@ class QuestionerPlugin @Inject constructor(
                 task.finalizedBy("shutdownValidationServers")
             }
 
-            project.dependOnFilteredQuestions(task)
+            project.dependOnFilteredSubprojectTasks(task, "validate")
         }
 
         // Validate all questions regardless of status
@@ -381,7 +396,7 @@ class QuestionerPlugin @Inject constructor(
                 task.finalizedBy("shutdownValidationServers")
             }
 
-            project.dependOnFilteredQuestions(task)
+            project.dependOnFilteredSubprojectTasks(task, "validate")
             // TODO: Pass force flag to server to re-validate
         }
 
@@ -397,7 +412,7 @@ class QuestionerPlugin @Inject constructor(
             }
 
             // TODO: Filter to only focused question subprojects
-            project.dependOnFilteredQuestions(task)
+            project.dependOnFilteredSubprojectTasks(task, "validate")
         }
 
         project.tasks.register("collectQuestions", CollectQuestions::class.java) { collectQuestions ->
@@ -463,6 +478,15 @@ class QuestionerPlugin @Inject constructor(
             }
 
             project.finalizeConfiguration(config)
+
+            // Initialize progress managers with filtered count when filters are active
+            val filteredQuestions = project.filteredDiscoveredQuestions()
+            val totalQuestions = filteredQuestions?.size
+                ?: project.subprojects.count { it.name.startsWith("question-") }
+            val serviceRegistry = (project as org.gradle.api.internal.project.ProjectInternal).services
+            val progressLoggerFactory = serviceRegistry.get(ProgressLoggerFactory::class.java)
+            ParseProgressManager.initialize(progressLoggerFactory, totalQuestions)
+            ValidateProgressManager.initialize(progressLoggerFactory, totalQuestions)
 
             publishingTasks.forEach { task ->
                 task.publishIncludes = config.publishIncludes
