@@ -8,11 +8,9 @@ import java.util.concurrent.atomic.AtomicInteger
 /**
  * Thread-safe progress manager for validate tasks.
  *
- * Handles parallel task execution by using atomic operations:
- * - AtomicBoolean ensures only one task starts the progress bar
- * - AtomicInteger ensures thread-safe counting
- *
- * Only shows progress if at least one task actually runs (not UP-TO-DATE).
+ * Shows progress as completed / activeTotal, where activeTotal = total - skipped.
+ * UP-TO-DATE tasks decrement the denominator so the bar reflects actual work remaining.
+ * The bar starts when the first real task runs; skip events adjust the denominator beforehand.
  */
 class ValidateProgressManager(
     private val progressLoggerFactory: ProgressLoggerFactory,
@@ -21,12 +19,8 @@ class ValidateProgressManager(
     private var progressLogger: ProgressLogger? = null
     private val started = AtomicBoolean(false)
     private val tasksCompleted = AtomicInteger(0)
-    private val tasksSkipped = AtomicInteger(0) // UP-TO-DATE tasks
+    private val tasksSkipped = AtomicInteger(0)
 
-    /**
-     * Called at the start of each task's @TaskAction.
-     * Only the first caller starts the progress bar.
-     */
     fun taskStarting() {
         if (started.compareAndSet(false, true)) {
             progressLogger = progressLoggerFactory.newOperation(ValidateProgressManager::class.java).also {
@@ -37,27 +31,19 @@ class ValidateProgressManager(
         }
     }
 
-    /**
-     * Called after each task completes its work.
-     */
     fun taskCompleted() {
         tasksCompleted.incrementAndGet()
         progressLogger?.progress(formatProgress())
     }
 
-    /**
-     * Called when a task is UP-TO-DATE (from afterTask callback).
-     */
     fun taskSkipped() {
         tasksSkipped.incrementAndGet()
-        // Update progress if bar is already showing
         progressLogger?.progress(formatProgress())
     }
 
     private fun formatProgress(): String {
         val completed = tasksCompleted.get()
-        val skipped = tasksSkipped.get()
-        val activeTotal = totalQuestions - skipped
+        val activeTotal = totalQuestions - tasksSkipped.get()
         val progressBar = buildProgressBar(completed, activeTotal, 20)
         return "$progressBar $completed/$activeTotal"
     }
@@ -69,9 +55,6 @@ class ValidateProgressManager(
         return "[" + "=".repeat(filled) + " ".repeat(empty) + "]"
     }
 
-    /**
-     * Called from validationReport task to complete the progress bar.
-     */
     fun finish() {
         progressLogger?.completed()
         progressLogger = null
@@ -80,18 +63,11 @@ class ValidateProgressManager(
     companion object {
         private var currentManager: ValidateProgressManager? = null
 
-        /**
-         * Initialize a fresh manager for this build.
-         * Must be called at the start of each build (from afterEvaluate).
-         */
         @Synchronized
         fun initialize(progressLoggerFactory: ProgressLoggerFactory, totalQuestions: Int) {
             currentManager = ValidateProgressManager(progressLoggerFactory, totalQuestions)
         }
 
-        /**
-         * Get the current manager instance.
-         */
         fun getInstance(): ValidateProgressManager? = currentManager
     }
 }
