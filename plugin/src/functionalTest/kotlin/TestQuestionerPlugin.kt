@@ -3,6 +3,7 @@ package edu.illinois.cs.cs125.questioner.plugin
 import edu.illinois.cs.cs125.questioner.lib.VERSION
 import edu.illinois.cs.cs125.questioner.lib.loadQuestionList
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.ints.shouldBeGreaterThan
@@ -143,6 +144,10 @@ class TestQuestionerPlugin :
             externalQuestion!!.published.author shouldBe "external@illinois.edu"
             externalQuestion.phase1Completed.shouldBeTrue()
             externalQuestion.validated.shouldBeTrue()
+
+            // Verify excluded external question was NOT discovered
+            val excludedQuestion = questions.find { it.published.name == "Add Three" }
+            (excludedQuestion != null).shouldBeFalse()
         }
 
         "second validate run should be up-to-date".config(timeout = 600.seconds) {

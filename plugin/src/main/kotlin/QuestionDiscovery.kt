@@ -71,12 +71,21 @@ fun String.sha256Take16(): String {
 
 /**
  * Discover all @Correct files in a source directory.
+ * @param excludes list of relative path prefixes to exclude (e.g. "com/github/examples")
  */
-fun discoverQuestions(sourceDir: File, external: String? = null): List<DiscoveredQuestion> {
+fun discoverQuestions(sourceDir: File, external: String? = null, excludes: List<String> = emptyList()): List<DiscoveredQuestion> {
     if (!sourceDir.exists()) return emptyList()
 
     return sourceDir.walkTopDown()
         .filter { it.isFile && (it.extension == "java" || it.extension == "kt") }
+        .filter { file ->
+            if (excludes.isEmpty()) {
+                true
+            } else {
+                val relativePath = file.relativeTo(sourceDir).path
+                excludes.none { relativePath.startsWith(it) }
+            }
+        }
         .mapNotNull { it.extractCorrectInfo(sourceDir, external) }
         .toList()
 }
@@ -112,7 +121,6 @@ fun discoverQuestionsWithCollisionCheck(sourceDir: File): List<DiscoveredQuestio
 
 /**
  * Discover questions from multiple source directories and check for collisions across all of them.
- * Each entry is a pair of (sourceDir, externalSlug) where externalSlug is null for the primary source dir.
+ * Each entry is a triple of (sourceDir, externalSlug, excludes) where externalSlug is null for the primary source dir.
  */
-fun discoverQuestionsFromDirs(sourceDirs: List<Pair<File, String?>>): List<DiscoveredQuestion> =
-    checkForCollisions(sourceDirs.flatMap { (dir, external) -> discoverQuestions(dir, external) })
+fun discoverQuestionsFromDirs(sourceDirs: List<Triple<File, String?, List<String>>>): List<DiscoveredQuestion> = checkForCollisions(sourceDirs.flatMap { (dir, external, excludes) -> discoverQuestions(dir, external, excludes) })

@@ -14,7 +14,9 @@ plugins {
 }
 
 questioner {
-    external("external/test")
+    external("external/test") {
+        exclude("com/github/cs124_illinois/questioner/testing/external/excluded")
+    }
 }
 
 dependencyResolutionManagement {

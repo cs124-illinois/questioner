@@ -35,10 +35,10 @@ class QuestionerSettingsPlugin : Plugin<Settings> {
         settings.gradle.settingsEvaluated {
             val primarySourceDir = File(settings.rootDir, "src/main/java")
 
-            // Build the list of all source directories with their external slugs
-            val sourceDirs = mutableListOf<Pair<File, String?>>(primarySourceDir to null)
-            for (path in extension.externalDirs) {
-                val externalSourceDir = File(settings.rootDir, "$path/src/main/java")
+            // Build the list of all source directories with their external slugs and excludes
+            val sourceDirs = mutableListOf<Triple<File, String?, List<String>>>(Triple(primarySourceDir, null, emptyList()))
+            for (externalDir in extension.externalDirs) {
+                val externalSourceDir = File(settings.rootDir, "${externalDir.path}/src/main/java")
                 if (!externalSourceDir.exists()) {
                     settings.gradle.rootProject { project ->
                         project.logger.warn(
@@ -46,7 +46,7 @@ class QuestionerSettingsPlugin : Plugin<Settings> {
                         )
                     }
                 } else {
-                    sourceDirs.add(externalSourceDir to path)
+                    sourceDirs.add(Triple(externalSourceDir, externalDir.path, externalDir.excludes))
                 }
             }
 
