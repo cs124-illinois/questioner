@@ -314,33 +314,16 @@ class QuestionerPlugin @Inject constructor(
             }
         }
 
-        // Validate unvalidated questions (server skips already-validated)
-        project.tasks.register("validate") { task ->
-            task.group = "questioner"
-            task.description = "Validate unvalidated questions"
-            task.dependsOn("parse")
-            task.finalizedBy("validationReport", "recollectQuestions")
+        // Helper: compute the set of question hashes to include based on filter/author/external properties
+        fun Project.filteredQuestionHashes(): Set<String>? {
+            val filterPattern = if (hasProperty("filter")) property("filter") as String else null
+            val authorFilter = if (hasProperty("author")) property("author") as String else null
+            val externalFilter = if (hasProperty("external")) property("external") as String else null
 
-            // Shutdown servers after validation if restartServers flag is set
-            if (project.hasProperty("restartServers")) {
-                task.finalizedBy("shutdownValidationServers")
-            }
+            if (filterPattern == null && authorFilter == null && externalFilter == null) return null
 
-            // Get filter patterns from project properties
-            val filterPattern = if (project.hasProperty("filter")) {
-                project.property("filter") as String
-            } else {
-                null
-            }
-            val authorFilter = if (project.hasProperty("author")) {
-                project.property("author") as String
-            } else {
-                null
-            }
-
-            // Get discovered questions from settings phase
             @Suppress("UNCHECKED_CAST")
-            val discoveredQuestions = project.extensions.extraProperties.let { extra ->
+            val discoveredQuestions = extensions.extraProperties.let { extra ->
                 if (extra.has("questioner.discoveredQuestions")) {
                     extra.get("questioner.discoveredQuestions") as? List<DiscoveredQuestion>
                 } else {
@@ -348,25 +331,22 @@ class QuestionerPlugin @Inject constructor(
                 }
             } ?: emptyList()
 
-            // Build set of hashes to include (null means include all)
-            val includedHashes: Set<String>? = if (filterPattern != null || authorFilter != null) {
-                val glob = filterPattern?.let {
-                    FileSystems.getDefault().getPathMatcher("glob:$it")
-                }
-                discoveredQuestions.filter { q ->
-                    val matchesFilter = glob?.let { matcher ->
-                        matcher.matches(Paths.get(q.slug)) ||
-                            matcher.matches(Paths.get(q.fullSlug)) ||
-                            matcher.matches(Paths.get(q.correctFile.path))
-                    } ?: true
-                    val matchesAuthor = authorFilter?.let { q.author == it } ?: true
-                    matchesFilter && matchesAuthor
-                }.map { it.hash }.toSet()
-            } else {
-                null
-            }
+            val glob = filterPattern?.let { FileSystems.getDefault().getPathMatcher("glob:$it") }
+            return discoveredQuestions.filter { q ->
+                val matchesFilter = glob?.let { matcher ->
+                    matcher.matches(Paths.get(q.slug)) ||
+                        matcher.matches(Paths.get(q.fullSlug)) ||
+                        matcher.matches(Paths.get(q.correctFile.path))
+                } ?: true
+                val matchesAuthor = authorFilter?.let { q.author == it } ?: true
+                val matchesExternal = externalFilter?.let { q.external == it } ?: true
+                matchesFilter && matchesAuthor && matchesExternal
+            }.map { it.hash }.toSet()
+        }
 
-            project.subprojects { subproject ->
+        fun Project.dependOnFilteredQuestions(task: org.gradle.api.Task) {
+            val includedHashes = filteredQuestionHashes()
+            subprojects { subproject ->
                 if (subproject.name.startsWith("question-")) {
                     val hash = subproject.name.removePrefix("question-")
                     if (includedHashes == null || hash in includedHashes) {
@@ -376,6 +356,20 @@ class QuestionerPlugin @Inject constructor(
             }
         }
 
+        // Validate unvalidated questions (server skips already-validated)
+        project.tasks.register("validate") { task ->
+            task.group = "questioner"
+            task.description = "Validate unvalidated questions"
+            task.dependsOn("parse")
+            task.finalizedBy("validationReport", "recollectQuestions")
+
+            if (project.hasProperty("restartServers")) {
+                task.finalizedBy("shutdownValidationServers")
+            }
+
+            project.dependOnFilteredQuestions(task)
+        }
+
         // Validate all questions regardless of status
         project.tasks.register("validateAll") { task ->
             task.group = "questioner"
@@ -383,59 +377,11 @@ class QuestionerPlugin @Inject constructor(
             task.dependsOn("parse")
             task.finalizedBy("validationReport", "recollectQuestions")
 
-            // Shutdown servers after validation if restartServers flag is set
             if (project.hasProperty("restartServers")) {
                 task.finalizedBy("shutdownValidationServers")
             }
 
-            // Get filter patterns from project properties
-            val filterPattern = if (project.hasProperty("filter")) {
-                project.property("filter") as String
-            } else {
-                null
-            }
-            val authorFilter = if (project.hasProperty("author")) {
-                project.property("author") as String
-            } else {
-                null
-            }
-
-            // Get discovered questions from settings phase
-            @Suppress("UNCHECKED_CAST")
-            val discoveredQuestions = project.extensions.extraProperties.let { extra ->
-                if (extra.has("questioner.discoveredQuestions")) {
-                    extra.get("questioner.discoveredQuestions") as? List<DiscoveredQuestion>
-                } else {
-                    null
-                }
-            } ?: emptyList()
-
-            // Build set of hashes to include (null means include all)
-            val includedHashes: Set<String>? = if (filterPattern != null || authorFilter != null) {
-                val glob = filterPattern?.let {
-                    FileSystems.getDefault().getPathMatcher("glob:$it")
-                }
-                discoveredQuestions.filter { q ->
-                    val matchesFilter = glob?.let { matcher ->
-                        matcher.matches(Paths.get(q.slug)) ||
-                            matcher.matches(Paths.get(q.fullSlug)) ||
-                            matcher.matches(Paths.get(q.correctFile.path))
-                    } ?: true
-                    val matchesAuthor = authorFilter?.let { q.author == it } ?: true
-                    matchesFilter && matchesAuthor
-                }.map { it.hash }.toSet()
-            } else {
-                null
-            }
-
-            project.subprojects { subproject ->
-                if (subproject.name.startsWith("question-")) {
-                    val hash = subproject.name.removePrefix("question-")
-                    if (includedHashes == null || hash in includedHashes) {
-                        task.dependsOn(subproject.tasks.named("validate"))
-                    }
-                }
-            }
+            project.dependOnFilteredQuestions(task)
             // TODO: Pass force flag to server to re-validate
         }
 
@@ -446,60 +392,12 @@ class QuestionerPlugin @Inject constructor(
             task.dependsOn("parse")
             task.finalizedBy("validationReport", "recollectQuestions")
 
-            // Shutdown servers after validation if restartServers flag is set
             if (project.hasProperty("restartServers")) {
                 task.finalizedBy("shutdownValidationServers")
             }
 
-            // Get filter patterns from project properties
-            val filterPattern = if (project.hasProperty("filter")) {
-                project.property("filter") as String
-            } else {
-                null
-            }
-            val authorFilter = if (project.hasProperty("author")) {
-                project.property("author") as String
-            } else {
-                null
-            }
-
-            // Get discovered questions from settings phase
-            @Suppress("UNCHECKED_CAST")
-            val discoveredQuestions = project.extensions.extraProperties.let { extra ->
-                if (extra.has("questioner.discoveredQuestions")) {
-                    extra.get("questioner.discoveredQuestions") as? List<DiscoveredQuestion>
-                } else {
-                    null
-                }
-            } ?: emptyList()
-
-            // Build set of hashes to include (null means include all)
-            val includedHashes: Set<String>? = if (filterPattern != null || authorFilter != null) {
-                val glob = filterPattern?.let {
-                    FileSystems.getDefault().getPathMatcher("glob:$it")
-                }
-                discoveredQuestions.filter { q ->
-                    val matchesFilter = glob?.let { matcher ->
-                        matcher.matches(Paths.get(q.slug)) ||
-                            matcher.matches(Paths.get(q.fullSlug)) ||
-                            matcher.matches(Paths.get(q.correctFile.path))
-                    } ?: true
-                    val matchesAuthor = authorFilter?.let { q.author == it } ?: true
-                    matchesFilter && matchesAuthor
-                }.map { it.hash }.toSet()
-            } else {
-                null
-            }
-
             // TODO: Filter to only focused question subprojects
-            project.subprojects { subproject ->
-                if (subproject.name.startsWith("question-")) {
-                    val hash = subproject.name.removePrefix("question-")
-                    if (includedHashes == null || hash in includedHashes) {
-                        task.dependsOn(subproject.tasks.named("validate"))
-                    }
-                }
-            }
+            project.dependOnFilteredQuestions(task)
         }
 
         project.tasks.register("collectQuestions", CollectQuestions::class.java) { collectQuestions ->

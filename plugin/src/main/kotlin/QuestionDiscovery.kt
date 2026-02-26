@@ -17,6 +17,7 @@ data class DiscoveredQuestion(
     val fullSlug: String,
     val hash: String,
     val sourceRoot: File,
+    val external: String? = null,
 )
 
 /**
@@ -24,7 +25,7 @@ data class DiscoveredQuestion(
  * Only extracts author, path, and name - doesn't do full ANTLR parsing.
  * This is used during the settings phase where we need fast discovery.
  */
-fun File.extractCorrectInfo(sourceRoot: File): DiscoveredQuestion? {
+fun File.extractCorrectInfo(sourceRoot: File, external: String? = null): DiscoveredQuestion? {
     val content = readText()
 
     // Quick check - does this file have @Correct?
@@ -56,6 +57,7 @@ fun File.extractCorrectInfo(sourceRoot: File): DiscoveredQuestion? {
         fullSlug = fullSlug,
         hash = hash,
         sourceRoot = sourceRoot,
+        external = external,
     )
 }
 
@@ -70,12 +72,12 @@ fun String.sha256Take16(): String {
 /**
  * Discover all @Correct files in a source directory.
  */
-fun discoverQuestions(sourceDir: File): List<DiscoveredQuestion> {
+fun discoverQuestions(sourceDir: File, external: String? = null): List<DiscoveredQuestion> {
     if (!sourceDir.exists()) return emptyList()
 
     return sourceDir.walkTopDown()
         .filter { it.isFile && (it.extension == "java" || it.extension == "kt") }
-        .mapNotNull { it.extractCorrectInfo(sourceDir) }
+        .mapNotNull { it.extractCorrectInfo(sourceDir, external) }
         .toList()
 }
 
@@ -110,5 +112,7 @@ fun discoverQuestionsWithCollisionCheck(sourceDir: File): List<DiscoveredQuestio
 
 /**
  * Discover questions from multiple source directories and check for collisions across all of them.
+ * Each entry is a pair of (sourceDir, externalSlug) where externalSlug is null for the primary source dir.
  */
-fun discoverQuestionsFromDirs(sourceDirs: List<File>): List<DiscoveredQuestion> = checkForCollisions(sourceDirs.flatMap { discoverQuestions(it) })
+fun discoverQuestionsFromDirs(sourceDirs: List<Pair<File, String?>>): List<DiscoveredQuestion> =
+    checkForCollisions(sourceDirs.flatMap { (dir, external) -> discoverQuestions(dir, external) })

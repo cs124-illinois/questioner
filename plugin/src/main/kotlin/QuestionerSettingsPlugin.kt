@@ -35,8 +35,8 @@ class QuestionerSettingsPlugin : Plugin<Settings> {
         settings.gradle.settingsEvaluated {
             val primarySourceDir = File(settings.rootDir, "src/main/java")
 
-            // Build the list of all source directories
-            val sourceDirs = mutableListOf(primarySourceDir)
+            // Build the list of all source directories with their external slugs
+            val sourceDirs = mutableListOf<Pair<File, String?>>(primarySourceDir to null)
             for (path in extension.externalDirs) {
                 val externalSourceDir = File(settings.rootDir, "$path/src/main/java")
                 if (!externalSourceDir.exists()) {
@@ -46,7 +46,7 @@ class QuestionerSettingsPlugin : Plugin<Settings> {
                         )
                     }
                 } else {
-                    sourceDirs.add(externalSourceDir)
+                    sourceDirs.add(externalSourceDir to path)
                 }
             }
 
@@ -65,9 +65,12 @@ class QuestionerSettingsPlugin : Plugin<Settings> {
                 if (project == project.rootProject) {
                     project.extensions.extraProperties["questioner.discoveredQuestions"] = questions
                     project.extensions.extraProperties["questioner.questionCount"] = questions.size
-                    project.extensions.extraProperties["questioner.sourceDirs"] = sourceDirs.filter { it.exists() }
+                    project.extensions.extraProperties["questioner.sourceDirs"] =
+                        sourceDirs.map { it.first }.filter { it.exists() }
                     project.extensions.extraProperties["questioner.questionSourceRoots"] =
                         questions.associate { it.hash to it.sourceRoot }
+                    project.extensions.extraProperties["questioner.questionExternals"] =
+                        questions.filter { it.external != null }.associate { it.hash to it.external }
                 }
             }
         }

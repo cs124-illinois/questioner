@@ -675,6 +675,9 @@ $contents
     var correctPath: String? = null
 
     @Transient
+    var external: String? = null
+
+    @Transient
     var solveCount: Int = 0
 
     @Transient
@@ -682,6 +685,7 @@ $contents
 
     fun cleanForUpload() {
         correctPath = null
+        external = null
         metadata = null
         solveCount = 0
         testedCount = 0

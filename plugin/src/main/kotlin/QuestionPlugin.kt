@@ -75,6 +75,17 @@ class QuestionPlugin : Plugin<Project> {
 
             task.questionerVersion.set(VERSION)
 
+            // Look up external slug if this question comes from an external source
+            @Suppress("UNCHECKED_CAST")
+            val questionExternals = project.rootProject.extensions.extraProperties.let { extra ->
+                if (extra.has("questioner.questionExternals")) {
+                    extra.get("questioner.questionExternals") as? Map<String, String?>
+                } else {
+                    null
+                }
+            }
+            questionExternals?.get(hash)?.let { task.externalSlug.set(it) }
+
             // Depend on package map being built
             task.dependsOn(":buildPackageMap")
         }
@@ -261,6 +272,9 @@ abstract class ParseQuestion : DefaultTask() {
     @get:Input
     abstract val questionerVersion: Property<String>
 
+    @get:Internal
+    abstract val externalSlug: Property<String>
+
     @get:OutputFile
     abstract val outputFile: RegularFileProperty
 
@@ -284,6 +298,11 @@ abstract class ParseQuestion : DefaultTask() {
 
             // Set the correct path relative to root
             question.correctPath = correctPath.relativeTo(rootDir).toString()
+
+            // Set external slug if this question comes from an external source
+            if (externalSlug.isPresent) {
+                question.external = externalSlug.get()
+            }
 
             // Ensure output directory exists
             outputFile.get().asFile.parentFile.mkdirs()
