@@ -79,6 +79,6 @@ The project follows a multi-module structure:
 ## Dependency Management
 
 - Always specify exact dependencies in package.json files, avoiding ~ or ^ version prefixes
-
-- We're currently ignoring dependency updates from Kotest due to breaking API changes in version 6.0+
+- To check for available dependency updates, run: `./gradlew dependencyUpdates`
+  - This uses the [ben-manes versions plugin](https://github.com/ben-manes/gradle-versions-plugin) and only reports stable releases
 - Other dependency updates (Kotlin, Ktor, KSP, etc.) should be applied when available

@@ -119,7 +119,7 @@ class TestValidation : StringSpec({
             results.shouldNotBeNull()
             if (results.canTestTest) {
                 results.testTestingIncorrectCount.shouldNotBeNull()
-                results.testTestingIncorrectCount!!.values.sum() shouldBeGreaterThan 0
+                results.testTestingIncorrectCount.values.sum() shouldBeGreaterThan 0
             }
         }
     }
