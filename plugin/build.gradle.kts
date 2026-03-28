@@ -22,8 +22,8 @@ dependencies {
         exclude(module = "kotlin-runtime")
         exclude(module = "kotlin-js")
     }
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.1")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.21.1")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.2")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.21.2")
     implementation("com.github.slugify:slugify:3.0.7")
 
     implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.3.10")
@@ -35,11 +35,11 @@ dependencies {
     implementation("io.github.z4kn4fein:semver:3.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
-    testImplementation("io.kotest:kotest-runner-junit5:6.1.4")
+    testImplementation("io.kotest:kotest-runner-junit5:6.1.9")
     testImplementation(gradleTestKit())
     testImplementation("com.autonomousapps:gradle-testkit-support:0.22")
 
-    "functionalTestImplementation"("io.kotest:kotest-runner-junit5:6.1.4")
+    "functionalTestImplementation"("io.kotest:kotest-runner-junit5:6.1.9")
     "functionalTestImplementation"(project(":lib"))
 }
 tasks.compileKotlin {

@@ -9,14 +9,19 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import java.io.File
 
+@DisableCachingByDefault(because = "Question collection should always reflect current state")
 abstract class CollectQuestions : DefaultTask() {
     @OutputFile
     val outputFile: File = project.layout.buildDirectory.dir("questioner/questions.json").get().asFile
 
     @InputFiles
+    @PathSensitive(PathSensitivity.RELATIVE)
     val inputFiles: FileCollection = project.fileTree(
         project.layout.buildDirectory.dir("questioner/questions"),
     ).matching { it.include("*.parsed.json") }

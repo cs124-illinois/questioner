@@ -4,8 +4,10 @@ package edu.illinois.cs.cs125.questioner.plugin
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import java.net.URI
 
+@DisableCachingByDefault(because = "Version check should always run")
 open class CheckQuestionerVersion : DefaultTask() {
     init {
         group = "Verification"

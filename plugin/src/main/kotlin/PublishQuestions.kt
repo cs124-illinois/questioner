@@ -8,7 +8,10 @@ import edu.illinois.cs.cs125.questioner.lib.toJSON
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.net.HttpURLConnection
@@ -19,11 +22,13 @@ import java.net.http.HttpResponse
 import java.util.function.BiPredicate
 import java.util.zip.GZIPOutputStream
 
+@DisableCachingByDefault(because = "Publishing should always run")
 abstract class PublishQuestions : DefaultTask() {
     @Internal
     lateinit var endpoint: QuestionerConfig.EndPoint
 
     @InputFile
+    @PathSensitive(PathSensitivity.RELATIVE)
     val inputFile: File = project.layout.buildDirectory.dir("questioner/questions.json").get().asFile
 
     @Internal

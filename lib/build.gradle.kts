@@ -29,9 +29,9 @@ dependencies {
     api("org.cs124.jeed:core:2026.2.0")
     api("org.cs124:jenisol:2026.2.0")
     api("org.cs124:libcs1:2026.2.0")
-    api("com.fasterxml.jackson.core:jackson-databind:2.21.1")
+    api("com.fasterxml.jackson.core:jackson-databind:2.21.2")
 
-    testImplementation("io.kotest:kotest-runner-junit5:6.1.4")
+    testImplementation("io.kotest:kotest-runner-junit5:6.1.9")
     api("org.junit.jupiter:junit-jupiter-api:6.0.3")
     api("org.junit.platform:junit-platform-engine:6.0.3")
     api("com.google.truth:truth:1.4.5")

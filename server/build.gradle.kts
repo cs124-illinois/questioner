@@ -6,11 +6,11 @@ plugins {
     kotlin("plugin.serialization")
     application
     id("org.jmailen.kotlinter")
-    id("com.gradleup.shadow") version "9.3.1"
+    id("com.gradleup.shadow") version "9.4.1"
     id("com.ryandens.javaagent-test") version "0.10.0"
 }
 dependencies {
-    val ktorVersion = "3.4.0"
+    val ktorVersion = "3.4.2"
 
     testJavaagent("com.beyondgrader.resource-agent:agent:2026.1.2")
 
@@ -24,11 +24,11 @@ dependencies {
     implementation("org.mongodb:mongodb-driver-sync:5.6.4")
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.3")
 
-    testImplementation("io.kotest:kotest-runner-junit5:6.1.4")
+    testImplementation("io.kotest:kotest-runner-junit5:6.1.9")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     testImplementation("com.google.truth:truth:1.4.5")
-    testImplementation("org.testcontainers:testcontainers-mongodb:2.0.3")
+    testImplementation("org.testcontainers:testcontainers-mongodb:2.0.4")
 }
 tasks.shadowJar {
     manifest {

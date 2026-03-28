@@ -17,6 +17,7 @@ import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import java.io.File
 import kotlin.io.path.relativeTo
 
@@ -121,6 +122,7 @@ class QuestionPlugin : Plugin<Project> {
  * Task that runs both validation phases (validate + calibrate) for a question.
  * Does not fail the build on validation errors - failures are tracked and reported at the end.
  */
+@DisableCachingByDefault(because = "Validation results depend on external server state")
 abstract class TestQuestionTask : DefaultTask() {
     @get:Internal
     abstract val questionFilePath: Property<String>
@@ -250,6 +252,7 @@ abstract class TestQuestionTask : DefaultTask() {
 /**
  * Task to parse a single question directory and save its metadata.
  */
+@DisableCachingByDefault(because = "Parse results depend on source file content analysis")
 abstract class ParseQuestion : DefaultTask() {
     @get:InputFile
     @get:PathSensitive(PathSensitivity.RELATIVE)

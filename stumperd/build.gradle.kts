@@ -8,11 +8,11 @@ plugins {
     kotlin("plugin.serialization")
     application
     id("org.jmailen.kotlinter")
-    id("com.gradleup.shadow") version "9.3.1"
+    id("com.gradleup.shadow") version "9.4.1"
     id("com.ryandens.javaagent-test") version "0.10.0"
 }
 dependencies {
-    val ktorVersion = "3.4.0"
+    val ktorVersion = "3.4.2"
 
     testJavaagent("com.beyondgrader.resource-agent:agent:2026.1.2")
 
