@@ -674,7 +674,6 @@ $contents
 
     var correctPath: String? = null
 
-    @Transient
     var external: String? = null
 
     @Transient
