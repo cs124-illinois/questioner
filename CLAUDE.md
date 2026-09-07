@@ -62,14 +62,10 @@ The project follows a multi-module structure:
   - MongoDB integration for data storage
   - Dockerized deployment
 
-- **stumperd/**: Mutation testing and deduplication
-  - Separate Docker setup
-
 - **js/**: TypeScript packages using Yarn workspaces
   - types: Shared TypeScript definitions
   - output: Output formatting utilities
   - mongodb: Database integration
-  - stumperd-import: Import utilities
 
 ## Key Patterns
 
@@ -83,7 +79,6 @@ The project follows a multi-module structure:
 
 - The project extensively uses JVM flags for testing including security manager and preview features
 - Version updates should follow YYYY.M.minor format in root build.gradle.kts
-- Server and stumperd modules have their own Docker configurations
 - TypeScript code uses strict type checking
 
 ## Dependency Management

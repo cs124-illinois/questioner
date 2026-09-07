@@ -24,9 +24,6 @@ This is a multi-module project with the following components:
   - Dockerized deployment ready
   - Handles question submission and validation
 
-- **stumperd/**: Mutation testing and deduplication system
-  - Separate Docker setup for advanced testing scenarios
-
 ### TypeScript Components
 
 - **js/types**: Shared TypeScript type definitions
@@ -188,7 +185,6 @@ The `Question` object provides fields like `published.author`, `published.name`,
 1. **Parsing**: Questions are parsed using ANTLR grammars for Java/Kotlin
 2. **Validation**: Core validation logic ensures questions meet educational standards
 3. **Testing**: Automated testing verifies question correctness
-4. **Mutation Testing**: Advanced testing through code mutation (stumperd)
 
 ### Technology Stack
 
@@ -239,16 +235,11 @@ The server image is published separately:
 
 ## Docker Support
 
-Server and stumperd components include Docker configurations for containerized deployment:
+The server component includes a Docker configuration for containerized deployment:
 
 ```bash
-# Server component
 cd server
 docker build -t questioner-server .
-
-# Stumperd component  
-cd stumperd
-docker-compose up
 ```
 
 ## Contributing
