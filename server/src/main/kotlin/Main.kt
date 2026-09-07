@@ -1,9 +1,8 @@
 package edu.illinois.cs.cs125.questioner.server
 
-import ch.qos.logback.classic.Level
-import ch.qos.logback.classic.LoggerContext
 import com.mongodb.client.MongoCollection
 import com.sun.management.HotSpotDiagnosticMXBean
+import edu.illinois.cs.cs125.jeed.core.configureJeedLogging
 import edu.illinois.cs.cs125.jeed.core.serializers.JeedSerializersModule
 import edu.illinois.cs.cs125.questioner.lib.Language
 import edu.illinois.cs.cs125.questioner.lib.Question
@@ -41,7 +40,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 import org.bson.BsonDocument
-import org.slf4j.LoggerFactory
 import java.lang.management.ManagementFactory
 import java.lang.management.MemoryNotificationInfo
 import java.lang.management.MemoryType
@@ -50,6 +48,8 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.logging.Level
+import java.util.logging.Logger
 import javax.management.NotificationEmitter
 import javax.management.NotificationListener
 import kotlin.math.floor
@@ -61,6 +61,22 @@ import edu.illinois.cs.cs125.jeed.core.warm as warmJeed
 import kotlin.math.round as kotlinRound
 
 internal val logger = KotlinLogging.logger {}
+
+private const val QUESTIONER_LOGGER_NAME = "edu.illinois.cs.cs125.questioner"
+private const val KTOR_LOGGER_NAME = "ktor.application"
+
+/**
+ * LOG_LEVEL is written with SLF4J's level names, which java.util.logging spells differently.
+ * Unrecognized values fall back to DEBUG, matching what logback's Level.toLevel did.
+ */
+private fun logLevelOf(name: String) = when (name.uppercase()) {
+    "TRACE" -> Level.FINEST
+    "DEBUG" -> Level.FINE
+    "INFO" -> Level.INFO
+    "WARN" -> Level.WARNING
+    "ERROR" -> Level.SEVERE
+    else -> Level.FINE
+}
 
 internal val questionCacheSize = (System.getenv("QUESTIONER_QUESTION_CACHE_SIZE")?.toLong() ?: 16L) + 1
 private val warmQuestion = System.getenv("QUESTIONER_WARM_QUESTION") ?: "hello-world"
@@ -191,8 +207,17 @@ fun main(@Suppress("unused") unused: Array<String>) {
         "Please set the QUESTIONER_TESTTEST_TIMEOUT_MS environment variable"
     }
 
-    (LoggerFactory.getILoggerFactory() as LoggerContext).getLogger(logger.name).level =
-        System.getenv("LOG_LEVEL")?.let { Level.toLevel(it) } ?: Level.INFO
+    // Before anything logs. Mirrors the levels the old logback.xml set: questioner at debug,
+    // everything else at warn, with Jeed inheriting that warn rather than its own default.
+    configureJeedLogging(
+        jeedLevel = Level.WARNING,
+        rootLevel = Level.WARNING,
+        loggerLevels = mapOf(
+            QUESTIONER_LOGGER_NAME to Level.FINE,
+            KTOR_LOGGER_NAME to Level.INFO,
+            logger.name to (System.getenv("LOG_LEVEL")?.let { logLevelOf(it) } ?: Level.INFO),
+        ),
+    )
 
     logger.info { Status().toJson() }
 
@@ -228,9 +253,7 @@ fun main(@Suppress("unused") unused: Array<String>) {
         }
     }
 
-    (LoggerFactory.getILoggerFactory() as LoggerContext).getLogger(logger.name).also { logLevel ->
-        logger.info("Starting questioner server (log level $logLevel)")
-    }
+    logger.info("Starting questioner server (log level ${Logger.getLogger(logger.name).level})")
 
     val heartbeatInterval = System.getenv("HEARTBEAT_INTERVAL_SEC")?.toLong() ?: 300L
     flow {
