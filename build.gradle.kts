@@ -1,3 +1,4 @@
+import org.gradle.api.publish.plugins.PublishingPlugin
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jmailen.gradle.kotlinter.tasks.FormatTask
@@ -66,6 +67,19 @@ nexusPublishing {
         sonatype {
             nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
             snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
+        }
+    }
+}
+val publish = tasks.register("publish") {
+    group = PublishingPlugin.PUBLISH_TASK_GROUP
+    description = "Publishes all artifacts to Maven Central, then closes and releases the staging repository."
+    dependsOn("closeAndReleaseSonatypeStagingRepository")
+}
+subprojects {
+    val subprojectPath = path
+    plugins.withId("maven-publish") {
+        publish.configure {
+            dependsOn("$subprojectPath:publishToSonatype")
         }
     }
 }

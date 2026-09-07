@@ -29,6 +29,16 @@ npm run eslint        # Lint code
 npm run tsc           # Type check without emitting
 ```
 
+### Publishing
+
+```bash
+./gradlew publish             # Full Maven Central release: publish, close, and release the staging repository
+./gradlew publishToMavenLocal # Publish to the local Maven repository for testing
+```
+
+Before releasing, bump `version` in the root `build.gradle.kts` and the `org.cs124.questioner.settings`
+version in `plugin-fixtures/settings.gradle.kts` to match.
+
 ### Running a Single Test
 
 For Kotlin tests:

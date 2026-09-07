@@ -203,6 +203,26 @@ The `Question` object provides fields like `published.author`, `published.name`,
 
 This project uses date-based versioning following the pattern `YYYY.M.minor` (e.g., `2025.7.1`).
 
+### Releasing
+
+Bump `version` in the root `build.gradle.kts` and the `org.cs124.questioner.settings` version in
+`plugin-fixtures/settings.gradle.kts` to match, then:
+
+```bash
+./gradlew build     # Run all tests and checks first
+./gradlew publish   # Publish to Maven Central
+```
+
+`./gradlew publish` runs the complete Maven Central workflow: it publishes every artifact to a Sonatype
+staging repository and then closes and releases that repository. To try a release locally without
+publishing anything, use `./gradlew publishToMavenLocal`.
+
+The server image is published separately:
+
+```bash
+./gradlew :server:dockerPush
+```
+
 ## Development
 
 ### Code Style
