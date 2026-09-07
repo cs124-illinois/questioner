@@ -4,16 +4,16 @@ import org.jmailen.gradle.kotlinter.tasks.FormatTask
 import org.jmailen.gradle.kotlinter.tasks.LintTask
 
 plugins {
-    kotlin("jvm") version "2.3.20" apply false
-    kotlin("plugin.serialization") version "2.3.20" apply false
-    id("org.jmailen.kotlinter") version "5.4.2" apply false
-    id("com.github.ben-manes.versions") version "0.53.0"
+    kotlin("jvm") version "2.4.20" apply false
+    kotlin("plugin.serialization") version "2.4.20" apply false
+    id("org.jmailen.kotlinter") version "5.7.0" apply false
+    id("io.github.ben-manes.versions") version "0.61.0"
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
-    id("com.autonomousapps.testkit") version "0.17" apply false
+    id("com.autonomousapps.testkit") version "0.20" apply false
 }
 allprojects {
     group = "org.cs124.questioner"
-    version = "2026.4.0"
+    version = "2026.9.0"
 }
 subprojects {
     tasks.withType<KotlinCompile> {

@@ -31,9 +31,17 @@ import edu.illinois.cs.cs125.questioner.lib.TemplateImports
 import edu.illinois.cs.cs125.questioner.lib.Whitelist
 import edu.illinois.cs.cs125.questioner.lib.Wrap
 import org.intellij.markdown.flavours.commonmark.CommonMarkFlavourDescriptor
+import org.intellij.markdown.html.HtmlGenerator
+import org.intellij.markdown.parser.CancellationToken
 import org.intellij.markdown.parser.MarkdownParser
 
-internal val markdownParser = MarkdownParser(CommonMarkFlavourDescriptor())
+private val markdownParser =
+    MarkdownParser(CommonMarkFlavourDescriptor(), cancellationToken = CancellationToken.NonCancellable)
+
+internal fun markdownToHtml(markdown: CharSequence) = markdownParser.buildMarkdownTreeFromString(markdown).let { astNode ->
+    HtmlGenerator(markdown.toString(), astNode, CommonMarkFlavourDescriptor()).generateHtml()
+        .removeSurrounding("<body>", "</body>")
+}
 
 internal data class CleanSpec(
     val hasTemplate: Boolean = false,

@@ -35,8 +35,6 @@ import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.RecognitionException
 import org.antlr.v4.runtime.Recognizer
 import org.apache.tools.ant.filters.StringInputStream
-import org.intellij.markdown.flavours.commonmark.CommonMarkFlavourDescriptor
-import org.intellij.markdown.html.HtmlGenerator
 import java.io.File
 import java.util.regex.Pattern
 
@@ -186,12 +184,7 @@ internal data class ParsedJavaFile(val path: String, val contents: String) {
 
                 val authorName = parameters["authorName"] ?: ""
 
-                val description = annotation.comment().let { comment ->
-                    markdownParser.buildMarkdownTreeFromString(comment).let { astNode ->
-                        HtmlGenerator(comment, astNode, CommonMarkFlavourDescriptor()).generateHtml()
-                            .removeSurrounding("<body>", "</body>")
-                    }
-                }
+                val description = markdownToHtml(annotation.comment())
                 val focused = parameters["focused"]?.toBoolean() ?: Question.Metadata.DEFAULT_FOCUSED
                 val publish = parameters["publish"]?.toBoolean() ?: Question.Metadata.DEFAULT_PUBLISH
 

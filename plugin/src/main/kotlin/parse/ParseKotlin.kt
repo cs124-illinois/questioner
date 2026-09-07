@@ -25,8 +25,6 @@ import org.antlr.v4.runtime.CommonTokenStream
 import org.antlr.v4.runtime.RecognitionException
 import org.antlr.v4.runtime.Recognizer
 import org.apache.tools.ant.filters.StringInputStream
-import org.intellij.markdown.flavours.commonmark.CommonMarkFlavourDescriptor
-import org.intellij.markdown.html.HtmlGenerator
 import java.io.File
 
 internal data class ParsedKotlinFile(val path: String, val contents: String) {
@@ -247,15 +245,7 @@ internal data class ParsedKotlinFile(val path: String, val contents: String) {
         topLevelClass!!.comment()
     }
 
-    val description =
-        if (comment != null) {
-            markdownParser.buildMarkdownTreeFromString(comment).let { astNode ->
-                HtmlGenerator(comment, astNode, CommonMarkFlavourDescriptor()).generateHtml()
-                    .removeSurrounding("<body>", "</body>")
-            }
-        } else {
-            null
-        }
+    val description = comment?.let { markdownToHtml(it) }
 
     @Suppress("ComplexMethod")
     private fun clean(cleanSpec: CleanSpec): String {

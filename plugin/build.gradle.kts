@@ -18,28 +18,28 @@ dependencies {
 
     implementation(gradleApi())
     implementation(project(":lib"))
-    implementation("org.jetbrains:markdown:0.7.3") {
+    implementation("org.jetbrains:markdown:0.7.12") {
         exclude(module = "kotlin-runtime")
         exclude(module = "kotlin-js")
     }
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.2")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.21.2")
-    implementation("com.github.slugify:slugify:3.0.7")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.22.2")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.2")
+    implementation("com.github.slugify:slugify:4.0.1")
 
-    implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.3.20")
+    implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.4.20")
     implementation("gradle.plugin.com.github.sherter.google-java-format:google-java-format-gradle-plugin:0.9")
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.8")
-    implementation("org.jmailen.gradle:kotlinter-gradle:5.4.2")
+    implementation("org.jmailen.gradle:kotlinter-gradle:5.7.0")
 
     implementation("com.beust:klaxon:5.6")
-    implementation("io.github.z4kn4fein:semver:3.0.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    implementation("io.github.z4kn4fein:semver:3.1.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
 
-    testImplementation("io.kotest:kotest-runner-junit5:6.1.10")
+    testImplementation("io.kotest:kotest-runner-junit5:6.2.4")
     testImplementation(gradleTestKit())
-    testImplementation("com.autonomousapps:gradle-testkit-support:0.22")
+    testImplementation("com.autonomousapps:gradle-testkit-support:0.28")
 
-    "functionalTestImplementation"("io.kotest:kotest-runner-junit5:6.1.10")
+    "functionalTestImplementation"("io.kotest:kotest-runner-junit5:6.2.4")
     "functionalTestImplementation"(project(":lib"))
 }
 tasks.compileKotlin {
