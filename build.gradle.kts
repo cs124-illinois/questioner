@@ -31,6 +31,7 @@ subprojects {
     tasks.withType<Test> {
         useJUnitPlatform()
         environment["JEED_USE_CACHE"] = "true"
+        environment["JEED_FAIL_ON_REPLACED_STREAMS"] = "true"
         jvmArgs(
             "-ea", "--enable-preview", "-Dfile.encoding=UTF-8", "-Djava.security.manager=allow",
             "-XX:+UseZGC", "-XX:+ZGenerational", "-XX:-OmitStackTraceInFastThrow",

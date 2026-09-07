@@ -10,6 +10,11 @@ RUN apt update && apt install -y procps libjemalloc2 && rm -rf /var/lib/apt/list
 RUN cp /usr/lib/`arch`-linux-gnu/libjemalloc.so.2 /usr/lib/
 ENV LD_PRELOAD=/usr/lib/libjemalloc.so.2
 
+# Fail a task rather than silently losing capture if anything replaces the sandbox's output
+# streams. ktor 3.5's CallLogging did exactly that via jansi, which cost us a debugging cycle and
+# would have mis-graded every output-based question.
+ENV JEED_FAIL_ON_REPLACED_STREAMS=true
+
 WORKDIR /
 COPY *.jar questioner.jar
 SHELL ["/bin/sh", "-c"]

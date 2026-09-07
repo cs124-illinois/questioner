@@ -105,6 +105,11 @@ fun Application.questioner(
     }
 
     install(CallLogging) {
+        // ktor 3.5's CallLogging calls AnsiConsole.systemInstall() when colours are enabled, which
+        // replaces System.out with a jansi stream writing straight to the file descriptor without
+        // forwarding. That bypasses Jeed's sandbox redirect, so submitted code's output escapes to
+        // the console and, worse, is never captured for grading.
+        disableDefaultColors()
         filter { call ->
             call.request.path() != "/version" && !(call.request.httpMethod.value == "GET" && call.request.path() == "/")
         }
