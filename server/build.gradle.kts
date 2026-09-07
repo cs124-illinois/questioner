@@ -31,6 +31,11 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers-mongodb:2.0.5")
 }
 tasks.shadowJar {
+    // Shadow's KotlinModuleMetadataTransformer merges colliding META-INF/*.kotlin_module entries,
+    // but only sees duplicates that reach it. The default EXCLUDE drops them first, which matters
+    // here because two kotlin-logging artifacts are on the classpath: io.github.microutils, which
+    // questioner declares, and io.github.oshai, which Jeed exports.
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     manifest {
         attributes["Launcher-Agent-Class"] = "com.beyondgrader.resourceagent.AgentKt"
         attributes["Can-Redefine-Classes"] = "true"
