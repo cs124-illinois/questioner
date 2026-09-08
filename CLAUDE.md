@@ -81,6 +81,30 @@ The project follows a multi-module structure:
 - Version updates should follow YYYY.M.minor format in root build.gradle.kts
 - TypeScript code uses strict type checking
 
+### The kotlin-compiler-embeddable warning is expected
+
+Builds that apply the questioner Gradle plugin get this from the Kotlin Gradle plugin:
+
+> `org.jetbrains.kotlin:kotlin-compiler-embeddable` Artifact Present in Build Classpath
+
+It is structural, not a mistake, and there is nothing to fix. `lib`'s `Question` model is
+jeed-typed by design (`Features`, `LineCounts`, `MutatedSource`), the plugin reads that model, and
+Gradle plugins run in the build JVM, so jeed and its compiler land on the build classpath.
+
+Do not spend time trying to remove it:
+
+- Kotlin documents no property to suppress the warning. The only remedy it offers plugin authors is
+  running compiler classes in an isolated classloader, which does not help here: isolating the two
+  files that use jeed directly (`parse/ParseJava.kt`, `parse/ParseKotlin.kt`) would not remove the
+  artifact, because eleven other files use `Question`.
+- Making the model jeed-free is not viable. `MutatedSource` extends jeed's `Source` and its
+  `formatted()` calls `googleFormat()`/`ktFormat()`, so a jeed-free model means reimplementing part
+  of jeed inside questioner and keeping it in sync.
+
+The hazard it warns about—two `kotlin-compiler-embeddable` versions sharing a classloader, jeed's
+against whatever the consumer's Kotlin Gradle plugin bundles—has not caused trouble, and validation
+already runs in forked JVMs where the heavy compilation happens.
+
 ## Dependency Management
 
 - Always specify exact dependencies in package.json files, avoiding ~ or ^ version prefixes
