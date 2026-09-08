@@ -64,16 +64,14 @@ configurations {
         exclude("ch.qos.logback")
     }
 }
-tasks {
-    val sourcesJar by registering(Jar::class) {
-        archiveClassifier.set("sources")
-        from(sourceSets["main"].allSource)
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE
-        dependsOn(getTasksByName("generateGrammarSource", false))
-    }
-    artifacts {
-        add("archives", sourcesJar)
-    }
+val sourcesJar = tasks.register<Jar>("sourcesJar") {
+    archiveClassifier.set("sources")
+    from(sourceSets["main"].allSource)
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    dependsOn(tasks.named("generateGrammarSource"))
+}
+artifacts {
+    add("archives", sourcesJar)
 }
 gradlePlugin {
     plugins {

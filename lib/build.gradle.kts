@@ -41,14 +41,12 @@ dependencies {
     api("org.slf4j:slf4j-api:2.0.19")
     api("io.github.microutils:kotlin-logging:3.0.5")
 }
-tasks {
-    val sourcesJar by registering(Jar::class) {
-        archiveClassifier.set("sources")
-        from(sourceSets["main"].allSource)
-    }
-    artifacts {
-        add("archives", sourcesJar)
-    }
+val sourcesJar = tasks.register<Jar>("sourcesJar") {
+    archiveClassifier.set("sources")
+    from(sourceSets["main"].allSource)
+}
+artifacts {
+    add("archives", sourcesJar)
 }
 tasks.register("createProperties") {
     doLast {
