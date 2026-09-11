@@ -21,10 +21,10 @@ dependencies {
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
-    implementation("org.mongodb:mongodb-driver-sync:5.11.0")
+    implementation("org.mongodb:mongodb-driver-sync:5.11.1")
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.4")
 
-    testImplementation("io.kotest:kotest-runner-junit5:6.2.4")
+    testImplementation("io.kotest:kotest-runner-junit5:6.2.5")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     testImplementation("com.google.truth:truth:1.4.5")

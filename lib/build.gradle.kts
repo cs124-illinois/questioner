@@ -26,12 +26,12 @@ dependencies {
     api("com.beyondgrader.resource-agent:virtualfsplugin:2026.1.2") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2026.9.2")
+    api("org.cs124.jeed:core:2026.9.5")
     api("org.cs124:jenisol:2026.9.0")
     api("org.cs124:libcs1:2026.9.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.22.2")
 
-    testImplementation("io.kotest:kotest-runner-junit5:6.2.4")
+    testImplementation("io.kotest:kotest-runner-junit5:6.2.5")
     api("org.junit.jupiter:junit-jupiter-api:6.1.3")
     api("org.junit.platform:junit-platform-engine:6.1.3")
     api("com.google.truth:truth:1.4.5")

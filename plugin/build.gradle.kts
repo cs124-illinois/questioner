@@ -35,11 +35,11 @@ dependencies {
     implementation("io.github.z4kn4fein:semver:3.1.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
 
-    testImplementation("io.kotest:kotest-runner-junit5:6.2.4")
+    testImplementation("io.kotest:kotest-runner-junit5:6.2.5")
     testImplementation(gradleTestKit())
     testImplementation("com.autonomousapps:gradle-testkit-support:0.28")
 
-    "functionalTestImplementation"("io.kotest:kotest-runner-junit5:6.2.4")
+    "functionalTestImplementation"("io.kotest:kotest-runner-junit5:6.2.5")
     "functionalTestImplementation"(project(":lib"))
 }
 tasks.compileKotlin {
