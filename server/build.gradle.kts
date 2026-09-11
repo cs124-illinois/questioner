@@ -1,5 +1,6 @@
 import org.jmailen.gradle.kotlinter.tasks.FormatTask
 import org.jmailen.gradle.kotlinter.tasks.LintTask
+import java.util.zip.ZipInputStream
 
 plugins {
     kotlin("jvm")
@@ -36,6 +37,39 @@ tasks.shadowJar {
     // here because two kotlin-logging artifacts are on the classpath: io.github.microutils, which
     // questioner declares, and io.github.oshai, which Jeed exports.
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    // Jeed ships a patched copy of one ktlint file under ktlint's own package, so five classes there
+    // exist twice: KtlintKotlinCompiler, KtlintKotlinCompilerKt, LoggerFactory,
+    // LoggerFactory$getLoggerInstance$1 and FormatPomModel. On a classpath Jeed's copy wins because
+    // Jeed core precedes ktlint, but INCLUDE writes both entries and the JDK hands back the last one,
+    // which is ktlint's, and ktlint's fails to initialize on Kotlin 2.4.20. First-wins for this
+    // package restores the classpath ordering, as Jeed's own server does.
+    filesMatching("com/pinterest/ktlint/rule/engine/core/api/**") {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+    // First-wins relies on Jeed core resolving ahead of ktlint-rule-engine-core, so check the jar
+    // itself. TestShadowJarStartup catches the same failure, but only when the tests run, and
+    // dockerBuild and dockerPush build the jar without them. MockComponentManager is the type Jeed's
+    // patched copy names, where ktlint's own copy names MockProject.
+    doLast {
+        val facade = "com/pinterest/ktlint/rule/engine/core/api/KtlintKotlinCompilerKt.class"
+        val copies = mutableListOf<ByteArray>()
+        ZipInputStream(archiveFile.get().asFile.inputStream().buffered()).use { entries ->
+            while (true) {
+                val entry = entries.nextEntry ?: break
+                if (entry.name == facade) {
+                    copies.add(entries.readBytes())
+                }
+            }
+        }
+        check(copies.size == 1) {
+            "Expected one $facade in the shaded jar, found ${copies.size}."
+        }
+        check(String(copies.single(), Charsets.ISO_8859_1).contains("MockComponentManager")) {
+            "The shaded jar carries ktlint's $facade rather than Jeed's patched copy, so ktlint " +
+                "would fail to initialize at run time. Check that Jeed core still resolves ahead " +
+                "of ktlint-rule-engine-core."
+        }
+    }
     manifest {
         attributes["Launcher-Agent-Class"] = "com.beyondgrader.resourceagent.AgentKt"
         attributes["Can-Redefine-Classes"] = "true"
@@ -84,6 +118,14 @@ java {
 tasks.test {
     useJUnitPlatform()
     dependsOn(":plugin:functionalTest")
+    // TestShadowJarStartup boots the shaded jar the Docker image runs, since a jar resolves
+    // duplicate entries differently from the classpath every other test sees.
+    val shadowJarFile = tasks.shadowJar.flatMap { it.archiveFile }
+    dependsOn(tasks.shadowJar)
+    inputs.file(shadowJarFile)
+    jvmArgumentProviders.add(
+        CommandLineArgumentProvider { listOf("-Dquestioner.shadowJar=${shadowJarFile.get().asFile.absolutePath}") },
+    )
 }
 afterEvaluate {
     tasks.withType<FormatTask> {
