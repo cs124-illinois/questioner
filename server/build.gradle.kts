@@ -25,6 +25,21 @@ dependencies {
     implementation("org.mongodb:mongodb-driver-sync:5.11.1")
     implementation("com.github.ben-manes.caffeine:caffeine:3.2.4")
 
+    // netty arrives through ktor-server-netty, and ktor 3.5.2 (the newest) pins netty
+    // 4.2.16.Final, which carries CVE-2026-75595 and CVE-2026-75596, fixed in 4.2.17.Final.
+    // The BOM moves every netty module together; forcing netty-handler alone would leave its
+    // siblings a version behind.
+    implementation(platform("io.netty:netty-bom:4.2.18.Final"))
+    constraints {
+        // plexus-utils arrives through Jeed core's plexus-container-default 2.1.1, which pins
+        // 3.1.1 (CVE-2025-67030). Jeed forces 4.1.0 in its own build, but a force is not
+        // published, so consumers still resolve 3.1.1. Matching Jeed keeps questioner on the
+        // combination Jeed's own tests cover.
+        implementation("org.codehaus.plexus:plexus-utils:4.1.0") {
+            because("CVE-2025-67030 in plexus-utils 3.1.1, reached through Jeed core")
+        }
+    }
+
     testImplementation("io.kotest:kotest-runner-junit5:6.2.5")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
@@ -96,7 +111,7 @@ tasks.register<Exec>("dockerBuild") {
     workingDir(layout.buildDirectory.dir("docker"))
     environment("DOCKER_BUILDKIT", "1")
     commandLine(
-        ("/usr/local/bin/docker build . " +
+        ("/usr/local/bin/docker build --pull . " +
             "-t ${dockerName}:latest " +
             "-t ${dockerName}:${project.version}").split(" ")
     )
@@ -105,7 +120,7 @@ tasks.register<Exec>("dockerPush") {
     dependsOn("dockerCopyJar", "dockerCopyDockerfile")
     workingDir(layout.buildDirectory.dir("docker"))
     commandLine(
-        ("/usr/local/bin/docker buildx build . --platform=linux/amd64,linux/arm64/v8 " +
+        ("/usr/local/bin/docker buildx build --pull . --platform=linux/amd64,linux/arm64/v8 " +
             "--tag ${dockerName}:latest " +
             "--tag ${dockerName}:${project.version} --push").split(" ")
     )
