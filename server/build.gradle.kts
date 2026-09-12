@@ -30,15 +30,6 @@ dependencies {
     // The BOM moves every netty module together; forcing netty-handler alone would leave its
     // siblings a version behind.
     implementation(platform("io.netty:netty-bom:4.2.18.Final"))
-    constraints {
-        // plexus-utils arrives through Jeed core's plexus-container-default 2.1.1, which pins
-        // 3.1.1 (CVE-2025-67030). Jeed forces 4.1.0 in its own build, but a force is not
-        // published, so consumers still resolve 3.1.1. Matching Jeed keeps questioner on the
-        // combination Jeed's own tests cover.
-        implementation("org.codehaus.plexus:plexus-utils:4.1.0") {
-            because("CVE-2025-67030 in plexus-utils 3.1.1, reached through Jeed core")
-        }
-    }
 
     testImplementation("io.kotest:kotest-runner-junit5:6.2.5")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
