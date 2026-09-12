@@ -89,16 +89,16 @@ tasks.shadowJar {
     isZip64 = true
 }
 val dockerName = "cs124/questioner"
-tasks.register<Copy>("dockerCopyJar") {
-    from(tasks["shadowJar"].outputs)
-    into(layout.buildDirectory.dir("docker"))
-}
-tasks.register<Copy>("dockerCopyDockerfile") {
+// One Sync rather than a Copy per file, so the build context holds exactly the current jar and the
+// Dockerfile. Two Copy tasks left every earlier version's jar sitting there, and the Dockerfile's
+// COPY *.jar fails as soon as a second one matches.
+tasks.register<Sync>("dockerContext") {
+    from(tasks.shadowJar)
     from("${projectDir}/Dockerfile")
     into(layout.buildDirectory.dir("docker"))
 }
 tasks.register<Exec>("dockerBuild") {
-    dependsOn("dockerCopyJar", "dockerCopyDockerfile")
+    dependsOn("dockerContext")
     workingDir(layout.buildDirectory.dir("docker"))
     environment("DOCKER_BUILDKIT", "1")
     commandLine(
@@ -108,7 +108,7 @@ tasks.register<Exec>("dockerBuild") {
     )
 }
 tasks.register<Exec>("dockerPush") {
-    dependsOn("dockerCopyJar", "dockerCopyDockerfile")
+    dependsOn("dockerContext")
     workingDir(layout.buildDirectory.dir("docker"))
     commandLine(
         ("/usr/local/bin/docker buildx build --pull . --platform=linux/amd64,linux/arm64/v8 " +
