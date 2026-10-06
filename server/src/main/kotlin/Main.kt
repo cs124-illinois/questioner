@@ -30,6 +30,7 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.routing
 import io.ktor.util.AttributeKey
 import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.delay
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import mu.KotlinLogging
 import org.bson.BsonDocument
@@ -146,7 +148,12 @@ fun Application.questioner(
             val runCount = counter.incrementAndGet()
 
             val submission = call.receive<Submission>()
-            val question = submission.getQuestion(testingQuestions, testingCollection)
+            // Loading a question and testing a submission both block: MongoDB reads, compilation, and
+            // in-process test harness work. Keep them off the call-handler threads so /version stays
+            // responsive to the kubelet probes while submissions run.
+            val question = withContext(Dispatchers.IO) {
+                submission.getQuestion(testingQuestions, testingCollection)
+            }
             if (question == null) {
                 logger.warn { "$runCount: Question not found for contentHash: ${submission.contentHash}" }
                 return@post call.respond(HttpStatusCode.NotFound)
@@ -164,7 +171,7 @@ fun Application.questioner(
             @Suppress("TooGenericExceptionCaught")
             try {
                 val startMemory = freeMemoryMB()
-                val response = submission.test(question)
+                val response = withContext(Dispatchers.IO) { submission.test(question) }
                 call.respond(response)
                 val endMemory = freeMemoryMB()
                 logger.trace(
