@@ -26,10 +26,10 @@ dependencies {
     api("com.beyondgrader.resource-agent:virtualfsplugin:2026.1.2") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2026.9.6")
+    api("org.cs124.jeed:core:2026.10.0")
     api("org.cs124:jenisol:2026.9.0")
     api("org.cs124:libcs1:2026.9.0")
-    api("com.fasterxml.jackson.core:jackson-databind:2.22.2")
+    api("com.fasterxml.jackson.core:jackson-databind:2.22.3")
 
     testImplementation("io.kotest:kotest-runner-junit5:6.2.5")
     api("org.junit.jupiter:junit-jupiter-api:6.1.3")
@@ -38,7 +38,7 @@ dependencies {
 
     api("io.github.cdimascio:dotenv-kotlin:6.5.1")
 
-    api("org.slf4j:slf4j-api:2.0.19")
+    api("org.slf4j:slf4j-api:2.0.20")
     api("io.github.microutils:kotlin-logging:3.0.5")
 }
 val sourcesJar = tasks.register<Jar>("sourcesJar") {

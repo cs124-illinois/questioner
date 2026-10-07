@@ -11,7 +11,7 @@ plugins {
     id("com.ryandens.javaagent-test") version "0.12.2"
 }
 dependencies {
-    val ktorVersion = "3.5.2"
+    val ktorVersion = "3.6.0"
 
     testJavaagent("com.beyondgrader.resource-agent:agent:2026.1.2")
 
@@ -22,14 +22,14 @@ dependencies {
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
-    implementation("org.mongodb:mongodb-driver-sync:5.11.1")
-    implementation("com.github.ben-manes.caffeine:caffeine:3.2.4")
+    implementation("org.mongodb:mongodb-driver-sync:5.13.0")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.3.0")
 
-    // netty arrives through ktor-server-netty, and ktor 3.5.2 (the newest) pins netty
-    // 4.2.16.Final, which carries CVE-2026-75595 and CVE-2026-75596, fixed in 4.2.17.Final.
-    // The BOM moves every netty module together; forcing netty-handler alone would leave its
-    // siblings a version behind.
-    implementation(platform("io.netty:netty-bom:4.2.18.Final"))
+    // netty arrives through ktor-server-netty, which trails netty releases: ktor 3.6.0 pins
+    // 4.2.17.Final (the first without CVE-2026-75595 and CVE-2026-75596). The BOM keeps netty on
+    // its newest release, and moves every netty module together; forcing netty-handler alone
+    // would leave its siblings a version behind.
+    implementation(platform("io.netty:netty-bom:4.2.19.Final"))
 
     testImplementation("io.kotest:kotest-runner-junit5:6.2.5")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")

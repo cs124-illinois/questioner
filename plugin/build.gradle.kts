@@ -18,12 +18,12 @@ dependencies {
 
     implementation(gradleApi())
     implementation(project(":lib"))
-    implementation("org.jetbrains:markdown:0.7.12") {
+    implementation("org.jetbrains:markdown:0.7.16") {
         exclude(module = "kotlin-runtime")
         exclude(module = "kotlin-js")
     }
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.22.2")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.2")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.22.3")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.3")
     implementation("com.github.slugify:slugify:4.0.1")
 
     implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.4.20")

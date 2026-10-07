@@ -8,7 +8,7 @@ plugins {
     kotlin("jvm") version "2.4.20" apply false
     kotlin("plugin.serialization") version "2.4.20" apply false
     id("org.jmailen.kotlinter") version "5.7.0" apply false
-    id("io.github.ben-manes.versions") version "0.61.0"
+    id("io.github.ben-manes.versions") version "0.64.0"
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
     id("com.autonomousapps.testkit") version "0.20" apply false
 }
