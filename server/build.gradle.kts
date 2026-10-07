@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.transformers.MergeLicenseResourceTransformer
 import org.jmailen.gradle.kotlinter.tasks.FormatTask
 import org.jmailen.gradle.kotlinter.tasks.LintTask
 import java.util.zip.ZipInputStream
@@ -52,6 +53,39 @@ tasks.shadowJar {
     filesMatching("com/pinterest/ktlint/rule/engine/core/api/**") {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     }
+    // kotlin-stdlib and kotlin-compiler-embeddable each ship the same eight .kotlin_builtins files,
+    // byte for byte, so one copy loses nothing and keeps Shadow from warning about the pair.
+    filesMatching("kotlin/**/*.kotlin_builtins") {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+    // The remaining duplicates are metadata. Where every copy matches (netty's per-component
+    // licenses, which each of its native transports repeats, and antlr's POM) one copy loses
+    // nothing. The quic POMs differ only in their build timestamps, all at the same version. The
+    // two MongoDB native-image configs do differ, but only GraalVM's native-image reads them, and
+    // this jar runs on a JVM.
+    filesMatching(
+        listOf(
+            "META-INF/license/**",
+            "META-INF/LICENSE-notice.md",
+            "META-INF/maven/**",
+            "META-INF/native-image/**",
+        ),
+    ) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+    // The generic license files carry several different texts, so first-wins would drop most of
+    // them. Merge them under questioner's own license, each distinct text once.
+    transform(MergeLicenseResourceTransformer::class.java) {
+        artifactLicense.set(rootProject.file("LICENSE"))
+        artifactLicenseSpdxId.set("MIT")
+    }
+    // These differ too and are read whole or not at all, so keep every copy. Netty's version files
+    // each list different modules.
+    listOf(
+        "META-INF/NOTICE",
+        "META-INF/NOTICE.txt",
+        "META-INF/io.netty.versions.properties",
+    ).forEach { append(it) }
     // First-wins relies on Jeed core resolving ahead of ktlint-rule-engine-core, so check the jar
     // itself. TestShadowJarStartup catches the same failure, but only when the tests run, and
     // dockerBuild and dockerPush build the jar without them. MockComponentManager is the type Jeed's
