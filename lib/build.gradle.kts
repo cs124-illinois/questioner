@@ -16,9 +16,9 @@ dependencies {
 
     implementation("org.apache.commons:commons-text:1.15.0")
     implementation("io.github.java-diff-utils:java-diff-utils:4.17")
-    implementation("org.ow2.asm:asm:9.10.1")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:2.4.20")
-    implementation("org.jetbrains.kotlin:kotlin-metadata-jvm:2.4.20")
+    implementation("org.ow2.asm:asm:9.11")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:2.4.21")
+    implementation("org.jetbrains.kotlin:kotlin-metadata-jvm:2.4.21")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
 
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
@@ -26,7 +26,7 @@ dependencies {
     api("com.beyondgrader.resource-agent:virtualfsplugin:2026.1.2") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2026.10.0")
+    api("org.cs124.jeed:core:2026.10.1")
     api("org.cs124:jenisol:2026.9.0")
     api("org.cs124:libcs1:2026.9.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.22.3")
