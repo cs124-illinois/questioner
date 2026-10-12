@@ -378,7 +378,8 @@ fun TestResult<*, *>.asTestResult(source: Source, questionType: Question.Type) =
     } else {
         null
     },
-    submission.interleavedOutput.trim() + if (submission.truncatedLines > 0) {
+    // Only the line breaks around it: a test's own spaces are part of what it printed
+    submission.interleavedOutput.trim('\n', '\r') + if (submission.truncatedLines > 0) {
         "\n(${submission.truncatedLines} lines truncated)\n"
     } else {
         ""

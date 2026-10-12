@@ -279,11 +279,13 @@ export const terminalOutput = (
       message += `\n\nSubmission exception stack trace:\n${indentString(lastFailure.submissionStackTrace, indentation)}`
     }
 
+    // Each test's output goes on its own line, whether or not it ended with a line break (a
+    // truncation note does). Only line breaks are trimmed: spaces are part of what was printed.
     const output = failures
-      .map((test) => test.output)
+      .map((test) => (test.output ?? "").replace(/[\r\n]+$/, ""))
       .filter((output) => output !== "")
-      .join("")
-      .trim()
+      .join("\n")
+      .replace(/^[\r\n]+|[\r\n]+$/g, "")
 
     const allOutputFailures =
       lastFailure.differs &&

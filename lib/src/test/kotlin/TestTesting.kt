@@ -25,6 +25,21 @@ int addOne(int value) {
             results.complete.testing!!.passed shouldBe false
         }
     }
+    "it should keep the spaces a test printed" {
+        val (question) = Validator.validateAndCalibrate("Add One").also { (question) ->
+            question.validated shouldBe true
+        }
+        val incorrect = """
+int addOne(int value) {
+  System.out.println("   why   ");
+  return value + 2;
+}""".trim()
+
+        question.test(incorrect, Language.java).also { results ->
+            results.complete.testing!!.passed shouldBe false
+            results.complete.testing!!.tests.filter { !it.passed }.map { it.output } shouldContain "   why   "
+        }
+    }
     "it should test a question with timeout" {
         val (question) = Validator.validateAndCalibrate("Add One").also { (question, report) ->
             question.validated shouldBe true
