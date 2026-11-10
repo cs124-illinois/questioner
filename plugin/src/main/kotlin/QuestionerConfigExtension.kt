@@ -9,6 +9,7 @@ open class QuestionerConfigExtension {
     var retries: Int = 4
     var verbose: Boolean = false
     var shuffleTests: Boolean = false
+    var openReport: Boolean = false
     var ignorePackages = listOf(
         "com.github.cs124_illinois.questioner.examples.",
         "com.github.cs124_illinois.questioner.testing.",

@@ -202,6 +202,7 @@ class QuestionerPlugin @Inject constructor(
             concurrency = validationConcurrency,
             totalQuestions = totalQuestionSubprojects,
             restartServers = restartServers,
+            openReport = config.openReport,
         )
 
         configurations.getByName("checkstyle").apply {

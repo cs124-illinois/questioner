@@ -29,6 +29,9 @@ class ValidationServerManager(
     private val totalQuestions: Int,
     private val idleTimeoutMinutes: Int = 60,
 ) {
+    // Whether to open the summary report in a browser when validation fails, from the questioner config block
+    var openReport: Boolean = false
+
     private var validateServerPort: Int? = null
     private var validateServerProcess: Process? = null
 
@@ -163,7 +166,7 @@ class ValidationServerManager(
             val reportFile = generateLinkedHtmlReport(allResults)
             println()
             println("Full report: file://${reportFile.absolutePath}")
-            if (failures.isNotEmpty()) {
+            if (failures.isNotEmpty() && openReport) {
                 openInBrowser(reportFile)
             }
         }
@@ -328,6 +331,7 @@ class ValidationServerManager(
             totalQuestions: Int,
             idleTimeoutMinutes: Int = 60,
             restartServers: Boolean = false,
+            openReport: Boolean = false,
         ): ValidationServerManager {
             val rootProject = project.rootProject
 
@@ -353,7 +357,10 @@ class ValidationServerManager(
                     totalQuestions,
                     idleTimeoutMinutes,
                 )
-            }.also { it.resetResults() }
+            }.also {
+                it.openReport = openReport
+                it.resetResults()
+            }
         }
 
         @Synchronized
