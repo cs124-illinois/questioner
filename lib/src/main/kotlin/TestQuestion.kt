@@ -402,8 +402,12 @@ suspend fun Question.test(
             )
         }
 
-        results.complete.recursion = checkRecursion(klassName, language, settings, isSolution, results)
-        results.completedSteps.add(TestResults.Step.recursion)
+        // Recursion and coverage are measured on the tests that ran. Testing stops at the first failure, often
+        // before a recursive call or before the code that would cover a line, so only a passing run says anything.
+        if (taskTestingResults.passed) {
+            results.complete.recursion = checkRecursion(klassName, language, settings, isSolution, results)
+            results.completedSteps.add(TestResults.Step.recursion)
+        }
 
         // executioncount soft failure
         results.complete.executionCount = TestResults.ResourceUsageComparison(
@@ -436,37 +440,39 @@ suspend fun Question.test(
         )
         results.completedSteps.add(TestResults.Step.memoryAllocation)
 
-        // coverage
-        check(settings.solutionDeadCode != null) { "Must set solutionDeadCode" }
-        val solutionDeadCode = if (language == Language.java) {
-            settings.solutionDeadCode!!.java
-        } else {
-            settings.solutionDeadCode!!.kotlin
-        }!!
+        // coverage, which like recursion only a passing run can measure
+        if (taskTestingResults.passed) {
+            check(settings.solutionDeadCode != null) { "Must set solutionDeadCode" }
+            val solutionDeadCode = if (language == Language.java) {
+                settings.solutionDeadCode!!.java
+            } else {
+                settings.solutionDeadCode!!.kotlin
+            }!!
 
-        val filetype = when (language) {
-            Language.kotlin -> Source.FileType.KOTLIN
-            Language.java -> Source.FileType.JAVA
+            val filetype = when (language) {
+                Language.kotlin -> Source.FileType.KOTLIN
+                Language.java -> Source.FileType.JAVA
+            }
+            val coverageResult = source
+                .processCoverage(taskResults.pluginResult(Jacoco))
+                .adjustWithFeatures(submissionFeatureResults, filetype)
+                .byFile[filename(language)]!!
+            val covered = coverageResult.count { it.value == LineCoverage.COVERED || it.value == LineCoverage.IGNORED }
+            val total = coverageResult.count { it.value != LineCoverage.EMPTY }
+            check(total - covered >= 0)
+
+            val missed = coverageResult
+                .filter { it.value == LineCoverage.NOT_COVERED || it.value == LineCoverage.PARTLY_COVERED }
+                .map { it.key }
+
+            val submissionCoverage = TestResults.CoverageComparison.LineCoverage(covered, total)
+            val solutionCoverage =
+                validationResults?.solutionCoverage ?: settings.solutionCoverage ?: submissionCoverage
+
+            results.complete.coverage =
+                TestResults.CoverageComparison(solutionCoverage, submissionCoverage, missed, solutionDeadCode.toInt())
+            results.completedSteps.add(TestResults.Step.coverage)
         }
-        val coverageResult = source
-            .processCoverage(taskResults.pluginResult(Jacoco))
-            .adjustWithFeatures(submissionFeatureResults, filetype)
-            .byFile[filename(language)]!!
-        val covered = coverageResult.count { it.value == LineCoverage.COVERED || it.value == LineCoverage.IGNORED }
-        val total = coverageResult.count { it.value != LineCoverage.EMPTY }
-        check(total - covered >= 0)
-
-        val missed = coverageResult
-            .filter { it.value == LineCoverage.NOT_COVERED || it.value == LineCoverage.PARTLY_COVERED }
-            .map { it.key }
-
-        val submissionCoverage = TestResults.CoverageComparison.LineCoverage(covered, total)
-        val solutionCoverage =
-            validationResults?.solutionCoverage ?: settings.solutionCoverage ?: submissionCoverage
-
-        results.complete.coverage =
-            TestResults.CoverageComparison(solutionCoverage, submissionCoverage, missed, solutionDeadCode.toInt())
-        results.completedSteps.add(TestResults.Step.coverage)
 
         val submissionOutputAmount = results.complete.testing!!.outputAmount
         val solutionOutputAmount = validationResults?.outputAmount ?: settings.solutionOutputAmount ?: submissionOutputAmount

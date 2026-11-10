@@ -2,6 +2,7 @@ package edu.illinois.cs.cs125.questioner.lib
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.ints.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -271,7 +272,8 @@ public class Question {
 """.trim().also { incorrect ->
             question.test(incorrect, Language.java).also { results ->
                 results.complete.testing!!.tests.count { it.passed } shouldBe 0
-                results.complete.recursion!!.failed shouldBe true
+                // Failing tests say nothing about recursion, so the check doesn't run
+                results.complete.recursion shouldBe null
             }
         }
         """
@@ -291,6 +293,57 @@ public class Question {
             question.test(incorrect, Language.java).also { results ->
                 results.failed.checkExecutedSubmission shouldBe null
                 results.complete.recursion!!.failed shouldBe true
+            }
+        }
+    }
+    "it should not report on recursion or coverage when testing fails" {
+        val (question) = Validator.validateAndCalibrate("Recursive Factorial")
+        // Recursive, but wrong for every input before it gets the chance to call itself
+        """
+public class Question {
+  public static long factorial(long input) {
+    if (input <= 0) {
+      throw new IllegalArgumentException();
+    }
+    if (input > 0) {
+      return 0;
+    }
+    return input * factorial(input - 1);
+  }
+}
+""".trim().also { incorrect ->
+            question.test(incorrect, Language.java).also { results ->
+                results.failed.checkExecutedSubmission shouldBe null
+                results.complete.testing!!.passed shouldBe false
+                results.complete.recursion shouldBe null
+                results.completedSteps shouldNotContain TestResults.Step.recursion
+                results.complete.coverage shouldBe null
+                results.completedSteps shouldNotContain TestResults.Step.coverage
+            }
+        }
+    }
+    "it should accept recursion through a helper that calls the method back" {
+        val (question) = Validator.validateAndCalibrate("Private Recursive Helper")
+        """
+public class Question {
+  private static int rangeSumHelper(int range) {
+    return range + rangeSum(range - 1);
+  }
+
+  public static int rangeSum(int range) {
+    if (range < 0) {
+      throw new IllegalArgumentException();
+    }
+    if (range == 0) {
+      return 0;
+    }
+    return rangeSumHelper(range);
+  }
+}
+""".trim().also { submission ->
+            question.test(submission, Language.java).also { results ->
+                results.complete.testing!!.passed shouldBe true
+                results.complete.recursion!!.failed shouldBe false
             }
         }
     }

@@ -14,6 +14,7 @@ import org.objectweb.asm.tree.LineNumberNode
 import org.objectweb.asm.tree.MethodInsnNode
 import org.objectweb.asm.tree.MethodNode
 import java.lang.management.ManagementFactory
+import java.util.Arrays
 import java.util.Stack
 import java.util.function.LongFunction
 
@@ -111,7 +112,8 @@ object ResourceMonitoring : SandboxPlugin<ResourceMonitoringArguments, ResourceM
         }
         method.maxStack++
         AllocationLimiting.instrumentArrayAllocations(method)
-        val methodInfo = ResourceMonitoringInstrumentationData.MethodInfo(className, method.name, method.desc, frameSize)
+        val methodInfo =
+            ResourceMonitoringInstrumentationData.MethodInfo(methodId, className, method.name, method.desc, frameSize)
         instrumentationData.knownMethods.add(methodInfo)
     }
 
@@ -252,7 +254,7 @@ object ResourceMonitoring : SandboxPlugin<ResourceMonitoringArguments, ResourceM
             val data = threadData.get()
             if (data.pendingClear) {
                 Unit.hashCode() // Load and link to avoid beforeWarmup call at a bad time
-                data.callStack.clear()
+                data.clearCallStack()
                 data.warmups = 0
                 AllocationLimiting.isCheckingAllocations = true
                 LineCounting.isCounting = true
@@ -263,11 +265,10 @@ object ResourceMonitoring : SandboxPlugin<ResourceMonitoringArguments, ResourceM
             }
             ignoreUsage(data) {
                 val methodInfo = data.instrumentationData.knownMethods[methodId]
-                val caller = if (data.callStack.isEmpty()) null else data.callStack.peek()
-                if (methodInfo == caller) {
+                // Recursive if it is already running, whether it called itself or went through other methods
+                if (data.pushFrame(methodInfo)) {
                     data.recursiveFunctions.add(methodInfo)
                 }
-                data.callStack.push(methodInfo)
                 data.callStackSize += methodInfo.frameSize
                 if (data.callStackSize > data.maxCallStackSize) {
                     // Can't use Math.max - would trigger checkPackageAccess and beforeWarmup
@@ -280,7 +281,7 @@ object ResourceMonitoring : SandboxPlugin<ResourceMonitoringArguments, ResourceM
         fun popCallStack() {
             val data = threadData.get()
             val shouldFinish = ignoreUsage(data) {
-                val methodInfo = data.callStack.pop()
+                val methodInfo = data.popFrame()
                 data.callStackSize -= methodInfo.frameSize
                 data.pendingCheckpoint && data.callStack.isEmpty()
             }
@@ -298,7 +299,7 @@ object ResourceMonitoring : SandboxPlugin<ResourceMonitoringArguments, ResourceM
                     stream.filter { it.className in data.instrumentationData.knownClasses }.count()
                 }
                 while (data.callStack.size > currentFrameCount) {
-                    data.callStackSize -= data.callStack.pop().frameSize
+                    data.callStackSize -= data.popFrame().frameSize
                 }
             }
         }
@@ -317,7 +318,7 @@ private class ResourceMonitoringInstrumentationData(
     val knownClasses: MutableSet<String> = mutableSetOf(),
     val knownMethods: MutableList<MethodInfo> = mutableListOf()
 ) {
-    class MethodInfo(val className: String, val name: String, val descriptor: String, val frameSize: Int) {
+    class MethodInfo(val id: Int, val className: String, val name: String, val descriptor: String, val frameSize: Int) {
         fun toResult(): ResourceMonitoringResults.MethodInfo {
             return ResourceMonitoringResults.MethodInfo(className, name, descriptor)
         }
@@ -328,6 +329,8 @@ private class ResourceMonitoringWorkingData(
     val instrumentationData: ResourceMonitoringInstrumentationData,
     val arguments: ResourceMonitoringArguments = instrumentationData.arguments,
     val callStack: Stack<ResourceMonitoringInstrumentationData.MethodInfo> = Stack(),
+    // Frames of each method on callStack, by method ID, so finding recursion doesn't search the stack on every call
+    var callStackFrames: IntArray = IntArray(0),
     var pendingClear: Boolean = true,
     var pendingCheckpoint: Boolean = false,
     var cachedCheckpoint: ResourceMonitoringCheckpoint? = null,
@@ -353,6 +356,32 @@ private class ResourceMonitoringWorkingData(
     var checkpointMaxCallStackSize: Long = 0,
     var checkpointWarmupCount: Int = 0
 ) {
+    // Returns whether the method was already on the call stack
+    fun pushFrame(methodInfo: ResourceMonitoringInstrumentationData.MethodInfo): Boolean {
+        if (methodInfo.id >= callStackFrames.size) {
+            // Not coerceAtLeast or Math.max, for the same reason pushCallStack avoids Math.max
+            var size = callStackFrames.size * 2
+            if (size <= methodInfo.id) {
+                size = methodInfo.id + 1
+            }
+            callStackFrames = callStackFrames.copyOf(size)
+        }
+        callStack.push(methodInfo)
+        return callStackFrames[methodInfo.id]++ > 0
+    }
+
+    fun popFrame(): ResourceMonitoringInstrumentationData.MethodInfo {
+        val methodInfo = callStack.pop()
+        callStackFrames[methodInfo.id]--
+        return methodInfo
+    }
+
+    fun clearCallStack() {
+        callStack.clear()
+        // Arrays rather than Kotlin's fill, which would load a stdlib class while usage is being counted
+        Arrays.fill(callStackFrames, 0)
+    }
+
     fun checkpoint(): ResourceMonitoringCheckpoint {
         val result = ResourceMonitoringCheckpoint(
             submissionLines = submissionLines,
@@ -376,7 +405,7 @@ private class ResourceMonitoringWorkingData(
         libraryLines = 0
         allocatedMemory = 0
         recursiveFunctions.clear()
-        callStack.clear()
+        clearCallStack()
         callStackSize = 0
         maxCallStackSize = 0
         warmups = 0

@@ -390,6 +390,53 @@ class TestResourceMonitoring : StringSpec({
         result.pluginResult(ResourceMonitoring).invokedRecursiveFunctions shouldHaveSize 1
     }
 
+    "should identify indirectly recursive methods" {
+        val recursiveMethods = mutableSetOf<ResourceMonitoringResults.MethodInfo>()
+        runJava("""
+            public static long test(long i) { return outer(i); }
+            public static long outer(long i) {
+                if (i <= 0) {
+                    return 0;
+                }
+                return inner(i);
+            }
+            private static long inner(long i) {
+                return i + outer(i - 1);
+            }
+        """.trimIndent(), ResourceMonitoringArguments()) { m ->
+            ResourceMonitoring.beginSubmissionCall()
+            m(null, 3L)
+            recursiveMethods.addAll(ResourceMonitoring.finishSubmissionCall().invokedRecursiveFunctions)
+        }
+        recursiveMethods.map { it.methodName }.toSet() shouldBe setOf("outer", "inner")
+    }
+
+    "should not carry recursion detection across exceptions" {
+        val recursiveMethods = mutableSetOf<ResourceMonitoringResults.MethodInfo>()
+        runJava("""
+            public static void test() {
+                try {
+                    outer(true);
+                } catch (IllegalStateException e) {
+                    outer(false);
+                }
+            }
+            private static void outer(boolean fail) {
+                inner(fail);
+            }
+            private static void inner(boolean fail) {
+                if (fail) {
+                    throw new IllegalStateException();
+                }
+            }
+        """.trimIndent(), ResourceMonitoringArguments()) { m ->
+            ResourceMonitoring.beginSubmissionCall()
+            m(null)
+            recursiveMethods.addAll(ResourceMonitoring.finishSubmissionCall().invokedRecursiveFunctions)
+        }
+        recursiveMethods shouldHaveSize 0
+    }
+
     "should not consider property equals recursive" {
         val recursiveMethods = mutableSetOf<ResourceMonitoringResults.MethodInfo>()
         runJava("""
