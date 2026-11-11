@@ -20,6 +20,13 @@ data class DiscoveredQuestion(
     val external: String? = null,
 )
 
+// The argument list runs to the first ) outside a string literal, so a name like "Array Max (1D)" doesn't end it
+private val correctAnnotationRegex =
+    """@Correct\s*\(((?:"(?:[^"\\]|\\.)*"|[^)"])*)\)""".toRegex(RegexOption.DOT_MATCHES_ALL)
+
+// Looks like a @Correct annotation, so a file that has this but yields no question should be reported, not dropped
+private val correctAnnotationStartRegex = """@Correct\s*\(""".toRegex()
+
 /**
  * Lightweight extraction of @Correct annotation fields.
  * Only extracts author, path, and name - doesn't do full ANTLR parsing.
@@ -33,13 +40,13 @@ fun File.extractCorrectInfo(sourceRoot: File, external: String? = null): Discove
 
     // Make sure it's the annotation, not just a comment or string
     // Look for @Correct followed by ( with optional whitespace
-    val annotationRegex = """@Correct\s*\(([^)]+)\)""".toRegex(RegexOption.DOT_MATCHES_ALL)
-    val match = annotationRegex.find(content) ?: return null
+    val match = correctAnnotationRegex.find(content) ?: return null
     val params = match.groupValues[1]
 
+    // The raw text between the quotes, escapes included, as the full parser reads it
     fun extractParam(name: String): String? {
-        val paramRegex = """$name\s*=\s*"([^"]+)"""".toRegex()
-        return paramRegex.find(params)?.groupValues?.get(1)
+        val paramRegex = """\b$name\s*=\s*"((?:[^"\\]|\\.)*)"""".toRegex()
+        return paramRegex.find(params)?.groupValues?.get(1)?.ifEmpty { null }
     }
 
     val author = extractParam("author") ?: return null
@@ -73,7 +80,12 @@ fun String.sha256Take16(): String {
  * Discover all @Correct files in a source directory.
  * @param excludes list of relative path prefixes to exclude (e.g. "com/github/examples")
  */
-fun discoverQuestions(sourceDir: File, external: String? = null, excludes: List<String> = emptyList()): List<DiscoveredQuestion> {
+fun discoverQuestions(
+    sourceDir: File,
+    external: String? = null,
+    excludes: List<String> = emptyList(),
+    onSkipped: (File) -> Unit = {},
+): List<DiscoveredQuestion> {
     if (!sourceDir.exists()) return emptyList()
 
     return sourceDir.walkTopDown()
@@ -86,7 +98,13 @@ fun discoverQuestions(sourceDir: File, external: String? = null, excludes: List<
                 excludes.none { relativePath.startsWith(it) }
             }
         }
-        .mapNotNull { it.extractCorrectInfo(sourceDir, external) }
+        .mapNotNull { file ->
+            file.extractCorrectInfo(sourceDir, external).also { discovered ->
+                if (discovered == null && correctAnnotationStartRegex.containsMatchIn(file.readText())) {
+                    onSkipped(file)
+                }
+            }
+        }
         .toList()
 }
 
@@ -123,4 +141,9 @@ fun discoverQuestionsWithCollisionCheck(sourceDir: File): List<DiscoveredQuestio
  * Discover questions from multiple source directories and check for collisions across all of them.
  * Each entry is a triple of (sourceDir, externalSlug, excludes) where externalSlug is null for the primary source dir.
  */
-fun discoverQuestionsFromDirs(sourceDirs: List<Triple<File, String?, List<String>>>): List<DiscoveredQuestion> = checkForCollisions(sourceDirs.flatMap { (dir, external, excludes) -> discoverQuestions(dir, external, excludes) })
+fun discoverQuestionsFromDirs(
+    sourceDirs: List<Triple<File, String?, List<String>>>,
+    onSkipped: (File) -> Unit = {},
+): List<DiscoveredQuestion> = checkForCollisions(
+    sourceDirs.flatMap { (dir, external, excludes) -> discoverQuestions(dir, external, excludes, onSkipped) },
+)

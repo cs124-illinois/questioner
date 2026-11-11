@@ -51,7 +51,17 @@ class QuestionerSettingsPlugin : Plugin<Settings> {
             }
 
             // Discover questions from all source directories
-            val questions = discoverQuestionsFromDirs(sourceDirs)
+            val skipped = mutableListOf<File>()
+            val questions = discoverQuestionsFromDirs(sourceDirs) { skipped.add(it) }
+            if (skipped.isNotEmpty()) {
+                settings.gradle.rootProject { project ->
+                    skipped.forEach { file ->
+                        project.logger.warn(
+                            "questioner: skipping ${file.absolutePath}: could not read the name and author from its @Correct annotation",
+                        )
+                    }
+                }
+            }
 
             // Include each question as a subproject
             questions.forEach { question ->
