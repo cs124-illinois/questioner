@@ -8,20 +8,20 @@ plugins {
     kotlin("plugin.serialization")
     `maven-publish`
     signing
-    id("com.ryandens.javaagent-test") version "0.12.2"
+    id("com.ryandens.javaagent-test") version "0.13.0"
     id("com.autonomousapps.testkit")
 }
 dependencies {
     testJavaagent("com.beyondgrader.resource-agent:agent:2026.1.2")
 
     implementation("org.apache.commons:commons-text:1.15.0")
-    implementation("io.github.java-diff-utils:java-diff-utils:4.17")
-    implementation("org.ow2.asm:asm:9.11")
+    implementation("io.github.java-diff-utils:java-diff-utils:4.18")
+    implementation("org.ow2.asm:asm:9.11.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect:2.4.21")
     implementation("org.jetbrains.kotlin:kotlin-metadata-jvm:2.4.21")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
 
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.12.0")
     api("com.beyondgrader.resource-agent:agent:2026.1.2")
     api("com.beyondgrader.resource-agent:virtualfsplugin:2026.1.2") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
@@ -29,9 +29,9 @@ dependencies {
     api("org.cs124.jeed:core:2026.10.1")
     api("org.cs124:jenisol:2026.10.0")
     api("org.cs124:libcs1:2026.9.0")
-    api("com.fasterxml.jackson.core:jackson-databind:2.22.3")
+    api("com.fasterxml.jackson.core:jackson-databind:2.23.0")
 
-    testImplementation("io.kotest:kotest-runner-junit5:6.2.5")
+    testImplementation("io.kotest:kotest-runner-junit5:6.2.6")
     api("org.junit.jupiter:junit-jupiter-api:6.1.3")
     api("org.junit.platform:junit-platform-engine:6.1.3")
     api("com.google.truth:truth:1.4.5")

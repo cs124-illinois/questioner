@@ -18,12 +18,12 @@ dependencies {
 
     implementation(gradleApi())
     implementation(project(":lib"))
-    implementation("org.jetbrains:markdown:0.7.16") {
+    implementation("org.jetbrains:markdown:0.7.18") {
         exclude(module = "kotlin-runtime")
         exclude(module = "kotlin-js")
     }
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.22.3")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.3")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.23.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.23.0")
     implementation("com.github.slugify:slugify:4.0.1")
 
     implementation("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:2.4.21")
@@ -35,11 +35,11 @@ dependencies {
     implementation("io.github.z4kn4fein:semver:3.1.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
 
-    testImplementation("io.kotest:kotest-runner-junit5:6.2.5")
+    testImplementation("io.kotest:kotest-runner-junit5:6.2.6")
     testImplementation(gradleTestKit())
-    testImplementation("com.autonomousapps:gradle-testkit-support:0.28")
+    testImplementation("com.autonomousapps:gradle-testkit-support:0.31")
 
-    "functionalTestImplementation"("io.kotest:kotest-runner-junit5:6.2.5")
+    "functionalTestImplementation"("io.kotest:kotest-runner-junit5:6.2.6")
     "functionalTestImplementation"(project(":lib"))
 }
 tasks.compileKotlin {
