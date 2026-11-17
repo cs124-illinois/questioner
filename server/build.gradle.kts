@@ -30,9 +30,9 @@ dependencies {
     // 4.2.17.Final (the first without CVE-2026-75595 and CVE-2026-75596). The BOM keeps netty on
     // its newest release, and moves every netty module together; forcing netty-handler alone
     // would leave its siblings a version behind.
-    implementation(platform("io.netty:netty-bom:4.2.20.Final"))
+    implementation(platform("io.netty:netty-bom:4.2.21.Final"))
 
-    testImplementation("io.kotest:kotest-runner-junit5:6.2.6")
+    testImplementation("io.kotest:kotest-runner-junit5:6.2.7")
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     testImplementation("com.google.truth:truth:1.4.5")

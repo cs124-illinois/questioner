@@ -21,17 +21,17 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-metadata-jvm:2.4.21")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
 
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.12.0")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.13.0")
     api("com.beyondgrader.resource-agent:agent:2026.1.2")
     api("com.beyondgrader.resource-agent:virtualfsplugin:2026.1.2") {
         exclude(group = "com.github.cs124-illinois.jeed", module = "core")
     }
-    api("org.cs124.jeed:core:2026.10.1")
+    api("org.cs124.jeed:core:2026.11.0")
     api("org.cs124:jenisol:2026.10.0")
     api("org.cs124:libcs1:2026.9.0")
     api("com.fasterxml.jackson.core:jackson-databind:2.23.0")
 
-    testImplementation("io.kotest:kotest-runner-junit5:6.2.6")
+    testImplementation("io.kotest:kotest-runner-junit5:6.2.7")
     api("org.junit.jupiter:junit-jupiter-api:6.1.3")
     api("org.junit.platform:junit-platform-engine:6.1.3")
     api("com.google.truth:truth:1.4.5")
