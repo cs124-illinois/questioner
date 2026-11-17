@@ -18,8 +18,12 @@ ENV JEED_FAIL_ON_REPLACED_STREAMS=true
 WORKDIR /
 COPY *.jar questioner.jar
 SHELL ["/bin/sh", "-c"]
+# -XX:-UseBASE64Intrinsics mitigates CVE-2026-114938: a heap overflow in the AVX-512 Base64 decode
+# intrinsic on Java 17/21/25. Student code runs in this JVM and can call java.util.Base64, so a
+# crafted submission could crash the server. Remove once the base image ships a fixed Java 21 build.
 CMD java -ea --enable-preview -Dfile.encoding=UTF-8 \
     -Djava.security.manager=allow -XX:-OmitStackTraceInFastThrow \
+    -XX:-UseBASE64Intrinsics \
     -XX:+UnlockExperimentalVMOptions -XX:-VMContinuations \
     -Xss256k -XX:+UseZGC -XX:+ZGenerational \
     --add-opens java.base/java.lang=ALL-UNNAMED \
