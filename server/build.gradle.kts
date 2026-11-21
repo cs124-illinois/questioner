@@ -157,6 +157,10 @@ java {
 }
 tasks.test {
     useJUnitPlatform()
+    // Both production deployments set JEED_USE_CACHE=true, and Jeed defaults it off. Without it here
+    // the tests never share a compilation between submissions, which is how test testing once
+    // rewrote cached bytecode that student submissions then ran against.
+    environment("JEED_USE_CACHE", "true")
     dependsOn(":plugin:functionalTest")
     // TestShadowJarStartup boots the shaded jar the Docker image runs, since a jar resolves
     // duplicate entries differently from the classpath every other test sees.

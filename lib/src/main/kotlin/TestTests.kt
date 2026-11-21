@@ -25,6 +25,7 @@ import edu.illinois.cs.cs125.jeed.core.fromTemplates
 import edu.illinois.cs.cs125.jeed.core.kompile
 import edu.illinois.cs.cs125.jeed.core.ktLint
 import edu.illinois.cs.cs125.jeed.core.server.CompiledSourceResult
+import edu.illinois.cs.cs125.jeed.core.standardFileManager
 import edu.illinois.cs.cs125.jenisol.core.isPackagePrivate
 import edu.illinois.cs.cs125.jenisol.core.isPrivate
 import edu.illinois.cs.cs125.jenisol.core.isStatic
@@ -640,11 +641,19 @@ fun Question.fixTestingMethods(compiledSource: CompiledSource, language: Languag
     classReader.accept(openingVisitor, 0)
     val newKlass = classWriter.toByteArray()
 
-    return Pair(
-        CopyableClassLoader(mapOf(klass to newKlass), classLoader.parent),
-        JeedFileManager(compiledSource.fileManager).also {
-            it.replaceClass(klass, newKlass)
-        })
+    // Not JeedFileManager(compiledSource.fileManager): that "copy" constructor shares the original's
+    // file map, so replaceClass would rewrite the compiled source itself. With Jeed's compilation
+    // cache on, that is the cached entry, and every later student submission with the same source
+    // as a mutant ran against the opened class and failed with "missing a method". The parent is
+    // the one compileSubmission, kompileSubmission and the solution compilations give Jeed, which
+    // substitutes standardFileManager when there is no common code.
+    val fileManager = JeedFileManager(
+        compiledCommon?.fileManager ?: standardFileManager,
+        compiledSource.fileManager.allFiles.toMutableMap(),
+    ).also {
+        it.replaceClass(klass, newKlass)
+    }
+    return Pair(CopyableClassLoader(mapOf(klass to newKlass), classLoader.parent), fileManager)
 }
 
 @Suppress("SpellCheckingInspection")
