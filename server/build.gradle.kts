@@ -23,7 +23,7 @@ dependencies {
     implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
-    implementation("org.mongodb:mongodb-driver-sync:5.14.0")
+    implementation("org.mongodb:mongodb-driver-sync:5.15.0")
     implementation("com.github.ben-manes.caffeine:caffeine:3.3.1")
 
     // netty arrives through ktor-server-netty, which trails netty releases: ktor 3.6.1 pins
