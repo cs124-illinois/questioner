@@ -3,7 +3,7 @@ FROM eclipse-temurin:21-jdk-jammy
 ARG TARGETARCH
 ENV TINI_VERSION=v0.19.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini-${TARGETARCH} /tini
-RUN chmod +x /tini
+RUN chmod 755 /tini
 ENTRYPOINT ["/tini", "--"]
 
 RUN apt update && apt install -y procps libjemalloc2 && rm -rf /var/lib/apt/lists/*
@@ -17,6 +17,14 @@ ENV JEED_FAIL_ON_REPLACED_STREAMS=true
 
 WORKDIR /
 COPY *.jar questioner.jar
+
+# Student code runs inside this JVM. If it ever gets out of the sandbox, it should be nobody
+# in particular, not root with root's capabilities. Numeric so Kubernetes' runAsNonRoot can verify
+# it. The server writes nothing outside /tmp (the JVM's perf data, Jeed's empty jeed-cache
+# directory, and heap dumps if DUMP_AFTER_HEARTBEAT is set), so the root filesystem can be mounted
+# read-only.
+RUN groupadd --gid 10001 questioner && useradd --uid 10001 --gid 10001 --no-create-home --shell /usr/sbin/nologin questioner
+USER 10001:10001
 SHELL ["/bin/sh", "-c"]
 # -XX:-UseBASE64Intrinsics mitigates CVE-2026-114938: a heap overflow in the AVX-512 Base64 decode
 # intrinsic on Java 17/21/25. Student code runs in this JVM and can call java.util.Base64, so a

@@ -45,6 +45,7 @@ import org.bson.BsonDocument
 import java.lang.management.ManagementFactory
 import java.lang.management.MemoryNotificationInfo
 import java.lang.management.MemoryType
+import java.nio.file.Path
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -290,7 +291,7 @@ fun main(@Suppress("unused") unused: Array<String>) {
                     ManagementFactory.getPlatformMBeanServer(),
                     "com.sun.management:type=HotSpotDiagnostic",
                     HotSpotDiagnosticMXBean::class.java,
-                ).dumpHeap(heapDumpName, false)
+                ).dumpHeap(Path.of(System.getProperty("java.io.tmpdir"), heapDumpName).toString(), false)
             }
         }
         logger.trace("Questioner heartbeat $index completed in ${(warmTime / 1000.0).round(1)}s. ${printMemory()}. Cache ${questionCache.estimatedSize()} / $questionCacheSize.")
