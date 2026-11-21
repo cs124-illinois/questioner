@@ -10,7 +10,7 @@ pluginManagement {
 }
 
 plugins {
-    id("org.cs124.questioner.settings") version "2026.11.1"
+    id("org.cs124.questioner.settings") version "2026.11.2"
 }
 
 questioner {
